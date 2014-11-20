@@ -1,0 +1,214 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>pyLoad by vuolter</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>pyLoad</h1>
+        <p>The Free and Open Source download manager written entirely in Python and designed to be extremely lightweight</p>
+
+        <p class="view"><a href="https://github.com/vuolter/pyload">View the Project on GitHub <small>vuolter/pyload</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/vuolter/pyload/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/vuolter/pyload/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/vuolter/pyload">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="" class="anchor" href="#" aria-hidden="true"><span class="octicon octicon-link"></span></a><a href="http://pyload.org/"><img src="https://raw.githubusercontent.com/vuolter/pyload/0.4.10/docs/resources/banner.png" alt="pyLoad" title="pyLoad"></a>
+</h1>
+
+<p><a href="http://translate.pyload.org/project/pyload/"><img src="http://translate.pyload.org/badges/pyload/localized.png" alt="Translation Status" title="Translation Status"></a></p>
+
+<p>pyLoad is available for all kind of operating systems and devices:
+You could install it on a computer, but also on a headless servers, a router, a smart usb-stick running linux... almost whatever you want!</p>
+
+<p>You can control it entirely by web.
+Its web user interface allows full managing and easily remote access to your download from anywhere, online, or in your personal network..</p>
+
+<p>All common video-sites, one-click-hosters, container formats and well known web standards are supported to allow you to download files.
+Additionaly, pyLoad has a great variety of plugins to automate common tasks and make unattended running possible.</p>
+
+<p>pyLoad has a fully featured and well documented API, it's easily extendable and accessible by external tools, cross-platform apps or other softwares.</p>
+
+<h2>
+<a id="dependencies" class="anchor" href="#dependencies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dependencies</h2>
+
+<ul>
+<li><strong>You need at least Python 2.5 or at most Python 2.7 to run pyLoad and its required software libraries</strong></li>
+<li><strong>Python 3 and PyPy are not yet supported</strong></li>
+</ul>
+
+<h3>
+<a id="required" class="anchor" href="#required" aria-hidden="true"><span class="octicon octicon-link"></span></a>Required</h3>
+
+<ul>
+<li><strong>Beaker</strong></li>
+<li><strong>bottle</strong></li>
+<li><strong>Getch</strong></li>
+<li><strong>jinja2</strong></li>
+<li><strong>markupsafe</strong></li>
+<li><strong>MultipartPostHandler</strong></li>
+<li>
+<strong>pycurl</strong> (python-curl)</li>
+<li><strong>rename_process</strong></li>
+<li><strong>SafeEval</strong></li>
+<li>
+<strong>simplejson</strong> <em>required for JSON speedup</em>
+</li>
+<li><strong>thrift</strong></li>
+<li><strong>wsgiserver</strong></li>
+</ul>
+
+<p>Some addition features require additional packages.</p>
+
+<h3>
+<a id="optional" class="anchor" href="#optional" aria-hidden="true"><span class="octicon octicon-link"></span></a>Optional</h3>
+
+<ul>
+<li><strong>BeautifulSoup</strong></li>
+<li>
+<strong>bjoern</strong> (<a href="https://github.com/jonashaag/bjoern">https://github.com/jonashaag/bjoern</a>) <em>required for a better webui experience</em>
+</li>
+<li>
+<strong>feedparser</strong> <em>required for RSS parsing support</em>
+</li>
+<li>
+<strong>node.js</strong> or <strong>ossp-js</strong> or <strong>pyv8</strong> or <strong>rhino</strong> or <strong>spidermonkey</strong> (JS Engines) <em>required by plugins like ClickNLoad to work correctly</em>
+</li>
+<li>
+<strong>PIL</strong> (python-imaging) <em>required for captcha recognition support</em>
+</li>
+<li>
+<strong>pycrypto</strong> <em>required for RSDF/CCF/DLC container decrypting</em>
+</li>
+<li>
+<strong>pyOpenSSL</strong> <em>required for SSL connection support</em>
+</li>
+<li>
+<strong>tesseract</strong> <em>required for captcha ocr support</em>
+</li>
+</ul>
+
+<p>You can install them using the Python Package Index:</p>
+
+<pre><code>pip install &lt;package-name&gt;
+</code></pre>
+
+<h3>
+<a id="included" class="anchor" href="#included" aria-hidden="true"><span class="octicon octicon-link"></span></a>Included</h3>
+
+<ul>
+<li><strong>Beaker</strong></li>
+<li><strong>BeautifulSoup</strong></li>
+<li><strong>bottle</strong></li>
+<li><strong>feedparser</strong></li>
+<li><strong>Getch</strong></li>
+<li><strong>jinja2</strong></li>
+<li><strong>markupsafe</strong></li>
+<li><strong>MultipartPostHandler</strong></li>
+<li><strong>rename_process</strong></li>
+<li><strong>SafeEval</strong></li>
+<li><strong>simplejson</strong></li>
+<li><strong>thrift</strong></li>
+<li><strong>wsgiserver</strong></li>
+</ul>
+
+<blockquote>
+<p><strong>Note:</strong>
+Pre-build packages should yet include all.</p>
+</blockquote>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<h3>
+<a id="first-start" class="anchor" href="#first-start" aria-hidden="true"><span class="octicon octicon-link"></span></a>First start</h3>
+
+<p>Run:</p>
+
+<pre><code>python pyload.py
+</code></pre>
+
+<p>and follow the setup assistant instructions.</p>
+
+<blockquote>
+<p><strong>Note:</strong>
+If you installed pyLoad by package-manager, command <code>python pyload.py</code> is probably equivalent to <code>pyload</code>.</p>
+</blockquote>
+
+<p>Additionally, you can whenever restart the setup assistant typing:</p>
+
+<pre><code>python pyload.py -s
+</code></pre>
+
+<p>Or you can even edit configuration files located in your pyLoad home directory (default to <code>~/.pyload</code>)
+with your favorite editor.
+For a short description of all the configuration options available visit <a href="http://pyload.org/configuration">http://pyload.org/configuration</a>.</p>
+
+<h3>
+<a id="web-user-interface" class="anchor" href="#web-user-interface" aria-hidden="true"><span class="octicon octicon-link"></span></a>Web User Interface</h3>
+
+<p>Run:</p>
+
+<pre><code>python pyload.py
+</code></pre>
+
+<p>So, to retrieve it point your web browser to the socket address configured by setup (default to <code>http://localhost:8000</code>).</p>
+
+<p>You can get the list of accepted arguments typing:</p>
+
+<pre><code>python pyload.py -h
+</code></pre>
+
+<h3>
+<a id="command-line-interface" class="anchor" href="#command-line-interface" aria-hidden="true"><span class="octicon octicon-link"></span></a>Command Line Interface</h3>
+
+<p>Run:</p>
+
+<pre><code>python pyload-cli.py -l
+</code></pre>
+
+<p>You can get the list of accepted arguments typing:</p>
+
+<pre><code>python pyload-cli.py -h
+</code></pre>
+
+<h2>
+<a id="notes" class="anchor" href="#notes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Notes</h2>
+
+<p>For news, downloads, wiki, forum and further information visit <a href="http://pyload.org/">http://pyload.org/</a>.</p>
+
+<p>To report bugs, suggest features, ask a question, get the developer version
+or help us out, visit <a href="https://github.com/pyload/pyload">https://github.com/pyload/pyload</a>.</p>
+
+<p>Documentation about extending pyLoad can be found at <a href="http://docs.pyload.org">http://docs.pyload.org</a> or joining us at <code>#pyload</code> on <code>irc.freenode.net</code>.</p>
+
+<hr>
+
+<h6>
+<a id="pyload-team-2008-2014" class="anchor" href="#pyload-team-2008-2014" aria-hidden="true"><span class="octicon octicon-link"></span></a>pyLoad Team 2008-2014</h6>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/vuolter">vuolter</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
