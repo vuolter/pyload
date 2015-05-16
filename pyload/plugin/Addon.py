@@ -168,7 +168,7 @@ class Addon(Base):
         pass
 
 
-    def afterReconnecting(self, ip):
+    def afterReconnecting(self, ip, oldip):
         pass
 
 
