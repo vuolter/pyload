@@ -30,7 +30,6 @@ class ExternalScripts(Addon):
 
 
     def setup(self):
-        self.info['oldip'] = None
         self.scripts = {}
 
         folders = ["pyload_start", "pyload_restart", "pyload_stop",
@@ -108,12 +107,11 @@ class ExternalScripts(Addon):
     def beforeReconnecting(self, ip):
         for script in self.scripts['before_reconnect']:
             self.callScript(script, ip)
-        self.info['oldip'] = ip
 
 
-    def afterReconnecting(self, ip):
+    def afterReconnecting(self, ip, oldip):
         for script in self.scripts['after_reconnect']:
-            self.callScript(script, ip, self.info['oldip'])  #@TODO: Use built-in oldip in 0.4.10
+            self.callScript(script, ip, oldip)
 
 
     def downloadPreparing(self, pyfile):

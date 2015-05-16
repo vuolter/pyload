@@ -172,11 +172,11 @@ class ThreadManager(object):
         while [x.active.plugin.waiting for x in self.threads if x.active].count(True) != 0:
             time.sleep(0.25)
 
-        ip = self.getIP()
+        oldip = self.getIP()
 
-        self.core.addonManager.beforeReconnecting(ip)
+        self.core.addonManager.beforeReconnecting(oldip)
 
-        self.core.log.debug("Old IP: %s" % ip)
+        self.core.log.debug("Old IP: %s" % oldip)
 
         try:
             reconn = subprocess.Popen(self.core.config.get("reconnect", "method"), bufsize=-1, shell=True)  # , stdout=subprocess.PIPE)
@@ -190,10 +190,10 @@ class ThreadManager(object):
 
         reconn.wait()
         time.sleep(1)
-        ip = self.getIP()
-        self.core.addonManager.afterReconnecting(ip)
+        newip = self.getIP()
+        self.core.addonManager.afterReconnecting(newip)
 
-        self.core.log.info(_("Reconnected, new IP: %s") % ip)
+        self.core.log.info(_("Reconnected, new IP: %s") % newip)
 
         self.reconnecting.clear()
 

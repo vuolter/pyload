@@ -240,12 +240,12 @@ class AddonManager(object):
 
 
     @lock
-    def afterReconnecting(self, ip):
+    def afterReconnecting(self, ip, oldip):
         for plugin in self.plugins:
             if plugin.isActivated():
-                plugin.afterReconnecting(ip)
+                plugin.afterReconnecting(ip, oldip)
 
-        self.dispatchEvent("afterReconnecting", ip)
+        self.dispatchEvent("afterReconnecting", ip, oldip)
 
 
     def startThread(self, function, *args, **kwargs):
