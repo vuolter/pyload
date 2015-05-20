@@ -10,7 +10,7 @@ import bottle
 
 from pyload.utils import decode, formatSize
 from pyload.webui import PYLOAD
-from pyload.webui.App.utils import login_required, render_to_response, toDict
+from pyload.webui.App.utils import decode, login_required, render_to_response, toDict
 
 
 def format_time(seconds):
@@ -172,15 +172,14 @@ def add_package():
     except Exception:
         pass
 
-    name = name.decode("utf8", "ignore")
+    name = decode(name)
 
     links = map(lambda x: x.strip(), links)
     links = filter(lambda x: x != "", links)
 
     pack = PYLOAD.addPackage(name, links, queue)
     if pw:
-        pw = pw.decode("utf8", "ignore")
-        data = {"password": pw}
+        data = {"password": decode(pw)}
         PYLOAD.setPackageData(pack, data)
 
 
@@ -199,9 +198,9 @@ def move_package(dest, id):
 def edit_package():
     try:
         id = int(bottle.request.forms.get("pack_id"))
-        data = {"name": bottle.request.forms.get("pack_name").decode("utf8", "ignore"),
-                "folder": bottle.request.forms.get("pack_folder").decode("utf8", "ignore"),
-                "password": bottle.request.forms.get("pack_pws").decode("utf8", "ignore")}
+        data = {"name"    : decode(bottle.request.forms.get("pack_name")),
+                "folder"  : decode(bottle.request.forms.get("pack_folder")),
+                "password": decode(bottle.request.forms.get("pack_pws"))}
 
         PYLOAD.setPackageData(id, data)
         return {"response": "success"}
