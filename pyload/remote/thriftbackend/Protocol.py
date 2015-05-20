@@ -2,15 +2,13 @@
 
 import thrift
 
+from pyload.utils import decode, encode
+
 
 class Protocol(thrift.protocol.TBinaryProtocol.thrift.protocol.TBinaryProtocol):
 
     def writeString(self, str):
-        try:
-            str = str.encode("utf8", "ignore")
-        except Exception:
-            pass
-
+        str = encode(str)
         self.writeI32(len(str))
         self.trans.write(str)
 
@@ -18,12 +16,7 @@ class Protocol(thrift.protocol.TBinaryProtocol.thrift.protocol.TBinaryProtocol):
     def readString(self):
         len = self.readI32()
         str = self.trans.readAll(len)
-        try:
-            str = str.decode("utf8", "ignore")
-        except Exception:
-            pass
-
-        return str
+        return decode(str)
 
 
 class ProtocolFactory(thrift.protocol.TBinaryProtocol.thrift.protocol.TBinaryProtocolFactory):

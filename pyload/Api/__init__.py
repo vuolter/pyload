@@ -335,7 +335,7 @@ class Api(Iface):
 
         self.core.files.addLinks(links, pid)
 
-        self.core.log.info(_("Added package %(name)s containing %(count)d links") % {"name": name.decode('utf-8'), "count": len(links)})
+        self.core.log.info(_("Added package %(name)s containing %(count)d links") % {"name": decode(name), "count": len(links)})
 
         self.core.files.save()
 

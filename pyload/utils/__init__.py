@@ -12,14 +12,14 @@ import sys
 import time
 import urllib
 
-from pyload.utils import pylgettext as gettext
+from pyload.utils import decode, pylgettext as gettext
 
 # abstraction layer for json operations
 try:
     import simplejson as json
 except ImportError:
     import json
-    
+
 from bottle import json_loads, json_dumps
 
 

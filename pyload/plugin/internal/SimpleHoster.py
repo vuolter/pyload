@@ -21,29 +21,6 @@ from pyload.utils import fixup, fs_encode, parseFileSize
 statusMap = dict((v, k) for k, v in _statusMap.iteritems())
 
 
-#@TODO: Remove in 0.4.10 and redirect to self.error instead
-def _error(self, reason, type):
-    if not reason and not type:
-        type = "unknown"
-
-    msg  = _("%s error") % type.strip().capitalize() if type else _("Error")
-    msg += (": %s" % reason.strip()) if reason else ""
-    msg += _(" | Plugin may be out of date")
-
-    raise Fail(msg)
-
-
-#@TODO: Remove in 0.4.10
-def _wait(self, seconds, reconnect):
-    if seconds:
-        self.setWait(int(seconds) + 1)
-
-    if reconnect is not None:
-        self.wantReconnect = reconnect
-
-    super(SimpleHoster, self).wait()
-
-
 def replace_patterns(string, ruleslist):
     for r in ruleslist:
         rf, rt = r

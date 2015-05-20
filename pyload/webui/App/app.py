@@ -17,7 +17,7 @@ from pyload.webui.App.utils import render_to_response, parse_permissions, parse_
 
 from pyload.utils.filters import relpath, unquotepath
 
-from pyload.utils import formatSize, fs_join, fs_encode, fs_decode
+from pyload.utils import decode, encode, formatSize, fs_join, fs_encode, fs_decode
 
 # Helper
 
@@ -226,7 +226,7 @@ def downloads():
 @bottle.route('/downloads/get/<path:path>')
 @login_required("DOWNLOAD")
 def get_download(path):
-    path = urllib.unquote(path).decode("utf8")
+    path = urllib.unquote(decode(path))
     #@TODO some files can not be downloaded
 
     root = PYLOAD.getConfigValue("general", "download_folder")
@@ -320,12 +320,7 @@ def path(file="", path=""):
     else:
         cwd = os.getcwd()
 
-    try:
-        cwd = cwd.encode("utf8")
-    except Exception:
-        pass
-
-    cwd = os.path.normpath(os.path.abspath(cwd))
+    cwd = os.path.normpath(os.path.abspath(encode(cwd)))
     parentdir = os.path.dirname(cwd)
     if not abs:
         if os.path.abspath(cwd) == "/":
@@ -435,7 +430,7 @@ def logs(item=-1):
 
         if counter >= item:
             try:
-                date, time, level, message = l.decode("utf8", "ignore").split(" ", 3)
+                date, time, level, message = decode(l).split(" ", 3)
                 dtime = datetime.datetime.strptime(date + ' ' + time, '%Y-%m-%d %H:%M:%S')
             except Exception:
                 dtime = None
