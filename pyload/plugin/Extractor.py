@@ -4,7 +4,7 @@ import os
 import re
 
 from pyload.Datatype import PyFile
-from pyload.plugin.Plugin import Base
+from pyload.plugin.Plugin import Plugin
 
 
 class ArchiveError(Exception):
@@ -19,7 +19,7 @@ class PasswordError(Exception):
     pass
 
 
-class Extractor:
+class Extractor(Plugin):
     __name    = "Extractor"
     __type    = "extractor"
     __version = "0.24"

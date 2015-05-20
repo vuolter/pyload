@@ -13,7 +13,7 @@ from pyload.plugin.Plugin import SkipDownload
 class SkipRev(Addon):
     __name    = "SkipRev"
     __type    = "addon"
-    __version = "0.29"
+    __version = "0.30"
 
     __config = [("mode"     , "Auto;Manual", "Choose recovery archives to skip"               , "Auto"),
                   ("revtokeep", "int"        , "Number of recovery archives to keep for package", 0     )]
@@ -31,10 +31,11 @@ class SkipRev(Addon):
 
 
     def _name(self, pyfile):
-        if hasattr(pyfile.pluginmodule, "getInfo"):  #@NOTE: getInfo is deprecated in 0.4.10
-            return pyfile.pluginmodule.getInfo([pyfile.url]).next()[0]
-        else:
-            self.logWarning("Unable to grab file name")
+        try:
+            return pyfile.pluginclass.getInfo(pyfile.url)['name']
+
+        except Exception, e:
+            self.logWarning("Unable to grab file name", e)
             return urlparse.urlparse(urllib.unquote(pyfile.url)).path.split('/')[-1]
 
 

@@ -88,13 +88,13 @@ class AndroidPhoneNotify(Addon):
 
         elapsed_time = time.time() - self.last_notify
 
-        if elapsed_time < self.getConf("sendtimewait"):
+        if elapsed_time < self.getConfig("sendtimewait"):
             return
 
         if elapsed_time > 60:
             self.notifications = 0
 
-        elif self.notifications >= self.getConf("sendpermin"):
+        elif self.notifications >= self.getConfig("sendpermin"):
             return
 
 

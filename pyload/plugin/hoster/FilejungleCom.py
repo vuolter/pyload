@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from pyload.plugin.hoster.FileserveCom import FileserveCom, checkFile
-from pyload.plugin.Plugin import chunks
+from pyload.utils import chunks
 
 
 class FilejungleCom(FileserveCom):

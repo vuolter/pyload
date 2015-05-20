@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from pyload.plugin.Plugin import Base
+from pyload.plugin.Plugin import Plugin
 
 
 #@TODO: Extend Plugin class; remove all `html` args
-class Captcha(Base):
+class Captcha(Plugin):
     __name    = "Captcha"
     __type    = "captcha"
     __version = "0.25"

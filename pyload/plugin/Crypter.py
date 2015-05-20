@@ -2,11 +2,16 @@
 
 import urlparse
 
-from pyload.plugin.Plugin import Plugin
+from pyload.plugin.Plugin import Hoster
 from pyload.utils import decode, safe_filename
 
 
-class Crypter(Plugin):
+class Crypter(Hoster):
+    """
+    Base plugin for crypter.
+    Overwrite `decrypt` in your subclassed plugin.
+    """
+
     __name    = "Crypter"
     __type    = "crypter"
     __version = "0.05"
@@ -24,6 +29,9 @@ class Crypter(Plugin):
 
 
     def __init__(self, pyfile):
+        #: Provide information in dict here
+        self.info = {}
+
         #: Put all packages here. It's a list of tuples like: ( name, [list of links], folder )
         self.packages = []
 

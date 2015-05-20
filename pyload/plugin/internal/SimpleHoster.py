@@ -95,22 +95,6 @@ def parseFileInfo(plugin, url="", html=""):
     return res
 
 
-#@TODO: Remove in 0.4.10
-#@NOTE: Every plugin must have own parseInfos classmethod to work with 0.4.10
-# def create_getInfo(plugin):
-
-    # def generator(list):
-    # for x in list:
-    # yield x
-
-    # if hasattr(plugin, "parseInfos"):
-    # fn = lambda urls: generator((info['name'], info['size'], info['status'], info['url']) for info in plugin.parseInfos(urls))
-    # else:
-    # fn = lambda urls: generator(parseFileInfo(url) for url in urls)
-
-    # return fn
-
-
 def timestamp():
     return int(time.time() * 1000)
 
@@ -706,15 +690,6 @@ class SimpleHoster(Hoster):
             size = self.pyfile.size
             self.logInfo(_("Filesize: %i KiB, Traffic left for user %s: %i KiB") % (size / 1024, self.user, traffic / 1024))
             return size <= traffic
-
-
-    def getConfig(self, option, default=''):  #@TODO: Remove in 0.4.10
-        """getConfig with default value - sublass may not implements all config options"""
-        try:
-            return self.getConf(option)
-
-        except KeyError:
-            return default
 
 
     def retryFree(self):

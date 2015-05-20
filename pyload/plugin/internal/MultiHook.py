@@ -108,15 +108,6 @@ class MultiHook(Hook):
         return rep
 
 
-    def getConfig(self, option, default=''):  #@TODO: Remove in 0.4.10
-        """getConfig with default value - sublass may not implements all config options"""
-        try:
-            return self.getConf(option)
-
-        except KeyError:
-            return default
-
-
     def pluginsCached(self):
         if self.plugins:
             return self.plugins

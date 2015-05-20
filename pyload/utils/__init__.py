@@ -10,6 +10,7 @@ import re
 import string
 import sys
 import time
+import traceback
 import urllib
 
 from pyload.utils import decode, pylgettext as gettext
@@ -247,8 +248,6 @@ def versiontuple(v):  #: By kindall (http://stackoverflow.com/a/11887825)
 def load_translation(name, locale, default="en"):
     """ Load language and return its translation object or None """
 
-    import traceback
-
     try:
         gettext.setpaths([os.path.join(os.sep, "usr", "share", "pyload", "locale"), None])
         translation = gettext.translation(name, os.path.join(pypath, "locale"),
@@ -259,3 +258,11 @@ def load_translation(name, locale, default="en"):
     else:
         translation.install(True)
         return translation
+        
+        
+def chunks(iterable, size):
+    it = iter(iterable)
+    item = list(itertools.islice(it, size))
+    while item:
+        yield item
+        item = list(itertools.islice(it, size))

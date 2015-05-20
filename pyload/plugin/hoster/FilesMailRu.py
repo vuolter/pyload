@@ -4,7 +4,7 @@ import re
 
 from pyload.network.RequestFactory import getURL
 from pyload.plugin.Hoster import Hoster
-from pyload.plugin.Plugin import chunks
+from pyload.utils import chunks
 
 
 def getInfo(urls):

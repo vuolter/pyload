@@ -70,7 +70,7 @@ class ArchiveQueue(object):
 
     def get(self):
         try:
-            return [int(pid) for pid in self.plugin.getStorage("ExtractArchive:%s" % self.storage, "").decode('base64').split()]
+            return [int(pid) for pid in self.plugin.retrieve("ExtractArchive:%s" % self.storage, "").decode('base64').split()]
         except Exception:
             return []
 
@@ -80,7 +80,7 @@ class ArchiveQueue(object):
             item = str(value)[1:-1].replace(' ', '').replace(',', ' ')
         else:
             item = str(value).strip()
-        return self.plugin.setStorage("ExtractArchive:%s" % self.storage, item.encode('base64')[:-1])
+        return self.plugin.store("ExtractArchive:%s" % self.storage, item.encode('base64')[:-1])
 
 
     def delete(self):

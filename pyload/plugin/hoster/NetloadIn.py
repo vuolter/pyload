@@ -6,8 +6,8 @@ import urlparse
 
 from pyload.network.RequestFactory import getURL
 from pyload.plugin.Hoster import Hoster
-from pyload.plugin.Plugin import chunks
 from pyload.plugin.captcha.ReCaptcha import ReCaptcha
+from pyload.utils import chunks
 
 
 def getInfo(urls):

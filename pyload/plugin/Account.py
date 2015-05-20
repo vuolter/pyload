@@ -5,7 +5,7 @@ import threading
 import time
 import traceback
 
-from pyload.plugin.Plugin import Base
+from pyload.plugin.Plugin import Plugin
 from pyload.utils import compare_time, parseFileSize, lock
 
 
@@ -13,7 +13,7 @@ class WrongPassword(Exception):
     pass
 
 
-class Account(Base):
+class Account(Plugin):
     """
     Base class for every Account plugin.
     Just overwrite `login` and cookies will be stored and account becomes accessible in\
@@ -35,8 +35,6 @@ class Account(Base):
 
 
     def __init__(self, manager, accounts):
-        Base.__init__(self, manager.core)
-
         self.manager = manager
         self.accounts = {}
         self.infos = {}  #: cache for account information

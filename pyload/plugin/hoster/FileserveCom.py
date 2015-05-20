@@ -2,13 +2,11 @@
 
 import re
 
-from pyload.utils import json_loads
 from pyload.network.RequestFactory import getURL
 from pyload.plugin.Hoster import Hoster
-from pyload.plugin.Plugin import chunks
 from pyload.plugin.captcha.ReCaptcha import ReCaptcha
 from pyload.plugin.internal.SimpleHoster import secondsToMidnight
-from pyload.utils import parseFileSize
+from pyload.utils import chunks, json_loads, parseFileSize
 
 
 def checkFile(plugin, urls):

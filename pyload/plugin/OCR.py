@@ -13,11 +13,11 @@ import os
 import subprocess
 # import tempfile
 
-from pyload.plugin.Plugin import Base
+from pyload.plugin.Plugin import Plugin
 from pyload.utils import fs_join
 
 
-class OCR(Base):
+class OCR(Plugin):
     __name    = "OCR"
     __type    = "ocr"
     __version = "0.12"

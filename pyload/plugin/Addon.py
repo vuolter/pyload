@@ -2,7 +2,7 @@
 
 import traceback
 
-from pyload.plugin.Plugin import Base
+from pyload.plugin.Plugin import Plugin
 from pyload.utils import has_method
 
 
@@ -22,7 +22,7 @@ def threaded(fn):
     return run
 
 
-class Addon(Base):
+class Addon(Plugin):
     __name    = "Addon"
     __type    = "addon"
     __version = "0.01"
@@ -44,8 +44,6 @@ class Addon(Base):
 
 
     def __init__(self, core, manager):
-        Base.__init__(self, core)
-
         #: Provide information in dict here, usable by API `getInfo`
         self.info = {}
 
@@ -115,7 +113,8 @@ class Addon(Base):
             self.unload()
 
 
-    def unload(self):  #: Deprecated, use method `deactivate` instead
+    #: Deprecated, use method `deactivate` instead
+    def unload(self):
         pass
 
 
@@ -134,7 +133,8 @@ class Addon(Base):
             self.coreReady()
 
 
-    def coreReady(self):  #: Deprecated, use method `activate` instead
+    #: Deprecated, use method `activate` instead
+    def coreReady(self):
         pass
 
 
@@ -144,7 +144,8 @@ class Addon(Base):
             self.coreExiting()
 
 
-    def coreExiting(self):  #: Deprecated, use method `exit` instead
+    #: Deprecated, use method `exit` instead
+    def coreExiting(self):
         pass
 
 
