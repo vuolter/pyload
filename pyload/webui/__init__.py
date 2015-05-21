@@ -36,10 +36,10 @@ else:
     config = Server.core.config
     JS = JsEngine(Server.core)
 
-THEME = config.get('webui', 'theme')
-DL_ROOT = config.get('general', 'download_folder')
+THEME    = config.get('webui', 'theme').capitalize()
+DL_ROOT  = config.get('general', 'download_folder')
 LOG_ROOT = config.get('log', 'log_folder')
-PREFIX = config.get('webui', 'prefix')
+PREFIX   = config.get('webui', 'prefix')
 
 if PREFIX:
     PREFIX = PREFIX.rstrip("/")
