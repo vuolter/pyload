@@ -6,7 +6,7 @@ from pyload.network.RequestFactory import getURL
 from pyload.plugin.Hoster import Hoster
 from pyload.plugin.captcha.ReCaptcha import ReCaptcha
 from pyload.plugin.internal.SimpleHoster import secondsToMidnight
-from pyload.utils import chunks, json_loads, parse_filesize
+from pyload.utils import chunks, json_loads, parse_size
 
 
 def checkFile(plugin, urls):
@@ -19,7 +19,7 @@ def checkFile(plugin, urls):
             if cols:
                 file_info.append((
                     cols[1] if cols[1] != '--' else cols[0],
-                    parse_filesize(cols[2]) if cols[2] != '--' else 0,
+                    parse_size(cols[2]) if cols[2] != '--' else 0,
                     2 if cols[3].startswith('Available') else 1,
                     cols[0]))
         except Exception, e:

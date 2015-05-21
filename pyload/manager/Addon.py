@@ -12,6 +12,7 @@ import SafeEval
 
 from pyload.Thread import AddonThread
 from pyload.utils import lock
+from pyload.utils.decorators import try_catch
 
 
 class AddonManager(object):
@@ -61,20 +62,6 @@ class AddonManager(object):
 
         self.lock = threading.RLock()
         self.createIndex()
-
-
-    def try_catch(func):
-
-
-        def new(*args):
-            try:
-                return func(*args)
-            except Exception, e:
-                args[0].core.log.error(_("Error executing addon: %s") % e)
-                if args[0].core.debug:
-                    traceback.print_exc()
-
-        return new
 
 
     def addRPC(self, plugin, func, doc):

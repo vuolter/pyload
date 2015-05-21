@@ -8,12 +8,11 @@ import htmlentitydefs
 import os
 import re
 import string
-import sys
 import time
 import traceback
-import urllib
 
-from pyload.utils import decode, pylgettext as gettext
+from pyload.utils import convert, pylgettext as gettext
+from pyload.utils.encoding import *
 
 # abstraction layer for json operations
 try:
@@ -24,99 +23,19 @@ except ImportError:
 from bottle import json_loads, json_dumps
 
 
-def decode(string):
-    """ Decode string to unicode with utf8 """
-    if type(string) == str:
-        return string.decode("utf8", "replace")
-    else:
-        return string
-
-
-def encode(string):
-    """ Decode string to utf8 """
-    if type(string) == unicode:
-        return string.encode("utf8", "replace")
-    else:
-        return string
-
-
-def remove_chars(string, repl):
-    """ removes all chars in repl from string"""
-    if type(repl) == unicode:
-        for badc in list(repl):
-            string = string.replace(badc, "")
-        return string
-    else:
-        if type(string) == str:
-            return string.translate(string.maketrans("", ""), repl)
-        elif type(string) == unicode:
-            return string.translate(dict((ord(s), None) for s in repl))
-
-
-def safe_filename(name):
-    """ remove bad chars """
-    name = urllib.unquote(name).encode('ascii', 'replace')  #: Non-ASCII chars usually breaks file saving. Replacing.
-    if os.name == 'nt':
-        return remove_chars(name, u'\00\01\02\03\04\05\06\07\10\11\12\13\14\15\16\17\20\21\22\23\24\25\26\27\30\31\32'
-                                  u'\33\34\35\36\37/?%*|"<>')
-    else:
-        return remove_chars(name, u'\0\\"')
-
-
-#: Deprecated method
-def save_path(name):
-    return safe_filename(name)
-
-
-def fs_join(*args):
-    """ joins a path, encoding aware """
-    return fs_encode(os.path.join(*[x if type(x) == unicode else decode(x) for x in args]))
-
-
-#: Deprecated method
-def save_join(*args):
-    return fs_join(*args)
-
-
-# File System Encoding functions:
-# Use fs_encode before accesing files on disk, it will encode the string properly
-
-if sys.getfilesystemencoding().startswith('ANSI'):
-
-    def fs_encode(string):
-        return safe_filename(encode(string))
-
-    fs_decode = decode  #: decode utf8
-
-else:
-    fs_encode = fs_decode = lambda x: x  #: do nothing
-
-
-def get_console_encoding(enc):
-    if os.name == "nt":
-        if enc == "cp65001":  #: aka UTF-8
-            print "WARNING: Windows codepage 65001 is not supported."
-            enc = "cp850"
-    else:
-        enc = "utf8"
-
-    return enc
-
-
 def compare_time(start, end):
     start = map(int, start)
-    end = map(int, end)
+    end   = map(int, end)
 
     if start == end:
         return True
 
     now = list(time.localtime()[3:5])
-    if start < now < end:
+    if start < now < end \
+       or start < now > end < start \
+       or start > end and (now > start or now < end):
         return True
-    elif start > end and (now > start or now < end):
-        return True
-    elif start < now > end < start:
-        return True
+
     return False
 
 
@@ -158,12 +77,12 @@ def fs_bsize(path):
 
 def uniqify(seq):  #: Originally by Dave Kirby
     """ Remove duplicates from list preserving order """
-    seen = set()
+    seen     = set()
     seen_add = seen.add
     return [x for x in seq if x not in seen and not seen_add(x)]
 
 
-def parse_filesize(string, unit=None):  #: returns bytes
+def parse_size(string, unit=None):  #: returns bytes
     if not unit:
         m = re.match(r"([\d.,]+) *([a-zA-Z]*)", string.strip().lower())
         if m:
@@ -177,36 +96,12 @@ def parse_filesize(string, unit=None):  #: returns bytes
         else:
             traffic = string
 
-    # ignore case
-    unit = unit.lower().strip()
-
-    if unit in ("eb", "ebyte", "exabyte", "eib", "e"):
-        traffic *= 1 << 60
-    elif unit in ("pb", "pbyte", "petabyte", "pib", "p"):
-        traffic *= 1 << 50
-    elif unit in ("tb", "tbyte", "terabyte", "tib", "t"):
-        traffic *= 1 << 40
-    elif unit in ("gb", "gbyte", "gigabyte", "gib", "g", "gig"):
-        traffic *= 1 << 30
-    elif unit in ("mb", "mbyte", "megabyte", "mib", "m"):
-        traffic *= 1 << 20
-    elif unit in ("kb", "kbyte", "kilobyte", "kib", "k"):
-        traffic *= 1 << 10
-
-    return traffic
+    return convert.size(traffic, unit.lower().strip(), "byte")
 
 
-def lock(func):
-
-    def new(*args):
-        # print "Handler: %s args: %s" % (func, args[1:])
-        args[0].lock.acquire()
-        try:
-            return func(*args)
-        finally:
-            args[0].lock.release()
-
-    return new
+def bits_set(bits, compare):
+    """ checks if all bits are set in compare, or bits is 0 """
+    return bits == (bits & compare)
 
 
 def fixup(m):
@@ -236,13 +131,33 @@ def has_method(obj, name):
     return hasattr(obj, '__dict__') and name in obj.__dict__
 
 
+def accumulate(it, inv_map=None):
+    """ accumulate (key, value) data to {value : [keylist]} dictionary """
+    if inv_map is None:
+        inv_map = {}
+
+    for key, value in it:
+        if value in inv_map:
+            inv_map[value].append(key)
+        else:
+            inv_map[value] = [key]
+
+    return inv_map
+
+
+def get_index(l, value):
+    """ .index method that also works on tuple and python 2.5 """
+    for pos, t in enumerate(l):
+        if t == value:
+            return pos
+
+    # Matches behavior of list.index
+    raise ValueError("list.index(x): x not in list")
+
+
 def html_unescape(text):
     """Removes HTML or XML character references and entities from a text string"""
     return re.sub("&#?\w+;", fixup, text)
-
-
-def version_tuple(v):  #: By kindall (http://stackoverflow.com/a/11887825)
-    return tuple(map(int, (v.split("."))))
 
 
 def load_translation(name, locale, default="en"):
@@ -261,7 +176,7 @@ def load_translation(name, locale, default="en"):
 
 
 def chunks(iterable, size):
-    it = iter(iterable)
+    it   = iter(iterable)
     item = list(itertools.islice(it, size))
     while item:
         yield item
