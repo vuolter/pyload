@@ -47,8 +47,8 @@ __builtin__.pypath    = os.path.abspath(os.path.join(rootdir, ".."))
 
 import sys
 
-sys.path.append(os.path.join(pypath, "lib", "Python", "Lib"))
-sys.path.append(os.path.join(pypath, "lib"))
+sys.path.insert(0, os.path.join(pypath, "lib", "Python", "Lib"))
+sys.path.insert(1, os.path.join(pypath, "lib"))
 
 
 import codecs
