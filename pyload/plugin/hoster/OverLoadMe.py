@@ -2,7 +2,7 @@
 
 from pyload.utils import json_loads
 from pyload.plugin.internal.MultiHoster import MultiHoster
-from pyload.utils import parse_filesize
+from pyload.utils import parse_size
 
 
 class OverLoadMe(MultiHoster):
@@ -39,7 +39,7 @@ class OverLoadMe(MultiHoster):
         else:
             if pyfile.name and pyfile.name.endswith('.tmp') and data['filename']:
                 pyfile.name = data['filename']
-                pyfile.size = parse_filesize(data['filesize'])
+                pyfile.size = parse_size(data['filesize'])
 
             http_repl = ["http://", "https://"]
             self.link = data['downloadlink'].replace(*http_repl if self.getConfig('ssl') else http_repl[::-1])

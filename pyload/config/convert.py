@@ -3,7 +3,8 @@
 from collections import namedtuple
 from gettext import gettext
 
-from pyload.utils import decode, to_bool
+from pyload.utils import decode
+from pyload.utils.convert import to_bool
 
 __all__ = ["from_string", "to_configdata", "to_input"]
 

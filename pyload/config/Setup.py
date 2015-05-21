@@ -10,7 +10,7 @@ import subprocess
 import sys
 
 from pyload.network.JsEngine import JsEngine
-from pyload.utils import get_console_encoding, load_translation, fs_join, version_tuple
+from pyload.utils import convert, get_console_encoding, load_translation, fs_join
 
 
 class SetupAssistant(object):
@@ -243,7 +243,7 @@ class SetupAssistant(object):
             import jinja2
 
             v = jinja2.__version__
-            if v and version_tuple(v) < (2, 5, 0):
+            if v and convert.version_to_tuple(v) < (2, 5, 0):
                 jinja = False
             else:
                 jinja = True

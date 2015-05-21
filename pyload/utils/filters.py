@@ -2,13 +2,10 @@
 
 import os
 
-quotechar = "::/"
-
 try:
     from os.path import relpath
 except Exception:
     from posixpath import curdir, sep, pardir
-
 
     def relpath(path, start=curdir):
         """Return a relative version of a path"""
@@ -22,6 +19,9 @@ except Exception:
         if not rel_list:
             return curdir
         return os.path.join(*rel_list)
+
+
+quotechar = "::/"
 
 
 def quotepath(path):
