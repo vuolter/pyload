@@ -6,7 +6,7 @@ import time
 import traceback
 
 from pyload.plugin.Plugin import Plugin
-from pyload.utils import compare_time, parseFileSize, lock
+from pyload.utils import compare_time, parse_filesize, lock
 
 
 class WrongPassword(Exception):
@@ -265,7 +265,7 @@ class Account(Plugin):
     def parseTraffic(self, value, unit=None):  #: return bytes
         if not unit and not isinstance(value, basestring):
             unit = "KB"
-        return parseFileSize(value, unit)
+        return parse_filesize(value, unit)
 
 
     def wrongPassword(self):

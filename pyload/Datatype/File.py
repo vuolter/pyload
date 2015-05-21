@@ -5,7 +5,7 @@ import time
 import threading
 
 from pyload.manager.Event import UpdateEvent
-from pyload.utils import formatSize, lock
+from pyload.utils import format_size, lock
 
 
 statusMap = {
@@ -227,7 +227,7 @@ class PyFile(object):
 
     def formatSize(self):
         """ formats size to readable format """
-        return formatSize(self.getSize())
+        return format_size(self.getSize())
 
 
     def formatETA(self):

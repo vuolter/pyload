@@ -13,7 +13,7 @@ from pyload.Datatype import PyFile
 from pyload.utils.packagetools import parseNames
 from pyload.network.RequestFactory import getURL
 from pyload.remote import activated
-from pyload.utils import compare_time, freeSpace, safe_filename
+from pyload.utils import compare_time, free_space, safe_filename
 
 if activated:
     try:
@@ -238,7 +238,7 @@ class Api(Iface):
     @permission(PERMS.STATUS)
     def freeSpace(self):
         """Available free space at download directory in bytes"""
-        return freeSpace(self.core.config.get("general", "download_folder"))
+        return free_space(self.core.config.get("general", "download_folder"))
 
 
     @permission(PERMS.ALL)
@@ -309,7 +309,7 @@ class Api(Iface):
                 continue
             data.append(DownloadInfo(
                 pyfile.id, pyfile.name, pyfile.getSpeed(), pyfile.getETA(), pyfile.formatETA(),
-                pyfile.getBytesLeft(), pyfile.getSize(), pyfile.formatSize(), pyfile.getPercent(),
+                pyfile.getBytesLeft(), pyfile.getSize(), pyfile.format_size(), pyfile.getPercent(),
                 pyfile.status, pyfile.getStatusName(), pyfile.formatWait(),
                 pyfile.waitUntil, pyfile.packageid, pyfile.package().name, pyfile.pluginname))
         return data

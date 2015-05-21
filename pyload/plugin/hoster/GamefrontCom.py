@@ -4,7 +4,7 @@ import re
 
 from pyload.network.RequestFactory import getURL
 from pyload.plugin.Hoster import Hoster
-from pyload.utils import parseFileSize
+from pyload.utils import parse_filesize
 
 
 class GamefrontCom(Hoster):
@@ -83,7 +83,7 @@ def getInfo(urls):
             else:
                 name = name.group(1)
                 size = re.search(GamefrontCom.PATTERN_FILESIZE, html)
-                size = parseFileSize(size.group(1))
+                size = parse_filesize(size.group(1))
 
                 result.append((name, size, 3, url))
 

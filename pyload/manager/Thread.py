@@ -14,7 +14,7 @@ import pycurl
 from pyload.Datatype import PyFile
 from pyload.Thread import DecrypterThread, DownloadThread, InfoThread
 from pyload.network.RequestFactory import getURL
-from pyload.utils import freeSpace, lock
+from pyload.utils import free_space, lock
 
 
 class ThreadManager(object):
@@ -278,7 +278,7 @@ class ThreadManager(object):
                 return
 
             if job.plugin.getPluginType() == "hoster":
-                spaceLeft = freeSpace(self.core.config.get("general", "download_folder")) / 1024 / 1024
+                spaceLeft = free_space(self.core.config.get("general", "download_folder")) / 1024 / 1024
                 if spaceLeft < self.core.config.get("general", "min_free_space"):
                     self.core.log.warning(_("Not enough space left on device"))
                     self.pause = True

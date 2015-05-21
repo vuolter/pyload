@@ -8,7 +8,7 @@ import traceback
 
 import bottle
 
-from pyload.utils import decode, formatSize
+from pyload.utils import decode, format_size
 from pyload.webui import PYLOAD
 from pyload.webui.App.utils import decode, login_required, render_to_response, toDict
 
@@ -48,7 +48,7 @@ def links():
             ids.append(link['fid'])
 
             if link['status'] == 12:
-                link['info'] = "%s @ %s/s" % (link['format_eta'], formatSize(link['speed']))
+                link['info'] = "%s @ %s/s" % (link['format_eta'], format_size(link['speed']))
             elif link['status'] == 5:
                 link['percent'] = 0
                 link['size'] = 0

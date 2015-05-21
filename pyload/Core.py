@@ -32,7 +32,7 @@ from pyload.manager.Scheduler import Scheduler
 from pyload.Thread.Server import WebServer
 from pyload.network.JsEngine import JsEngine
 from pyload.network.RequestFactory import RequestFactory
-from pyload.utils import freeSpace, formatSize
+from pyload.utils import free_space, format_size
 
 
 # TODO List
@@ -391,9 +391,9 @@ class Core(object):
         if web:
             self.init_webserver()
 
-        spaceLeft = freeSpace(self.config.get("general", "download_folder"))
+        spaceLeft = free_space(self.config.get("general", "download_folder"))
 
-        self.log.info(_("Free space: %s") % formatSize(spaceLeft))
+        self.log.info(_("Free space: %s") % format_size(spaceLeft))
 
         self.config.save()  #: save so config files gets filled
 

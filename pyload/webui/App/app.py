@@ -17,7 +17,7 @@ from pyload.webui.App.utils import render_to_response, parse_permissions, parse_
 
 from pyload.utils.filters import relpath, unquotepath
 
-from pyload.utils import decode, encode, formatSize, fs_join, fs_encode, fs_decode
+from pyload.utils import decode, encode, format_size, fs_join, fs_encode, fs_decode
 
 # Helper
 
@@ -267,7 +267,7 @@ def config():
         elif not data.trafficleft:
             data.trafficleft = _("not available")
         else:
-            data.trafficleft = formatSize(data.trafficleft)
+            data.trafficleft = format_size(data.trafficleft)
 
         if data.validuntil == -1:
             data.validuntil = _("unlimited")
@@ -515,7 +515,7 @@ def info():
             "version"  : PYLOAD.getServerVersion(),
             "folder"   : os.path.abspath(PYLOAD_DIR), "config": os.path.abspath(""),
             "download" : os.path.abspath(conf['general']['download_folder']['value']),
-            "freespace": formatSize(PYLOAD.freeSpace()),
+            "freespace": format_size(PYLOAD.free_space()),
             "remote"   : conf['remote']['port']['value'],
             "webif"    : conf['webui']['port']['value'],
             "language" : conf['general']['language']['value']}
