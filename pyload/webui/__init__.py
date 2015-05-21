@@ -13,7 +13,7 @@ from pyload.utils import pylgettext as gettext
 from pyload.Thread import Server
 from pyload.utils.middlewares import StripPathMiddleware, GZipMiddleWare, PrefixMiddleware
 from pyload.network.JsEngine import JsEngine
-from pyload.utils import decode, formatSize
+from pyload.utils import decode, format_size
 
 
 THEME_DIR  = os.path.abspath(os.path.join(os.path.dirname(__file__), "themes"))
@@ -69,7 +69,7 @@ env.filters['path_make_relative'] = path_make_relative
 env.filters['path_make_absolute'] = path_make_absolute
 env.filters['decode'] = decode
 env.filters['type'] = lambda x: str(type(x))
-env.filters['formatsize'] = formatSize
+env.filters['formatsize'] = format_size
 env.filters['getitem'] = lambda x, y: x.__getitem__(y)
 if PREFIX:
     env.filters['url'] = lambda x: x

@@ -6,7 +6,7 @@
 import re
 
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
-from pyload.utils import parseFileSize
+from pyload.utils import parse_filesize
 
 
 class CzshareCom(SimpleHoster):
@@ -51,7 +51,7 @@ class CzshareCom(SimpleHoster):
 
         # check user credit
         try:
-            credit = parseFileSize(m.group(1).replace(' ', ''), m.group(2))
+            credit = parse_filesize(m.group(1).replace(' ', ''), m.group(2))
             self.logInfo(_("Premium download for %i KiB of Credit") % (self.pyfile.size / 1024))
             self.logInfo(_("User %s has %i KiB left") % (self.user, credit / 1024))
             if credit < self.pyfile.size:

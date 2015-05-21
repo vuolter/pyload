@@ -13,7 +13,7 @@ import pycurl
 from pyload.Api import PackageDoesNotExists, FileDoesNotExists
 from pyload.network.RequestFactory import getURL
 from pyload.plugin.Addon import Addon
-from pyload.utils import formatSize
+from pyload.utils import format_size
 
 
 class IRCInterface(Thread, Addon):
@@ -223,7 +223,7 @@ class IRCInterface(Thread, Addon):
                              data.fid,
                              data.name,
                              data.statusmsg,
-                             "%s/s" % formatSize(data.speed),
+                             "%s/s" % format_size(data.speed),
                              "%s" % data.format_eta,
                              temp_progress
                          ))

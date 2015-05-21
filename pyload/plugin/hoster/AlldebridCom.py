@@ -2,7 +2,7 @@
 
 from pyload.utils import json_loads
 from pyload.plugin.internal.MultiHoster import MultiHoster
-from pyload.utils import parseFileSize
+from pyload.utils import parse_filesize
 
 
 class AlldebridCom(MultiHoster):
@@ -39,7 +39,7 @@ class AlldebridCom(MultiHoster):
         else:
             if pyfile.name and not pyfile.name.endswith('.tmp'):
                 pyfile.name = data['filename']
-            pyfile.size = parseFileSize(data['filesize'])
+            pyfile.size = parse_filesize(data['filesize'])
             self.link = data['link']
 
         if self.getConfig('ssl'):

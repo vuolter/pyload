@@ -14,7 +14,7 @@ from pyload.network.HTTPRequest import BadHeader
 from pyload.network.RequestFactory import getURL
 from pyload.plugin.Hoster import Hoster
 from pyload.plugin.Plugin import Fail, Retry
-from pyload.utils import fixup, fs_encode, parseFileSize
+from pyload.utils import fixup, fs_encode, parse_filesize
 
 
 #@TODO: Adapt and move to PyFile in 0.4.10
@@ -371,11 +371,11 @@ class SimpleHoster(Hoster):
             if 'S' in info['pattern']:
                 size = replace_patterns(info['pattern']['S'] + info['pattern']['U'] if 'U' in info['pattern'] else info['pattern']['S'],
                                         cls.SIZE_REPLACEMENTS)
-                info['size'] = parseFileSize(size)
+                info['size'] = parse_filesize(size)
 
             elif isinstance(info['size'], basestring):
                 unit = info['units'] if 'units' in info else None
-                info['size'] = parseFileSize(info['size'], unit)
+                info['size'] = parse_filesize(info['size'], unit)
 
             if 'H' in info['pattern']:
                 hashtype = info['pattern']['T'] if 'T' in info['pattern'] else "hash"

@@ -3,7 +3,6 @@
 import re
 
 from pyload.plugin.Account import Account
-from pyload.utils import parseFileSize
 
 
 class FastshareCz(Account):

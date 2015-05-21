@@ -6,7 +6,7 @@ import threading
 from pyload.Datatype import PyFile, PyPackage
 from pyload.Database import DatabaseBackend, style
 from pyload.manager.Event import InsertEvent, ReloadAllEvent, RemoveEvent, UpdateEvent
-from pyload.utils import formatSize, lock
+from pyload.utils import format_size, lock
 
 try:
     from pysqlite2 import dbapi2 as sqlite3
@@ -721,7 +721,7 @@ class FileMethods(object):
                 'url': r[1],
                 'name': r[2],
                 'size': r[3],
-                'format_size': formatSize(r[3]),
+                'format_size': format_size(r[3]),
                 'status': r[4],
                 'statusmsg': self.manager.statusMsg[r[4]],
                 'error': r[5],
@@ -785,7 +785,7 @@ class FileMethods(object):
             'url': r[1],
             'name': r[2],
             'size': r[3],
-            'format_size': formatSize(r[3]),
+            'format_size': format_size(r[3]),
             'status': r[4],
             'statusmsg': self.manager.statusMsg[r[4]],
             'error': r[5],
@@ -811,7 +811,7 @@ class FileMethods(object):
                 'url': r[1],
                 'name': r[2],
                 'size': r[3],
-                'format_size': formatSize(r[3]),
+                'format_size': format_size(r[3]),
                 'status': r[4],
                 'statusmsg': self.manager.statusMsg[r[4]],
                 'error': r[5],

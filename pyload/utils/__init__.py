@@ -119,16 +119,16 @@ def compare_time(start, end):
     return False
 
 
-def formatSize(size):
+def format_size(size):
     """formats size of bytes"""
     return bitmath.Byte(int(size)).best_prefix()
 
 
-def formatSpeed(speed):
-    return formatSize(speed) + "/s"
+def format_speed(speed):
+    return format_size(speed) + "/s"
 
 
-def freeSpace(folder):
+def free_space(folder):
     if os.name == "nt":
         import ctypes
 
@@ -162,7 +162,7 @@ def uniqify(seq):  #: Originally by Dave Kirby
     return [x for x in seq if x not in seen and not seen_add(x)]
 
 
-def parseFileSize(string, unit=None):  #: returns bytes
+def parse_filesize(string, unit=None):  #: returns bytes
     if not unit:
         m = re.match(r"([\d.,]+) *([a-zA-Z]*)", string.strip().lower())
         if m:
@@ -240,7 +240,7 @@ def html_unescape(text):
     return re.sub("&#?\w+;", fixup, text)
 
 
-def versiontuple(v):  #: By kindall (http://stackoverflow.com/a/11887825)
+def version_tuple(v):  #: By kindall (http://stackoverflow.com/a/11887825)
     return tuple(map(int, (v.split("."))))
 
 
@@ -259,3 +259,11 @@ def load_translation(name, locale, default="en"):
     else:
         translation.install(True)
         return translation
+
+
+def chunks(iterable, size):
+    it = iter(iterable)
+    item = list(itertools.islice(it, size))
+    while item:
+        yield item
+        item = list(itertools.islice(it, size))
