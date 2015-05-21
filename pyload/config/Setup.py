@@ -329,7 +329,7 @@ class SetupAssistant(object):
 
         print
         print _("Listen address, if you use 127.0.0.1 or localhost, the webinterface will only accessible locally.")
-        self.config.set("webui", "host", self.ask(_("Address"), "0.0.0.0"))
+        self.config.set("webui", "ip", self.ask(_("IP address"), "0.0.0.0"))
         self.config.set("webui", "port", self.ask(_("Port"), "8000"))
         print
         print _("pyLoad offers several server backends, now following a short explanation.")

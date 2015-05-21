@@ -17,7 +17,7 @@ class JsEngine(object):
         self.engine = None  #: Engine Instance
 
         if not engine:
-            engine = self.core.config.get("general", "jsengine")
+            engine = self.core.config.get("download", "jsengine")
 
         if engine != "auto" and self.set(engine) is False:
             engine = "auto"

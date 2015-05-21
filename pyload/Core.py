@@ -448,9 +448,8 @@ class Core(object):
 
 
     def init_webserver(self):
-        if self.config.get("webui", "activated"):
-            self.webserver = WebServer(self)
-            self.webserver.start()
+        self.webserver = WebServer(self)
+        self.webserver.start()
 
 
     def init_logger(self, level):
@@ -597,7 +596,7 @@ class Core(object):
     def shutdown(self):
         self.log.info(_("shutting down..."))
         try:
-            if self.config.get("webui", "activated") and hasattr(self, "webserver"):
+            if hasattr(self, "webserver"):
                 self.webserver.quit()
 
             for thread in list(self.threadManager.threads):

@@ -82,7 +82,7 @@ class RequestFactory(object):
 
     def getProxies(self):
         """ returns a proxy list for the request classes """
-        if not self.core.config.get("proxy", "proxy"):
+        if not self.core.config.get("proxy", "activated"):
             return {}
         else:
             type = "http"
@@ -102,7 +102,7 @@ class RequestFactory(object):
 
             return {
                 "type": type,
-                "address": self.core.config.get("proxy", "address"),
+                "ip": self.core.config.get("proxy", "ip"),
                 "port": self.core.config.get("proxy", "port"),
                 "username": username,
                 "password": pw,

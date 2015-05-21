@@ -292,8 +292,8 @@ class Api(Iface):
 
         :return: bool
         """
-        start = self.core.config.get("reconnect", "startTime").split(":")
-        end = self.core.config.get("reconnect", "endTime").split(":")
+        start = self.core.config.get("reconnect", "start").split(":")
+        end = self.core.config.get("reconnect", "end").split(":")
         return compare_time(start, end) and self.core.config.get("reconnect", "activated")
 
 
