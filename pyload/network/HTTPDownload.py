@@ -7,13 +7,14 @@ import logging
 import os
 import shutil
 import time
+import urllib
 
 import pycurl
 
 from pyload.network.HTTPChunk import ChunkInfo, HTTPChunk
 from pyload.network.HTTPRequest import BadHeader
 from pyload.plugin.Plugin import Abort
-from pyload.utils import fs_join, fs_encode
+from pyload.utils import encode, fs_join, fs_encode
 
 
 class HTTPDownload(object):
@@ -21,8 +22,8 @@ class HTTPDownload(object):
 
     def __init__(self, url, filename, get={}, post={}, referer=None, cj=None, bucket=None,
                  options={}, progress=None, disposition=False):
-        self.url = url
-        self.filename = filename  #: complete file destination, not only name
+        self.url = urllib.unquote(encode(url).strip())
+        self.filename = filename.strip()  #: complete file destination, not only name
         self.get = get
         self.post = post
         self.referer = referer
