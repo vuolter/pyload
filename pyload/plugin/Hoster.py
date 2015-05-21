@@ -345,10 +345,8 @@ class Hoster(Plugin):
         if not url:
             self.fail(_("No url given"))
 
-        url = urllib.unquote(encode(url).strip())  #@NOTE: utf8 vs decode -> please use decode attribute in all future plugins
-
         if self.core.debug:
-            self.logDebug("Load url: " + url, *["%s=%s" % (key, val) for key, val in locals().iteritems() if key not in ("self", "url")])
+            self.logDebug("Load url: " + urllib.unquote(encode(url).strip()), *["%s=%s" % (key, val) for key, val in locals().iteritems() if key not in ("self", "url")])
 
         res = self.req.load(url, get, post, ref, cookies, just_header, decode=decode, follow_location=follow_location, save_cookies=save_cookies)
 

@@ -16,14 +16,6 @@ from pyload.plugin.Plugin import Abort, Fail
 from pyload.utils import encode
 
 
-def myquote(url):
-    return urllib.quote(encode(url), safe="%/:=&?~#+!$,;'@()*[]")
-
-
-def myurlencode(data):
-    data = dict(data)
-    return urllib.urlencode(dict((encode(x), encode(y)) for x, y in data.iteritems()))
-
 bad_headers = range(400, 404) + range(405, 418) + range(500, 506)
 
 
@@ -145,7 +137,7 @@ class HTTPRequest(object):
     def setRequestContext(self, url, get, post, referer, cookies, multipart=False):
         """ sets everything needed for the request """
 
-        url = myquote(url)
+        url = urllib.quote(encode(url).strip(), safe="%/:=&?~#+!$,;'@()*[]")  #@TODO: recheck
 
         if get:
             get = urllib.urlencode(get)
@@ -162,7 +154,7 @@ class HTTPRequest(object):
                 elif type(post) == str:
                     pass
                 else:
-                    post = myurlencode(post)
+                    post = urllib.urlencode(dict((encode(x), encode(y)) for x, y in dict(post).iteritems()))
 
                 self.c.setopt(pycurl.POSTFIELDS, post)
             else:
