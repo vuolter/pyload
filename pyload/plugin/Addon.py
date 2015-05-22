@@ -7,7 +7,7 @@ from pyload.utils import has_method
 
 
 class Expose(object):
-    """ used for decoration to declare rpc services """
+    """Used for decoration to declare rpc services"""
 
     def __new__(cls, f, *args, **kwargs):
         addonManager.addRPC(f.__module__, f.func_name, f.func_doc)
@@ -102,12 +102,12 @@ class Addon(Plugin):
 
 
     def setup(self):
-        """ more init stuff if needed """
+        """More init stuff if needed"""
         pass
 
 
     def deactivate(self):
-        """ called when addon was deactivated """
+        """Called when addon was deactivated"""
         if has_method(self.__class__, "unload"):
             self.logWarning(_("Deprecated method `unload`, use `deactivate` instead"))
             self.unload()
@@ -119,7 +119,7 @@ class Addon(Plugin):
 
 
     def isActivated(self):
-        """ checks if addon is activated"""
+        """Checks if addon is activated"""
         return self.getConfig("activated")
 
 
@@ -127,7 +127,7 @@ class Addon(Plugin):
 
 
     def activate(self):
-        """ called when addon was activated """
+        """Called when addon was activated"""
         if has_method(self.__class__, "coreReady"):
             self.logWarning(_("Deprecated method `coreReady`, use `activate` instead"))
             self.coreReady()
@@ -139,7 +139,7 @@ class Addon(Plugin):
 
 
     def exit(self):
-        """ called by core.shutdown just before pyLoad exit """
+        """Called by core.shutdown just before pyLoad exit"""
         if has_method(self.__class__, "coreExiting"):
             self.coreExiting()
 
@@ -178,7 +178,7 @@ class Addon(Plugin):
 
 
     def captchaTask(self, task):
-        """ new captcha task for the plugin, it MUST set the handler and timeout or will be ignored """
+        """New captcha task for the plugin, it MUST set the handler and timeout or will be ignored"""
         pass
 
 

@@ -6,7 +6,7 @@ import urllib
 
 
 def decode(string):
-    """ Decode string to unicode with utf8 """
+    """Decode string to unicode with utf8"""
     if type(string) == str:
         return string.decode("utf8", "replace")
     else:
@@ -14,7 +14,7 @@ def decode(string):
 
 
 def encode(string):
-    """ Decode string to utf8 """
+    """Decode string to utf8"""
     if type(string) == unicode:
         return string.encode("utf8", "replace")
     else:
@@ -22,7 +22,7 @@ def encode(string):
 
 
 def remove_chars(string, repl):
-    """ removes all chars in repl from string"""
+    """Removes all chars in repl from string"""
     if type(repl) == unicode:
         for badc in list(repl):
             string = string.replace(badc, "")
@@ -38,7 +38,7 @@ def remove_chars(string, repl):
 
 
 def safe_filename(name):
-    """ remove bad chars """
+    """Remove bad chars"""
     name = urllib.unquote(name).encode('ascii', 'replace')  #: Non-ASCII chars usually breaks file saving. Replacing.
     if os.name == 'nt':
         return remove_chars(name, u'\00\01\02\03\04\05\06\07\10\11\12\13\14\15\16\17\20\21\22\23\24\25\26\27\30\31\32'
@@ -48,7 +48,7 @@ def safe_filename(name):
 
 
 def fs_join(*args):
-    """ joins a path, encoding aware """
+    """Joins a path, encoding aware"""
     return fs_encode(os.path.join(*[x if type(x) == unicode else decode(x) for x in args]))
 
 

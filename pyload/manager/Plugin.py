@@ -46,7 +46,7 @@ class PluginManager(object):
 
 
     def createIndex(self):
-        """create information for all plugins available"""
+        """Create information for all plugins available"""
 
         sys.path.append(os.path.abspath(""))
 
@@ -184,7 +184,7 @@ class PluginManager(object):
 
 
     def parseUrls(self, urls):
-        """parse plugins for given list of urls"""
+        """Parse plugins for given list of urls"""
 
         last = None
         res  = []  #: tupels of (url, plugintype, pluginname)
@@ -223,7 +223,7 @@ class PluginManager(object):
 
 
     def pluginClass(self, type, name):
-        """return plugin class"""
+        """Return plugin class"""
         if name in self.plugins[type]:
             return self.loadClass(type, name)
         else:
@@ -233,7 +233,7 @@ class PluginManager(object):
 
 
     def pluginModule(self, type, name):
-        """return plugin module"""
+        """Return plugin module"""
         if name in self.plugins[type]:
             return self.loadModule(type, name)
         else:
@@ -243,7 +243,8 @@ class PluginManager(object):
 
 
     def loadModule(self, type, name):
-        """ Returns loaded module for plugin
+        """
+        Returns loaded module for plugin
 
         :param type: plugin type, subfolder of pyload.plugins
         :param name:
@@ -284,7 +285,7 @@ class PluginManager(object):
 
 
     def getAccountPlugins(self):
-        """return list of account plugin names"""
+        """Return list of account plugin names"""
         return self.accountPlugins.keys()
 
 
@@ -331,7 +332,7 @@ class PluginManager(object):
 
 
     def reloadPlugins(self, type_plugins):
-        """ reload and reindex plugins """
+        """Reload and reindex plugins"""
         if not type_plugins:
             return None
 
@@ -377,5 +378,5 @@ class PluginManager(object):
 
 
     def reloadPlugin(self, type_plugin):
-        """ reload and reindex ONE plugin """
+        """Reload and reindex ONE plugin"""
         return bool(self.reloadPlugins(type_plugin))

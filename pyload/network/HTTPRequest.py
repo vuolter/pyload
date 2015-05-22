@@ -54,7 +54,7 @@ class HTTPRequest(object):
 
 
     def initHandle(self):
-        """ sets common options to curl handle """
+        """Sets common options to curl handle"""
         self.c.setopt(pycurl.FOLLOWLOCATION, 1)
         self.c.setopt(pycurl.MAXREDIRS, 10)
         self.c.setopt(pycurl.CONNECTTIMEOUT, 30)
@@ -117,13 +117,13 @@ class HTTPRequest(object):
 
 
     def addCookies(self):
-        """ put cookies from curl handle to cj """
+        """Put cookies from curl handle to cj"""
         if self.cj:
             self.cj.addCookies(self.c.getinfo(pycurl.INFO_COOKIELIST))
 
 
     def getCookies(self):
-        """ add cookies from cj to curl handle """
+        """Add cookies from cj to curl handle"""
         if self.cj:
             for c in self.cj.getCookies():
                 self.c.setopt(pycurl.COOKIELIST, c)
@@ -135,7 +135,7 @@ class HTTPRequest(object):
 
 
     def setRequestContext(self, url, get, post, referer, cookies, multipart=False):
-        """ sets everything needed for the request """
+        """Sets everything needed for the request"""
 
         url = urllib.quote(encode(url).strip(), safe="%/:=&?~#+!$,;'@()*[]")  #@TODO: recheck
 
@@ -173,7 +173,7 @@ class HTTPRequest(object):
 
 
     def load(self, url, get={}, post={}, referer=True, cookies=True, just_header=False, multipart=False, decode=False, follow_location=True, save_cookies=True):
-        """ load and returns a given page """
+        """Load and returns a given page"""
 
         self.setRequestContext(url, get, post, referer, cookies, multipart)
 
@@ -215,7 +215,7 @@ class HTTPRequest(object):
 
 
     def verifyHeader(self):
-        """ raise an exceptions on bad headers """
+        """Raise an exceptions on bad headers"""
         code = int(self.c.getinfo(pycurl.RESPONSE_CODE))
         if code in bad_headers:
             # 404 will NOT raise an exception
@@ -224,12 +224,12 @@ class HTTPRequest(object):
 
 
     def checkHeader(self):
-        """ check if header indicates failure"""
+        """Check if header indicates failure"""
         return int(self.c.getinfo(pycurl.RESPONSE_CODE)) not in bad_headers
 
 
     def getResponse(self):
-        """ retrieve response from string io """
+        """Retrieve response from string io"""
         if self.rep is None:
             return ""
         else:
@@ -240,7 +240,7 @@ class HTTPRequest(object):
 
 
     def decodeResponse(self, rep):
-        """ decode with correct encoding, relies on header """
+        """Decode with correct encoding, relies on header"""
         header = self.header.splitlines()
         encoding = "utf8"  #: default encoding
 
@@ -276,7 +276,7 @@ class HTTPRequest(object):
 
 
     def write(self, buf):
-        """ writes response """
+        """Writes response"""
         if self.rep.tell() > 1000000 or self.abort:
             rep = self.getResponse()
 
@@ -291,7 +291,7 @@ class HTTPRequest(object):
 
 
     def writeHeader(self, buf):
-        """ writes header """
+        """Writes header"""
         self.header += buf
 
 
@@ -304,7 +304,7 @@ class HTTPRequest(object):
 
 
     def close(self):
-        """ cleanup, unusable after this """
+        """Cleanup, unusable after this"""
         self.rep.close()
         if hasattr(self, "cj"):
             del self.cj

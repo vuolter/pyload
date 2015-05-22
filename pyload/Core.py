@@ -150,7 +150,7 @@ class Core(object):
 
 
     def checkPidFile(self):
-        """ return pid as int or 0"""
+        """Return pid as int or 0"""
         if os.path.isfile(self.pidfile):
             with open(self.pidfile, "rb") as f:
                 pid = f.read().strip()
@@ -217,7 +217,7 @@ class Core(object):
 
 
     def start(self, rpc=True, web=True):
-        """ starts the fun :D """
+        """Starts the fun :D"""
 
         self.version = pyload.__version__
 
@@ -484,7 +484,7 @@ class Core(object):
 
 
     def check_install(self, check_name, legend, python=True, essential=False):
-        """check wether needed tools are installed"""
+        """Check wether needed tools are installed"""
         try:
             if python:
                 imp.find_module(check_name)
@@ -502,7 +502,7 @@ class Core(object):
 
 
     def check_file(self, check_names, description="", folder=False, empty=True, essential=False, quiet=False):
-        """check wether needed files exists"""
+        """Check wether needed files exists"""
         tmp_names = []
         if not type(check_names) == list:
             tmp_names.append(check_names)

@@ -181,7 +181,7 @@ class XMPPInterface(IRCInterface, JabberClient):
 
 
     def announce(self, message):
-        """ send message to all owners"""
+        """Send message to all owners"""
         for user in self.getConfig('owners').split(";"):
             self.logDebug("Send message to", user)
 

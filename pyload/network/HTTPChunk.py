@@ -159,7 +159,7 @@ class HTTPChunk(HTTPRequest):
 
 
     def getHandle(self):
-        """ returns a Curl handle ready to use for perform/multiperform """
+        """Returns a Curl handle ready to use for perform/multiperform"""
 
         self.setRequestContext(self.p.url, self.p.get, self.p.post, self.p.referer, self.p.cj)
         self.c.setopt(pycurl.WRITEFUNCTION, self.writeBody)
@@ -254,7 +254,7 @@ class HTTPChunk(HTTPRequest):
 
 
     def parseHeader(self):
-        """parse data from recieved header"""
+        """Parse data from recieved header"""
         for orgline in self.decodeResponse(self.header).splitlines():
             line = orgline.strip().lower()
 
@@ -289,7 +289,7 @@ class HTTPChunk(HTTPRequest):
 
 
     def resetRange(self):
-        """ Reset the range, so the download will load all data available  """
+        """Reset the range, so the download will load all data available"""
         self.range = None
 
 
@@ -299,14 +299,14 @@ class HTTPChunk(HTTPRequest):
 
 
     def flushFile(self):
-        """  flush and close file """
+        """Flush and close file"""
         self.fp.flush()
         os.fsync(self.fp.fileno())  #: make sure everything was written to disk
         self.fp.close()  #: needs to be closed, or merging chunks will fail
 
 
     def close(self):
-        """ closes everything, unusable after this """
+        """Closes everything, unusable after this"""
         if self.fp: self.fp.close()
         self.c.close()
         if hasattr(self, "p"):

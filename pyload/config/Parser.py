@@ -46,7 +46,7 @@ class ConfigParser(object):
 
 
     def checkVersion(self, n=0):
-        """determines if config need to be copied"""
+        """Determines if config need to be copied"""
         try:
             if not os.path.exists("pyload.conf"):
                 shutil.copy(os.path.join(pypath, "pyload", "config", "default.conf"), "pyload.conf")
@@ -80,7 +80,7 @@ class ConfigParser(object):
 
 
     def readConfig(self):
-        """reads the config file"""
+        """Reads the config file"""
         self.config = self.parseConfig(os.path.join(pypath, "pyload", "config", "default.conf"))
         self.plugin = self.parseConfig("plugin.conf")
 
@@ -99,7 +99,7 @@ class ConfigParser(object):
 
 
     def parseConfig(self, config):
-        """parses a given configfile"""
+        """Parses a given configfile"""
 
         with open(config) as f:
             config = f.read()
@@ -183,7 +183,7 @@ class ConfigParser(object):
 
 
     def updateValues(self, config, dest):
-        """sets the config values from a parsed config file to values in destination"""
+        """Sets the config values from a parsed config file to values in destination"""
 
         for section in config.iterkeys():
             if section in dest:
@@ -203,7 +203,7 @@ class ConfigParser(object):
 
 
     def saveConfig(self, config, filename):
-        """saves config to filename"""
+        """Saves config to filename"""
         with open(filename, "wb") as f:
             try:
                 os.chmod(filename, 0600)
@@ -235,7 +235,7 @@ class ConfigParser(object):
 
 
     def cast(self, typ, value):
-        """cast value to given format"""
+        """Cast value to given format"""
         if not isinstance(value, basestring):
             return value
 
@@ -256,37 +256,37 @@ class ConfigParser(object):
 
 
     def save(self):
-        """saves the configs to disk"""
+        """Saves the configs to disk"""
         self.saveConfig(self.config, "pyload.conf")
         self.saveConfig(self.plugin, "plugin.conf")
 
 
     def __getitem__(self, section):
-        """provides dictonary like access: c['section']['option']"""
+        """Provides dictonary like access: c['section']['option']"""
         return Section(self, section)
 
 
     def get(self, section, option):
-        """get value"""
+        """Get value"""
         value = self.config[section][option]['value']
         return decode(value)
 
 
     def set(self, section, option, value):
-        """set value"""
+        """Set value"""
         value = self.cast(self.config[section][option]['type'], value)
         self.config[section][option]['value'] = value
         self.save()
 
 
     def getPlugin(self, plugin, option):
-        """gets a value for a plugin"""
+        """Gets a value for a plugin"""
         value = self.plugin[plugin][option]['value']
         return encode(value)
 
 
     def setPlugin(self, plugin, option, value):
-        """sets a value for a plugin"""
+        """Sets a value for a plugin"""
 
         value = self.cast(self.plugin[plugin][option]['type'], value)
 
@@ -303,12 +303,12 @@ class ConfigParser(object):
 
 
     def getMetaData(self, section, option):
-        """ get all config data for an option """
+        """Get all config data for an option"""
         return self.config[section][option]
 
 
     def addPluginConfig(self, name, config, outline=""):
-        """adds config options with tuples (name, type, desc, default)"""
+        """Adds config options with tuples (name, type, desc, default)"""
         if name not in self.plugin:
             conf = {"desc": name,
                     "outline": outline}
@@ -343,7 +343,7 @@ class ConfigParser(object):
 
 
 class Section(object):
-    """provides dictionary like access for configparser"""
+    """Provides dictionary like access for configparser"""
 
     def __init__(self, parser, section):
         """Constructor"""
@@ -352,10 +352,10 @@ class Section(object):
 
 
     def __getitem__(self, item):
-        """getitem"""
+        """Getitem"""
         return self.parser.get(self.section, item)
 
 
     def __setitem__(self, item, value):
-        """setitem"""
+        """Setitem"""
         self.parser.set(self.section, item, value)

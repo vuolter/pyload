@@ -51,7 +51,8 @@ class Account(Plugin):
 
 
     def login(self, user, data, req):
-        """login into account, the cookies will be saved so user can be recognized
+        """
+        Login into account, the cookies will be saved so user can be recognized
 
         :param user: loginname
         :param data: data dictionary
@@ -107,7 +108,7 @@ class Account(Plugin):
 
 
     def updateAccounts(self, user, password=None, options={}):
-        """ updates account and return true if anything changed """
+        """Updates account and return true if anything changed"""
 
         if user in self.accounts:
             self.accounts[user]['valid'] = True  #: do not remove or accounts will not login
@@ -136,7 +137,8 @@ class Account(Plugin):
 
     @lock
     def getAccountInfo(self, name, force=False):
-        """retrieve account infos for an user, do **not** overwrite this method!\\
+        """
+        Retrieve account infos for an user, do **not** overwrite this method!\\
         just use it to retrieve infos in hoster plugins. see `loadAccountInfo`
 
         :param name: username
@@ -179,7 +181,8 @@ class Account(Plugin):
 
 
     def loadAccountInfo(self, name, req=None):
-        """this should be overwritten in account plugin,\
+        """
+        This should be overwritten in account plugin,\
         and retrieving account information for user
 
         :param name:
@@ -227,7 +230,7 @@ class Account(Plugin):
 
 
     def selectAccount(self):
-        """ returns an valid account name and data"""
+        """Returns an valid account name and data"""
         usable = []
         for user, data in self.accounts.iteritems():
             if not data['valid']:
@@ -290,14 +293,14 @@ class Account(Plugin):
 
 
     def scheduleRefresh(self, user, time=0, force=True):
-        """ add task to refresh account info to sheduler """
+        """Add task to refresh account info to sheduler"""
         self.logDebug("Scheduled Account refresh for %s in %s seconds." % (user, time))
         self.core.scheduler.addJob(time, self.getAccountInfo, [user, force])
 
 
     @lock
     def checkLogin(self, user):
-        """ checks if user is still logged in """
+        """Checks if user is still logged in"""
         if user in self.timestamps:
             if self.login_timeout > 0 and self.timestamps[user] + self.login_timeout * 60 < time.time():
                 self.logDebug("Reached login timeout for %s" % user)

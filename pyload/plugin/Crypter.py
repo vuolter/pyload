@@ -42,7 +42,7 @@ class Crypter(Hoster):
 
 
     def process(self, pyfile):
-        """ main method """
+        """Main method"""
 
         self.decrypt(pyfile)
 
@@ -60,14 +60,14 @@ class Crypter(Hoster):
 
 
     def generatePackages(self):
-        """ generate new packages from self.urls """
+        """Generate new packages from self.urls"""
 
         packages = map(lambda name, links: (name, links, None), self.core.api.generatePackages(self.urls).iteritems())
         self.packages.extend(packages)
 
 
     def createPackages(self):
-        """ create new packages from self.packages """
+        """Create new packages from self.packages"""
 
         package_folder = self.pyfile.package().folder
         package_password = self.pyfile.package().password

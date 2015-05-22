@@ -31,7 +31,7 @@ class InfoThread(PluginThread):
 
 
     def run(self):
-        """run method"""
+        """Run method"""
 
         plugins = {}
         container = []

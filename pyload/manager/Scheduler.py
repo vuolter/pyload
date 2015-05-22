@@ -107,7 +107,7 @@ class Job(object):
 
 
 class PriorityQueue(object):
-    """ a non blocking priority queue """
+    """A non blocking priority queue"""
 
     def __init__(self):
         self.queue = []
@@ -129,7 +129,7 @@ class PriorityQueue(object):
 
 
     def get(self):
-        """ return element or None """
+        """Return element or None"""
         self.lock.acquire()
         try:
             el = heapq.heappop(self.queue)

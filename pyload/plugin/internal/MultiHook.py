@@ -99,7 +99,7 @@ class MultiHook(Hook):
 
 
     def getURL(self, *args, **kwargs):  #@TODO: Remove in 0.4.10
-        """ see HTTPRequest for argument list """
+        """See HTTPRequest for argument list"""
         h = pyreq.getHTTPRequest(timeout=120)
         try:
             if not 'decode' in kwargs:
@@ -160,7 +160,8 @@ class MultiHook(Hook):
 
 
     def getHosters(self):
-        """Load list of supported hoster
+        """
+        Load list of supported hoster
 
         :return: List of domain names
         """
@@ -168,7 +169,7 @@ class MultiHook(Hook):
 
 
     def periodical(self):
-        """reload plugin list periodically"""
+        """Reload plugin list periodically"""
         self.loadAccount()
 
         if self.getConfig('reload', True):

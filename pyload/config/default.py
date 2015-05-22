@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""
-Configuration layout for default base config
-"""
+"""Configuration layout for default base config"""
 
 #TODO: write tooltips and descriptions
 #TODO: use apis config related classes

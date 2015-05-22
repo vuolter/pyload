@@ -55,8 +55,8 @@ class ShareplaceCom(Hoster):
 
 
     def get_file_url(self):
-        """ returns the absolute downloadable filepath
-        """
+        """Returns the absolute downloadable filepath"""
+
         url = re.search(r"var beer = '(.*?)';", self.html)
         if url:
             url = url.group(1)
@@ -77,8 +77,6 @@ class ShareplaceCom(Hoster):
 
 
     def file_exists(self):
-        """ returns True or False
-        """
         if not self.html:
             self.download_html()
 

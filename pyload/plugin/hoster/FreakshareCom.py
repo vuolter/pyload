@@ -92,8 +92,8 @@ class FreakshareCom(Hoster):
 
 
     def get_file_url(self):
-        """ returns the absolute downloadable filepath
-        """
+        """Returns the absolute downloadable filepath"""
+
         if not self.html:
             self.download_html()
         if not self.wantReconnect:
@@ -151,8 +151,6 @@ class FreakshareCom(Hoster):
 
 
     def file_exists(self):
-        """ returns True or False
-        """
         if not self.html:
             self.download_html()
         if re.search(r"This file does not exist!", self.html):

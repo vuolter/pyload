@@ -39,7 +39,7 @@ class BasePlugin(Hoster):
         self.multiDL        = True
         self.resumeDownload = True
     def process(self, pyfile):
-        """main function"""
+        """Main function"""
 
         pyfile.name = self.getInfo(pyfile.url)['name']
 

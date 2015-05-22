@@ -24,7 +24,7 @@ class MegacrypterCom(MegaCoNz):
 
 
     def api_response(self, **kwargs):
-        """ Dispatch a call to the api, see megacrypter.com/api_doc """
+        """Dispatch a call to the api, see megacrypter.com/api_doc"""
         self.logDebug("JSON request: " + json_dumps(kwargs))
         res = self.load(self.API_URL, post=json_dumps(kwargs))
         self.logDebug("API Response: " + res)

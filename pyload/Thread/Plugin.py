@@ -20,7 +20,7 @@ from pyload.utils import fs_join
 
 
 class PluginThread(threading.Thread):
-    """abstract base class for thread types"""
+    """Abstract base class for thread types"""
 
     def __init__(self, manager):
         """Constructor"""
@@ -30,10 +30,6 @@ class PluginThread(threading.Thread):
 
 
     def writeDebugReport(self, pyfile):
-        """ writes a
-        :return:
-        """
-
         dump_name = "debug_%s_%s.zip" % (pyfile.pluginname, time.strftime("%d-%m-%Y_%H-%M-%S"))
         dump = self.getDebugDump(pyfile)
 
@@ -124,6 +120,6 @@ class PluginThread(threading.Thread):
 
 
     def clean(self, pyfile):
-        """ set thread unactive and release pyfile """
+        """Set thread unactive and release pyfile"""
         self.active = True  #: release pyfile but lets the thread active
         pyfile.release()

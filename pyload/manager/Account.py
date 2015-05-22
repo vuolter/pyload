@@ -14,7 +14,7 @@ ACC_VERSION = 1
 
 
 class AccountManager(object):
-    """manages all accounts"""
+    """Manages all accounts"""
 
     def __init__(self, core):
         """Constructor"""
@@ -35,7 +35,7 @@ class AccountManager(object):
 
 
     def getAccountPlugin(self, plugin):
-        """get account instance for plugin or None if anonymous"""
+        """Get account instance for plugin or None if anonymous"""
         try:
             if plugin in self.accounts:
                 if plugin not in self.plugins:
@@ -53,7 +53,7 @@ class AccountManager(object):
 
 
     def getAccountPlugins(self):
-        """ get all account instances"""
+        """Get all account instances"""
 
         plugins = []
         for plugin in self.accounts.keys():
@@ -65,7 +65,7 @@ class AccountManager(object):
     #----------------------------------------------------------------------
 
     def loadAccounts(self):
-        """loads all accounts available"""
+        """Loads all accounts available"""
 
         try:
             with open("accounts.conf", "a+") as f:
@@ -116,7 +116,7 @@ class AccountManager(object):
     #----------------------------------------------------------------------
 
     def saveAccounts(self):
-        """save all account information"""
+        """Save all account information"""
 
         try:
             with open("accounts.conf", "wb") as f:
@@ -144,14 +144,14 @@ class AccountManager(object):
     #----------------------------------------------------------------------
 
     def initAccountPlugins(self):
-        """init names"""
+        """Init names"""
         for name in self.core.pluginManager.getAccountPlugins():
             self.accounts[name] = {}
 
 
     @lock
     def updateAccount(self, plugin, user, password=None, options={}):
-        """add or update account"""
+        """Add or update account"""
         if plugin in self.accounts:
             p = self.getAccountPlugin(plugin)
             updated = p.updateAccounts(user, password, options)
@@ -163,7 +163,7 @@ class AccountManager(object):
 
     @lock
     def removeAccount(self, plugin, user):
-        """remove account"""
+        """Remove account"""
 
         if plugin in self.accounts:
             p = self.getAccountPlugin(plugin)

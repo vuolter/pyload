@@ -52,7 +52,7 @@ def read_lock(fn):
 
 
 def try_catch(fallback):
-    """ Decorator that executes the function and returns the value or fallback on any exception """
+    """Decorator that executes the function and returns the value or fallback on any exception"""
 
     def wrapper(fn):
 

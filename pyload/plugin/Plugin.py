@@ -19,23 +19,23 @@ from pyload.utils import fs_decode, fs_encode, safe_filename, fs_join, encode
 
 
 class Abort(Exception):
-    """ raised when aborted """
+    """Raised when aborted"""
 
 
 class Fail(Exception):
-    """ raised when failed """
+    """Raised when failed"""
 
 
 class Reconnect(Exception):
-    """ raised when reconnected """
+    """Raised when reconnected"""
 
 
 class Retry(Exception):
-    """ raised when start again from beginning """
+    """Raised when start again from beginning"""
 
 
 class SkipDownload(Exception):
-    """ raised when download should be skipped """
+    """Raised when download should be skipped"""
 
 
 class Plugin(Plugin):
@@ -102,7 +102,8 @@ class Plugin(Plugin):
 
 
     def setConfig(self, option, value):
-        """ Set config value for current plugin
+        """
+        Set config value for current plugin
 
         :param option:
         :param value:
@@ -113,12 +114,13 @@ class Plugin(Plugin):
 
     #: Deprecated method
     def setConf(self, *args, **kwargs):
-        """ see `setConfig` """
+        """See `setConfig`"""
         return self.setConfig(*args, **kwargs)
 
 
     def getConfig(self, option):
-        """ Returns config value for current plugin
+        """
+        Returns config value for current plugin
 
         :param option:
         :return:
@@ -128,39 +130,39 @@ class Plugin(Plugin):
 
     #: Deprecated method
     def getConf(self, *args, **kwargs):
-        """ see `getConfig` """
+        """See `getConfig`"""
         return self.getConfig(*args, **kwargs)
 
 
     def store(self, key, value):
-        """ Saves a value persistently to the database """
+        """Saves a value persistently to the database"""
         self.core.db.setStorage(self.getPluginConfSection(), key, value)
 
 
     #: Deprecated method
     def setStorage(self, *args, **kwargs):
-        """ same as `setStorage` """
+        """Same as `setStorage`"""
         return self.store(*args, **kwargs)
 
 
     def retrieve(self, key, default=None):
-        """ Retrieves saved value or dict of all saved entries if key is None """
+        """Retrieves saved value or dict of all saved entries if key is None"""
         return self.core.db.getStorage(self.getPluginConfSection(), key) or default
 
 
     #: Deprecated method
     def getStorage(self, *args, **kwargs):
-        """ same as `getStorage` """
+        """Same as `getStorage`"""
         return self.retrieve(*args, **kwargs)
 
 
     def delStorage(self, key):
-        """ Delete entry in db """
+        """Delete entry in db"""
         self.core.db.delStorage(self.__name__, key)
 
 
     def fail(self, reason):
-        """ fail and give reason """
+        """Fail and give reason"""
         raise Fail(reason)
 
 

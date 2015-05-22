@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # @author: vuolter
 
-""" Store all useful functions here """
+"""Store all useful functions here"""
 
 from __future__ import with_statement
 
@@ -44,7 +44,7 @@ def compare_time(start, end):
 
 
 def format_size(size):
-    """formats size of bytes"""
+    """Formats size of bytes"""
     return bitmath.Byte(int(size)).best_prefix()
 
 
@@ -65,7 +65,7 @@ def free_space(folder):
 
 
 def fs_bsize(path):
-    """ get optimal file system buffer size (in bytes) for I/O calls """
+    """Get optimal file system buffer size (in bytes) for I/O calls"""
     path = fs_encode(path)
 
     if os.name == "nt":
@@ -80,7 +80,7 @@ def fs_bsize(path):
 
 
 def uniqify(seq):  #: Originally by Dave Kirby
-    """ Remove duplicates from list preserving order """
+    """Remove duplicates from list preserving order"""
     seen     = set()
     seen_add = seen.add
     return [x for x in seq if x not in seen and not seen_add(x)]
@@ -104,7 +104,7 @@ def parse_size(string, unit=None):  #: returns bytes
 
 
 def bits_set(bits, compare):
-    """ checks if all bits are set in compare, or bits is 0 """
+    """Checks if all bits are set in compare, or bits is 0"""
     return bits == (bits & compare)
 
 
@@ -131,12 +131,12 @@ def fixup(m):
 
 
 def has_method(obj, name):
-    """ Check if "name" was defined in obj, (false if it was inhereted) """
+    """Check if "name" was defined in obj, (false if it was inhereted)"""
     return hasattr(obj, '__dict__') and name in obj.__dict__
 
 
 def accumulate(it, inv_map=None):
-    """ accumulate (key, value) data to {value : [keylist]} dictionary """
+    """Accumulate (key, value) data to {value : [keylist]} dictionary"""
     if inv_map is None:
         inv_map = {}
 
@@ -150,7 +150,7 @@ def accumulate(it, inv_map=None):
 
 
 def get_index(l, value):
-    """ .index method that also works on tuple and python 2.5 """
+    """.index method that also works on tuple and python 2.5"""
     for pos, t in enumerate(l):
         if t == value:
             return pos
@@ -165,7 +165,7 @@ def html_unescape(text):
 
 
 def load_translation(name, locale, default="en"):
-    """ Load language and return its translation object or None """
+    """Load language and return its translation object or None"""
 
     try:
         gettext.setpaths([os.path.join(os.sep, "usr", "share", "pyload", "locale"), None])

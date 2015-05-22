@@ -13,10 +13,10 @@ from pyload.plugin.Plugin import Abort, Fail, Retry
 
 class DecrypterThread(PluginThread):
 
-    """thread for decrypting"""
+    """Thread for decrypting"""
 
     def __init__(self, manager, pyfile):
-        """constructor"""
+        """Constructor"""
         PluginThread.__init__(self, manager)
 
         self.active = pyfile
@@ -32,7 +32,7 @@ class DecrypterThread(PluginThread):
 
 
     def run(self):
-        """run method"""
+        """Run method"""
 
         pyfile = self.active
         retry = False

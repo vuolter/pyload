@@ -16,7 +16,8 @@ from pyload.utils.decorators import try_catch
 
 
 class AddonManager(object):
-    """Manages addons, delegates and handles Events.
+    """
+    Manages addons, delegates and handles Events.
 
         Every plugin can define events, \
         but some very usefull events are called by the Core.
@@ -242,12 +243,12 @@ class AddonManager(object):
 
 
     def activePlugins(self):
-        """ returns all active plugins """
+        """Returns all active plugins"""
         return [x for x in self.plugins if x.isActivated()]
 
 
     def getAllInfo(self):
-        """returns info stored by addon plugins"""
+        """Returns info stored by addon plugins"""
         info = {}
         for name, plugin in self.pluginMap.iteritems():
             if plugin.info:
@@ -274,13 +275,13 @@ class AddonManager(object):
 
 
     def removeEvent(self, event, func):
-        """removes previously added event listener"""
+        """Removes previously added event listener"""
         if event in self.events:
             self.events[event].remove(func)
 
 
     def dispatchEvent(self, event, *args):
-        """dispatches event with args"""
+        """Dispatches event with args"""
         if event in self.events:
             for f in self.events[event]:
                 try:

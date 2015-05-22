@@ -18,7 +18,7 @@ from pyload.utils import free_space, lock
 
 
 class ThreadManager(object):
-    """manages the download threads, assign jobs, reconnect etc"""
+    """Manages the download threads, assign jobs, reconnect etc"""
 
     def __init__(self, core):
         """Constructor"""
@@ -54,7 +54,7 @@ class ThreadManager(object):
 
 
     def createThread(self):
-        """create a download thread"""
+        """Create a download thread"""
 
         thread = DownloadThread(self)
         self.threads.append(thread)
@@ -72,7 +72,7 @@ class ThreadManager(object):
 
     @lock
     def createResultThread(self, data, add=False):
-        """ creates a thread to fetch online status, returns result id """
+        """Creates a thread to fetch online status, returns result id"""
         self.timestamp = time.time() + 5 * 60
 
         rid = self.resultIDs
@@ -85,7 +85,7 @@ class ThreadManager(object):
 
     @lock
     def getInfoResult(self, rid):
-        """returns result and clears it"""
+        """Returns result and clears it"""
         self.timestamp = time.time() + 5 * 60
 
         if rid in self.infoResults:
@@ -111,12 +111,12 @@ class ThreadManager(object):
 
 
     def processingIds(self):
-        """get a id list of all pyfiles processed"""
+        """Get a id list of all pyfiles processed"""
         return [x.id for x in self.getActiveFiles()]
 
 
     def work(self):
-        """run all task which have to be done (this is for repetivive call by core)"""
+        """Run all task which have to be done (this is for repetivive call by core)"""
         try:
             self.tryReconnect()
         except Exception, e:
@@ -146,7 +146,7 @@ class ThreadManager(object):
     #--------------------------------------------------------------------------
 
     def tryReconnect(self):
-        """checks if reconnect needed"""
+        """Checks if reconnect needed"""
 
         if not (self.core.config.get("reconnect", "activated") and self.core.api.isTimeReconnect()):
             return False
@@ -199,7 +199,7 @@ class ThreadManager(object):
 
 
     def getIP(self):
-        """retrieve current ip"""
+        """Retrieve current ip"""
         services = [("http://automation.whatismyip.com/n09230945.asp", "(\S+)"),
                     ("http://checkip.dyndns.org/", ".*Current IP Address: (\S+)</body>.*")]
 
@@ -220,7 +220,7 @@ class ThreadManager(object):
     #--------------------------------------------------------------------------
 
     def checkThreadCount(self):
-        """checks if there are need for increasing or reducing thread count"""
+        """Checks if there are need for increasing or reducing thread count"""
 
         if len(self.threads) == self.core.config.get("download", "max_downloads"):
             return True
@@ -233,7 +233,7 @@ class ThreadManager(object):
 
 
     def cleanPycurl(self):
-        """ make a global curl cleanup (currently ununused) """
+        """Make a global curl cleanup (currently ununused)"""
         if self.processingIds():
             return False
         pycurl.global_cleanup()
@@ -246,7 +246,7 @@ class ThreadManager(object):
     #--------------------------------------------------------------------------
 
     def assignJob(self):
-        """assing a job to a thread if possible"""
+        """Assing a job to a thread if possible"""
 
         if self.pause or not self.core.api.isTimeDownload():
             return
@@ -310,5 +310,5 @@ class ThreadManager(object):
 
 
     def cleanup(self):
-        """do global cleanup, should be called when finished with pycurl"""
+        """Do global cleanup, should be called when finished with pycurl"""
         pycurl.global_cleanup()

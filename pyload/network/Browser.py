@@ -89,7 +89,7 @@ class Browser(object):
 
     def httpDownload(self, url, filename, get={}, post={}, ref=True, cookies=True, chunks=1, resume=False,
                      progressNotify=None, disposition=False):
-        """ this can also download ftp """
+        """This can also download ftp"""
         self._size = 0
         self.dl = HTTPDownload(url, filename, get, post, self.lastEffectiveURL if ref else None,
                                self.cj if cookies else None, self.bucket, self.options, progressNotify, disposition)
@@ -102,17 +102,18 @@ class Browser(object):
 
 
     def load(self, *args, **kwargs):
-        """ retrieves page """
+        """Retrieves page"""
         return self.http.load(*args, **kwargs)
 
 
     def putHeader(self, name, value):
-        """ add a header to the request """
+        """Add a header to the request"""
         self.http.putHeader(name, value)
 
 
     def addAuth(self, pwd):
-        """Adds user and pw for http auth
+        """
+        Adds user and pw for http auth
 
         :param pwd: string, user:password
         """
@@ -141,7 +142,7 @@ class Browser(object):
 
 
     def close(self):
-        """ cleanup """
+        """Cleanup"""
         if hasattr(self, "http"):
             self.http.close()
             del self.http

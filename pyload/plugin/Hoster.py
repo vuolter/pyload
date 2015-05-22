@@ -104,17 +104,17 @@ class Hoster(Plugin):
 
 
     def init(self):
-        """initialize the plugin (in addition to `__init__`)"""
+        """Initialize the plugin (in addition to `__init__`)"""
         pass
 
 
     def setup(self):
-        """ setup for enviroment and other things, called before downloading (possibly more than one time)"""
+        """Setup for enviroment and other things, called before downloading (possibly more than one time)"""
         pass
 
 
     def preprocessing(self, thread):
-        """ handles important things to do before starting """
+        """Handles important things to do before starting"""
         self.thread = thread
 
         if self.account:
@@ -130,7 +130,7 @@ class Hoster(Plugin):
 
 
     def process(self, pyfile):
-        """the 'main' method of every plugin, you **have to** overwrite it"""
+        """The 'main' method of every plugin, you **have to** overwrite it"""
         raise NotImplementedError
 
 
@@ -141,7 +141,7 @@ class Hoster(Plugin):
 
 
     def resetAccount(self):
-        """ dont use account and retry download """
+        """Dont use account and retry download"""
         self.account = None
         self.req = self.core.requestFactory.getRequest(self.__name__)
         self.retry()
@@ -154,7 +154,8 @@ class Hoster(Plugin):
 
 
     def setWait(self, seconds, reconnect=None):
-        """Set a specific wait time later used with `wait`
+        """
+        Set a specific wait time later used with `wait`
 
         :param seconds: wait time in seconds
         :param reconnect: True if a reconnect would avoid wait time
@@ -172,7 +173,7 @@ class Hoster(Plugin):
 
 
     def wait(self, seconds=None, reconnect=None):
-        """ waits the time previously set """
+        """Waits the time previously set"""
 
         pyfile = self.pyfile
 
@@ -218,28 +219,29 @@ class Hoster(Plugin):
 
 
     def abort(self, reason=""):
-        """ abort and give reason """
+        """Abort and give reason"""
         if reason:
             self.pyfile.error = str(reason)
         raise Abort
 
 
     def offline(self, reason=""):
-        """ fail and indicate file is offline """
+        """Fail and indicate file is offline"""
         if reason:
             self.pyfile.error = str(reason)
         raise Fail("offline")
 
 
     def tempOffline(self, reason=""):
-        """ fail and indicates file ist temporary offline, the core may take consequences """
+        """Fail and indicates file ist temporary offline, the core may take consequences"""
         if reason:
             self.pyfile.error = str(reason)
         raise Fail("temp. offline")
 
 
     def retry(self, max_tries=5, wait_time=1, reason=""):
-        """Retries and begin again from the beginning
+        """
+        Retries and begin again from the beginning
 
         :param max_tries: number of maximum retries
         :param wait_time: time to wait in seconds
@@ -268,7 +270,8 @@ class Hoster(Plugin):
 
     def decryptCaptcha(self, url, get={}, post={}, cookies=False, forceUser=False, imgtype='jpg',
                        result_type='textual', timeout=290):
-        """ Loads a captcha and decrypts it with ocr, plugin, user input
+        """
+        Loads a captcha and decrypts it with ocr, plugin, user input
 
         :param url: url of captcha image
         :param get: get part for request
@@ -338,7 +341,8 @@ class Hoster(Plugin):
 
 
     def load(self, url, get={}, post={}, ref=True, cookies=True, just_header=False, decode=False, follow_location=True, save_cookies=True):
-        """Load content at url and returns it
+        """
+        Load content at url and returns it
 
         :param url:
         :param get:
@@ -403,7 +407,8 @@ class Hoster(Plugin):
 
         return res
 
-        """ checks if same file was/is downloaded within same package
+        """
+        Checks if same file was/is downloaded within same package
 
         :param starting: indicates that the current download is going to start
         :raises SkipDownload:
@@ -435,7 +440,8 @@ class Hoster(Plugin):
 
 
     def download(self, url, get={}, post={}, ref=True, cookies=True, disposition=False):
-        """Downloads the content at url to download folder
+        """
+        Downloads the content at url to download folder
 
         :param url:
         :param get:
@@ -525,7 +531,8 @@ class Hoster(Plugin):
 
 
     def checkDownload(self, rules, api_size=0, max_size=50000, delete=True, read_size=0):
-        """ checks the content of the last downloaded file, re match is saved to `lastCheck`
+        """
+        Checks the content of the last downloaded file, re match is saved to `lastCheck`
 
         :param rules: dict with names and rules to match (compiled regexp or strings)
         :param api_size: expected file size
@@ -568,7 +575,7 @@ class Hoster(Plugin):
 
 
     def getPassword(self):
-        """ get the password the user provided in the package"""
+        """Get the password the user provided in the package"""
         password = self.pyfile.package().password
         if not password:
             return ""
@@ -576,7 +583,8 @@ class Hoster(Plugin):
 
 
     def checkForSameFiles(self, starting=False):
-        """ checks if same file was/is downloaded within same package
+        """
+        Checks if same file was/is downloaded within same package
 
         :param starting: indicates that the current download is going to start
         :raises SkipDownload:
@@ -608,7 +616,7 @@ class Hoster(Plugin):
 
 
     def clean(self):
-        """ clean everything and remove references """
+        """Clean everything and remove references"""
         if hasattr(self, "pyfile"):
             del self.pyfile
 

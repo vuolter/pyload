@@ -116,7 +116,7 @@ def html():
 
 
 def get_source(options):
-    """ Downloads pyload source from bitbucket tip or given rev"""
+    """Downloads pyload source from bitbucket tip or given rev"""
     if options.rev: options.url = "https://bitbucket.org/spoob/pyload/get/%s.zip" % options.rev
 
     pyload = path("pyload")
@@ -155,7 +155,7 @@ def get_source(options):
 @task
 @needs('clean', 'generate_setup', 'minilib', 'get_source', 'setuptools.command.sdist')
 def sdist():
-    """ Build source code package with distutils """
+    """Build source code package with distutils"""
 
 
 @task
@@ -166,7 +166,7 @@ def sdist():
 
 
 def thrift(options):
-    """ Generate Thrift stubs """
+    """Generate Thrift stubs"""
 
     print "add import for TApplicationException manually as long it is not fixed"
 
@@ -194,7 +194,7 @@ def thrift(options):
 
 @task
 def compile_js():
-    """ Compile .coffee files to javascript"""
+    """Compile .coffee files to javascript"""
 
     root = path("pyload") / "web" / "media" / "js"
     for f in root.glob("*.coffee"):
@@ -211,7 +211,7 @@ def compile_js():
 
 @task
 def generate_locale():
-    """ Generates localization files """
+    """Generates localization files"""
 
     EXCLUDE = ["BeautifulSoup.py", "web/locale", "web/ajax", "web/cnl", "web/pyload",
                "setup.py"]
@@ -255,7 +255,7 @@ def generate_locale():
 
 
 def upload_translations(options):
-    """ Uploads the locale files to translation server """
+    """Uploads the locale files to translation server"""
     tmp = path(tempfile.mkdtemp())
 
     shutil.shutil.copy('locale/crowdin.yaml', tmp)
@@ -285,7 +285,7 @@ def upload_translations(options):
 
 
 def download_translations(options):
-    """ Downloads the translated files from translation server """
+    """Downloads the translated files from translation server"""
     tmp = path(tempfile.mkdtemp())
 
     shutil.shutil.copy('locale/crowdin.yaml', tmp)
@@ -319,7 +319,7 @@ def download_translations(options):
 
 @task
 def compile_translations():
-    """ Compile PO files to MO """
+    """Compile PO files to MO"""
     for language in path('locale').listdir():
         if not language.isdir():
             continue

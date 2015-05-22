@@ -18,7 +18,7 @@ from pyload.utils import encode, fs_join, fs_encode
 
 
 class HTTPDownload(object):
-    """ loads a url http + ftp """
+    """Loads a url http + ftp"""
 
     def __init__(self, url, filename, get={}, post={}, referer=None, cj=None, bucket=None,
                  options={}, progress=None, disposition=False):
@@ -106,7 +106,7 @@ class HTTPDownload(object):
 
 
     def download(self, chunks=1, resume=False):
-        """ returns new filename or None """
+        """Returns new filename or None"""
 
         chunks = max(1, chunks)
         resume = self.info.resume and resume
@@ -290,7 +290,7 @@ class HTTPDownload(object):
 
 
     def findChunk(self, handle):
-        """ linear search to find a chunk (should be ok since chunk size is usually low) """
+        """Linear search to find a chunk (should be ok since chunk size is usually low)"""
         for chunk in self.chunks:
             if chunk.c == handle:
                 return chunk
@@ -306,7 +306,7 @@ class HTTPDownload(object):
 
 
     def close(self):
-        """ cleanup """
+        """Cleanup"""
         for chunk in self.chunks:
             self.closeChunk(chunk)
 
