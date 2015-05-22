@@ -10,18 +10,17 @@ import urllib
 
 import bottle
 
-from pyload.webui import PYLOAD, PYLOAD_DIR, THEME_DIR, env
+from pyload.webui import API, PYLOAD_DIR, THEME_DIR, env
 
-from pyload.webui.App.utils import render_to_response, parse_permissions, parse_userdata, \
-    login_required, get_permission, set_permission, permlist, toDict, set_session
+from pyload.webui.App.utils import get_theme, render_to_response, parse_permissions, parse_userdata, \
+    login_required, get_permission, set_permission, permlist, set_session
 
-from pyload.utils.filters import relpath, unquotepath
+from pyload.utils.filters import convert, relpath, unquotepath
 
 from pyload.utils import decode, encode, format_size, fs_join, fs_encode, fs_decode
 
+
 # Helper
-
-
 def pre_processor():
     s = bottle.request.environ.get('beaker.session')
     user = parse_userdata(s)
@@ -31,9 +30,9 @@ def pre_processor():
     update = False
     plugins = False
     if user['is_authenticated']:
-        status = PYLOAD.statusServer()
-        info = PYLOAD.getInfoByPlugin("UpdateManager")
-        captcha = PYLOAD.isCaptchaWaiting()
+        status = API.statusServer()
+        info = API.getInfoByPlugin("UpdateManager")
+        captcha = API.isCaptchaWaiting()
 
         # check if update check is available
         if info:
@@ -75,8 +74,9 @@ def error500(error):
                  traceback.replace("\n", "<br>") if traceback else "No Traceback"])
 
 
-@bottle.route('/<theme>/<file:re:(.+/)?[^/]+\.min\.[^/]+>')
-def server_min(theme, file):
+@bottle.route('/<file:re:(.+/)?[^/]+\.min\.[^/]+>')
+def server_min(file):
+    theme = get_theme()
     filename = os.path.join(THEME_DIR, theme, file)
     if not os.path.isfile(filename):
         file = file.replace(".min.", ".")
@@ -86,8 +86,10 @@ def server_min(theme, file):
         return server_static(theme, file)
 
 
-@bottle.route('/<theme>/<file:re:.+\.js>')
-def server_js(theme, file):
+@bottle.route('/<file:re:.+\.js>')
+def server_js(file):
+    theme = get_theme()
+
     bottle.response.headers['Content-Type'] = "text/javascript; charset=UTF-8"
 
     if "/render/" in file or ".render." in file or True:
@@ -101,27 +103,17 @@ def server_js(theme, file):
         return server_static(theme, file)
 
 
-@bottle.route('/<theme>/<file:path>')
-def server_static(theme, file):
+@bottle.route('/<file:path>')
+def server_static(file):
     bottle.response.headers['Expires'] = time.strftime("%a, %d %b %Y %H:%M:%S GMT",
                                                 time.gmtime(time.time() + 24 * 7 * 60 * 60))
     bottle.response.headers['Cache-control'] = "public"
-    return bottle.static_file(file, root=os.path.join(THEME_DIR, theme))
+    return bottle.static_file(file, root=os.path.join(THEME_DIR, get_theme()))
 
 
 @bottle.route('/favicon.ico')
 def favicon():
-    return bottle.static_file("icon.ico", root=os.path.join(PYLOAD_DIR, "docs", "resources"))
-
-
-@bottle.route('/login', method="GET")
-def login():
-    if PYLOAD.getConfigValue("webui", "nolocalauth") \
-       and bottle.request.environ.get("REMOTE_ADDR", "0") in ("127.0.0.1", "localhost"):
-        set_session(request, "local")
-        return bottle.redirect("/")
-    else:
-        return render_to_response("login.html", proc=[pre_processor])
+    return bottle.static_file("favicon.ico", root=os.path.join(THEME_DIR, get_theme(), "img"))
 
 
 @bottle.route('/nopermission')
@@ -129,14 +121,29 @@ def nopermission():
     return base([_("You dont have permission to access this page.")])
 
 
+@bottle.route('/login', method="GET")
+def login():
+    if API.getConfigValue("webui", "nolocalauth") \
+       and bottle.request.environ.get("REMOTE_ADDR", "0") in ("127.0.0.1", "localhost"):
+        set_session(request, "local")
+        return bottle.redirect("/")
+    else:
+        return render_to_response("login.html", proc=[pre_processor])
+
+
 @bottle.route('/login', method='POST')
 def login_post():
     user = bottle.request.forms.get("username")
     password = bottle.request.forms.get("password")
 
-    info = PYLOAD.checkAuth(user, password)
+    remote_addr = bottle.request.environ.get("REMOTE_ADDR", "0")
 
-    if not info:
+    info = API.checkAuth(user, password)
+
+    if info:
+        API.core.log.debug(_("WebUI login from IP address: %s") % remote_addr)
+    else:
+        API.core.log.warning(_("Failed WebUI login from IP address: %s") % remote_addr)
         return render_to_response("login.html", {"errors": True}, [pre_processor])
 
     set_session(info)
@@ -155,7 +162,7 @@ def logout():
 @login_required("LIST")
 def home():
     try:
-        res = [toDict(x) for x in PYLOAD.statusDownloads()]
+        res = [convert.toDict(x) for x in API.statusDownloads()]
     except Exception:
         s = bottle.request.environ.get('beaker.session')
         s.delete()
@@ -171,7 +178,7 @@ def home():
 @bottle.route('/queue')
 @login_required("LIST")
 def queue():
-    queue = PYLOAD.getQueue()
+    queue = API.getQueue()
 
     queue.sort(key=operator.attrgetter("order"))
 
@@ -181,7 +188,7 @@ def queue():
 @bottle.route('/collector')
 @login_required('LIST')
 def collector():
-    queue = PYLOAD.getCollector()
+    queue = API.getCollector()
 
     queue.sort(key=operator.attrgetter("order"))
 
@@ -191,7 +198,7 @@ def collector():
 @bottle.route('/downloads')
 @login_required('DOWNLOAD')
 def downloads():
-    root = PYLOAD.getConfigValue("general", "download_folder")
+    root = API.getConfigValue("general", "download_folder")
 
     if not os.path.isdir(root):
         return base([_('Download directory not found.')])
@@ -230,7 +237,7 @@ def get_download(path):
     path = urllib.unquote(decode(path))
     #@TODO some files can not be downloaded
 
-    root = PYLOAD.getConfigValue("general", "download_folder")
+    root = API.getConfigValue("general", "download_folder")
 
     path = path.replace("..", "")
     return bottle.static_file(fs_encode(path), fs_encode(root))
@@ -239,8 +246,8 @@ def get_download(path):
 @bottle.route('/settings')
 @login_required('SETTINGS')
 def config():
-    conf = PYLOAD.getConfig()
-    plugin = PYLOAD.getPluginConfig()
+    conf = API.getConfig()
+    plugin = API.getPluginConfig()
     conf_menu = []
     plugin_menu = []
 
@@ -252,7 +259,7 @@ def config():
         desc = plugin[entry].description
         name, none, type = desc.partition("_")
 
-        if type in PYLOAD.core.pluginManager.TYPES:
+        if type in API.core.pluginManager.TYPES:
             if name == last_name or len([a for a, b in plugin.iteritems() if b.description.startswith(name + "_")]) > 1:
                 desc = name + " (" + type.title() + ")"
             else:
@@ -260,7 +267,7 @@ def config():
             last_name = name
         plugin_menu.append((entry, desc))
 
-    accs = PYLOAD.getAccounts(False)
+    accs = API.getAccounts(False)
 
     for data in accs:
         if data.trafficleft == -1:
@@ -290,7 +297,7 @@ def config():
 
     return render_to_response('settings.html',
                               {'conf': {'plugin': plugin_menu, 'general': conf_menu, 'accs': accs},
-                               'types': PYLOAD.getAccountTypes()},
+                               'types': API.getAccountTypes()},
                               [pre_processor])
 
 
@@ -385,7 +392,7 @@ def logs(item=-1):
     reversed = s.get('reversed', False)
 
     warning = ""
-    conf = PYLOAD.getConfigValue("log", "file_log")
+    conf = API.getConfigValue("log", "file_log")
     if not conf:
         warning = "Warning: File log is disabled, see settings page."
 
@@ -413,7 +420,7 @@ def logs(item=-1):
     except Exception:
         pass
 
-    log = PYLOAD.getLog()
+    log = API.getLog()
     if not perpage:
         item = 1
 
@@ -460,7 +467,7 @@ def logs(item=-1):
                                             'reversed': reversed, 'perpage': perpage, 'perpage_p': sorted(perpage_p),
                                             'iprev': 1 if item - perpage < 1 else item - perpage,
                                             'inext': (item + perpage) if item + perpage < len(log) else item,
-                                            'color_console': PYLOAD.getConfigValue("log", "color_console")},
+                                            'color_console': API.getConfigValue("log", "color_console")},
                               [pre_processor])
 
 
@@ -469,7 +476,7 @@ def logs(item=-1):
 @login_required("ADMIN")
 def admin():
     # convert to dict
-    user = dict((name, toDict(y)) for name, y in PYLOAD.getAllUserData().iteritems())
+    user = dict((name, convert.toDict(y)) for name, y in API.getAllUserData().iteritems())
     perms = permlist()
 
     for data in user.itervalues():
@@ -496,22 +503,22 @@ def admin():
 
             user[name]['permission'] = set_permission(user[name]['perms'])
 
-            PYLOAD.setUserPermission(name, user[name]['permission'], user[name]['role'])
+            API.setUserPermission(name, user[name]['permission'], user[name]['role'])
 
     return render_to_response("admin.html", {"users": user, "permlist": perms}, [pre_processor])
 
 
 @bottle.route('/info')
 def info():
-    conf = PYLOAD.getConfigDict()
+    conf = API.getConfigDict()
     extra = os.uname() if hasattr(os, "uname") else tuple()
 
     data = {"python"   : sys.version,
             "os"       : " ".join((os.name, sys.platform) + extra),
-            "version"  : PYLOAD.getServerVersion(),
+            "version"  : API.getServerVersion(),
             "folder"   : os.path.abspath(PYLOAD_DIR), "config": os.path.abspath(""),
             "download" : os.path.abspath(conf['general']['download_folder']['value']),
-            "freespace": format_size(PYLOAD.free_space()),
+            "freespace": format_size(API.free_space()),
             "remote"   : conf['remote']['port']['value'],
             "webif"    : conf['webui']['port']['value'],
             "language" : conf['general']['language']['value']}

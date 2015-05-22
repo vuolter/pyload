@@ -8,12 +8,10 @@ import beaker.middleware
 import bottle
 import jinja2
 
-from pyload.utils import pylgettext as gettext
-
 from pyload.Thread import Server
 from pyload.utils.middlewares import StripPathMiddleware, GZipMiddleWare, PrefixMiddleware
 from pyload.network.JsEngine import JsEngine
-from pyload.utils import decode, format_size
+from pyload.utils import decode, format_size, load_translation
 
 
 THEME_DIR  = os.path.abspath(os.path.join(os.path.dirname(__file__), "themes"))
@@ -21,18 +19,17 @@ PYLOAD_DIR = os.path.abspath(os.path.join(THEME_DIR, "..", "..", ".."))
 
 sys.path.append(PYLOAD_DIR)
 
-PYLOAD = Server.core.api
-config = Server.core.config
+API = Server.core.api
 JS = JsEngine(Server.core)
 
-PREFIX = config.get('webui', 'prefix')
+PREFIX = API.getConfigValue('webui', 'prefix')
 
 if PREFIX:
     PREFIX = PREFIX.rstrip("/")
     if not PREFIX.startswith("/"):
         PREFIX = "/" + PREFIX
 
-DEBUG = config.get("general", "debug_mode") or "-d" in sys.argv or "--debug" in sys.argv
+DEBUG = API.getConfigValue("general", "debug_mode") or "-d" in sys.argv or "--debug" in sys.argv
 bottle.debug(DEBUG)
 
 cache = os.path.join("tmp", "jinja_cache")
@@ -42,7 +39,7 @@ if not os.path.exists(cache):
 bcc = jinja2.FileSystemBytecodeCache(cache, '%s.cache')
 
 loader = jinja2.FileSystemLoader([THEME_DIR,
-                                 os.path.join(THEME_DIR, config.get('webui', 'theme').capitalize())])
+                                 os.path.join(THEME_DIR, API.getConfigValue('webui', 'theme').capitalize())])
 
 env = jinja2.Environment(loader=loader, extensions=['jinja2.ext.i18n', 'jinja2.ext.autoescape'], trim_blocks=True, auto_reload=False,
                   bytecode_cache=bcc)
@@ -63,11 +60,7 @@ if PREFIX:
 else:
     env.filters['url'] = lambda x: PREFIX + x if x.startswith("/") else x
 
-gettext.setpaths([os.path.join(os.sep, "usr", "share", "pyload", "locale"), None])
-translation = gettext.translation("django", os.path.join(PYLOAD_DIR, "locale"),
-    languages=[config.get("general", "language"), "en"],fallback=True)
-translation.install(True)
-env.install_gettext_translations(translation)
+env.install_gettext_translations(load_translation("django", API.getConfigValue("general", "language")))
 
 session_opts = {
     'session.type': 'file',
@@ -82,6 +75,7 @@ web = GZipMiddleWare(web)
 if PREFIX:
     web = PrefixMiddleware(web, prefix=PREFIX)
 
+    
 from pyload.webui import App
 
 

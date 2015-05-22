@@ -8,9 +8,9 @@ import SafeEval
 import bottle
 
 from pyload.Api import BaseObject
-from pyload.utils import json, json_dumps
-from pyload.webui import PYLOAD
-from pyload.webui.App.utils import toDict, set_session
+from pyload.utils import convert, json, json_dumps
+from pyload.webui import API
+from pyload.webui.App.utils import set_session
 
 
 # json encoder that accepts TBase objects
@@ -18,7 +18,7 @@ class TBaseEncoder(json.JSONEncoder):
 
     def default(self, o):
         if isinstance(o, BaseObject):
-            return toDict(o)
+            return convert.toDict(o)
         return json.JSONEncoder.default(self, o)
 
 
@@ -36,7 +36,7 @@ def call_api(func, args=""):
     if not s or not s.get("authenticated", False):
         return bottle.HTTPError(403, json_dumps("Forbidden"))
 
-    if not PYLOAD.isAuthorized(func, {"role": s['role'], "permission": s['perms']}):
+    if not API.isAuthorized(func, {"role": s['role'], "permission": s['perms']}):
         return bottle.HTTPError(401, json_dumps("Unauthorized"))
 
     args = args.split("/")[1:]
@@ -55,11 +55,11 @@ def call_api(func, args=""):
 
 
 def callApi(func, *args, **kwargs):
-    if not hasattr(PYLOAD.EXTERNAL, func) or func.startswith("_"):
+    if not hasattr(API.EXTERNAL, func) or func.startswith("_"):
         print "Invalid API call", func
         return bottle.HTTPError(404, json_dumps("Not Found"))
 
-    result = getattr(PYLOAD, func)(*[SafeEval.const_eval(x) for x in args],
+    result = getattr(API, func)(*[SafeEval.const_eval(x) for x in args],
                                    **dict((x, SafeEval.const_eval(y)) for x, y in kwargs.iteritems()))
 
     # null is invalid json  response
@@ -75,9 +75,14 @@ def login():
     user = bottle.request.forms.get("username")
     password = bottle.request.forms.get("password")
 
-    info = PYLOAD.checkAuth(user, password)
+    remote_addr = bottle.request.environ.get("REMOTE_ADDR", "0")
 
-    if not info:
+    info = API.checkAuth(user, password)
+
+    if info:
+        API.core.log.debug(_("API login from IP address: %s") % remote_addr)
+    else:
+        API.core.log.warning(_("Failed API login from IP address: %s") % remote_addr)
         return json_dumps(False)
 
     s = set_session(request, info)
