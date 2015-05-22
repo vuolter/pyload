@@ -11,7 +11,7 @@ import urllib
 import Crypto
 import bottle
 
-from pyload.webui import PYLOAD, DL_ROOT, JS
+from pyload.webui import PYLOAD, JS
 
 
 def local_check(function):
@@ -54,7 +54,8 @@ def addcrypted():
     package = bottle.request.forms.get('referer', 'ClickNLoad Package')
     dlc = bottle.request.forms['crypted'].replace(" ", "+")
 
-    dlc_path = os.path.join(DL_ROOT, package.replace("/", "").replace("\\", "").replace(":", "") + ".dlc")
+    dlc_path = os.path.join(PYLOAD.getConfigValue('general', 'download_folder'),
+                            package.replace("/", "").replace("\\", "").replace(":", "") + ".dlc")
     with open(dlc_path, "wb") as dlc_file:
         dlc_file.write(dlc)
 

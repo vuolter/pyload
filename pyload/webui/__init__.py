@@ -21,25 +21,11 @@ PYLOAD_DIR = os.path.abspath(os.path.join(THEME_DIR, "..", "..", ".."))
 
 sys.path.append(PYLOAD_DIR)
 
-SETUP = None
-PYLOAD = None
+PYLOAD = Server.core.api
+config = Server.core.config
+JS = JsEngine(Server.core)
 
-if not Server.core:
-    if Server.setup:
-        SETUP = Server.setup
-        config = SETUP.config
-        JS = JsEngine(SETUP)
-    else:
-        raise Exception("Could not access pyLoad Core")
-else:
-    PYLOAD = Server.core.api
-    config = Server.core.config
-    JS = JsEngine(Server.core)
-
-THEME    = config.get('webui', 'theme').capitalize()
-DL_ROOT  = config.get('general', 'download_folder')
-LOG_ROOT = config.get('log', 'log_folder')
-PREFIX   = config.get('webui', 'prefix')
+PREFIX = config.get('webui', 'prefix')
 
 if PREFIX:
     PREFIX = PREFIX.rstrip("/")
@@ -55,7 +41,8 @@ if not os.path.exists(cache):
 
 bcc = jinja2.FileSystemBytecodeCache(cache, '%s.cache')
 
-loader = jinja2.FileSystemLoader([THEME_DIR, os.path.join(THEME_DIR, THEME)])
+loader = jinja2.FileSystemLoader([THEME_DIR,
+                                 os.path.join(THEME_DIR, config.get('webui', 'theme').capitalize())])
 
 env = jinja2.Environment(loader=loader, extensions=['jinja2.ext.i18n', 'jinja2.ext.autoescape'], trim_blocks=True, auto_reload=False,
                   bytecode_cache=bcc)
