@@ -115,10 +115,11 @@ def make_config(config):
                             _("Description"),
                             _("Long description"),
                             [
-                                ("server", "auto;threaded;fastcgi;lightweight", _("Server")     , "threaded"),
-                                ("ip"    , "ip"                               , _("IP address") , "0.0.0.0" ),
-                                ("port"  , "int"                              , _("Port")       , 8001      ),
-                                ("ssl"   , "bool"                             , _("Use HTTPS")  , False     ),
-                                ("theme" , "default;dark;flat;next"           , _("Theme")      , "next"    ),
-                                ("prefix", "str"                              , _("Path Prefix"), ""        ),
+                                ("server"     , "auto;threaded;fastcgi;lightweight", _("Server")                , "threaded"),
+                                ("ip"         , "ip"                               , _("IP address")            , "0.0.0.0" ),
+                                ("port"       , "int"                              , _("Port")                  , 8001      ),
+                                ("ssl"        , "bool"                             , _("Use HTTPS")             , False     ),
+                                ("theme"      , "default;dark;flat;next"           , _("Theme")                 , "next"    ),
+                                ("prefix"     , "str"                              , _("Path Prefix")           , ""        ),
+                                ("nolocalauth", "bool"                             , _("No login on LAN access"), True      ),
                             ])

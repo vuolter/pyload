@@ -3,11 +3,15 @@
 
 """ Store all useful functions here """
 
+from __future__ import with_statement
+
+import __builtin__
 import bitmath
 import htmlentitydefs
 import os
 import re
 import string
+import subprocess
 import time
 import traceback
 
@@ -181,3 +185,46 @@ def chunks(iterable, size):
     while item:
         yield item
         item = list(itertools.islice(it, size))
+
+
+def set_configdir(self, configdir, persistent=False):
+    dirname = os.path.abspath(configdir)
+    try:
+        if not os.path.exists(os.path.dirname):
+            os.makedirs(os.path.dirname, 0700)
+
+        os.chdir(os.path.dirname)
+
+        if persistent:
+            c = os.path.join(rootdir, "config", "configdir")
+            if not os.path.exists(c):
+                os.makedirs(c, 0700)
+
+            with open(c, "wb") as f:
+                f.write(os.path.dirname)
+
+    except IOError:
+        return False
+
+    else:
+        __builtin__.configdir = dirname
+        return dirname  #: return always abspath
+
+
+def check_module(self, module):
+    try:
+        __import__(module)
+        return True
+
+    except Exception:
+        return False
+
+
+def check_prog(self, command):
+    pipe = subprocess.PIPE
+    try:
+        subprocess.call(command, stdout=pipe, stderr=pipe)
+        return True
+
+    except Exception:
+        return False

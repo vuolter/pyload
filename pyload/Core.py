@@ -73,27 +73,6 @@ class Core(object):
                         sys.exit()
                     elif option in ("-d", "--debug"):
                         self.doDebug = True
-                    elif option in ("-u", "--user"):
-                        from pyload.config.Setup import SetupAssistant as Setup
-
-                        self.config = ConfigParser()
-                        s = Setup(self.config)
-                        s.set_user()
-                        sys.exit()
-                    elif option in ("-s", "--setup"):
-                        from pyload.config.Setup import SetupAssistant as Setup
-
-                        self.config = ConfigParser()
-                        s = Setup(self.config)
-                        s.start()
-                        sys.exit()
-                    elif option == "--changedir":
-                        from pyload.config.Setup import SetupAssistant as Setup
-
-                        self.config = ConfigParser()
-                        s = Setup(self.config)
-                        s.conf_path(True)
-                        sys.exit()
                     elif option in ("-q", "--quit"):
                         self.quitInstance()
                         sys.exit()
@@ -130,12 +109,9 @@ class Core(object):
         print "  -v, --version", " " * 10, "Print version to terminal"
         print "  -c, --clear", " " * 12, "Delete all saved packages/links"
         # print "  -a, --add=<link/list>", " " * 2, "Add the specified links"
-        print "  -u, --user", " " * 13, "Manages users"
         print "  -d, --debug", " " * 12, "Enable debug mode"
-        print "  -s, --setup", " " * 12, "Run Setup Assistant"
         print "  --configdir=<dir>", " " * 6, "Run with <dir> as config directory"
         print "  -p, --pidfile=<file>", " " * 3, "Set pidfile to <file>"
-        print "  --changedir", " " * 12, "Change config dir permanently"
         print "  --daemon", " " * 15, "Daemonmize after start"
         print "  --no-remote", " " * 12, "Disable remote access (saves RAM)"
         print "  --status", " " * 15, "Display pid if running or False"
@@ -246,26 +222,10 @@ class Core(object):
         self.version = pyload.__version__
 
         if not os.path.exists("pyload.conf"):
-            from pyload.config.Setup import SetupAssistant as Setup
-
-            print "This is your first start, running configuration assistent now."
-            self.config = ConfigParser()
-            s = Setup(self.config)
-            res = False
-            try:
-                res = s.start()
-            except SystemExit:
-                pass
-            except KeyboardInterrupt:
-                print "\nSetup interrupted"
-            except Exception:
-                res = False
-                traceback.print_exc()
-                print "Setup failed"
-            if not res:
-                reshutil.move("pyload.conf")
-
-            sys.exit()
+            first_start = True
+            print "This is your first start (default login credentials are admin:pyload)"
+        else:
+            first_start = False
 
         try: signal.signal(signal.SIGQUIT, self.quit)
         except Exception:
@@ -345,7 +305,11 @@ class Core(object):
             self.check_install("OpenSSL", _("OpenSSL for secure connection"))
 
         self.setupDB()
-        if self.config.oldRemoteData:
+        
+        if first_start:
+            self.db.addUser("admin", "pyload")
+            
+        elif self.config.oldRemoteData:
             self.log.info(_("Moving old user config to DB"))
             self.db.addUser(self.config.oldRemoteData['username'], self.config.oldRemoteData['password'])
 

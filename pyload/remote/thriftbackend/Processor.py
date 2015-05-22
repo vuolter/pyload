@@ -55,7 +55,10 @@ class Processor(Pyload.Processor):
             iprot.readMessageEnd()
             result = Pyload.login_result()
             # api login
-            self.authenticated[trans] = self._handler.checkAuth(args.username, args.password, trans.remoteaddr[0])
+            if self._handler.getConfigValue("remote", "nolocalauth") and trans.remoteaddr[0] in ("127.0.0.1", "localhost"):
+                self.authenticated[trans] = "local"
+            else:
+                self.authenticated[trans] = self._handler.checkAuth(args.username, args.password)
 
             result.success = bool(self.authenticated[trans])
             oprot.writeMessageBegin("login", Pyload.TMessageType.REPLY, seqid)

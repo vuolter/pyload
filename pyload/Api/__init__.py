@@ -935,7 +935,7 @@ class Api(Iface):
         return bool(self.checkAuth(username, password, remoteip))
 
 
-    def checkAuth(self, username, password, remoteip=None):
+    def checkAuth(self, username, password):
         """Check authentication and returns details
 
         :param username:
@@ -943,10 +943,7 @@ class Api(Iface):
         :param remoteip:
         :return: dict with info, empty when login is incorrect
         """
-        if self.core.config.get("remote", "nolocalauth") and remoteip == "127.0.0.1":
-            return "local"
-        else:
-            return self.core.db.checkAuth(username, password)
+        return self.core.db.checkAuth(username, password)
 
 
     def isAuthorized(self, func, userdata):

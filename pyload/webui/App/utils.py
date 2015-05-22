@@ -6,7 +6,7 @@ import os
 import bottle
 
 from pyload.Api import has_permission, PERMS, ROLE
-from pyload.webui import env, THEME
+from pyload.webui import env
 
 
 def render_to_response(file, args={}, proc=[]):

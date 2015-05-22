@@ -10,7 +10,7 @@ import urllib
 
 import bottle
 
-from pyload.webui import PYLOAD, PYLOAD_DIR, THEME_DIR, THEME, SETUP, env
+from pyload.webui import PYLOAD, PYLOAD_DIR, THEME_DIR, env
 
 from pyload.webui.App.utils import render_to_response, parse_permissions, parse_userdata, \
     login_required, get_permission, set_permission, permlist, toDict, set_session
@@ -77,7 +77,7 @@ def error500(error):
 
 @bottle.route('/<theme>/<file:re:(.+/)?[^/]+\.min\.[^/]+>')
 def server_min(theme, file):
-    filename = os.path.join(THEME_DIR, THEME, theme, file)
+    filename = os.path.join(THEME_DIR, theme, file)
     if not os.path.isfile(filename):
         file = file.replace(".min.", ".")
     if file.endswith(".js"):
@@ -106,8 +106,7 @@ def server_static(theme, file):
     bottle.response.headers['Expires'] = time.strftime("%a, %d %b %Y %H:%M:%S GMT",
                                                 time.gmtime(time.time() + 24 * 7 * 60 * 60))
     bottle.response.headers['Cache-control'] = "public"
-
-    return bottle.static_file(file, root=os.path.join(THEME_DIR, THEME, theme))
+    return bottle.static_file(file, root=os.path.join(THEME_DIR, theme))
 
 
 @bottle.route('/favicon.ico')
@@ -117,8 +116,10 @@ def favicon():
 
 @bottle.route('/login', method="GET")
 def login():
-    if not PYLOAD and SETUP:
-        bottle.redirect("/setup")
+    if PYLOAD.getConfigValue("webui", "nolocalauth") \
+       and bottle.request.environ.get("REMOTE_ADDR", "0") in ("127.0.0.1", "localhost"):
+        set_session(request, "local")
+        return bottle.redirect("/")
     else:
         return render_to_response("login.html", proc=[pre_processor])
 
@@ -498,11 +499,6 @@ def admin():
             PYLOAD.setUserPermission(name, user[name]['permission'], user[name]['role'])
 
     return render_to_response("admin.html", {"users": user, "permlist": perms}, [pre_processor])
-
-
-@bottle.route('/setup')
-def setup():
-    return base([_("Run pyload.py -s to access the setup.")])
 
 
 @bottle.route('/info')
