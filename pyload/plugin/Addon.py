@@ -25,7 +25,7 @@ def threaded(fn):
 class Addon(Plugin):
     __name    = "Addon"
     __type    = "addon"
-    __version = "0.01"
+    __version = "0.03"
 
     __config = []  #: [("name", "type", "desc", "default")]
 

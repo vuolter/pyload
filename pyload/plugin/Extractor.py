@@ -22,7 +22,7 @@ class PasswordError(Exception):
 class Extractor(Plugin):
     __name    = "Extractor"
     __type    = "extractor"
-    __version = "0.24"
+    __version = "0.25"
 
     __description = """Base extractor plugin"""
     __license     = "GPLv3"

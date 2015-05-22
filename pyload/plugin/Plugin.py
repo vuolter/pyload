@@ -45,7 +45,7 @@ class Plugin(Plugin):
 
     __name    = "Plugin"
     __type    = "hoster"
-    __version = "0.07"
+    __version = "0.08"
 
     __pattern = r'^unmatchable$'
     __config  = []  #: [("name", "type", "desc", "default")]

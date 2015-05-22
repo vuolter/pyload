@@ -11,7 +11,7 @@ class Hoster(Plugin):
 
     __name    = "Hoster"
     __type    = "hoster"
-    __version = "0.02"
+    __version = "0.05"
 
     __pattern = r'^unmatchable$'
     __config  = []  #: [("name", "type", "desc", "default")]
@@ -406,37 +406,6 @@ class Hoster(Plugin):
             res = header
 
         return res
-
-        """
-        Checks if same file was/is downloaded within same package
-
-        :param starting: indicates that the current download is going to start
-        :raises SkipDownload:
-        """
-
-        pack = self.pyfile.package()
-
-        for pyfile in self.core.files.cache.values():
-            if pyfile != self.pyfile and pyfile.name == self.pyfile.name and pyfile.package().folder == pack.folder:
-                if pyfile.status in (0, 12):  #: finished or downloading
-                    raise SkipDownload(pyfile.pluginname)
-                elif pyfile.status in (5, 7) and starting:  #: a download is waiting/starting and was appenrently started before
-                    raise SkipDownload(pyfile.pluginname)
-
-        download_folder = self.core.config.get("general", "download_folder")
-        location = fs_join(download_folder, pack.folder, self.pyfile.name)
-
-        if starting and self.core.config.get("download", "skip_existing") and os.path.exists(location):
-            size = os.stat(location).st_size
-            if size >= self.pyfile.size:
-                raise SkipDownload("File exists")
-
-        pyfile = self.core.db.findDuplicates(self.pyfile.id, self.pyfile.package().folder, self.pyfile.name)
-        if pyfile:
-            if os.path.exists(location):
-                raise SkipDownload(pyfile[0])
-
-            self.logDebug("File %s not skipped, because it does not exists." % self.pyfile.name)
 
 
     def download(self, url, get={}, post={}, ref=True, cookies=True, disposition=False):

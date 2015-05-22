@@ -14,7 +14,7 @@ class Crypter(Hoster):
 
     __name    = "Crypter"
     __type    = "crypter"
-    __version = "0.05"
+    __version = "0.06"
 
     __pattern = r'^unmatchable$'
     __config  = [("use_subfolder", "bool", "Save package to subfolder", True),  #: Overrides core.config.get("general", "folder_per_package")

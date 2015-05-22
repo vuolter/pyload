@@ -20,7 +20,7 @@ from pyload.utils import fs_join
 class OCR(Plugin):
     __name    = "OCR"
     __type    = "ocr"
-    __version = "0.12"
+    __version = "0.13"
 
     __description = """OCR base plugin"""
     __license     = "GPLv3"
