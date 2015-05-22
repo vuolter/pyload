@@ -88,30 +88,32 @@ class AddonManager(object):
         plugins  = []
 
         for type in ("addon", "hook"):
-            active   = []
-            deactive = []
+            actived     = []
+            deactivated = []
             for pluginname in getattr(self.core.pluginManager, "%sPlugins" % type):
                 try:
-                    if self.core.config.getPlugin("%s_%s" % (pluginname, type), "activated"):
-                        pluginClass = self.core.pluginManager.loadClass(type, pluginname)
-                        if not pluginClass:
-                            continue
+                    pluginClass = self.core.pluginManager.loadClass(type, pluginname)
+                    if not pluginClass:
+                        continue
 
+                    if self.core.config.getPlugin("%s_%s" % (pluginname, type), "activated"):
                         plugin = pluginClass(self.core, self)
                         plugins.append(plugin)
+
                         self.pluginMap[pluginClass.__name__] = plugin
                         if plugin.isActivated():
-                            active.append(pluginClass.__name__)
+                            actived.append(pluginClass.__name)
+
                     else:
-                        deactive.append(pluginname)
+                        deactivated.append(pluginClass.__name__)
 
                 except Exception:
                     self.core.log.warning(_("Failed activating %(name)s") % {"name": pluginname})
                     if self.core.debug:
                         traceback.print_exc()
 
-            self.core.log.info(_("Activated %ss: %s") % (type, ", ".join(sorted(active))))
-            self.core.log.info(_("Deactivated %ss: %s") % (type, ", ".join(sorted(deactive))))
+            self.core.log.info(_("Activate %ss: %s") % (type, ", ".join(sorted(actived))))
+            self.core.log.info(_("Deactivate %ss: %s") % (type, ", ".join(sorted(deactivated))))
 
         self.plugins = plugins
 

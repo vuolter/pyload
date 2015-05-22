@@ -10,13 +10,13 @@ def deprecated(by=None):
         def new(*args, **kargs):
             if by:
                 new_fn = by
-                pycore.log.debug(_('"%s" has been Deprecated, use "%s" instead.')
+                args[0].core.log.debug(_('"%s" has been Deprecated, use "%s" instead.')
                     % (old_fn.__name__, new_fn.__name__))
 
                 return new_fn(*args, **kargs)
 
             else:
-                pycore.log.error(_('"%s" has been Removed.') % old_fn.__name__)
+                args[0].core.log.error(_('"%s" has been Removed.') % old_fn.__name__)
                 traceback.print_exc()
 
         return new

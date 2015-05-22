@@ -271,7 +271,8 @@ class ThreadManager(object):
                 job.initPlugin()
             except Exception, e:
                 self.core.log.critical(str(e))
-                traceback.print_exc()
+                if self.core.debug:
+                    traceback.print_exc()
                 job.setStatus("failed")
                 job.error = str(e)
                 job.release()

@@ -157,7 +157,8 @@ class Account(Base):
                     raise Exception("Wrong return format")
             except Exception, e:
                 infos = {"error": str(e)}
-                traceback.print_exc()
+                if self.core.debug:
+                    traceback.print_exc()
 
             if req:
                 req.close()
