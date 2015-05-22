@@ -10,6 +10,7 @@ import traceback
 from pyload.Api import OnlineStatus
 from pyload.Datatype import PyFile
 from pyload.Thread.Plugin import PluginThread
+from pyload.plugin.Hoster import parseFileInfo
 
 
 class InfoThread(PluginThread):
@@ -162,8 +163,12 @@ class InfoThread(PluginThread):
 
             if process:
                 self.m.log.debug("Run Info Fetching for %s" % pluginname)
-                for result in plugin.getInfo(process):
-                    # result = [ .. (name, size, status, url) .. ]
+                for url in process:
+                    if hasattr(plugin, "URL_REPLACEMENTS"):
+                        url = replace_patterns(url, plugin.URL_REPLACEMENTS)
+
+                    result = parseFileInfo(plugin, url)
+
                     if not type(result) == list:
                         result = [result]
 
