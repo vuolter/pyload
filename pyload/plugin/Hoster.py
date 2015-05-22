@@ -46,7 +46,7 @@ class Hoster(Plugin):
         self.ocr = None
 
         #: account handler instance, see :py:class:`Account`
-        self.account = pyfile.m.core.accountManager.getAccountPlugin(self.getClassName())
+        self.account = pyfile.m.core.accountManager.getAccountPlugin(self.__name__)
 
         #: premium status
         self.premium = False
@@ -67,7 +67,7 @@ class Hoster(Plugin):
             #: premium status
             self.premium = self.account.isPremium(self.user)
         else:
-            self.req = pyfile.m.core.requestFactory.getRequest(self.getClassName())
+            self.req = pyfile.m.core.requestFactory.getRequest(self.__name__)
 
         #: associated pyfile instance, see `PyFile`
         self.pyfile = pyfile
@@ -90,9 +90,9 @@ class Hoster(Plugin):
 
         self.init()
 
-        
+
     @classmethod
-    def getInfo(cls, url="", html=""):    
+    def getInfo(cls, url="", html=""):
         url   = urllib.unquote(url)
         url_p = urlparse.urlparse(url)
         return {'name': (url_p.path.split('/')[-1]
@@ -102,7 +102,7 @@ class Hoster(Plugin):
                 'status': 3 if url else 8,
                 'url': url}
 
-                
+
     def init(self):
         """initialize the plugin (in addition to `__init__`)"""
         pass
@@ -143,7 +143,7 @@ class Hoster(Plugin):
     def resetAccount(self):
         """ dont use account and retry download """
         self.account = None
-        self.req = self.core.requestFactory.getRequest(self.getClassName())
+        self.req = self.core.requestFactory.getRequest(self.__name__)
         self.retry()
 
 
@@ -287,13 +287,13 @@ class Hoster(Plugin):
 
         id = ("%.2f" % time.time())[-6:].replace(".", "")
 
-        with open(os.path.join("tmp", "tmpCaptcha_%s_%s.%s" % (self.getClassName(), id, imgtype)), "wb") as tmpCaptcha:
+        with open(os.path.join("tmp", "tmpCaptcha_%s_%s.%s" % (self.__name__, id, imgtype)), "wb") as tmpCaptcha:
             tmpCaptcha.write(img)
 
-        has_plugin = self.getClassName() in self.core.pluginManager.ocrPlugins
+        has_plugin = self.__name__ in self.core.pluginManager.ocrPlugins
 
         if self.core.captcha:
-            Ocr = self.core.pluginManager.loadClass("ocr", self.getClassName())
+            Ocr = self.core.pluginManager.loadClass("ocr", self.__name__)
         else:
             Ocr = None
 
@@ -369,10 +369,10 @@ class Hoster(Plugin):
             import inspect
 
             frame = inspect.currentframe()
-            framefile = fs_join("tmp", self.getClassName(), "%s_line%s.dump.html" % (frame.f_back.f_code.co_name, frame.f_back.f_lineno))
+            framefile = fs_join("tmp", self.__name__, "%s_line%s.dump.html" % (frame.f_back.f_code.co_name, frame.f_back.f_lineno))
             try:
-                if not os.path.exists(os.path.join("tmp", self.getClassName())):
-                    os.makedirs(os.path.join("tmp", self.getClassName()))
+                if not os.path.exists(os.path.join("tmp", self.__name__)):
+                    os.makedirs(os.path.join("tmp", self.__name__))
 
                 with open(framefile, "wb") as f:
                     del frame  #: delete the frame or it wont be cleaned

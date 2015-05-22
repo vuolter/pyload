@@ -63,13 +63,13 @@ class Plugin(Plugin):
 
 
     def __call__(self):
-        return self.getClassName()
+        return self.__name__
 
 
     def _log(self, type, args):
         msg = " | ".join([encode(str(a)).strip() for a in args if a])
         logger = getattr(self.core.log, type)
-        logger("%s: %s" % (self.getClassName(), msg or _("%s MARK" % type.upper())))
+        logger("%s: %s" % (self.__name, msg or _("%s MARK" % type.upper())))
 
 
     def logDebug(self, *args):
@@ -94,16 +94,11 @@ class Plugin(Plugin):
 
 
     def getPluginType(self):
-        return getattr(self, "_%s__type" % self.getClassName())
-
-
-    @classmethod
-    def getClassName(cls):
-        return cls.__name__
+        return getattr(self, "_%s__type" % self.__name__)
 
 
     def getPluginConfSection(self):
-        return "%s_%s" % (self.getClassName(), getattr(self, "_%s__type" % self.getClassName()))
+        return "%s_%s" % (self.__name__, getattr(self, "_%s__type" % self.__name__))
 
 
     def setConfig(self, option, value):
@@ -161,7 +156,7 @@ class Plugin(Plugin):
 
     def delStorage(self, key):
         """ Delete entry in db """
-        self.core.db.delStorage(self.getClassName(), key)
+        self.core.db.delStorage(self.__name__, key)
 
 
     def fail(self, reason):

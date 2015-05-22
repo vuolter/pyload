@@ -382,7 +382,7 @@ class SimpleHoster(Hoster):
             set_cookies(self.req.cj, self.COOKIES)
 
         if (self.MULTI_HOSTER
-            and (self.__pattern != self.core.pluginManager.hosterPlugins[self.getClassName()]['pattern']
+            and (self.__pattern != self.core.pluginManager.hosterPlugins[self.__name__]['pattern']
                  or re.match(self.__pattern, self.pyfile.url) is None)):
             self.multihost = True
             return
@@ -683,7 +683,7 @@ class SimpleHoster(Hoster):
             return
         self.premium = False
         self.account = None
-        self.req     = self.core.requestFactory.getRequest(self.getClassName())
+        self.req     = self.core.requestFactory.getRequest(self.__name__)
         self.retries = -1
         raise Retry(_("Fallback to free download"))
 

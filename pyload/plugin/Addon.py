@@ -98,7 +98,7 @@ class Addon(Plugin):
 
 
     def __repr__(self):
-        return "<Addon %s>" % self.getClassName()
+        return "<Addon %s>" % self.__name__
 
 
     def setup(self):

@@ -69,7 +69,7 @@ class MultiHook(Hook):
 
 
     def initPlugin(self):
-        self.pluginname         = self.getClassName()
+        self.pluginname         = self.__name__
         plugin, self.plugintype = self.core.pluginManager.findPlugin(("hoster", "crypter", "container"), self.pluginname)
 
         if plugin:
