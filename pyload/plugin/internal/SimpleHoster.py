@@ -77,35 +77,6 @@ def parseHtmlForm(attr_str, html, input_names={}):
     return {}, None  #: no matching form found
 
 
-#@TODO: Remove in 0.4.10
-def parseFileInfo(plugin, url="", html=""):
-    if hasattr(plugin, "getInfo"):
-        info = plugin.getInfo(url, html)
-        res  = info['name'], info['size'], info['status'], info['url']
-    else:
-        url   = urllib.unquote(url)
-        url_p = urlparse.urlparse(url)
-        res   = ((url_p.path.split('/')[-1]
-                  or url_p.query.split('=', 1)[::-1][0].split('&', 1)[0]
-                  or url_p.netloc.split('.', 1)[0]),
-                 0,
-                 3 if url else 8,
-                 url)
-
-    return res
-
-
-#@TODO: Remove in 0.4.10
-def create_getInfo(plugin):
-    def getInfo(urls):
-        for url in urls:
-            if hasattr(plugin, "URL_REPLACEMENTS"):
-                url = replace_patterns(url, plugin.URL_REPLACEMENTS)
-            yield parseFileInfo(plugin, url)
-
-    return getInfo
-
-
 def timestamp():
     return int(time.time() * 1000)
 

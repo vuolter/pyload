@@ -1,6 +1,26 @@
 # -*- coding: utf-8 -*-
 
+import urllib
+import urlparse
+
 from pyload.plugin.Plugin import Abort, Fail, Plugin, Reconnect, Retry, SkipDownload
+
+
+def parseFileInfo(plugin, url="", html=""):
+    if hasattr(plugin, "getInfo"):
+        info = plugin.getInfo(url, html)
+        res  = [info['name'], info['size'], info['status'], info['url']]
+    else:
+        url   = urllib.unquote(url)
+        url_p = urlparse.urlparse(url)
+        res   = [(url_p.path.split('/')[-1]
+                  or url_p.query.split('=', 1)[::-1][0].split('&', 1)[0]
+                  or url_p.netloc.split('.', 1)[0]),
+                 0,
+                 3 if url else 8,
+                 url]
+
+    return res
 
 
 class Hoster(Plugin):
