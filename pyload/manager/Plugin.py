@@ -222,45 +222,24 @@ class PluginManager(object):
         return res
 
 
-    def findPlugin(self, type, name):
-        if isinstance(type, tuple):
-            for typ in type:
-                if name in self.plugins[typ]:
-                    return (self.plugins[typ][name], typ)
-
-        if isinstance(type, tuple) or type not in self.plugins or name not in self.plugins[type]:
+    def pluginClass(self, type, name):
+        """return plugin class"""
+        if name in self.plugins[type]:
+            return self.loadClass(type, name)
+        else:
             self.core.log.warning(_("Plugin [%(type)s] %(name)s not found | Using plugin: [internal] BasePlugin")
                                   % {'name': name, 'type': type})
-            return self.internalPlugins['BasePlugin']
-
-        else:
-            return self.plugins[type][name]
+            return self.loadClass("internal", "BasePlugin")
 
 
-    def getPlugin(self, type, name, original=False):
-        """return plugin module from hoster|decrypter|container"""
-        plugin = self.findPlugin(type, name)
-
-        if plugin is None:
-            return {}
-
-        if "new_module" in plugin and not original:
-            return plugin['new_module']
-        else:
+    def pluginModule(self, type, name):
+        """return plugin module"""
+        if name in self.plugins[type]:
             return self.loadModule(type, name)
-
-
-    def getPluginName(self, type, name):
-        """ used to obtain new name if other plugin was injected"""
-        plugin = self.findPlugin(type, name)
-
-        if plugin is None:
-            return ""
-
-        if "new_name" in plugin:
-            return plugin['new_name']
-
-        return name
+        else:
+            self.core.log.warning(_("Plugin [%(type)s] %(name)s not found | Using plugin: [internal] BasePlugin")
+                                  % {'name': name, 'type': type})
+            return self.loadModule("internal", "BasePlugin")
 
 
     def loadModule(self, type, name):
@@ -296,10 +275,12 @@ class PluginManager(object):
     def loadClass(self, type, name):
         """Returns the class of a plugin with the same name"""
         module = self.loadModule(type, name)
-        if module:
+        try:
             return getattr(module, name)
-        else:
-            return None
+
+        except Exception, e:
+            self.core.log.error(_("Error importing plugin: [%(type)s] %(name)s (v%(version).2f) | %(errmsg)s")
+                                % {'name': name, 'type': type, 'version': plugins[name]['version'], "errmsg": str(e)})
 
 
     def getAccountPlugins(self):

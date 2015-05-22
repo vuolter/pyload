@@ -49,14 +49,14 @@ class InfoThread(PluginThread):
         # directly write to database
         if self.pid > -1:
             for (plugintype, pluginname), urls in plugins.iteritems():
-                plugin = self.m.core.pluginManager.getPlugin(plugintype, pluginname, True)
+                plugin = self.m.core.pluginManager.pluginClass(plugintype, pluginname)
                 if hasattr(plugin, "getInfo"):
                     self.fetchForPlugin(pluginname, plugin, urls, self.updateDB)
                     self.m.core.files.save()
 
         elif self.add:
             for (plugintype, pluginname), urls in plugins.iteritems():
-                plugin = self.m.core.pluginManager.getPlugin(plugintype, pluginname, True)
+                plugin = self.m.core.pluginManager.pluginClass(plugintype, pluginname)
                 if hasattr(plugin, "getInfo"):
                     self.fetchForPlugin(pluginname, plugin, urls, self.updateCache, True)
 
@@ -83,8 +83,9 @@ class InfoThread(PluginThread):
                 try:
                     data = self.decryptContainer(name, url)
                 except Exception:
-                    traceback.print_exc()
                     self.m.log.error("Could not decrypt container.")
+                    if self.m.core.debug:
+                        traceback.print_exc()
                     data = []
 
                 for url, plugintype, pluginname in data:
@@ -96,7 +97,7 @@ class InfoThread(PluginThread):
             self.m.infoResults[self.rid] = {}
 
             for plugintype, pluginname, urls in plugins.iteritems():
-                plugin = self.m.core.pluginManager.getPlugin(plugintype, pluginname, True)
+                plugin = self.m.core.pluginManager.pluginClass(plugintype, pluginname)
                 if hasattr(plugin, "getInfo"):
                     self.fetchForPlugin(pluginname, plugin, urls, self.updateResult, True)
 

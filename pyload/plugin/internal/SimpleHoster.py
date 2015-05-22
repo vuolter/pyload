@@ -275,7 +275,7 @@ class SimpleHoster(Hoster):
     @classmethod
     def apiInfo(cls, *args, **kwargs):
         return super(SimpleHoster, cls).getInfo(*args, **kwargs)
-        
+
 
     @classmethod
     def getInfo(cls, url="", html=""):

@@ -62,19 +62,22 @@ class MultiHook(Hook):
         self.account      = None
         self.pluginclass  = None
         self.pluginmodule = None
-        self.pluginname   = None
+        self.pluginname   = self.__name__
         self.plugintype   = None
 
         self.initPlugin()
 
 
     def initPlugin(self):
-        self.pluginname         = self.__name__
-        plugin, self.plugintype = self.core.pluginManager.findPlugin(("hoster", "crypter", "container"), self.pluginname)
+        for t in ("hoster", "crypter", "container"):
+            if self.pluginname in self.plugins[t]:
+                self.plugintype = t
+                break
 
-        if plugin:
-            self.pluginmodule = self.core.pluginManager.loadModule(self.plugintype, self.pluginname)
-            self.pluginclass  = getattr(self.pluginmodule, self.pluginname)
+        if self.plugintype:
+            self.pluginmodule = self.core.pluginManager.pluginModule(self.plugintype, self.pluginname)
+            self.pluginclass  = self.core.pluginManager.pluginClass(self.plugintype, self.pluginname)
+
         else:
             self.logWarning("Hook plugin will be deactivated due missing plugin reference")
             self.setConfig('activated', False)

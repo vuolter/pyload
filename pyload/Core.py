@@ -305,10 +305,10 @@ class Core(object):
             self.check_install("OpenSSL", _("OpenSSL for secure connection"))
 
         self.setupDB()
-        
+
         if first_start:
             self.db.addUser("admin", "pyload")
-            
+
         elif self.config.oldRemoteData:
             self.log.info(_("Moving old user config to DB"))
             self.db.addUser(self.config.oldRemoteData['username'], self.config.oldRemoteData['password'])
