@@ -273,23 +273,9 @@ class SimpleHoster(Hoster):
 
 
     @classmethod
-    def parseInfos(cls, urls):  #@TODO: Built-in in 0.4.10 core (remove from plugins)
-        for url in urls:
-            url = replace_patterns(url, cls.URL_REPLACEMENTS)
-            yield cls.getInfo(url)
-
-
-    @classmethod
-    def apiInfo(cls, url="", get={}, post={}):
-        url   = urllib.unquote(url)
-        url_p = urlparse.urlparse(url)
-        return {'name': (url_p.path.split('/')[-1]
-                         or url_p.query.split('=', 1)[::-1][0].split('&', 1)[0]
-                         or url_p.netloc.split('.', 1)[0]),
-                'size': 0,
-                'status': 3 if url else 8,
-                'url': url}
-
+    def apiInfo(cls, *args, **kwargs):
+        return super(SimpleHoster, cls).getInfo(*args, **kwargs)
+        
 
     @classmethod
     def getInfo(cls, url="", html=""):

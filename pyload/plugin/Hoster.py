@@ -90,7 +90,19 @@ class Hoster(Plugin):
 
         self.init()
 
+        
+    @classmethod
+    def getInfo(cls, url="", html=""):    
+        url   = urllib.unquote(url)
+        url_p = urlparse.urlparse(url)
+        return {'name': (url_p.path.split('/')[-1]
+                         or url_p.query.split('=', 1)[::-1][0].split('&', 1)[0]
+                         or url_p.netloc.split('.', 1)[0]),
+                'size': 0,
+                'status': 3 if url else 8,
+                'url': url}
 
+                
     def init(self):
         """initialize the plugin (in addition to `__init__`)"""
         pass
