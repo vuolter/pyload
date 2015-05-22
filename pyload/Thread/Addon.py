@@ -12,7 +12,7 @@ from pyload.Thread.Plugin import PluginThread
 
 
 class AddonThread(PluginThread):
-    """thread for addons"""
+    """Thread for addons"""
 
     def __init__(self, m, function, args, kwargs):
         """Constructor"""
@@ -34,7 +34,7 @@ class AddonThread(PluginThread):
 
 
     def addActive(self, pyfile):
-        """ Adds a pyfile to active list and thus will be displayed on overview"""
+        """Adds a pyfile to active list and thus will be displayed on overview"""
         if pyfile not in self.active:
             self.active.append(pyfile)
 

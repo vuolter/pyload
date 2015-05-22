@@ -27,8 +27,6 @@ class OneKhDe(Crypter):
 
 
     def file_exists(self):
-        """ returns True or False
-        """
         return True
 
 

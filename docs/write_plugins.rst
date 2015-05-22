@@ -46,9 +46,7 @@ An example ``process`` function could look like this ::
 
 
         class MyFileHoster(Hoster):
-            """
-                plugin code
-            """
+            """Plugin code"""
 
             def process(self, pyfile):
                 html = self.load(pyfile.url)  #: load the content of the orginal pyfile.url to html
@@ -87,9 +85,7 @@ Example: ::
 
 
     class MyFileCrypter(Crypter):
-        """
-            plugin code
-        """
+        """Plugin code"""
 
         def decrypt(self, pyfile):
 

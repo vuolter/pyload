@@ -6,9 +6,7 @@ from pyload.utils import safe_filename
 
 
 class PyPackage(object):
-    """
-    Represents a package object at runtime
-    """
+    """Represents a package object at runtime"""
 
     def __init__(self, manager, id, name, folder, site, password, queue, order):
         self.m = manager
@@ -30,7 +28,8 @@ class PyPackage(object):
 
 
     def toDict(self):
-        """ Returns a dictionary representation of the data.
+        """
+        Returns a dictionary representation of the data.
 
         :return: dict: {id: { attr: value }}
         """
@@ -49,17 +48,17 @@ class PyPackage(object):
 
 
     def getChildren(self):
-        """get information about contained links"""
+        """Get information about contained links"""
         return self.m.getPackageData(self.id)["links"]
 
 
     def sync(self):
-        """sync with db"""
+        """Sync with db"""
         self.m.updatePackage(self)
 
 
     def release(self):
-        """sync and delete from cache"""
+        """Sync and delete from cache"""
         self.sync()
         self.m.releasePackage(self.id)
 

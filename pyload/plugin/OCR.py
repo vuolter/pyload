@@ -38,7 +38,7 @@ class OCR(Base):
 
 
     def deactivate(self):
-        """delete all tmp images"""
+        """Delete all tmp images"""
         pass
 
 
@@ -189,7 +189,7 @@ class OCR(Base):
 
 
     def derotate_by_average(self):
-        """rotate by checking each angle and guess most suitable"""
+        """Rotate by checking each angle and guess most suitable"""
 
         w, h = self.image.size
         pixels = self.pixels

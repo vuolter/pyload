@@ -94,7 +94,7 @@ class UpdateManager(Addon):
 
     @Expose
     def autoreloadPlugins(self):
-        """ reload and reindex all modified plugins """
+        """Reload and reindex all modified plugins"""
         modules = filter(
             lambda m: m and (m.__name__.startswith("pyload.plugin.") or
                              m.__name__.startswith("userplugins.")) and
@@ -133,7 +133,7 @@ class UpdateManager(Addon):
     @Expose
     @threaded
     def update(self):
-        """ check for updates """
+        """Check for updates"""
 
         self.core.api.pauseServer()
 
@@ -178,7 +178,7 @@ class UpdateManager(Addon):
 
 
     def _updatePlugins(self, data):
-        """ check for plugin updates """
+        """Check for plugin updates"""
 
         exitcode = 0
         updated  = []
@@ -283,7 +283,7 @@ class UpdateManager(Addon):
 
     @Expose
     def removePlugins(self, type_plugins):
-        """ delete plugins from disk """
+        """Delete plugins from disk"""
 
         if not type_plugins:
             return

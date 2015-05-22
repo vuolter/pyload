@@ -45,7 +45,7 @@ pat4 = re.compile(r'(.+)\.\d+\.xtm$')
 
 
 def matchFirst(string, *args):
-    """ matches against list of regexp and returns first match """
+    """Matches against list of regexp and returns first match"""
     for patternlist in args:
         for pattern in patternlist:
             m = pattern.search(string)
@@ -57,7 +57,8 @@ def matchFirst(string, *args):
 
 
 def parseNames(files):
-    """ Generates packages names from name, data lists
+    """
+    Generates packages names from name, data lists
 
     :param files: list of (name, data)
     :return: packagenames mapped to data lists (eg. urls)

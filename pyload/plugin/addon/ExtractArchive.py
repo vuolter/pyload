@@ -210,7 +210,7 @@ class ExtractArchive(Addon):
 
     @Expose
     def extractPackage(self, *ids):
-        """ Extract packages with given id"""
+        """Extract packages with given id"""
         for id in ids:
             self.queue.add(id)
         if not self.getConfig('waitall') and not self.extracting:
@@ -511,7 +511,7 @@ class ExtractArchive(Addon):
 
     @Expose
     def getPasswords(self, reload=True):
-        """ List of saved passwords """
+        """List of saved passwords"""
         if reload:
             self.reloadPasswords()
 
@@ -536,7 +536,7 @@ class ExtractArchive(Addon):
 
     @Expose
     def addPassword(self, password):
-        """  Adds a password to saved list"""
+        """Adds a password to saved list"""
         try:
             self.passwords = uniqify([password] + self.passwords)
 

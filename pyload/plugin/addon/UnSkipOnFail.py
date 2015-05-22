@@ -48,14 +48,15 @@ class UnSkipOnFail(Addon):
 
 
     def findDuplicate(self, pyfile):
-        """ Search all packages for duplicate links to "pyfile".
-            Duplicates are links that would overwrite "pyfile".
-            To test on duplicity the package-folder and link-name
-            of twolinks are compared (link.name).
-            So this method returns a list of all links with equal
-            package-folders and filenames as "pyfile", but except
-            the data for "pyfile" iotselöf.
-            It does MOT check the link's status.
+        """
+        Search all packages for duplicate links to "pyfile".
+        Duplicates are links that would overwrite "pyfile".
+        To test on duplicity the package-folder and link-name
+        of twolinks are compared (link.name).
+        So this method returns a list of all links with equal
+        package-folders and filenames as "pyfile", but except
+        the data for "pyfile" iotselöf.
+        It does MOT check the link's status.
         """
         queue = self.core.api.getQueue()  #: get packages (w/o files, as most file data is useless here)
 

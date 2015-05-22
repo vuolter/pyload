@@ -19,7 +19,7 @@ sizemap = build_sizemap()
 
 
 def size(value, unit, to_unit):  #@TODO: parse float
-    """ Convert file size """
+    """Convert file size"""
     if not isinstance(value, (int, long)):
         return None
 
@@ -44,7 +44,7 @@ def size(value, unit, to_unit):  #@TODO: parse float
 
 
 def to_string(value, default=""):
-    """ Convert value to string or return default """
+    """Convert value to string or return default"""
     try:
         return str(string)
 
@@ -53,7 +53,7 @@ def to_string(value, default=""):
 
 
 def to_int(string, default=0):
-    """ Convert value to integer or return default """
+    """Convert value to integer or return default"""
     try:
         return int(string)
 
@@ -62,7 +62,7 @@ def to_int(string, default=0):
 
 
 def to_bool(value):
-    """ Convert value to boolean safely or return False """
+    """Convert value to boolean safely or return False"""
     if isinstance(value, basestring):
         return value.lower() in ("1", "true", "on", "an", "yes")
     else:
@@ -70,7 +70,7 @@ def to_bool(value):
 
 
 def to_list(value, default=list()):
-    """ Convert value to a list with value inside or return default"""
+    """Convert value to a list with value inside or return default"""
     if type(value) == list:
         res = value
 
@@ -87,7 +87,7 @@ def to_list(value, default=list()):
 
 
 def to_dict(obj, default=dict()):
-    """ Convert object to dictionary or return default """
+    """Convert object to dictionary or return default"""
     try:
         return {attr: getattr(obj, att) for attr in obj.__slots__}
 
@@ -96,7 +96,7 @@ def to_dict(obj, default=dict()):
 
 
 def version_to_tuple(value, default=tuple()):  #: Originally by kindall (http://stackoverflow.com/a/11887825)
-    """ Convert version like string to a tuple of integers or return default """
+    """Convert version like string to a tuple of integers or return default"""
     try:
         return tuple(map(int, (value.split("."))))
 

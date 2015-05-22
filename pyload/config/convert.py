@@ -64,7 +64,7 @@ input_dict = {
 
 
 def to_input(typ):
-    """ Converts old config format to input type """
+    """Converts old config format to input type"""
     return input_dict.get(typ, InputType.Text)
 
 
@@ -91,7 +91,7 @@ def to_configdata(entry):
 
 
 def from_string(value, typ=None):
-    """ cast value to given type, unicode for strings """
+    """Cast value to given type, unicode for strings"""
 
     # value is no string
     if not isinstance(value, basestring):

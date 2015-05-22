@@ -15,9 +15,7 @@ SectionTuple = namedtuple("SectionTuple", "label description explanation config"
 
 
 class ConfigParser:
-    """
-    Holds and manages the configuration + meta data for config read from file.
-    """
+    """Holds and manages the configuration + meta data for config read from file"""
 
     CONFIG = "pyload.conf"
 
@@ -41,7 +39,7 @@ class ConfigParser:
 
 
     def checkVersion(self):
-        """ Determines if config needs to be deleted """
+        """Determines if config needs to be deleted"""
         if path.exists(self.CONFIG):
             f = open(self.CONFIG, "rb")
             v = f.readline()
@@ -60,7 +58,7 @@ class ConfigParser:
 
 
     def parseValues(self, filename):
-        """ read config values from file """
+        """Read config values from file"""
         f = open(filename, "rb")
         config = f.readlines()[1:]
 
@@ -99,7 +97,7 @@ class ConfigParser:
 
 
     def save(self):
-        """ saves config to filename """
+        """Saves config to filename"""
 
         configs = []
         f = open(self.CONFIG, "wb")
@@ -121,17 +119,17 @@ class ConfigParser:
 
 
     def __getitem__(self, section):
-        """ provides dictionary like access: c['section']['option'] """
+        """Provides dictionary like access: c['section']['option']"""
         return Section(self, section)
 
 
     def __contains__(self, section):
-        """ checks if parser contains section """
+        """Checks if parser contains section"""
         return section in self.config
 
 
     def get(self, section, option):
-        """ get value or default """
+        """Get value or default"""
         try:
             return self.values[section][option]
         except KeyError:
@@ -139,7 +137,7 @@ class ConfigParser:
 
 
     def set(self, section, option, value, sync=True):
-        """ set value """
+        """Set value"""
 
         data = self.config[section].config[option]
         value = convert.from_string(value, data.input.type)
@@ -158,23 +156,24 @@ class ConfigParser:
 
 
     def getMetaData(self, section, option):
-        """ get all config data for an option """
+        """Get all config data for an option"""
         return self.config[section].config[option]
 
 
     def iterSections(self):
-        """ Yields section, config info, values, for all sections """
+        """Yields section, config info, values, for all sections"""
         for name, config in self.config.iteritems():
             yield name, config, self.values[name] if name in self.values else {}
 
 
     def getSection(self, section):
-        """ Retrieves single config as tuple (section, values) """
+        """Retrieves single config as tuple (section, values)"""
         return self.config[section], self.values[section] if section in self.values else {}
 
 
     def addConfigSection(self, section, label, desc, expl, config):
-        """ Adds a section to the config. `config` is a list of config tuple as used in plugin api defined as:
+        """
+        Adds a section to the config. `config` is a list of config tuple as used in plugin api defined as:
         The order of the config elements is preserved with OrderedDict
         """
         d = OrderedDict()
@@ -188,19 +187,19 @@ class ConfigParser:
 
 
 class Section:
-    """ provides dictionary like access for configparser """
+    """Provides dictionary like access for configparser"""
 
     def __init__(self, parser, section):
-        """ Constructor """
+        """Constructor"""
         self.parser = parser
         self.section = section
 
 
     def __getitem__(self, item):
-        """ getitem """
+        """Getitem"""
         return self.parser.get(self.section, item)
 
 
     def __setitem__(self, item, value):
-        """ setitem """
+        """Setitem"""
         self.parser.set(self.section, item, value)

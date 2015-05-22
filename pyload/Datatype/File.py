@@ -84,7 +84,7 @@ class PyFile(object):
 
     @lock
     def initPlugin(self):
-        """ inits plugin instance """
+        """Inits plugin instance"""
         if not self.plugin:
             self.pluginmodule = self.m.core.pluginManager.pluginModule(self.plugintype, self.pluginname)
             self.pluginclass  = self.m.core.pluginManager.pluginClass(self.plugintype, self.pluginname)
@@ -93,7 +93,8 @@ class PyFile(object):
 
     @lock
     def hasPlugin(self):
-        """Thread safe way to determine this file has initialized plugin attribute
+        """
+        Thread safe way to determine this file has initialized plugin attribute
 
         :return:
         """
@@ -101,7 +102,7 @@ class PyFile(object):
 
 
     def package(self):
-        """ return package instance"""
+        """Return package instance"""
         return self.m.getPackage(self.packageid)
 
 
@@ -127,13 +128,13 @@ class PyFile(object):
 
 
     def sync(self):
-        """sync PyFile instance with database"""
+        """Sync PyFile instance with database"""
         self.m.updateLink(self)
 
 
     @lock
     def release(self):
-        """sync and remove from cache"""
+        """Sync and remove from cache"""
         # file has valid package
         if self.packageid > 0:
             self.sync()
@@ -146,17 +147,18 @@ class PyFile(object):
 
 
     def delete(self):
-        """delete pyfile from database"""
+        """Delete pyfile from database"""
         self.m.deleteLink(self.id)
 
 
     def toDict(self):
-        """return dict with all information for interface"""
+        """Return dict with all information for interface"""
         return self.toDbDict()
 
 
     def toDbDict(self):
-        """return data as dict for databse
+        """
+        Return data as dict for databse
 
         format:
 
@@ -183,7 +185,7 @@ class PyFile(object):
 
 
     def abortDownload(self):
-        """abort pyfile if possible"""
+        """Abort pyfile if possible"""
         while self.id in self.m.core.threadManager.processingIds():
             self.abort = True
             if self.plugin and self.plugin.req:
@@ -198,7 +200,7 @@ class PyFile(object):
 
 
     def finishIfDone(self):
-        """set status to finish and release file if every thread is finished with it"""
+        """Set status to finish and release file if every thread is finished with it"""
 
         if self.id in self.m.core.threadManager.processingIds():
             return False
@@ -214,7 +216,7 @@ class PyFile(object):
 
 
     def formatWait(self):
-        """ formats and return wait time in humanreadable format """
+        """Formats and return wait time in humanreadable format"""
         seconds = self.waitUntil - time.time()
 
         if seconds < 0:
@@ -226,12 +228,12 @@ class PyFile(object):
 
 
     def formatSize(self):
-        """ formats size to readable format """
+        """Formats size to readable format"""
         return format_size(self.getSize())
 
 
     def formatETA(self):
-        """ formats eta to readable format """
+        """Formats eta to readable format"""
         seconds = self.getETA()
 
         if seconds < 0:
@@ -243,7 +245,7 @@ class PyFile(object):
 
 
     def getSpeed(self):
-        """ calculates speed """
+        """Calculates speed"""
         try:
             return self.plugin.req.speed
         except Exception:
@@ -251,7 +253,7 @@ class PyFile(object):
 
 
     def getETA(self):
-        """ gets established time of arrival"""
+        """Gets established time of arrival"""
         try:
             return self.getBytesLeft() / self.getSpeed()
         except Exception:
@@ -259,7 +261,7 @@ class PyFile(object):
 
 
     def getBytesLeft(self):
-        """ gets bytes left """
+        """Gets bytes left"""
         try:
             return self.getSize() - self.plugin.req.arrived
         except Exception:
@@ -267,7 +269,7 @@ class PyFile(object):
 
 
     def getPercent(self):
-        """ get % of download """
+        """Get % of download"""
         if self.status == 12:
             try:
                 return self.plugin.req.percent
@@ -278,7 +280,7 @@ class PyFile(object):
 
 
     def getSize(self):
-        """ get size of download """
+        """Get size of download"""
         try:
             if self.plugin.req.size:
                 return self.plugin.req.size

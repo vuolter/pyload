@@ -10,7 +10,7 @@ from pyload.utils import encode, decode, uniqify
 
 
 class JsEngine(object):
-    """ JS Engine superclass """
+    """JS Engine superclass"""
 
     def __init__(self, core, engine=None):
         self.core   = core
@@ -33,12 +33,12 @@ class JsEngine(object):
 
     @classmethod
     def find(cls):
-        """ Check if there is any engine available """
+        """Check if there is any engine available"""
         return [E for E in ENGINES if E.find()]
 
 
     def get(self, engine=None):
-        """ Convert engine name (string) to relative JSE class (AbstractEngine extended) """
+        """Convert engine name (string) to relative JSE class (AbstractEngine extended)"""
         if not engine:
             JSE = self.engine
 
@@ -61,7 +61,7 @@ class JsEngine(object):
 
 
     def set(self, engine):
-        """ Set engine name (string) or JSE class (AbstractEngine extended) as default engine """
+        """Set engine name (string) or JSE class (AbstractEngine extended) as default engine"""
         if isinstance(engine, basestring):
             return self.set(self.get(engine))
 
@@ -104,7 +104,7 @@ class JsEngine(object):
 
 
 class AbstractEngine(object):
-    """ JSE base class """
+    """JSE base class"""
 
     _name = ""
 
@@ -120,7 +120,7 @@ class AbstractEngine(object):
 
     @classmethod
     def find(cls):
-        """ Check if the engine is available """
+        """Check if the engine is available"""
         try:
             __import__(cls._name)
         except Exception:
