@@ -1010,7 +1010,7 @@ class Api(Iface):
         :param remoteip:
         :return: dict with info, empty when login is incorrect
         """
-        return self.core.db.checkAuth(username, password)
+        return self.core.db.checkAuth(username, password) or None
 
 
     def isAuthorized(self, func, userdata):

@@ -11,7 +11,7 @@ import urllib
 import Crypto
 import bottle
 
-from pyload.webui import PYLOAD, JS
+from pyload.webui import API, JS
 
 
 def local_check(function):
@@ -41,9 +41,9 @@ def add(request):
     urls = filter(lambda x: x != "", bottle.request.POST['urls'].split("\n"))
 
     if package:
-        PYLOAD.addPackage(package, urls, 0)
+        API.addPackage(package, urls, 0)
     else:
-        PYLOAD.generateAndAddPackages(urls, 0)
+        API.generateAndAddPackages(urls, 0)
 
     return ""
 
@@ -54,13 +54,13 @@ def addcrypted():
     package = bottle.request.forms.get('referer', 'ClickNLoad Package')
     dlc = bottle.request.forms['crypted'].replace(" ", "+")
 
-    dlc_path = os.path.join(PYLOAD.getConfigValue('general', 'download_folder'),
+    dlc_path = os.path.join(API.getConfigValue('general', 'download_folder'),
                             package.replace("/", "").replace("\\", "").replace(":", "") + ".dlc")
     with open(dlc_path, "wb") as dlc_file:
         dlc_file.write(dlc)
 
     try:
-        PYLOAD.addPackage(package, [dlc_path], 0)
+        API.addPackage(package, [dlc_path], 0)
     except Exception:
         return bottle.HTTPError()
     else:
@@ -107,9 +107,9 @@ def addcrypted2():
 
     try:
         if package:
-            PYLOAD.addPackage(package, result, 0)
+            API.addPackage(package, result, 0)
         else:
-            PYLOAD.generateAndAddPackages(result, 0)
+            API.generateAndAddPackages(result, 0)
     except Exception:
         return "failed can't add"
     else:
@@ -131,9 +131,9 @@ def flashgot():
     folder = bottle.request.forms.get('dir', None)
 
     if package:
-        PYLOAD.addPackage(package, urls, autostart)
+        API.addPackage(package, urls, autostart)
     else:
-        PYLOAD.generateAndAddPackages(urls, autostart)
+        API.generateAndAddPackages(urls, autostart)
 
     return ""
 
@@ -153,7 +153,7 @@ def crossdomain():
 @local_check
 def checksupport():
     url = bottle.request.GET.get("url")
-    res = PYLOAD.checkURLs([url])
+    res = API.checkURLs([url])
     supported = (not res[0][1] is None)
 
     return str(supported).lower()

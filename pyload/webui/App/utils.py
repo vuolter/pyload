@@ -6,7 +6,11 @@ import os
 import bottle
 
 from pyload.Api import has_permission, PERMS, ROLE
-from pyload.webui import env
+from pyload.webui import THEME_DIR, env
+
+
+def get_theme()
+    return os.path.join(THEME_DIR, API.getConfigValue("webui", "theme").capitalize())
 
 
 def render_to_response(file, args={}, proc=[]):
@@ -111,10 +115,6 @@ def login_required(perm=None):
         return _view
 
     return _dec
-
-
-def toDict(obj):
-    return dict((att, getattr(obj, att)) for att in obj.__slots__)
 
 
 class CherryPyWSGI(bottle.ServerAdapter):
