@@ -6,7 +6,7 @@ from pyload.plugin.internal.XFSHoster import XFSHoster
 class UptoboxCom(XFSHoster):
     __name    = "UptoboxCom"
     __type    = "hoster"
-    __version = "0.18"
+    __version = "0.19"
 
     __pattern = r'https?://(?:www\.)?(uptobox|uptostream)\.com/\w{12}'
 
@@ -14,6 +14,8 @@ class UptoboxCom(XFSHoster):
     __license     = "GPLv3"
     __authors     = [("Walter Purcaro", "vuolter@gmail.com")]
 
+
+    LOGIN_ACCOUNT = True
 
     INFO_PATTERN         = r'"para_title">(?P<N>.+) \((?P<S>[\d.,]+) (?P<U>[\w^_]+)\)'
     OFFLINE_PATTERN      = r'>(File not found|Access Denied|404 Not Found)'

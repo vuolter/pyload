@@ -51,7 +51,7 @@ def parseHtmlForm(attr_str, html, input_names={}):
             if name:
                 value = parseHtmlTagAttrValue("value", inputtag.group(1))
                 if not value:
-                    inputs[name] = inputtag.group(3) or ''
+                    inputs[name] = inputtag.group(3) or ""
                 else:
                     inputs[name] = value
 
@@ -77,7 +77,7 @@ def parseHtmlForm(attr_str, html, input_names={}):
     return {}, None  #: no matching form found
 
 
-#: Deprecated
+#@TODO: Remove in 0.4.10
 def parseFileInfo(plugin, url="", html=""):
     if hasattr(plugin, "getInfo"):
         info = plugin.getInfo(url, html)
@@ -93,6 +93,17 @@ def parseFileInfo(plugin, url="", html=""):
                  url)
 
     return res
+
+
+#@TODO: Remove in 0.4.10
+def create_getInfo(plugin):
+    def getInfo(urls):
+        for url in urls:
+            if hasattr(plugin, "URL_REPLACEMENTS"):
+                url = replace_patterns(url, plugin.URL_REPLACEMENTS)
+            yield parseFileInfo(plugin, url)
+
+    return getInfo
 
 
 def timestamp():
@@ -114,7 +125,7 @@ def getFileURL(self, url, follow_location=None):
             self.logDebug("Redirect #%d to: %s" % (i, url))
             header = self.load(url, just_header=True, decode=True)
 
-        except Exception:  #: Bad bad bad...
+        except Exception:  #: Bad bad bad... rewrite this part in 0.4.10
             req = pyreq.getHTTPRequest()
             res = req.load(url, just_header=True, decode=True)
 
@@ -205,7 +216,7 @@ def secondsToMidnight(gmt=0):
 class SimpleHoster(Hoster):
     __name    = "SimpleHoster"
     __type    = "hoster"
-    __version = "1.42"
+    __version = "1.46"
 
     __pattern = r'^unmatchable$'
     __config  = [("use_premium", "bool", "Use premium account if available"          , True),
@@ -216,27 +227,27 @@ class SimpleHoster(Hoster):
     __authors     = [("Walter Purcaro", "vuolter@gmail.com")]
 
     """
-    Info patterns should be defined by each hoster:
+    Info patterns:
 
-      INFO_PATTERN: (optional) Name and Size of the file
+      INFO_PATTERN: (mandatory) Name and Size of the file
         example: INFO_PATTERN = r'(?P<N>file_name) (?P<S>file_size) (?P<U>size_unit)'
       or
-        NAME_PATTERN: (optional) Name that will be set for the file
+        NAME_PATTERN: (mandatory) Name that will be set for the file
           example: NAME_PATTERN = r'(?P<N>file_name)'
-        SIZE_PATTERN: (optional) Size that will be checked for the file
+        SIZE_PATTERN: (mandatory) Size that will be checked for the file
           example: SIZE_PATTERN = r'(?P<S>file_size) (?P<U>size_unit)'
 
       HASHSUM_PATTERN: (optional) Hash code and type of the file
         example: HASHSUM_PATTERN = r'(?P<H>hash_code) (?P<T>MD5)'
 
-      OFFLINE_PATTERN: (optional) Check if the page is unreachable
+      OFFLINE_PATTERN: (mandatory) Check if the page is unreachable
         example: OFFLINE_PATTERN = r'File (deleted|not found)'
 
       TEMP_OFFLINE_PATTERN: (optional) Check if the page is temporarily unreachable
         example: TEMP_OFFLINE_PATTERN = r'Server (maintenance|maintainance)'
 
 
-    Error handling patterns are all optional:
+    Error patterns:
 
       WAIT_PATTERN: (optional) Detect waiting time
         example: WAIT_PATTERN = r''
@@ -244,11 +255,23 @@ class SimpleHoster(Hoster):
       PREMIUM_ONLY_PATTERN: (optional) Check if the file can be downloaded only with a premium account
         example: PREMIUM_ONLY_PATTERN = r'Premium account required'
 
+      HAPPY_HOUR_PATTERN: (optional)
+        example: HAPPY_HOUR_PATTERN = r'Happy hour'
+
+      IP_BLOCKED_PATTERN: (optional)
+        example: IP_BLOCKED_PATTERN = r'in your country'
+
+      DOWNLOAD_LIMIT_PATTERN: (optional)
+        example: DOWNLOAD_LIMIT_PATTERN = r'download limit'
+
+      SIZE_LIMIT_PATTERN: (optional)
+        example: SIZE_LIMIT_PATTERN = r'up to'
+
       ERROR_PATTERN: (optional) Detect any error preventing download
         example: ERROR_PATTERN = r''
 
 
-    Instead overriding handle_free and handle_premium methods you can define the following patterns for direct download:
+    Instead overriding handle_free and handle_premium methods you may define the following patterns for link handling:
 
       LINK_FREE_PATTERN: (optional) group(1) should be the direct link for free download
         example: LINK_FREE_PATTERN = r'<div class="link"><a href="(.+?)"'
@@ -280,7 +303,7 @@ class SimpleHoster(Hoster):
     @classmethod
     def getInfo(cls, url="", html=""):
         info   = cls.apiInfo(url)
-        online = info['status'] == 2
+        online = info['status'] is 2
 
         try:
             info['pattern'] = re.match(cls.__pattern, url).groupdict()  #: pattern groups will be saved here
@@ -293,7 +316,7 @@ class SimpleHoster(Hoster):
                 info['error']  = "missing url"
                 info['status'] = 1
 
-            elif info['status'] is 3 and not getFileURL(None, url):
+            elif info['status'] is 3:
                 try:
                     html = getURL(url, cookies=cls.COOKIES, decode=not cls.TEXT_ENCODING)
 
@@ -308,6 +331,9 @@ class SimpleHoster(Hoster):
 
                     elif e.code is 503:
                         info['status'] = 6
+
+                except Exception:
+                    pass
 
         if html:
             if hasattr(cls, "OFFLINE_PATTERN") and re.search(cls.OFFLINE_PATTERN, html):
@@ -498,10 +524,39 @@ class SimpleHoster(Hoster):
             self.logWarning(_("No html code to check"))
             return
 
-        if hasattr(self, 'PREMIUM_ONLY_PATTERN') and not self.premium and re.search(self.PREMIUM_ONLY_PATTERN, self.html):
-            self.fail(_("Link require a premium account to be handled"))
+        if hasattr(self, 'IP_BLOCKED_PATTERN') and re.search(self.IP_BLOCKED_PATTERN, self.html):
+            self.fail(_("Connection from your current IP address is not allowed"))
 
-        elif hasattr(self, 'ERROR_PATTERN'):
+        elif not self.premium:
+            if hasattr(self, 'PREMIUM_ONLY_PATTERN') and re.search(self.PREMIUM_ONLY_PATTERN, self.html):
+                self.fail(_("File can be downloaded by premium users only"))
+
+            elif hasattr(self, 'SIZE_LIMIT_PATTERN') and re.search(self.SIZE_LIMIT_PATTERN, self.html):
+                self.fail(_("File too large for free download"))
+
+            elif hasattr(self, 'DOWNLOAD_LIMIT_PATTERN') and re.search(self.DOWNLOAD_LIMIT_PATTERN, self.html):
+                m = re.search(self.DOWNLOAD_LIMIT_PATTERN, self.html)
+                try:
+                    errmsg = m.group(1).strip()
+                except Exception:
+                    errmsg = m.group(0).strip()
+
+                self.info['error'] = re.sub(r'<.*?>', " ", errmsg)
+                self.logWarning(self.info['error'])
+
+                if re.search('da(il)?y|today', errmsg, re.I):
+                    wait_time = secondsToMidnight(gmt=2)
+                else:
+                    wait_time = sum(int(v) * {"hr": 3600, "hour": 3600, "min": 60, "sec": 1, "": 1}[u.lower()] for v, u in
+                                re.findall(r'(\d+)\s*(hr|hour|min|sec|)', errmsg, re.I))
+
+                self.wantReconnect = wait_time > 300
+                self.retry(1, wait_time, _("Download limit exceeded"))
+
+        if hasattr(self, 'HAPPY_HOUR_PATTERN') and re.search(self.HAPPY_HOUR_PATTERN, self.html):
+            self.multiDL = True
+
+        if hasattr(self, 'ERROR_PATTERN'):
             m = re.search(self.ERROR_PATTERN, self.html)
             if m:
                 try:
@@ -509,19 +564,40 @@ class SimpleHoster(Hoster):
                 except Exception:
                     errmsg = m.group(0).strip()
 
-                self.info['error'] = errmsg
+                self.info['error'] = re.sub(r'<.*?>', " ", errmsg)
+                self.logWarning(self.info['error'])
 
-                if "hour" in errmsg:
-                    self.wait(1 * 60 * 60, True)
+                if re.search('limit|wait', errmsg, re.I):
+                    if re.search("da(il)?y|today", errmsg):
+                        wait_time = secondsToMidnight(gmt=2)
+                    else:
+                        wait_time = sum(int(v) * {"hr": 3600, "hour": 3600, "min": 60, "sec": 1, "": 1}[u.lower()] for v, u in
+                                    re.findall(r'(\d+)\s*(hr|hour|min|sec|)', errmsg, re.I))
 
-                elif re.search("da(il)?y|today", errmsg):
-                    self.wait(secondsToMidnight(gmt=2), True)
+                    self.wantReconnect = wait_time > 300
+                    self.retry(1, wait_time, _("Download limit exceeded"))
 
-                elif "minute" in errmsg:
-                    self.wait(1 * 60)
+                elif re.search('country', errmsg, re.I):
+                    self.fail(_("Connection from your current IP address is not allowed"))
+
+                elif re.search('captcha', errmsg, re.I):
+                    self.invalidCaptcha()
+
+                elif re.search('countdown|expired', errmsg, re.I):
+                    self.retry(wait_time=60, reason=_("Link expired"))
+
+                elif re.search('maintenance|maintainance', errmsg, re.I):
+                    self.tempOffline()
+
+                elif re.search('up to', errmsg, re.I):
+                    self.fail(_("File too large for free download"))
+
+                elif re.search('premium', errmsg, re.I):
+                    self.fail(_("File can be downloaded by premium users only"))
 
                 else:
-                    self.error(errmsg)
+                    self.wantReconnect = True
+                    self.retry(wait_time=60, reason=errmsg)
 
         elif hasattr(self, 'WAIT_PATTERN'):
             m = re.search(self.WAIT_PATTERN, self.html)
@@ -555,7 +631,7 @@ class SimpleHoster(Hoster):
                 self.tempOffline()
 
             elif status is 8:
-                self.fail(self.info['error'] if 'error' in self.info else "Failed")
+                self.fail(self.info['error'] if 'error' in self.info else _("Failed"))
 
         finally:
             self.logDebug("File status: %s" % statusMap[status])

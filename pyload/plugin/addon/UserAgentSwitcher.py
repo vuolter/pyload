@@ -15,10 +15,10 @@ class UserAgentSwitcher(Addon):
     __type    = "addon"
     __version = "0.04"
 
-    __config = [("activated", "bool", "Activated"               , True                                                                      ),
-                  ("uaf"      , "file", "Random user-agents file" , ""                                                                        ),
-                  ("uar"      , "bool", "Random user-agent"       , False                                                                     ),
-                  ("uas"      , "str" , "Custom user-agent string", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:37.0) Gecko/20100101 Firefox/37.0")]
+    __config = [("activated", "bool", "Activated"                , True                                                                      ),
+                ("uaf"      , "file", "Random user-agent by file", ""                                                                        ),
+                ("uar"      , "bool", "Random user-agent"        , False                                                                     ),
+                ("uas"      , "str" , "Custom user-agent string" , "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0")]
 
     __description = """Custom user-agent"""
     __license     = "GPLv3"

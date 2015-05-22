@@ -11,7 +11,7 @@ from pyload.plugin.internal.SimpleHoster import SimpleHoster
 class UploadedTo(SimpleHoster):
     __name    = "UploadedTo"
     __type    = "hoster"
-    __version = "0.87"
+    __version = "0.88"
 
     __pattern = r'https?://(?:www\.)?(uploaded\.(to|net)|ul\.to)(/file/|/?\?id=|.*?&id=|/)(?P<ID>\w+)'
     __config  = [("use_premium", "bool", "Use premium account if available", True)]
@@ -36,7 +36,7 @@ class UploadedTo(SimpleHoster):
 
 
     @classmethod
-    def apiInfo(cls, url="", get={}, post={}):
+    def apiInfo(cls, url):
         info = super(UploadedTo, cls).apiInfo(url)
 
         for _i in xrange(5):

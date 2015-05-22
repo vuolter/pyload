@@ -11,7 +11,7 @@ from pyload.plugin.Hoster import Hoster
 class Ftp(Hoster):
     __name    = "Ftp"
     __type    = "hoster"
-    __version = "0.51"
+    __version = "0.52"
 
     __pattern = r'(?:ftps?|sftp)://([\w.-]+(:[\w.-]+)?@)?[\w.-]+(:\d+)?/.+'
 
@@ -64,7 +64,7 @@ class Ftp(Hoster):
             # Naive ftp directory listing
             if re.search(r'^25\d.*?"', self.req.http.header, re.M):
                 pyfile.url = pyfile.url.rstrip('/')
-                pkgname = "/".join(pyfile.package().name, urlparse.urlparse(pyfile.url).path.rpartition('/')[2])
+                pkgname = "/".join([pyfile.package().name, urlparse.urlparse(pyfile.url).path.rpartition('/')[2]])
                 pyfile.url += '/'
                 self.req.http.c.setopt(48, 1)  #: CURLOPT_DIRLISTONLY
                 res = self.load(pyfile.url, decode=False)

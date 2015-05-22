@@ -9,7 +9,7 @@ from pyload.plugin.internal.SimpleHoster import SimpleHoster
 class CatShareNet(SimpleHoster):
     __name    = "CatShareNet"
     __type    = "hoster"
-    __version = "0.13"
+    __version = "0.14"
 
     __pattern = r'http://(?:www\.)?catshare\.net/\w{16}'
     __config  = [("use_premium", "bool", "Use premium account if available", True)]
@@ -36,14 +36,6 @@ class CatShareNet(SimpleHoster):
     def setup(self):
         self.multiDL        = self.premium
         self.resumeDownload = True
-
-
-    def checkErrors(self):
-        m = re.search(self.IP_BLOCKED_PATTERN, self.html)
-        if m:
-            self.fail(_("Only connections from Polish IP address are allowed"))
-
-        return super(CatShareNet, self).checkErrors()
 
 
     def handle_free(self, pyfile):

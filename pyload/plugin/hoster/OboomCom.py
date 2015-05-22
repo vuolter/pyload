@@ -13,9 +13,9 @@ from pyload.plugin.captcha.ReCaptcha import ReCaptcha
 class OboomCom(Hoster):
     __name    = "OboomCom"
     __type    = "hoster"
-    __version = "0.31"
+    __version = "0.32"
 
-    __pattern = r'https?://(?:www\.)?oboom\.com/(#(id=|/)?)?(?P<ID>\w{8})'
+    __pattern = r'https?://(?:www\.)?oboom\.com/(?:#(?:id=|/)?)?(?P<ID>\w{8})'
 
     __description = """oboom.com hoster plugin"""
     __license     = "GPLv3"
@@ -33,6 +33,7 @@ class OboomCom(Hoster):
     def process(self, pyfile):
         self.pyfile.url.replace(".com/#id=", ".com/#")
         self.pyfile.url.replace(".com/#/", ".com/#")
+        self.html = self.load(pyfile.url)
         self.getFileId(self.pyfile.url)
         self.getSessionToken()
         self.getFileInfo(self.sessionToken, self.fileId)

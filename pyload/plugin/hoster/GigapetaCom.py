@@ -9,7 +9,7 @@ from pyload.plugin.internal.SimpleHoster import SimpleHoster
 class GigapetaCom(SimpleHoster):
     __name    = "GigapetaCom"
     __type    = "hoster"
-    __version = "0.03"
+    __version = "0.04"
 
     __pattern = r'http://(?:www\.)?gigapeta\.com/dl/\w+'
     __config  = [("use_premium", "bool", "Use premium account if available", True)]
@@ -19,9 +19,11 @@ class GigapetaCom(SimpleHoster):
     __authors     = [("zoidberg", "zoidberg@mujmail.cz")]
 
 
-    NAME_PATTERN = r'<img src=".*" alt="file" />-->\s*(?P<N>.*?)\s*</td>'
-    SIZE_PATTERN = r'<th>\s*Size\s*</th>\s*<td>\s*(?P<S>.*?)\s*</td>'
+    NAME_PATTERN    = r'<img src=".*" alt="file" />-->\s*(?P<N>.*?)\s*</td>'
+    SIZE_PATTERN    = r'<th>\s*Size\s*</th>\s*<td>\s*(?P<S>.*?)\s*</td>'
     OFFLINE_PATTERN = r'<div id="page_error">'
+
+    DOWNLOAD_PATTERN = r'"All threads for IP'
 
     COOKIES = [("gigapeta.com", "lang", "us")]
 
@@ -50,10 +52,3 @@ class GigapetaCom(SimpleHoster):
             self.fail(_("No valid captcha code entered"))
 
 
-    def checkErrors(self):
-        if "All threads for IP" in self.html:
-            self.logDebug("Your IP is already downloading a file")
-            self.wait(5 * 60, True)
-            self.retry()
-
-        self.info.pop('error', None)

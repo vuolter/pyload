@@ -6,7 +6,7 @@ from pyload.plugin.Crypter import Crypter as _Crypter
 class DeadCrypter(_Crypter):
     __name    = "DeadCrypter"
     __type    = "crypter"
-    __version = "0.04"
+    __version = "0.05"
 
     __pattern = r'^unmatchable$'
 
@@ -16,8 +16,8 @@ class DeadCrypter(_Crypter):
 
 
     @classmethod
-    def apiInfo(cls, url="", get={}, post={}):
-        api = super(DeadCrypter, self).apiInfo(url, get, post)
+    def apiInfo(cls, *args, **kwargs):
+        api = super(DeadCrypter, cls).apiInfo(*args, **kwargs)
         api['status'] = 1
         return api
 

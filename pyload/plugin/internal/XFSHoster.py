@@ -11,7 +11,7 @@ from pyload.utils import html_unescape
 class XFSHoster(SimpleHoster):
     __name    = "XFSHoster"
     __type    = "hoster"
-    __version = "0.47"
+    __version = "0.50"
 
     __pattern = r'^unmatchable$'
 
@@ -36,6 +36,7 @@ class XFSHoster(SimpleHoster):
 
     WAIT_PATTERN         = r'<span id="countdown_str".*>(\d+)</span>|id="countdown" value=".*?(\d+).*?"'
     PREMIUM_ONLY_PATTERN = r'>This file is available for Premium Users only'
+    HAPPY_HOUR_PATTERN   = r'>[Hh]appy hour'
     ERROR_PATTERN        = r'(?:class=["\']err["\'].*?>|<[Cc]enter><b>|>Error</td>|>\(ERROR:)(?:\s*<.+?>\s*)*(.+?)(?:["\']|<|\))'
 
     LINK_LEECH_PATTERN = r'<h2>Download Link</h2>\s*<textarea[^>]*>([^<]+)'
@@ -74,9 +75,6 @@ class XFSHoster(SimpleHoster):
         if not self.LINK_PATTERN:
             pattern = r'(https?://(?:www\.)?([^/]*?%s|\d+\.\d+\.\d+\.\d+)(\:\d+)?(/d/|(/files)?/\d+/\w+/).+?)["\'<]'
             self.LINK_PATTERN = pattern % self.HOSTER_DOMAIN.replace('.', '\.')
-
-        self.captcha = None
-        self.errmsg  = None
 
         super(XFSHoster, self).prepare()
 
@@ -142,7 +140,7 @@ class XFSHoster(SimpleHoster):
 
         action, inputs = self.parseHtmlForm('F1')
         if not inputs:
-            self.retry(reason=self.errmsg or _("TEXTAREA F1 not found"))
+            self.retry(reason=self.info['error'] if 'error' in self.info else _("TEXTAREA F1 not found"))
 
         self.logDebug(inputs)
 
@@ -171,59 +169,6 @@ class XFSHoster(SimpleHoster):
             self.link = header['location']
 
 
-    def checkErrors(self):
-        m = re.search(self.ERROR_PATTERN, self.html)
-        if m is None:
-            self.errmsg = None
-        else:
-            self.errmsg = m.group(1).strip()
-
-            self.logWarning(re.sub(r"<.*?>", " ", self.errmsg))
-
-            if 'wait' in self.errmsg:
-                wait_time = sum(int(v) * {"hr": 3600, "hour": 3600, "min": 60, "sec": 1, "": 1}[u.lower()] for v, u in
-                                re.findall(r'(\d+)\s*(hr|hour|min|sec|)', self.errmsg, re.I))
-                self.wait(wait_time, wait_time > 300)
-
-            elif 'country' in self.errmsg:
-                self.fail(_("Downloads are disabled for your country"))
-
-            elif 'captcha' in self.errmsg:
-                self.invalidCaptcha()
-
-            elif 'premium' in self.errmsg and 'require' in self.errmsg:
-                self.fail(_("File can be downloaded by premium users only"))
-
-            elif 'limit' in self.errmsg:
-                if 'day' in self.errmsg:
-                    delay   = secondsToMidnight(gmt=2)
-                    retries = 3
-                else:
-                    delay   = 1 * 60 * 60
-                    retries = 24
-
-                self.wantReconnect = True
-                self.retry(retries, delay, _("Download limit exceeded"))
-
-            elif 'countdown' in self.errmsg or 'Expired' in self.errmsg:
-                self.retry(reason=_("Link expired"))
-
-            elif 'maintenance' in self.errmsg or 'maintainance' in self.errmsg:
-                self.tempOffline()
-
-            elif 'up to' in self.errmsg:
-                self.fail(_("File too large for free download"))
-
-            else:
-                self.wantReconnect = True
-                self.retry(wait_time=60, reason=self.errmsg)
-
-        if self.errmsg:
-            self.info['error'] = self.errmsg
-        else:
-            self.info.pop('error', None)
-
-
     def getPostParameters(self):
         if self.FORM_PATTERN or self.FORM_INPUTS_MAP:
             action, inputs = self.parseHtmlForm(self.FORM_PATTERN or "", self.FORM_INPUTS_MAP or {})
@@ -233,7 +178,7 @@ class XFSHoster(SimpleHoster):
         if not inputs:
             action, inputs = self.parseHtmlForm('F1')
             if not inputs:
-                self.retry(reason=self.errmsg or _("TEXTAREA F1 not found"))
+                self.retry(reason=self.info['error'] if 'error' in self.info else _("TEXTAREA F1 not found"))
 
         self.logDebug(inputs)
 
@@ -251,8 +196,7 @@ class XFSHoster(SimpleHoster):
                     wait_time = int(m.group(1))
                     self.setWait(wait_time, False)
 
-                self.captcha = self.handleCaptcha(inputs)
-
+                self.handleCaptcha(inputs)
                 self.wait()
         else:
             inputs['referer'] = self.pyfile.url
@@ -272,7 +216,7 @@ class XFSHoster(SimpleHoster):
         if m:
             captcha_url = m.group(1)
             inputs['code'] = self.decryptCaptcha(captcha_url)
-            return 1
+            return
 
         m = re.search(self.CAPTCHA_BLOCK_PATTERN, self.html, re.S)
         if m:
@@ -284,7 +228,7 @@ class XFSHoster(SimpleHoster):
             inputs['code'] = "".join(a[1] for a in sorted(numerals, key=lambda num: int(num[0])))
 
             self.logDebug("Captcha code: %s" % inputs['code'], numerals)
-            return 2
+            return
 
         recaptcha = ReCaptcha(self)
         try:
@@ -298,7 +242,7 @@ class XFSHoster(SimpleHoster):
 
         if captcha_key:
             inputs['recaptcha_response_field'], inputs['recaptcha_challenge_field'] = recaptcha.challenge(captcha_key)
-            return 3
+            return
 
         solvemedia = SolveMedia(self)
         try:
@@ -312,6 +256,3 @@ class XFSHoster(SimpleHoster):
 
         if captcha_key:
             inputs['adcopy_response'], inputs['adcopy_challenge'] = solvemedia.challenge(captcha_key)
-            return 4
-
-        return 0
