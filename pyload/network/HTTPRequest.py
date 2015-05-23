@@ -52,6 +52,8 @@ class HTTPRequest(object):
 
         self.log = logging.getLogger("log")
 
+        pyload_core.hookManager.dispatchEvent("newHTTPRequest", self)
+
 
     def initHandle(self):
         """Sets common options to curl handle"""
