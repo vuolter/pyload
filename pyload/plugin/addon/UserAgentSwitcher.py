@@ -13,7 +13,7 @@ from pyload.utils import fs_encode
 class UserAgentSwitcher(Addon):
     __name    = "UserAgentSwitcher"
     __type    = "addon"
-    __version = "0.04"
+    __version = "0.05"
 
     __config = [("activated", "bool", "Activated"                , True                                                                      ),
                 ("uaf"      , "file", "Random user-agent by file", ""                                                                        ),
@@ -24,8 +24,20 @@ class UserAgentSwitcher(Addon):
     __license     = "GPLv3"
     __authors     = [("Walter Purcaro", "vuolter@gmail.com")]
 
+    event_list = ["newHTTPRequest"]
+
+    uas = None
+
+
+    def coreReady(self):
+        self.uas = self.getUserAgent()
+
 
     def downloadPreparing(self, pyfile):
+        self.uas = self.getUserAgent()
+
+
+    def getUserAgent(self):
         uar = self.getConfig('uar')
         uaf = fs_encode(self.getConfig('uaf'))
 
@@ -35,6 +47,10 @@ class UserAgentSwitcher(Addon):
         else:
             uas = self.getConfig('uas')
 
-        if uas:
-            self.logDebug("Use custom user-agent string: " + uas)
-            pyfile.plugin.req.http.c.setopt(pycurl.USERAGENT, uas.encode('utf-8'))
+        return uas
+
+
+    def newHTTPRequest(self, http):
+        if self.uas:
+            http.c.setopt(pycurl.USERAGENT, self.uas.encode('utf-8'))
+            self.logDebug("Use custom user-agent string: " + self.uas)
