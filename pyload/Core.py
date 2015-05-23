@@ -43,6 +43,8 @@ class Core(object):
 
 
     def __init__(self):
+        __builtin__.pyload_core = self
+
         self.doDebug = False
         self.running = False
         self.daemon = False
