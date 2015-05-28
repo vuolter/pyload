@@ -16,8 +16,6 @@ class RestartFailed(Addon):
     __authors     = [("Walter Purcaro", "vuolter@gmail.com")]
 
 
-    # event_list = ["pluginConfigChanged"]
-
     MIN_CHECK_INTERVAL = 15 * 60  #: 15 minutes
 
 
@@ -30,6 +28,10 @@ class RestartFailed(Addon):
                 # self.initPeriodical()
             # else:
                 # self.logDebug("Invalid interval value, kept current")
+
+
+    def setup(self):
+        # self.event_list = ["pluginConfigChanged"]
 
 
     def periodical(self):

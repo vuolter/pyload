@@ -11,7 +11,7 @@ from pyload.utils import html_unescape
 class XFSHoster(SimpleHoster):
     __name    = "XFSHoster"
     __type    = "hoster"
-    __version = "0.50"
+    __version = "0.51"
 
     __pattern = r'^unmatchable$'
 
@@ -73,7 +73,7 @@ class XFSHoster(SimpleHoster):
             self.COOKIES.insert((self.HOSTER_DOMAIN, "lang", "english"))
 
         if not self.LINK_PATTERN:
-            pattern = r'(https?://(?:www\.)?([^/]*?%s|\d+\.\d+\.\d+\.\d+)(\:\d+)?(/d/|(/files)?/\d+/\w+/).+?)["\'<]'
+            pattern = r'(?:file: "(.+?)"|(https?://(?:www\.)?([^/]*?%s|\d+\.\d+\.\d+\.\d+)(\:\d+)?(/d/|(/files)?/\d+/\w+/).+?)["\'<])'
             self.LINK_PATTERN = pattern % self.HOSTER_DOMAIN.replace('.', '\.')
 
         super(XFSHoster, self).prepare()
@@ -84,7 +84,7 @@ class XFSHoster(SimpleHoster):
 
     def handle_free(self, pyfile):
         for i in xrange(1, 6):
-            self.logDebug("Getting download link: #%d" % i)
+            self.logDebug("Getting download link #%d" % i)
 
             self.checkErrors()
 

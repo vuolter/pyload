@@ -9,17 +9,17 @@ from pyload.plugin.Addon import Addon, Expose
 class AndroidPhoneNotify(Addon):
     __name    = "AndroidPhoneNotify"
     __type    = "addon"
-    __version = "0.07"
+    __version = "0.08"
 
     __config = [("apikey"         , "str" , "API key"                                  , ""   ),
-                  ("notifycaptcha"  , "bool", "Notify captcha request"                   , True ),
-                  ("notifypackage"  , "bool", "Notify package finished"                  , True ),
-                  ("notifyprocessed", "bool", "Notify packages processed"                , True ),
-                  ("notifyupdate"   , "bool", "Notify plugin updates"                    , True ),
-                  ("notifyexit"     , "bool", "Notify pyLoad shutdown"                   , True ),
-                  ("sendtimewait"   , "int" , "Timewait in seconds between notifications", 5    ),
-                  ("sendpermin"     , "int" , "Max notifications per minute"             , 12   ),
-                  ("ignoreclient"   , "bool", "Send notifications if client is connected", False)]
+                ("notifycaptcha"  , "bool", "Notify captcha request"                   , True ),
+                ("notifypackage"  , "bool", "Notify package finished"                  , True ),
+                ("notifyprocessed", "bool", "Notify packages processed"                , True ),
+                ("notifyupdate"   , "bool", "Notify plugin updates"                    , True ),
+                ("notifyexit"     , "bool", "Notify pyLoad shutdown"                   , True ),
+                ("sendtimewait"   , "int" , "Timewait in seconds between notifications", 5    ),
+                ("sendpermin"     , "int" , "Max notifications per minute"             , 12   ),
+                ("ignoreclient"   , "bool", "Send notifications if client is connected", False)]
 
     __description = """Send push notifications to your Android Phone (using notifymyandroid.com)"""
     __license     = "GPLv3"
@@ -27,10 +27,9 @@ class AndroidPhoneNotify(Addon):
                        ("Walter Purcaro", "vuolter@gmail.com"      )]
 
 
-    event_list = ["allDownloadsProcessed", "plugin_updated"]
-
-
     def setup(self):
+        self.event_list = ["allDownloadsProcessed", "plugin_updated"]
+
         self.last_notify   = 0
         self.notifications = 0
 
@@ -40,6 +39,10 @@ class AndroidPhoneNotify(Addon):
             return
 
         self.notify(_("Plugins updated"), str(type_plugins))
+
+
+    def coreReady(self):
+        self.key = self.getConfig('apikey')
 
 
     def exit(self):
@@ -78,8 +81,9 @@ class AndroidPhoneNotify(Addon):
     def notify(self,
                event,
                msg="",
-               key=self.getConfig('apikey')):
+               key=None):
 
+        key = key or self.key
         if not key:
             return
 
@@ -97,7 +101,6 @@ class AndroidPhoneNotify(Addon):
         elif self.notifications >= self.getConfig("sendpermin"):
             return
 
-
         getURL("http://www.notifymyandroid.com/publicapi/notify",
                get={'apikey'     : key,
                     'application': "pyLoad",
@@ -106,3 +109,5 @@ class AndroidPhoneNotify(Addon):
 
         self.last_notify    = time.time()
         self.notifications += 1
+
+        return True

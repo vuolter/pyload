@@ -17,15 +17,12 @@ class DeleteFinished(Addon):
     __authors     = [("Walter Purcaro", "vuolter@gmail.com")]
 
 
-    # event_list = ["pluginConfigChanged"]
-
     MIN_CHECK_INTERVAL = 1 * 60 * 60  #: 1 hour
 
 
     ## overwritten methods ##
-
-
     def setup(self):
+        # self.event_list = ["pluginConfigChanged"]
         self.interval = self.MIN_CHECK_INTERVAL
 
 

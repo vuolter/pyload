@@ -9,18 +9,18 @@ from pyload.plugin.Addon import Addon, Expose
 class WindowsPhoneNotify(Addon):
     __name    = "WindowsPhoneNotify"
     __type    = "addon"
-    __version = "0.09"
+    __version = "0.10"
 
-    __config = [("id"             , "str" , "Push ID"                                  , ""   ),
-                  ("url"            , "str" , "Push url"                                 , ""   ),
-                  ("notifycaptcha"  , "bool", "Notify captcha request"                   , True ),
-                  ("notifypackage"  , "bool", "Notify package finished"                  , True ),
-                  ("notifyprocessed", "bool", "Notify packages processed"                , True ),
-                  ("notifyupdate"   , "bool", "Notify plugin updates"                    , True ),
-                  ("notifyexit"     , "bool", "Notify pyLoad shutdown"                   , True ),
-                  ("sendtimewait"   , "int" , "Timewait in seconds between notifications", 5    ),
-                  ("sendpermin"     , "int" , "Max notifications per minute"             , 12   ),
-                  ("ignoreclient"   , "bool", "Send notifications if client is connected", False)]
+    __config = [("push-id"        , "str" , "Push ID"                                  , ""   ),
+                ("push-url"       , "str" , "Push url"                                 , ""   ),
+                ("notifycaptcha"  , "bool", "Notify captcha request"                   , True ),
+                ("notifypackage"  , "bool", "Notify package finished"                  , True ),
+                ("notifyprocessed", "bool", "Notify packages processed"                , True ),
+                ("notifyupdate"   , "bool", "Notify plugin updates"                    , True ),
+                ("notifyexit"     , "bool", "Notify pyLoad shutdown"                   , True ),
+                ("sendtimewait"   , "int" , "Timewait in seconds between notifications", 5    ),
+                ("sendpermin"     , "int" , "Max notifications per minute"             , 12   ),
+                ("ignoreclient"   , "bool", "Send notifications if client is connected", False)]
 
     __description = """Send push notifications to Windows Phone"""
     __license     = "GPLv3"
@@ -28,10 +28,11 @@ class WindowsPhoneNotify(Addon):
                        ("Walter Purcaro", "vuolter@gmail.com"       )]
 
 
-    event_list = ["allDownloadsProcessed", "plugin_updated"]
 
 
     def setup(self):
+        self.event_list = ["allDownloadsProcessed", "plugin_updated"]
+
         self.last_notify   = 0
         self.notifications = 0
 
@@ -41,6 +42,10 @@ class WindowsPhoneNotify(Addon):
             return
 
         self.notify(_("Plugins updated"), str(type_plugins))
+
+
+    def coreReady(self):
+        self.key = (self.getConfig('push-id'), self.getConfig('push-url'))
 
 
     def exit(self):
@@ -85,10 +90,9 @@ class WindowsPhoneNotify(Addon):
     def notify(self,
                event,
                msg="",
-               key=(self.getConfig('id'), self.getConfig('url'))):
+               key=(None, None)):
 
-        id, url = key
-
+        id, url = key or self.key
         if not id or not url:
             return
 
@@ -106,7 +110,6 @@ class WindowsPhoneNotify(Addon):
         elif self.notifications >= self.getConfig("sendpermin"):
             return
 
-
         request    = self.getXmlData("%s: %s" % (event, msg) if msg else event)
         webservice = httplib.HTTP(url)
 
@@ -122,3 +125,5 @@ class WindowsPhoneNotify(Addon):
 
         self.last_notify    = time.time()
         self.notifications += 1
+
+        return True

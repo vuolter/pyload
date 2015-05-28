@@ -22,15 +22,16 @@ class ExternalScripts(Addon):
                      ("spoob"         , "spoob@pyload.org"),
                      ("Walter Purcaro", "vuolter@gmail.com")]
 
-    event_list = ["archive_extract_failed", "archive_extracted"     ,
-                  "package_extract_failed", "package_extracted"     ,
-                  "all_archives_extracted", "all_archives_processed",
-                  "allDownloadsFinished"  , "allDownloadsProcessed" ,
-                  "packageDeleted"]
 
 
     def setup(self):
         self.scripts = {}
+
+        self.event_list = ["archive_extract_failed", "archive_extracted"     ,
+                           "package_extract_failed", "package_extracted"     ,
+                           "all_archives_extracted", "all_archives_processed",
+                           "allDownloadsFinished"  , "allDownloadsProcessed" ,
+                           "packageDeleted"]
 
         folders = ["pyload_start", "pyload_restart", "pyload_stop",
                    "before_reconnect", "after_reconnect",

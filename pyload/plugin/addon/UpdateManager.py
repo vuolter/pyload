@@ -29,18 +29,15 @@ def exists(path):
 class UpdateManager(Addon):
     __name    = "UpdateManager"
     __type    = "addon"
-    __version = "0.51"
+    __version = "0.52"
 
-    __config  = [("activated", "bool", "Activated", False),
-                 ("checkinterval", "int", "Check interval in hours", 8),
-                 ("autorestart", "bool",
-                  "Auto-restart pyLoad when required", True),
-                 ("checkonstart", "bool", "Check for updates on startup", True),
-                 ("checkperiod", "bool",
-                  "Check for updates periodically", True),
-                 ("reloadplugins", "bool",
-                  "Monitor plugin code changes in debug mode", True),
-                 ("nodebugupdate", "bool", "Don't update plugins in debug mode", False)]
+    __config = [("activated"    , "bool", "Activated"                                , True ),
+                ("checkinterval", "int" , "Check interval in hours"                  , 8    ),
+                ("autorestart"  , "bool", "Auto-restart pyLoad when required"        , True ),
+                ("checkonstart" , "bool", "Check for updates on startup"             , True ),
+                ("checkperiod"  , "bool", "Check for updates periodically"           , True ),
+                ("reloadplugins", "bool", "Monitor plugin code changes in debug mode", True ),
+                ("nodebugupdate", "bool", "Don't update plugins in debug mode"       , False)]
 
     __description = """ Check for updates """
     __license     = "GPLv3"
@@ -49,20 +46,24 @@ class UpdateManager(Addon):
     SERVER_URL         = "http://updatemanager.pyload.org" if release_status == 5 else None
     MIN_CHECK_INTERVAL = 3 * 60 * 60  #: 3 hours
 
-    event_list = ["allDownloadsProcessed"]
-
 
     def activate(self):
         if self.checkonstart:
+            self.core.api.pauseServer()
             self.update()
+            if self.do_restart is False:
+                self.core.api.unpauseServer()
 
         self.initPeriodical()
 
 
     def setup(self):
-        self.interval = 10
         self.info     = {'pyload': False, 'version': None, 'plugins': False, 'last_check': time.time()}
         self.mtimes   = {}  #: store modification time for each plugin
+
+        self.event_list = ["allDownloadsProcessed"]
+
+        self.interval = 10
 
         if self.getConfig('checkonstart'):
             self.core.api.pauseServer()
@@ -135,16 +136,13 @@ class UpdateManager(Addon):
     def update(self):
         """Check for updates"""
 
-        self.core.api.pauseServer()
-
         if self._update() is 2 and self.getConfig('autorestart'):
             if not self.core.api.statusDownloads():
                 self.core.api.restart()
             else:
                 self.do_restart = True
                 self.logWarning(_("Downloads are active, will restart once the download is done"))
-        else:
-            self.core.api.unpauseServer()
+                self.core.api.pauseServer()
 
 
     def _update(self):

@@ -14,7 +14,7 @@ from pyload.network.HTTPRequest import BadHeader
 from pyload.network.RequestFactory import getURL
 from pyload.plugin.Hoster import Hoster
 from pyload.plugin.Plugin import Fail, Retry
-from pyload.utils import fixup, fs_encode, parse_size
+from pyload.utils import fixup, fs_encode, html_unescape, parse_size
 
 
 #@TODO: Adapt and move to PyFile in 0.4.10
@@ -187,7 +187,7 @@ def secondsToMidnight(gmt=0):
 class SimpleHoster(Hoster):
     __name    = "SimpleHoster"
     __type    = "hoster"
-    __version = "1.47"
+    __version = "1.49"
 
     __pattern = r'^unmatchable$'
     __config  = [("use_premium", "bool", "Use premium account if available"          , True),
@@ -432,21 +432,29 @@ class SimpleHoster(Hoster):
             self.checkFile()
 
         except Fail, e:  #@TODO: Move to PluginThread in 0.4.10
-            if self.getConfig('fallback', True) and self.premium:
+            if str(e) == _("No captcha result obtained in appropiate time by any of the plugins."):  #@TODO: Fix in 0.4.10
+                self.checkFile()
+
+            elif self.getConfig('fallback', True) and self.premium:
                 self.logWarning(_("Premium download failed"), e)
                 self.retryFree()
+
             else:
                 raise Fail(e)
     def downloadLink(self, link, disposition=True):
-        if link and isinstance(link, basestring):
-            self.correctCaptcha()
+        if not link or not isinstance(link, basestring):
+            return
 
-            if not urlparse.urlparse(link).scheme:
-                url_p   = urlparse.urlparse(self.pyfile.url)
-                baseurl = "%s://%s" % (url_p.scheme, url_p.netloc)
-                link    = urlparse.urljoin(baseurl, link)
+        self.correctCaptcha()
 
-            self.download(link, ref=False, disposition=disposition)
+        link = html_unescape(link.decode('unicode-escape'))  #@TODO: Move this check to plugin `load` method
+
+        if not urlparse.urlparse(link).scheme:
+            url_p   = urlparse.urlparse(self.pyfile.url)
+            baseurl = "%s://%s" % (url_p.scheme, url_p.netloc)
+            link    = urlparse.urljoin(baseurl, link)
+
+        self.download(link, ref=False, disposition=disposition)
 
 
     def checkFile(self, rules={}):

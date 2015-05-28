@@ -138,12 +138,12 @@ class ExtractArchive(Addon):
                      ("Immenz"        , "immenz@gmx.net")]
 
 
-    event_list = ["allDownloadsProcessed", "packageDeleted"]
-
     NAME_REPLACEMENTS = [(r'\.part\d+\.rar$', ".part.rar")]
 
 
     def setup(self):
+        self.event_list = ["allDownloadsProcessed","packageDeleted"]
+
         self.queue  = ArchiveQueue(self, "Queue.Queue")
         self.failed = ArchiveQueue(self, "Failed")
 

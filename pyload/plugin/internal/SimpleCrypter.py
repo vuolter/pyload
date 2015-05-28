@@ -5,13 +5,13 @@ import urlparse
 
 from pyload.plugin.Crypter import Crypter
 from pyload.plugin.internal.SimpleHoster import SimpleHoster, replace_patterns, set_cookies
-from pyload.utils import fixup
+from pyload.utils import fixup, html_unescape
 
 
 class SimpleCrypter(Crypter, SimpleHoster):
     __name    = "SimpleCrypter"
     __type    = "crypter"
-    __version = "0.43"
+    __version = "0.46"
 
     __pattern = r'^unmatchable$'
     __config  = [("use_subfolder"     , "bool", "Save package to subfolder"          , True),  #: Overrides core.config.get("general", "folder_per_package")
@@ -136,8 +136,10 @@ class SimpleCrypter(Crypter, SimpleHoster):
         url_p   = urlparse.urlparse(self.pyfile.url)
         baseurl = "%s://%s" % (url_p.scheme, url_p.netloc)
 
-        return [urlparse.urljoin(baseurl, link) if not urlparse.urlparse(link).scheme else link \
-                for link in re.findall(self.LINK_PATTERN, self.html)]
+        links = [urlparse.urljoin(baseurl, link) if not urlparse.urlparse(link).scheme else link \
+                 for link in re.findall(self.LINK_PATTERN, self.html)]
+
+        return [html_unescape(l.decode('unicode-escape')) for l in links]
 
 
     def handle_pages(self, pyfile):

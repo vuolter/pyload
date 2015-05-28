@@ -11,7 +11,7 @@ class JustPremium(Addon):
     __version = "0.22"
 
     __config = [("excluded", "str", "Exclude hosters (comma separated)", ""),
-                  ("included", "str", "Include hosters (comma separated)", "")]
+                ("included", "str", "Include hosters (comma separated)", "")]
 
     __description = """Remove not-premium links from added urls"""
     __license     = "GPLv3"
@@ -20,7 +20,8 @@ class JustPremium(Addon):
                        ("immenz"        , "immenz@gmx.net"    )]
 
 
-    event_list = ["linksAdded"]
+    def setup(self):
+        self.event_list = ["linksAdded"]
 
 
     def linksAdded(self, links, pid):
