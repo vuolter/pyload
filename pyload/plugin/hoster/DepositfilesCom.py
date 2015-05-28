@@ -8,16 +8,16 @@ from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
 class DepositfilesCom(SimpleHoster):
-    __name__    = "DepositfilesCom"
-    __type__    = "hoster"
-    __version__ = "0.55"
+    __name    = "DepositfilesCom"
+    __type    = "hoster"
+    __version = "0.55"
 
-    __pattern__ = r'https?://(?:www\.)?(depositfiles\.com|dfiles\.(eu|ru))(/\w{1,3})?/files/(?P<ID>\w+)'
-    __config__  = [("use_premium", "bool", "Use premium account if available", True)]
+    __pattern = r'https?://(?:www\.)?(depositfiles\.com|dfiles\.(eu|ru))(/\w{1,3})?/files/(?P<ID>\w+)'
+    __config  = [("use_premium", "bool", "Use premium account if available", True)]
 
-    __description__ = """Depositfiles.com hoster plugin"""
-    __license__     = "GPLv3"
-    __authors__     = [("spoob", "spoob@pyload.org"),
+    __description = """Depositfiles.com hoster plugin"""
+    __license     = "GPLv3"
+    __authors     = [("spoob", "spoob@pyload.org"),
                        ("zoidberg", "zoidberg@mujmail.cz"),
                        ("Walter Purcaro", "vuolter@gmail.com")]
 

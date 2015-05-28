@@ -4,13 +4,13 @@ from pyload.plugin.internal.DeadCrypter import DeadCrypter
 
 
 class RSLayerCom(DeadCrypter):
-    __name__    = "RSLayerCom"
-    __type__    = "crypter"
-    __version__ = "0.21"
+    __name    = "RSLayerCom"
+    __type    = "crypter"
+    __version = "0.21"
 
-    __pattern__ = r'http://(?:www\.)?rs-layer\.com/directory-'
-    __config__  = []  #@TODO: Remove in 0.4.10
+    __pattern = r'http://(?:www\.)?rs-layer\.com/directory-'
+    __config  = []  #@TODO: Remove in 0.4.10
 
-    __description__ = """RS-Layer.com decrypter plugin"""
-    __license__     = "GPLv3"
-    __authors__     = [("hzpz", "")]
+    __description = """RS-Layer.com decrypter plugin"""
+    __license     = "GPLv3"
+    __authors     = [("hzpz", "")]

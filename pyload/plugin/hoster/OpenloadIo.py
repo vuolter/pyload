@@ -4,15 +4,15 @@ from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
 class OpenloadIo(SimpleHoster):
-    __name__    = "OpenloadIo"
-    __type__    = "hoster"
-    __version__ = "0.01"
+    __name    = "OpenloadIo"
+    __type    = "hoster"
+    __version = "0.01"
 
-    __pattern__ = r'https?://(?:www\.)?openload\.io/f/\w{11}'
+    __pattern = r'https?://(?:www\.)?openload\.io/f/\w{11}'
 
-    __description__ = """Openload.io hoster plugin"""
-    __license__     = "GPLv3"
-    __authors__     = [(None, None)]
+    __description = """Openload.io hoster plugin"""
+    __license     = "GPLv3"
+    __authors     = [(None, None)]
 
 
     NAME_PATTERN = r'<span id="filename">(?P<N>.+)</'

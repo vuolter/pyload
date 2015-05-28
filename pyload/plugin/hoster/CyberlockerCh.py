@@ -4,13 +4,13 @@ from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
 class CyberlockerCh(DeadHoster):
-    __name__    = "CyberlockerCh"
-    __type__    = "hoster"
-    __version__ = "0.02"
+    __name    = "CyberlockerCh"
+    __type    = "hoster"
+    __version = "0.02"
 
-    __pattern__ = r'http://(?:www\.)?cyberlocker\.ch/\w+'
-    __config__  = []  #@TODO: Remove in 0.4.10
+    __pattern = r'http://(?:www\.)?cyberlocker\.ch/\w+'
+    __config  = []  #@TODO: Remove in 0.4.10
 
-    __description__ = """Cyberlocker.ch hoster plugin"""
-    __license__     = "GPLv3"
-    __authors__     = [("stickell", "l.stickell@yahoo.it")]
+    __description = """Cyberlocker.ch hoster plugin"""
+    __license     = "GPLv3"
+    __authors     = [("stickell", "l.stickell@yahoo.it")]

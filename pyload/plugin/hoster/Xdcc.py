@@ -12,17 +12,17 @@ from pyload.utils import fs_join
 
 
 class Xdcc(Hoster):
-    __name__    = "Xdcc"
-    __type__    = "hoster"
-    __version__ = "0.32"
+    __name    = "Xdcc"
+    __type    = "hoster"
+    __version = "0.32"
 
     __config = [("nick", "str", "Nickname", "pyload"),
                 ("ident", "str", "Ident", "pyloadident"),
                 ("realname", "str", "Realname", "pyloadreal")]
 
-    __description__ = """Download from IRC XDCC bot"""
-    __license__     = "GPLv3"
-    __authors__     = [("jeix", "jeix@hasnomail.com")]
+    __description = """Download from IRC XDCC bot"""
+    __license     = "GPLv3"
+    __authors     = [("jeix", "jeix@hasnomail.com")]
 
 
     def setup(self):

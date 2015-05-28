@@ -35,16 +35,16 @@ class CustomBrowser(Browser):
 
 
 class DlFreeFr(SimpleHoster):
-    __name__    = "DlFreeFr"
-    __type__    = "hoster"
-    __version__ = "0.28"
+    __name    = "DlFreeFr"
+    __type    = "hoster"
+    __version = "0.28"
 
-    __pattern__ = r'http://(?:www\.)?dl\.free\.fr/(\w+|getfile\.pl\?file=/\w+)'
-    __config__  = [("use_premium", "bool", "Use premium account if available", True)]
+    __pattern = r'http://(?:www\.)?dl\.free\.fr/(\w+|getfile\.pl\?file=/\w+)'
+    __config  = [("use_premium", "bool", "Use premium account if available", True)]
 
-    __description__ = """Dl.free.fr hoster plugin"""
-    __license__     = "GPLv3"
-    __authors__     = [("the-razer", "daniel_ AT gmx DOT net"),
+    __description = """Dl.free.fr hoster plugin"""
+    __license     = "GPLv3"
+    __authors     = [("the-razer", "daniel_ AT gmx DOT net"),
                        ("zoidberg", "zoidberg@mujmail.cz"),
                        ("Toilal", "toilal.dev@gmail.com")]
 

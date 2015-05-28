@@ -44,15 +44,15 @@ from pyload.utils import decode, fs_decode, fs_encode
 
 
 class MegaCoNz(Hoster):
-    __name__    = "MegaCoNz"
-    __type__    = "hoster"
-    __version__ = "0.26"
+    __name    = "MegaCoNz"
+    __type    = "hoster"
+    __version = "0.26"
 
-    __pattern__ = r'(?:https?://(?:www\.)?mega\.co\.nz/|mega:|chrome:.+?)#(?P<TYPE>N|)!(?P<ID>[\w^_]+)!(?P<KEY>[\w,-]+)'
+    __pattern = r'(?:https?://(?:www\.)?mega\.co\.nz/|mega:|chrome:.+?)#(?P<TYPE>N|)!(?P<ID>[\w^_]+)!(?P<KEY>[\w,-]+)'
 
-    __description__ = """Mega.co.nz hoster plugin"""
-    __license__     = "GPLv3"
-    __authors__     = [("RaNaN", "ranan@pyload.org"),
+    __description = """Mega.co.nz hoster plugin"""
+    __license     = "GPLv3"
+    __authors     = [("RaNaN", "ranan@pyload.org"),
                        ("Walter Purcaro", "vuolter@gmail.com")]
 
 

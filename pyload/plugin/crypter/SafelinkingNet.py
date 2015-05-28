@@ -10,17 +10,17 @@ from pyload.plugin.captcha.SolveMedia import SolveMedia
 
 
 class SafelinkingNet(Crypter):
-    __name__    = "SafelinkingNet"
-    __type__    = "crypter"
-    __version__ = "0.14"
+    __name    = "SafelinkingNet"
+    __type    = "crypter"
+    __version = "0.14"
 
-    __pattern__ = r'https?://(?:www\.)?safelinking\.net/([pd])/\w+'
-    __config__  = [("use_subfolder"     , "bool", "Save package to subfolder"          , True),
+    __pattern = r'https?://(?:www\.)?safelinking\.net/([pd])/\w+'
+    __config  = [("use_subfolder"     , "bool", "Save package to subfolder"          , True),
                    ("subfolder_per_pack", "bool", "Create a subfolder for each package", True)]
 
-    __description__ = """Safelinking.net decrypter plugin"""
-    __license__     = "GPLv3"
-    __authors__     = [("quareevo", "quareevo@arcor.de")]
+    __description = """Safelinking.net decrypter plugin"""
+    __license     = "GPLv3"
+    __authors     = [("quareevo", "quareevo@arcor.de")]
 
 
     SOLVEMEDIA_PATTERN = "solvemediaApiKey = '([\w.-]+)';"

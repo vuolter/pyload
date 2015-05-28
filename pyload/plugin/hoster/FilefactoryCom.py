@@ -18,16 +18,16 @@ def getInfo(urls):
 
 
 class FilefactoryCom(SimpleHoster):
-    __name__    = "FilefactoryCom"
-    __type__    = "hoster"
-    __version__ = "0.55"
+    __name    = "FilefactoryCom"
+    __type    = "hoster"
+    __version = "0.55"
 
-    __pattern__ = r'https?://(?:www\.)?filefactory\.com/(file|trafficshare/\w+)/\w+'
-    __config__  = [("use_premium", "bool", "Use premium account if available", True)]
+    __pattern = r'https?://(?:www\.)?filefactory\.com/(file|trafficshare/\w+)/\w+'
+    __config  = [("use_premium", "bool", "Use premium account if available", True)]
 
-    __description__ = """Filefactory.com hoster plugin"""
-    __license__     = "GPLv3"
-    __authors__     = [("stickell", "l.stickell@yahoo.it"),
+    __description = """Filefactory.com hoster plugin"""
+    __license     = "GPLv3"
+    __authors     = [("stickell", "l.stickell@yahoo.it"),
                        ("Walter Purcaro", "vuolter@gmail.com")]
 
 

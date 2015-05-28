@@ -13,13 +13,13 @@ from module.plugins.Plugin import Base, Fail
 
 #@TODO: Extend (new) Plugin class; remove all `html` args
 class CaptchaService(Base):
-    __name__    = "CaptchaService"
-    __type__    = "captcha"
-    __version__ = "0.29"
+    __name    = "CaptchaService"
+    __type    = "captcha"
+    __version = "0.29"
 
-    __description__ = """Base captcha service plugin"""
-    __license__     = "GPLv3"
-    __authors__     = [("pyLoad Team", "admin@pyload.org")]
+    __description = """Base captcha service plugin"""
+    __license     = "GPLv3"
+    __authors     = [("pyLoad Team", "admin@pyload.org")]
 
 
     key = None  #: last key detected
@@ -65,13 +65,13 @@ class CaptchaService(Base):
 
 
 class AdYouLike(CaptchaService):
-    __name__    = "AdYouLike"
-    __type__    = "captcha"
-    __version__ = "0.06"
+    __name    = "AdYouLike"
+    __type    = "captcha"
+    __version = "0.06"
 
-    __description__ = """AdYouLike captcha service plugin"""
-    __license__     = "GPLv3"
-    __authors__     = [("Walter Purcaro", "vuolter@gmail.com")]
+    __description = """AdYouLike captcha service plugin"""
+    __license     = "GPLv3"
+    __authors     = [("Walter Purcaro", "vuolter@gmail.com")]
 
 
     AYL_PATTERN      = r'Adyoulike\.create\s*\((.+?)\)'
@@ -150,13 +150,13 @@ class AdYouLike(CaptchaService):
 
 
 class AdsCaptcha(CaptchaService):
-    __name__    = "AdsCaptcha"
-    __type__    = "captcha"
-    __version__ = "0.09"
+    __name    = "AdsCaptcha"
+    __type    = "captcha"
+    __version = "0.09"
 
-    __description__ = """AdsCaptcha captcha service plugin"""
-    __license__     = "GPLv3"
-    __authors__     = [("pyLoad Team", "admin@pyload.org")]
+    __description = """AdsCaptcha captcha service plugin"""
+    __license     = "GPLv3"
+    __authors     = [("pyLoad Team", "admin@pyload.org")]
 
 
     CAPTCHAID_PATTERN  = r'api\.adscaptcha\.com/Get\.aspx\?.*?CaptchaId=(\d+)'
@@ -207,13 +207,13 @@ class AdsCaptcha(CaptchaService):
 
 
 class ReCaptcha(CaptchaService):
-    __name__    = "ReCaptcha"
-    __type__    = "captcha"
-    __version__ = "0.17"
+    __name    = "ReCaptcha"
+    __type    = "captcha"
+    __version = "0.17"
 
-    __description__ = """ReCaptcha captcha service plugin"""
-    __license__     = "GPLv3"
-    __authors__     = [("pyLoad Team", "admin@pyload.org"),
+    __description = """ReCaptcha captcha service plugin"""
+    __license     = "GPLv3"
+    __authors     = [("pyLoad Team", "admin@pyload.org"),
                        ("Walter Purcaro", "vuolter@gmail.com"),
                        ("zapp-brannigan", "fuerst.reinje@web.de")]
 
@@ -392,13 +392,13 @@ class ReCaptcha(CaptchaService):
 
 
 class SolveMedia(CaptchaService):
-    __name__    = "SolveMedia"
-    __type__    = "captcha"
-    __version__ = "0.13"
+    __name    = "SolveMedia"
+    __type    = "captcha"
+    __version = "0.13"
 
-    __description__ = """SolveMedia captcha service plugin"""
-    __license__     = "GPLv3"
-    __authors__     = [("pyLoad Team", "admin@pyload.org")]
+    __description = """SolveMedia captcha service plugin"""
+    __license     = "GPLv3"
+    __authors     = [("pyLoad Team", "admin@pyload.org")]
 
 
     KEY_PATTERN = r'api\.solvemedia\.com/papi/challenge\.(?:no)?script\?k=(.+?)["\']'

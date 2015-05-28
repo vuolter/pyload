@@ -11,15 +11,15 @@ from pyload.plugin.captcha.ReCaptcha import ReCaptcha
 
 
 class OboomCom(Hoster):
-    __name__    = "OboomCom"
-    __type__    = "hoster"
-    __version__ = "0.32"
+    __name    = "OboomCom"
+    __type    = "hoster"
+    __version = "0.32"
 
-    __pattern__ = r'https?://(?:www\.)?oboom\.com/(?:#(?:id=|/)?)?(?P<ID>\w{8})'
+    __pattern = r'https?://(?:www\.)?oboom\.com/(?:#(?:id=|/)?)?(?P<ID>\w{8})'
 
-    __description__ = """oboom.com hoster plugin"""
-    __license__     = "GPLv3"
-    __authors__     = [("stanley", "stanley.foerster@gmail.com")]
+    __description = """oboom.com hoster plugin"""
+    __license     = "GPLv3"
+    __authors     = [("stanley", "stanley.foerster@gmail.com")]
 
 
     RECAPTCHA_KEY = "6LdqpO0SAAAAAJGHXo63HyalP7H4qlRs_vff0kJX"

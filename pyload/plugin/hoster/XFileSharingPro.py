@@ -6,15 +6,15 @@ from pyload.plugin.internal.XFSHoster import XFSHoster
 
 
 class XFileSharingPro(XFSHoster):
-    __name__    = "XFileSharingPro"
-    __type__    = "hoster"
-    __version__ = "0.45"
+    __name    = "XFileSharingPro"
+    __type    = "hoster"
+    __version = "0.45"
 
-    __pattern__ = r'^unmatchable$'
+    __pattern = r'^unmatchable$'
 
-    __description__ = """XFileSharingPro dummy hoster plugin for hook"""
-    __license__     = "GPLv3"
-    __authors__     = [("Walter Purcaro", "vuolter@gmail.com")]
+    __description = """XFileSharingPro dummy hoster plugin for hook"""
+    __license     = "GPLv3"
+    __authors     = [("Walter Purcaro", "vuolter@gmail.com")]
 
 
     URL_REPLACEMENTS = [("/embed-", "/")]

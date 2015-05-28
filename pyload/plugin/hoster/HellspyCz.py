@@ -4,13 +4,13 @@ from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
 class HellspyCz(DeadHoster):
-    __name__    = "HellspyCz"
-    __type__    = "hoster"
-    __version__ = "0.28"
+    __name    = "HellspyCz"
+    __type    = "hoster"
+    __version = "0.28"
 
-    __pattern__ = r'http://(?:www\.)?(?:hellspy\.(?:cz|com|sk|hu|pl)|sciagaj\.pl)(/\S+/\d+)'
-    __config__  = []  #@TODO: Remove in 0.4.10
+    __pattern = r'http://(?:www\.)?(?:hellspy\.(?:cz|com|sk|hu|pl)|sciagaj\.pl)(/\S+/\d+)'
+    __config  = []  #@TODO: Remove in 0.4.10
 
-    __description__ = """HellSpy.cz hoster plugin"""
-    __license__     = "GPLv3"
-    __authors__     = [("zoidberg", "zoidberg@mujmail.cz")]
+    __description = """HellSpy.cz hoster plugin"""
+    __license     = "GPLv3"
+    __authors     = [("zoidberg", "zoidberg@mujmail.cz")]

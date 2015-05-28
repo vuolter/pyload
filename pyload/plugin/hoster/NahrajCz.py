@@ -4,13 +4,13 @@ from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
 class NahrajCz(DeadHoster):
-    __name__    = "NahrajCz"
-    __type__    = "hoster"
-    __version__ = "0.21"
+    __name    = "NahrajCz"
+    __type    = "hoster"
+    __version = "0.21"
 
-    __pattern__ = r'http://(?:www\.)?nahraj\.cz/content/download/.+'
-    __config__  = []  #@TODO: Remove in 0.4.10
+    __pattern = r'http://(?:www\.)?nahraj\.cz/content/download/.+'
+    __config  = []  #@TODO: Remove in 0.4.10
 
-    __description__ = """Nahraj.cz hoster plugin"""
-    __license__     = "GPLv3"
-    __authors__     = [("zoidberg", "zoidberg@mujmail.cz")]
+    __description = """Nahraj.cz hoster plugin"""
+    __license     = "GPLv3"
+    __authors     = [("zoidberg", "zoidberg@mujmail.cz")]

@@ -4,13 +4,13 @@ from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
 class TurbouploadCom(DeadHoster):
-    __name__    = "TurbouploadCom"
-    __type__    = "hoster"
-    __version__ = "0.03"
+    __name    = "TurbouploadCom"
+    __type    = "hoster"
+    __version = "0.03"
 
-    __pattern__ = r'http://(?:www\.)?turboupload\.com/(\w+)'
-    __config__  = []  #@TODO: Remove in 0.4.10
+    __pattern = r'http://(?:www\.)?turboupload\.com/(\w+)'
+    __config  = []  #@TODO: Remove in 0.4.10
 
-    __description__ = """Turboupload.com hoster plugin"""
-    __license__     = "GPLv3"
-    __authors__     = [("zoidberg", "zoidberg@mujmail.cz")]
+    __description = """Turboupload.com hoster plugin"""
+    __license     = "GPLv3"
+    __authors     = [("zoidberg", "zoidberg@mujmail.cz")]

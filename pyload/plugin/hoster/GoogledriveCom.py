@@ -11,16 +11,16 @@ from pyload.utils import html_unescape
 
 
 class GoogledriveCom(SimpleHoster):
-    __name__    = "GoogledriveCom"
-    __type__    = "hoster"
-    __version__ = "0.12"
+    __name    = "GoogledriveCom"
+    __type    = "hoster"
+    __version = "0.12"
 
-    __pattern__ = r'https?://(?:www\.)?(drive|docs)\.google\.com/(file/d/\w+|uc\?.*id=)'
-    __config__  = [("use_premium", "bool", "Use premium account if available", True)]
+    __pattern = r'https?://(?:www\.)?(drive|docs)\.google\.com/(file/d/\w+|uc\?.*id=)'
+    __config  = [("use_premium", "bool", "Use premium account if available", True)]
 
-    __description__ = """Drive.google.com hoster plugin"""
-    __license__     = "GPLv3"
-    __authors__     = [("zapp-brannigan", "fuerst.reinje@web.de")]
+    __description = """Drive.google.com hoster plugin"""
+    __license     = "GPLv3"
+    __authors     = [("zapp-brannigan", "fuerst.reinje@web.de")]
 
 
     DISPOSITION = False  #: Remove in 0.4.10

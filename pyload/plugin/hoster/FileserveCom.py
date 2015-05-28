@@ -29,15 +29,15 @@ def checkFile(plugin, urls):
 
 
 class FileserveCom(Hoster):
-    __name__    = "FileserveCom"
-    __type__    = "hoster"
-    __version__ = "0.54"
+    __name    = "FileserveCom"
+    __type    = "hoster"
+    __version = "0.54"
 
-    __pattern__ = r'http://(?:www\.)?fileserve\.com/file/(?P<ID>[^/]+)'
+    __pattern = r'http://(?:www\.)?fileserve\.com/file/(?P<ID>[^/]+)'
 
-    __description__ = """Fileserve.com hoster plugin"""
-    __license__     = "GPLv3"
-    __authors__     = [("jeix", "jeix@hasnomail.de"),
+    __description = """Fileserve.com hoster plugin"""
+    __license     = "GPLv3"
+    __authors     = [("jeix", "jeix@hasnomail.de"),
                      ("mkaay", "mkaay@mkaay.de"),
                      ("Paul King", ""),
                      ("zoidberg", "zoidberg@mujmail.cz")]

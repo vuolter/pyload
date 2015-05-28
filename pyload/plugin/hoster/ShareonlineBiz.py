@@ -11,16 +11,16 @@ from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
 class ShareonlineBiz(SimpleHoster):
-    __name__    = "ShareonlineBiz"
-    __type__    = "hoster"
-    __version__ = "0.50"
+    __name    = "ShareonlineBiz"
+    __type    = "hoster"
+    __version = "0.50"
 
-    __pattern__ = r'https?://(?:www\.)?(share-online\.biz|egoshare\.com)/(download\.php\?id=|dl/)(?P<ID>\w+)'
-    __config__  = [("use_premium", "bool", "Use premium account if available", True)]
+    __pattern = r'https?://(?:www\.)?(share-online\.biz|egoshare\.com)/(download\.php\?id=|dl/)(?P<ID>\w+)'
+    __config  = [("use_premium", "bool", "Use premium account if available", True)]
 
-    __description__ = """Shareonline.biz hoster plugin"""
-    __license__     = "GPLv3"
-    __authors__     = [("spoob", "spoob@pyload.org"),
+    __description = """Shareonline.biz hoster plugin"""
+    __license     = "GPLv3"
+    __authors     = [("spoob", "spoob@pyload.org"),
                        ("mkaay", "mkaay@mkaay.de"),
                        ("zoidberg", "zoidberg@mujmail.cz"),
                        ("Walter Purcaro", "vuolter@gmail.com")]
