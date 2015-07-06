@@ -1,4 +1,4 @@
-# Common packaging directories
+### Common packaging directories ##############################################
 bin/
 build/
 dist/
@@ -9,7 +9,7 @@ sdist/
 var/
 temp/
 
-# Common directories
+### Common directories ########################################################
 .*/
 __pycache__/
 Downloads/
@@ -17,7 +17,7 @@ Logs/
 tmp/
 userplugins/
 
-# Common files
+### Common files ##############################################################
 *.backup
 *.db
 *.pid
@@ -29,45 +29,45 @@ userplugins/
 /pyload/config/core.xml
 /pyload/config/plugin.xml
 
-# Common MacOS & Windows files
+### Common OS files ###########################################################
 *.DS_Store
 Thumbs.db
 desktop.ini
 
-# Certificate files
+### Certificates ##############################################################
 cert.pem
 ssl.crt
 ssl.key
 
-# Common compiled files
+### Compiled files ############################################################
 *.mo
 *.so
 *.py[cod]
 
-# Installer files
+### Installer files ###########################################################
 .installed.cfg
 pip-log.txt
 
-# Unit test / coverage reports
+### Unit tests & coverage reports #############################################
 .coverage
 .tox
 nosetests.xml
 
-# Python Eggs
+### Python Eggs ###############################################################
 *.egg
 *.egg-info
 develop-eggs
 eggs
 
-# Mr Developer
+### Mr Developer ##############################################################
 .mr.developer.cfg
 .project
 .pydevproject
 
-# PyCharm
+### PyCharm ###################################################################
 .idea
 
-# Other development stuff
+### Other development stuff ###################################################
 .svn
 *~
 *.orig
