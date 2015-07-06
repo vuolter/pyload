@@ -20,7 +20,7 @@ class FileHandler(object):
 
     def __init__(self, core):
         """Constructor"""
-        self.core = core
+        self.pyload = core
 
         # translations
         self.statusMsg = [_("finished"), _("offline"), _("online"), _("queued"), _("skipped"), _("waiting"),
@@ -40,7 +40,7 @@ class FileHandler(object):
         self.queuecount = -1  #: number of package to be loaded
         self.unchanged = False  #: determines if any changes was made since last call
 
-        self.db = self.core.db
+        self.db = self.pyload.db
 
 
     def change(func):
@@ -117,15 +117,15 @@ class FileHandler(object):
     def addLinks(self, urls, package):
         """Adds links"""
 
-        self.core.addonManager.dispatchEvent("links-added", urls, package)
+        self.pyload.addonManager.dispatchEvent("links-added", urls, package)
 
-        data = self.core.pluginManager.parseUrls(urls)
+        data = self.pyload.pluginManager.parseUrls(urls)
 
         self.db.addLinks(data, package)
-        self.core.threadManager.createInfoThread(data, package)
+        self.pyload.threadManager.createInfoThread(data, package)
 
         #@TODO: change from reloadAll event to package update event
-        self.core.pullManager.addEvent(ReloadAllEvent("collector"))
+        self.pyload.pullManager.addEvent(ReloadAllEvent("collector"))
 
 
     #--------------------------------------------------------------------------
@@ -137,7 +137,7 @@ class FileHandler(object):
         lastID = self.db.addPackage(name, folder, queue)
         p = self.db.getPackage(lastID)
         e = InsertEvent("pack", lastID, p.order, "collector" if not queue else "queue")
-        self.core.pullManager.addEvent(e)
+        self.pyload.pullManager.addEvent(e)
         return lastID
 
 
@@ -167,8 +167,8 @@ class FileHandler(object):
                 pyfile.release()
 
         self.db.deletePackage(p)
-        self.core.pullManager.addEvent(e)
-        self.core.addonManager.dispatchEvent("package-deleted", id)
+        self.pyload.pullManager.addEvent(e)
+        self.pyload.addonManager.dispatchEvent("package-deleted", id)
 
         if id in self.packageCache:
             del self.packageCache[id]
@@ -196,7 +196,7 @@ class FileHandler(object):
 
         oldorder = f.order
 
-        if id in self.core.threadManager.processingIds():
+        if id in self.pyload.threadManager.processingIds():
             self.cache[id].abortDownload()
 
         if id in self.cache:
@@ -204,7 +204,7 @@ class FileHandler(object):
 
         self.db.deleteLink(f)
 
-        self.core.pullManager.addEvent(e)
+        self.pyload.pullManager.addEvent(e)
 
         p = self.getPackage(pid)
         if not len(p.getChildren()):
@@ -240,7 +240,7 @@ class FileHandler(object):
         self.db.updateLink(pyfile)
 
         e = UpdateEvent("file", pyfile.id, "collector" if not pyfile.package().queue else "queue")
-        self.core.pullManager.addEvent(e)
+        self.pyload.pullManager.addEvent(e)
 
 
     #--------------------------------------------------------------------------
@@ -250,7 +250,7 @@ class FileHandler(object):
         self.db.updatePackage(pypack)
 
         e = UpdateEvent("pack", pypack.id, "collector" if not pypack.queue else "queue")
-        self.core.pullManager.addEvent(e)
+        self.pyload.pullManager.addEvent(e)
 
 
     #--------------------------------------------------------------------------
@@ -361,7 +361,7 @@ class FileHandler(object):
         if "decrypt" in self.jobCache:
             return None
 
-        plugins = self.core.pluginManager.crypterPlugins.keys() + self.core.pluginManager.containerPlugins.keys()
+        plugins = self.pyload.pluginManager.crypterPlugins.keys() + self.pyload.pluginManager.containerPlugins.keys()
         plugins = str(tuple(plugins))
 
         jobs = self.db.getPluginJob(plugins)
@@ -393,8 +393,8 @@ class FileHandler(object):
         """Checks if all files are finished and dispatch event"""
 
         if not self.getQueueCount(True):
-            self.core.addonManager.dispatchEvent("all_downloads-finished")
-            self.core.log.debug("All downloads finished")
+            self.pyload.addonManager.dispatchEvent("all_downloads-finished")
+            self.pyload.log.debug("All downloads finished")
             return True
 
         return False
@@ -407,8 +407,8 @@ class FileHandler(object):
         self.resetCount()
 
         if not self.db.processcount(1, fid):
-            self.core.addonManager.dispatchEvent("all_downloads-processed")
-            self.core.log.debug("All downloads processed")
+            self.pyload.addonManager.dispatchEvent("all_downloads-processed")
+            self.pyload.log.debug("All downloads processed")
             return True
 
         return False
@@ -433,7 +433,7 @@ class FileHandler(object):
             self.packageCache[id].setFinished = False
 
         e = UpdateEvent("pack", id, "collector" if not self.getPackage(id).queue else "queue")
-        self.core.pullManager.addEvent(e)
+        self.pyload.pullManager.addEvent(e)
 
 
     @lock
@@ -449,7 +449,7 @@ class FileHandler(object):
         self.db.restartFile(id)
 
         e = UpdateEvent("file", id, "collector" if not self.getFile(id).package().queue else "queue")
-        self.core.pullManager.addEvent(e)
+        self.pyload.pullManager.addEvent(e)
 
 
     @lock
@@ -461,7 +461,7 @@ class FileHandler(object):
         oldorder = p.order
 
         e = RemoveEvent("pack", id, "collector" if not p.queue else "queue")
-        self.core.pullManager.addEvent(e)
+        self.pyload.pullManager.addEvent(e)
 
         self.db.clearPackageOrder(p)
 
@@ -483,7 +483,7 @@ class FileHandler(object):
         p = self.getPackage(id)
 
         e = InsertEvent("pack", id, p.order, "collector" if not p.queue else "queue")
-        self.core.pullManager.addEvent(e)
+        self.pyload.pullManager.addEvent(e)
 
 
     @lock
@@ -492,7 +492,7 @@ class FileHandler(object):
         p = self.getPackage(id)
 
         e = RemoveEvent("pack", id, "collector" if not p.queue else "queue")
-        self.core.pullManager.addEvent(e)
+        self.pyload.pullManager.addEvent(e)
         self.db.reorderPackage(p, position)
 
         packs = self.packageCache.values()
@@ -512,7 +512,7 @@ class FileHandler(object):
         self.db.commit()
 
         e = InsertEvent("pack", id, position, "collector" if not p.queue else "queue")
-        self.core.pullManager.addEvent(e)
+        self.pyload.pullManager.addEvent(e)
 
 
     @lock
@@ -522,7 +522,7 @@ class FileHandler(object):
         f = f[id]
 
         e = RemoveEvent("file", id, "collector" if not self.getPackage(f['package']).queue else "queue")
-        self.core.pullManager.addEvent(e)
+        self.pyload.pullManager.addEvent(e)
 
         self.db.reorderLink(f, position)
 
@@ -545,7 +545,7 @@ class FileHandler(object):
         self.db.commit()
 
         e = InsertEvent("file", id, position, "collector" if not self.getPackage(f['package']).queue else "queue")
-        self.core.pullManager.addEvent(e)
+        self.pyload.pullManager.addEvent(e)
 
 
     @change
@@ -553,7 +553,7 @@ class FileHandler(object):
         """Updates file info (name, size, status, url)"""
         ids = self.db.updateLinkInfo(data)
         e = UpdateEvent("pack", pid, "collector" if not self.getPackage(pid).queue else "queue")
-        self.core.pullManager.addEvent(e)
+        self.pyload.pullManager.addEvent(e)
 
 
     def checkPackageFinished(self, pyfile):
@@ -562,8 +562,8 @@ class FileHandler(object):
         ids = self.db.getUnfinished(pyfile.packageid)
         if not ids or (pyfile.id in ids and len(ids) == 1):
             if not pyfile.package().setFinished:
-                self.core.log.info(_("Package finished: %s") % pyfile.package().name)
-                self.core.addonManager.packageFinished(pyfile.package())
+                self.pyload.log.info(_("Package finished: %s") % pyfile.package().name)
+                self.pyload.addonManager.packageFinished(pyfile.package())
                 pyfile.package().setFinished = True
 
 
@@ -577,7 +577,7 @@ class FileHandler(object):
             if pyfile['status'] not in (0, 12, 13):
                 urls.append((pyfile['url'], pyfile['plugin']))
 
-        self.core.threadManager.createInfoThread(urls, pid)
+        self.pyload.threadManager.createInfoThread(urls, pid)
 
 
     @lock

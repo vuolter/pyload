@@ -50,14 +50,14 @@ class InfoThread(PluginThread):
         # directly write to database
         if self.pid > -1:
             for (plugintype, pluginname), urls in plugins.iteritems():
-                plugin = self.m.core.pluginManager.pluginClass(plugintype, pluginname)
+                plugin = self.pyload.pluginManager.pluginClass(plugintype, pluginname)
                 if hasattr(plugin, "getInfo"):
                     self.fetchForPlugin(pluginname, plugin, urls, self.updateDB)
-                    self.m.core.files.save()
+                    self.pyload.files.save()
 
         elif self.add:
             for (plugintype, pluginname), urls in plugins.iteritems():
-                plugin = self.m.core.pluginManager.pluginClass(plugintype, pluginname)
+                plugin = self.pyload.pluginManager.pluginClass(plugintype, pluginname)
                 if hasattr(plugin, "getInfo"):
                     self.fetchForPlugin(pluginname, plugin, urls, self.updateCache, True)
 
@@ -69,10 +69,10 @@ class InfoThread(PluginThread):
 
             packs = parseNames([(name, url) for name, x, y, url in self.cache])
 
-            self.m.log.debug("Fetched and generated %d packages" % len(packs))
+            self.pyload.log.debug("Fetched and generated %d packages" % len(packs))
 
             for k, v in packs:
-                self.m.core.api.addPackage(k, v)
+                self.pyload.api.addPackage(k, v)
 
             # empty cache
             del self.cache[:]
@@ -84,8 +84,8 @@ class InfoThread(PluginThread):
                 try:
                     data = self.decryptContainer(name, url)
                 except Exception:
-                    self.m.log.error("Could not decrypt container.")
-                    if self.m.core.debug:
+                    self.pyload.log.error("Could not decrypt container.")
+                    if self.pyload.debug:
                         traceback.print_exc()
                     data = []
 
@@ -95,10 +95,10 @@ class InfoThread(PluginThread):
                     except Exception:
                         plugins[plugintype][pluginname] = [url]
 
-            self.m.infoResults[self.rid] = {}
+            self.manager.infoResults[self.rid] = {}
 
             for plugintype, pluginname, urls in plugins.iteritems():
-                plugin = self.m.core.pluginManager.pluginClass(plugintype, pluginname)
+                plugin = self.pyload.pluginManager.pluginClass(plugintype, pluginname)
                 if hasattr(plugin, "getInfo"):
                     self.fetchForPlugin(pluginname, plugin, urls, self.updateResult, True)
 
@@ -112,13 +112,13 @@ class InfoThread(PluginThread):
 
                     self.updateResult(pluginname, result, True)
 
-            self.m.infoResults[self.rid]['ALL_INFO_FETCHED'] = {}
+            self.manager.infoResults[self.rid]['ALL_INFO_FETCHED'] = {}
 
-        self.m.timestamp = time.time() + 5 * 60
+        self.manager.timestamp = time.time() + 5 * 60
 
 
     def updateDB(self, plugin, result):
-        self.m.core.files.updateFileInfo(result, self.pid)
+        self.pyload.files.updateFileInfo(result, self.pid)
 
 
     def updateResult(self, plugin, result, force=False):
@@ -138,7 +138,7 @@ class InfoThread(PluginThread):
                     status.packagename = k
                     result[url] = status
 
-            self.m.setInfoResults(self.rid, result)
+            self.manager.setInfoResults(self.rid, result)
 
             self.cache = []
 
@@ -152,17 +152,17 @@ class InfoThread(PluginThread):
             result = []  #: result loaded from cache
             process = []  #: urls to process
             for url in urls:
-                if url in self.m.infoCache:
-                    result.append(self.m.infoCache[url])
+                if url in self.manager.infoCache:
+                    result.append(self.manager.infoCache[url])
                 else:
                     process.append(url)
 
             if result:
-                self.m.log.debug("Fetched %d values from cache for %s" % (len(result), pluginname))
+                self.pyload.log.debug("Fetched %d values from cache for %s" % (len(result), pluginname))
                 cb(pluginname, result)
 
             if process:
-                self.m.log.debug("Run Info Fetching for %s" % pluginname)
+                self.pyload.log.debug("Run Info Fetching for %s" % pluginname)
                 for url in process:
                     if hasattr(plugin, "URL_REPLACEMENTS"):
                         url = replace_patterns(url, plugin.URL_REPLACEMENTS)
@@ -173,14 +173,14 @@ class InfoThread(PluginThread):
                         result = [result]
 
                     for res in result:
-                        self.m.infoCache[res[3]] = res  # : why don't assign res dict directly?
+                        self.manager.infoCache[res[3]] = res  # : why don't assign res dict directly?
 
                     cb(pluginname, result)
 
-            self.m.log.debug("Finished Info Fetching for %s" % pluginname)
+            self.pyload.log.debug("Finished Info Fetching for %s" % pluginname)
         except Exception, e:
-            self.m.log.warning(_("Info Fetching for %(name)s failed | %(err)s") % {"name": pluginname, "err": str(e)})
-            if self.m.core.debug:
+            self.pyload.log.warning(_("Info Fetching for %(name)s failed | %(err)s") % {"name": pluginname, "err": str(e)})
+            if self.pyload.debug:
                 traceback.print_exc()
 
             # generate default results
@@ -193,10 +193,10 @@ class InfoThread(PluginThread):
         data = []
         # only works on container plugins
 
-        self.m.log.debug("Pre decrypting %s with %s" % (url, plugin))
+        self.pyload.log.debug("Pre decrypting %s with %s" % (url, plugin))
 
         # dummy pyfile
-        pyfile = PyFile(self.m.core.files, -1, url, url, 0, 0, "", plugin, -1, -1)
+        pyfile = PyFile(self.pyload.files, -1, url, url, 0, 0, "", plugin, -1, -1)
 
         pyfile.initPlugin()
 
@@ -210,12 +210,12 @@ class InfoThread(PluginThread):
             for pack in pyfile.plugin.packages:
                 pyfile.plugin.urls.extend(pack[1])
 
-            data = self.m.core.pluginManager.parseUrls(pyfile.plugin.urls)
+            data = self.pyload.pluginManager.parseUrls(pyfile.plugin.urls)
 
-            self.m.log.debug("Got %d links." % len(data))
+            self.pyload.log.debug("Got %d links." % len(data))
 
         except Exception, e:
-            self.m.log.debug("Pre decrypting error: %s" % str(e))
+            self.pyload.log.debug("Pre decrypting error: %s" % str(e))
         finally:
             pyfile.release()
 

@@ -49,7 +49,7 @@ class MergeFiles(Addon):
                 for splitted_file in file_list:
                     self.logDebug("Merging part", splitted_file)
 
-                    pyfile = self.core.files.getFile(fid_dict[splitted_file])
+                    pyfile = self.pyload.files.getFile(fid_dict[splitted_file])
 
                     pyfile.setStatus("processing")
 

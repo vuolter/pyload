@@ -50,7 +50,7 @@ class HTTPDownload(object):
             self.info = ChunkInfo(filename)
 
         self.chunkSupport = True
-        self.m = pycurl.CurlMulti()
+        self.manager = pycurl.CurlMulti()
 
         # needed for speed calculation
         self.lastArrived = []
@@ -146,7 +146,7 @@ class HTTPDownload(object):
         init = HTTPChunk(0, self, None, resume)  #: initial chunk that will load complete file (if needed)
 
         self.chunks.append(init)
-        self.m.add_handle(init.getHandle())
+        self.manager.add_handle(init.getHandle())
 
         lastFinishCheck = 0
         lastTimeCheck = 0
@@ -175,7 +175,7 @@ class HTTPDownload(object):
                     handle = c.getHandle()
                     if handle:
                         self.chunks.append(c)
-                        self.m.add_handle(handle)
+                        self.manager.add_handle(handle)
                     else:
                         # close immediatly
                         self.log.debug("Invalid curl handle -> closed")
@@ -184,7 +184,7 @@ class HTTPDownload(object):
                 chunksCreated = True
 
             while 1:
-                ret, num_handles = self.m.perform()
+                ret, num_handles = self.manager.perform()
                 if ret != pycurl.E_CALL_MULTI_PERFORM:
                     break
 
@@ -196,7 +196,7 @@ class HTTPDownload(object):
                 failed = []
                 ex = None  #: save only last exception, we can only raise one anyway
 
-                num_q, ok_list, err_list = self.m.info_read()
+                num_q, ok_list, err_list = self.manager.info_read()
                 for c in ok_list:
                     chunk = self.findChunk(c)
                     try:  #: check if the header implies success, else add it to failed list
@@ -276,7 +276,7 @@ class HTTPDownload(object):
                 raise Abort
 
             # time.sleep(0.003)  #: supress busy waiting - limits dl speed to (1 / x) * buffersize
-            self.m.select(1)
+            self.manager.select(1)
 
         for chunk in self.chunks:
             chunk.flushFile()  #: make sure downloads are written to disk
@@ -298,7 +298,7 @@ class HTTPDownload(object):
 
     def closeChunk(self, chunk):
         try:
-            self.m.remove_handle(chunk.c)
+            self.manager.remove_handle(chunk.c)
         except pycurl.error, e:
             self.log.debug("Error removing chunk: %s" % str(e))
         finally:
@@ -312,8 +312,8 @@ class HTTPDownload(object):
 
         self.chunks = []
         if hasattr(self, "m"):
-            self.m.close()
-            del self.m
+            self.manager.close()
+            del self.manager
         if hasattr(self, "cj"):
             del self.cj
         if hasattr(self, "info"):

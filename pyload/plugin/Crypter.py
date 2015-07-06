@@ -12,7 +12,7 @@ class Crypter(Plugin):
     __version = "0.05"
 
     __pattern = r'^unmatchable$'
-    __config  = [("use_subfolder", "bool", "Save package to subfolder", True),  #: Overrides core.config.get("general", "folder_per_package")
+    __config  = [("use_subfolder", "bool", "Save package to subfolder", True),  #: Overrides pyload.config.get("general", "folder_per_package")
                    ("subfolder_per_package", "bool", "Create a subfolder for each package", True)]
 
     __description = """Base decrypter plugin"""
@@ -54,7 +54,7 @@ class Crypter(Plugin):
     def generatePackages(self):
         """Generate new packages from self.urls"""
 
-        packages = map(lambda name, links: (name, links, None), self.core.api.generatePackages(self.urls).iteritems())
+        packages = map(lambda name, links: (name, links, None), self.pyload.api.generatePackages(self.urls).iteritems())
         self.packages.extend(packages)
 
 
@@ -65,7 +65,7 @@ class Crypter(Plugin):
         package_password = self.pyfile.package().password
         package_queue = self.pyfile.package().queue
 
-        folder_per_package = self.core.config.get("general", "folder_per_package")
+        folder_per_package = self.pyload.config.get("general", "folder_per_package")
         try:
             use_subfolder = self.getConfig('use_subfolder')
         except Exception:
@@ -84,12 +84,12 @@ class Crypter(Plugin):
 
             links = map(decode, links)
 
-            pid = self.core.api.addPackage(name, links, package_queue)
+            pid = self.pyload.api.addPackage(name, links, package_queue)
 
             if package_password:
-                self.core.api.setPackageData(pid, {"password": package_password})
+                self.pyload.api.setPackageData(pid, {"password": package_password})
 
-            setFolder = lambda x: self.core.api.setPackageData(pid, {"folder": x or ""})  #: Workaround to do not break API addPackage method
+            setFolder = lambda x: self.pyload.api.setPackageData(pid, {"folder": x or ""})  #: Workaround to do not break API addPackage method
 
             if use_subfolder:
                 if not subfolder_per_package:

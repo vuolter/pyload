@@ -26,7 +26,9 @@ class PluginThread(threading.Thread):
         """Constructor"""
         threading.Thread.__init__(self)
         self.setDaemon(True)
-        self.m = manager  #: thread manager
+
+        self.pyload  = manager.pyload
+        self.manager = manager  #: thread manager
 
 
     def writeDebugReport(self, pyfile):
@@ -55,18 +57,18 @@ class PluginThread(threading.Thread):
                 raise Exception("Empty Zipfile")
 
         except Exception, e:
-            self.m.log.debug("Error creating zip file: %s" % e)
+            self.pyload.log.debug("Error creating zip file: %s" % e)
 
             dump_name = dump_name.replace(".zip", ".txt")
             with open(dump_name, "wb") as f:
                 f.write(dump)
 
-        self.m.core.log.info("Debug Report written to %s" % dump_name)
+        self.pyload.log.info("Debug Report written to %s" % dump_name)
 
 
     def getDebugDump(self, pyfile):
         dump = "pyLoad %s Debug Report of %s %s \n\nTRACEBACK:\n %s \n\nFRAMESTACK:\n" % (
-            self.m.core.api.getServerVersion(), pyfile.pluginname, pyfile.plugin.__version, traceback.format_exc())
+            self.pyload.api.getServerVersion(), pyfile.pluginname, pyfile.plugin.__version, traceback.format_exc())
 
         tb = sys.exc_info()[2]
         stack = []
@@ -112,9 +114,9 @@ class PluginThread(threading.Thread):
                 except Exception, e:
                     dump += "<ERROR WHILE PRINTING VALUE> " + str(e) + "\n"
 
-        if pyfile.pluginname in self.m.core.config.plugin:
+        if pyfile.pluginname in self.pyload.config.plugin:
             dump += "\n\nCONFIG: \n\n"
-            dump += pprint.pformat(self.m.core.config.plugin[pyfile.pluginname]) + "\n"
+            dump += pprint.pformat(self.pyload.config.plugin[pyfile.pluginname]) + "\n"
 
         return dump
 

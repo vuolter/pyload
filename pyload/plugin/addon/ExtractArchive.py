@@ -158,7 +158,7 @@ class ExtractArchive(Addon):
     def activate(self):
         for p in ("UnRar", "SevenZip", "UnZip"):
             try:
-                module = self.core.pluginManager.loadModule("extractor", p)
+                module = self.pyload.pluginManager.loadModule("extractor", p)
                 klass  = getattr(module, p)
                 if klass.isUsable():
                     self.extractors.append(klass)
@@ -170,12 +170,12 @@ class ExtractArchive(Addon):
                     self.logWarning(_("No %s installed") % p)
                 else:
                     self.logWarning(_("Could not activate: %s") % p, e)
-                    if self.core.debug:
+                    if self.pyload.debug:
                         traceback.print_exc()
 
             except Exception, e:
                 self.logWarning(_("Could not activate: %s") % p, e)
-                if self.core.debug:
+                if self.pyload.debug:
                     traceback.print_exc()
 
         if self.extractors:
@@ -266,7 +266,7 @@ class ExtractArchive(Addon):
 
         # iterate packages -> extractors -> targets
         for pid in ids:
-            pypack = self.core.files.getPackage(pid)
+            pypack = self.pyload.files.getPackage(pid)
 
             if not pypack:
                 self.queue.remove(pid)
@@ -311,7 +311,7 @@ class ExtractArchive(Addon):
 
                         self.logInfo(name, _("Extract to: %s") % fout)
                         try:
-                            pyfile  = self.core.files.getFile(fid)
+                            pyfile  = self.pyload.files.getFile(fid)
                             archive = Extractor(self,
                                                 fname,
                                                 fout,
@@ -501,7 +501,7 @@ class ExtractArchive(Addon):
 
         except Exception, e:
             self.logError(name, _("Unknown error"), e)
-            if self.core.debug:
+            if self.pyload.debug:
                 traceback.print_exc()
 
         self.manager.dispatchEvent("archive_extract_failed", pyfile, archive)

@@ -40,7 +40,7 @@ class MultiHome(Addon):
 
 
     def activate(self):
-        requestFactory = self.core.requestFactory
+        requestFactory = self.pyload.requestFactory
         oldGetRequest = requestFactory.getRequest
 
 

@@ -23,7 +23,7 @@ class PluginManager(object):
 
 
     def __init__(self, core):
-        self.core = core
+        self.pyload = core
 
         self.plugins = {}
         self.createIndex()
@@ -40,7 +40,7 @@ class PluginManager(object):
                               for p in (rootdir, userdir) if os.path.exists(p)])
 
         if not types:
-            self.core.log.critical(_("No plugins found!"))
+            self.pyload.log.critical(_("No plugins found!"))
 
         self.TYPES = list(set(self.TYPES) | types)
 
@@ -59,9 +59,9 @@ class PluginManager(object):
             setattr(self, "%sPlugins" % type, self.plugins[type])
             configs.extend("%s_%s" % (p, type) for p in self.plugins[type])
 
-        self.core.config.removeDeletedPlugins(configs)
+        self.pyload.config.removeDeletedPlugins(configs)
 
-        self.core.log.debug("Created index of plugins")
+        self.pyload.log.debug("Created index of plugins")
 
 
     def parse(self, folder, rootplugins={}):
@@ -85,7 +85,7 @@ class PluginManager(object):
                         f.close()
 
             except IOError, e:
-                self.core.log.critical(str(e))
+                self.pyload.log.critical(str(e))
                 return rootplugins
 
         else:
@@ -99,7 +99,7 @@ class PluginManager(object):
                         content = data.read()
 
                 except IOError, e:
-                    self.core.log.error(str(e))
+                    self.pyload.log.error(str(e))
                     continue
 
                 name = f[:-3]
@@ -107,7 +107,7 @@ class PluginManager(object):
                     name = name[:-4]
 
                 if not re.search("class\\s+%s\\(" % name, content):
-                    self.core.log.error(_("invalid classname: %s ignored") % os.path.join(pfolder, f))
+                    self.pyload.log.error(_("invalid classname: %s ignored") % os.path.join(pfolder, f))
 
                 version = self.VERSION.findall(content)
                 if version:
@@ -136,7 +136,7 @@ class PluginManager(object):
                     try:
                         regexp = re.compile(pattern)
                     except Exception:
-                        self.core.log.error(_("%s has a invalid pattern") % name)
+                        self.pyload.log.error(_("%s has a invalid pattern") % name)
                         pattern = r'^unmatchable$'
                         regexp = re.compile(pattern)
 
@@ -145,7 +145,7 @@ class PluginManager(object):
 
                 # internals have no config
                 if folder == "internal":
-                    self.core.config.deleteConfig("internal")
+                    self.pyload.config.deleteConfig("internal")
                     continue
 
                 config = self.CONFIG.findall(content)
@@ -163,9 +163,9 @@ class PluginManager(object):
                         if folder not in ("account", "internal") and not [True for item in config if item[0] == "activated"]:
                             config.insert(0, ["activated", "bool", "Activated", not folder in ("addon", "hook")])
 
-                        self.core.config.addPluginConfig("%s_%s" % (name, folder), config, desc)
+                        self.pyload.config.addPluginConfig("%s_%s" % (name, folder), config, desc)
                     except Exception:
-                        self.core.log.error("Invalid config in %s: %s" % (name, config))
+                        self.pyload.log.error("Invalid config in %s: %s" % (name, config))
 
                 elif folder in ("addon", "hook"):  #: force config creation
                     desc = self.DESC.findall(content)
@@ -173,9 +173,9 @@ class PluginManager(object):
                     config = (["activated", "bool", "Activated", False],)
 
                     try:
-                        self.core.config.addPluginConfig("%s_%s" % (name, folder), config, desc)
+                        self.pyload.config.addPluginConfig("%s_%s" % (name, folder), config, desc)
                     except Exception:
-                        self.core.log.error("Invalid config in %s: %s" % (name, config))
+                        self.pyload.log.error("Invalid config in %s: %s" % (name, config))
 
         if not rootplugins and plugins:  #: Double check
             plugins.update(self.parse(folder, plugins))
@@ -207,7 +207,7 @@ class PluginManager(object):
                             m = plugin['re'].match(url)
 
                     except KeyError:
-                        self.core.log.error(_("Plugin [%(type)s] %(name)s skipped due broken pattern")
+                        self.pyload.log.error(_("Plugin [%(type)s] %(name)s skipped due broken pattern")
                                             % {'name': plugin['name'], 'type': plugintype})
 
                     if m:
@@ -227,7 +227,7 @@ class PluginManager(object):
         if name in self.plugins[type]:
             return self.loadClass(type, name)
         else:
-            self.core.log.warning(_("Plugin [%(type)s] %(name)s not found | Using plugin: [internal] BasePlugin")
+            self.pyload.log.warning(_("Plugin [%(type)s] %(name)s not found | Using plugin: [internal] BasePlugin")
                                   % {'name': name, 'type': type})
             return self.loadClass("internal", "BasePlugin")
 
@@ -237,7 +237,7 @@ class PluginManager(object):
         if name in self.plugins[type]:
             return self.loadModule(type, name)
         else:
-            self.core.log.warning(_("Plugin [%(type)s] %(name)s not found | Using plugin: [internal] BasePlugin")
+            self.pyload.log.warning(_("Plugin [%(type)s] %(name)s not found | Using plugin: [internal] BasePlugin")
                                   % {'name': name, 'type': type})
             return self.loadModule("internal", "BasePlugin")
 
@@ -260,15 +260,15 @@ class PluginManager(object):
                                     plugins[name]['name'])
 
             except Exception, e:
-                self.core.log.error(_("Error importing plugin: [%(type)s] %(name)s (v%(version).2f) | %(errmsg)s")
+                self.pyload.log.error(_("Error importing plugin: [%(type)s] %(name)s (v%(version).2f) | %(errmsg)s")
                                     % {'name': name, 'type': type, 'version': plugins[name]['version'], "errmsg": str(e)})
-                if self.core.debug:
+                if self.pyload.debug:
                     traceback.print_exc()
 
             else:
                 plugins[name]['module'] = module  # : cache import, maybe unneeded
 
-                self.core.log.debug(_("Loaded plugin: [%(type)s] %(name)s (v%(version).2f)")
+                self.pyload.log.debug(_("Loaded plugin: [%(type)s] %(name)s (v%(version).2f)")
                                     % {'name': name, 'type': type, 'version': plugins[name]['version']})
                 return module
 
@@ -280,7 +280,7 @@ class PluginManager(object):
             return getattr(module, name)
 
         except Exception, e:
-            self.core.log.error(_("Error importing plugin: [%(type)s] %(name)s (v%(version).2f) | %(errmsg)s")
+            self.pyload.log.error(_("Error importing plugin: [%(type)s] %(name)s (v%(version).2f) | %(errmsg)s")
                                 % {'name': name, 'type': type, 'version': plugins[name]['version'], "errmsg": str(e)})
 
 
@@ -321,7 +321,7 @@ class PluginManager(object):
 
             base, plugin = newname.rsplit(".", 1)
 
-            self.core.log.debug("Redirected import %s -> %s" % (name, newname))
+            self.pyload.log.debug("Redirected import %s -> %s" % (name, newname))
 
             module = __import__(newname, globals(), locals(), [plugin])
             # inject under new an old name
@@ -336,7 +336,7 @@ class PluginManager(object):
         if not type_plugins:
             return None
 
-        self.core.log.debug("Request reload of plugins: %s" % type_plugins)
+        self.pyload.log.debug("Request reload of plugins: %s" % type_plugins)
 
         reloaded = []
 
@@ -349,18 +349,18 @@ class PluginManager(object):
 
         for type in as_dict.iterkeys():
             if type in ("addon", "internal"):  # : do not reload them because would cause to much side effects
-                self.core.log.debug("Skipping reload for plugins from type: %(type)s" % {'type': type})
+                self.pyload.log.debug("Skipping reload for plugins from type: %(type)s" % {'type': type})
                 continue
 
             for plugin in as_dict[type]:
                 if plugin in self.plugins[type] and "module" in self.plugins[type][plugin]:
-                    self.core.log.debug(_("Reloading plugin: [%(type)s] %(name)s") % {'name': plugin, 'type': type})
+                    self.pyload.log.debug(_("Reloading plugin: [%(type)s] %(name)s") % {'name': plugin, 'type': type})
 
                     try:
                         reload(self.plugins[type][plugin]['module'])
 
                     except Exception, e:
-                        self.core.log.error(_("Error when reloading plugin: [%(type)s] %(name)s") % {'name': plugin, 'type': type}, e)
+                        self.pyload.log.error(_("Error when reloading plugin: [%(type)s] %(name)s") % {'name': plugin, 'type': type}, e)
                         continue
 
                     else:
@@ -371,8 +371,8 @@ class PluginManager(object):
             setattr(self, "%sPlugins" % type, self.plugins[type])
 
         if "account" in as_dict:  #: accounts needs to be reloaded
-            self.core.accountManager.initPlugins()
-            self.core.scheduler.addJob(0, self.core.accountManager.getAccountInfos)
+            self.pyload.accountManager.initPlugins()
+            self.pyload.scheduler.addJob(0, self.pyload.accountManager.getAccountInfos)
 
         return reloaded  #: return a list of the plugins successfully reloaded
 

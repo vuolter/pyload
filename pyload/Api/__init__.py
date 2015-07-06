@@ -76,7 +76,7 @@ class Api(Iface):
     """
     **pyLoads API**
 
-    This is accessible either internal via core.api or via thrift backend.
+    This is accessible either internal via pyload.api or via thrift backend.
 
     see Thrift specification file remote/thriftbackend/pyload.thrift\
     for information about data structures and what methods are usuable with rpc.
@@ -89,7 +89,7 @@ class Api(Iface):
 
 
     def __init__(self, core):
-        self.core = core
+        self.pyload = core
 
 
     def _convertPyFile(self, p):
@@ -131,9 +131,9 @@ class Api(Iface):
         :return: config value as string
         """
         if section == "core":
-            value = self.core.config[category][option]
+            value = self.pyload.config[category][option]
         else:
-            value = self.core.config.getPlugin(category, option)
+            value = self.pyload.config.getPlugin(category, option)
         return str(value)
 
 
@@ -147,13 +147,13 @@ class Api(Iface):
         :param value: new config value
         :param section: 'plugin' or 'core
         """
-        self.core.addonManager.dispatchEvent("config-changed", category, option, value, section)
+        self.pyload.addonManager.dispatchEvent("config-changed", category, option, value, section)
         if section == "core":
-            self.core.config[category][option] = value
+            self.pyload.config[category][option] = value
             if option in ("limit_speed", "max_speed"):  #: not so nice to update the limit
-                self.core.requestFactory.updateBucket()
+                self.pyload.requestFactory.updateBucket()
         elif section == "plugin":
-            self.core.config.setPlugin(category, option, value)
+            self.pyload.config.setPlugin(category, option, value)
 
 
     @permission(PERMS.SETTINGS)
@@ -163,7 +163,7 @@ class Api(Iface):
 
         :return: list of `ConfigSection`
         """
-        return self._convertConfigFormat(self.core.config.config)
+        return self._convertConfigFormat(self.pyload.config.config)
 
 
     def getConfigDict(self):
@@ -172,7 +172,7 @@ class Api(Iface):
 
         :return: dict
         """
-        return self.core.config.config
+        return self.pyload.config.config
 
 
     @permission(PERMS.SETTINGS)
@@ -182,7 +182,7 @@ class Api(Iface):
 
         :return: list of `ConfigSection`
         """
-        return self._convertConfigFormat(self.core.config.plugin)
+        return self._convertConfigFormat(self.pyload.config.plugin)
 
 
     def getPluginConfigDict(self):
@@ -191,21 +191,21 @@ class Api(Iface):
 
         :return: dict
         """
-        return self.core.config.plugin
+        return self.pyload.config.plugin
 
 
     @permission(PERMS.STATUS)
     def pauseServer(self):
         """
         Pause server: Tt wont start any new downloads, but nothing gets aborted."""
-        self.core.threadManager.pause = True
+        self.pyload.threadManager.pause = True
 
 
     @permission(PERMS.STATUS)
     def unpauseServer(self):
         """
         Unpause server: New Downloads will be started."""
-        self.core.threadManager.pause = False
+        self.pyload.threadManager.pause = False
 
 
     @permission(PERMS.STATUS)
@@ -215,8 +215,8 @@ class Api(Iface):
 
         :return: new pause state
         """
-        self.core.threadManager.pause ^= True
-        return self.core.threadManager.pause
+        self.pyload.threadManager.pause ^= True
+        return self.pyload.threadManager.pause
 
 
     @permission(PERMS.STATUS)
@@ -226,8 +226,8 @@ class Api(Iface):
 
         :return: new reconnect state
         """
-        self.core.config['reconnect']['activated'] ^= True
-        return self.core.config.get("reconnect", "activated")
+        self.pyload.config['reconnect']['activated'] ^= True
+        return self.pyload.config.get("reconnect", "activated")
 
 
     @permission(PERMS.LIST)
@@ -237,11 +237,11 @@ class Api(Iface):
 
         :return: `ServerStatus`
         """
-        serverStatus = ServerStatus(self.core.threadManager.pause, len(self.core.threadManager.processingIds()),
-                                    self.core.files.getQueueCount(), self.core.files.getFileCount(), 0,
-                                    not self.core.threadManager.pause and self.isTimeDownload(),
-                                    self.core.config.get("reconnect", "activated") and self.isTimeReconnect())
-        for pyfile in [x.active for x in self.core.threadManager.threads if x.active and isinstance(x.active, PyFile)]:
+        serverStatus = ServerStatus(self.pyload.threadManager.pause, len(self.pyload.threadManager.processingIds()),
+                                    self.pyload.files.getQueueCount(), self.pyload.files.getFileCount(), 0,
+                                    not self.pyload.threadManager.pause and self.isTimeDownload(),
+                                    self.pyload.config.get("reconnect", "activated") and self.isTimeReconnect())
+        for pyfile in [x.active for x in self.pyload.threadManager.threads if x.active and isinstance(x.active, PyFile)]:
             serverStatus.speed += pyfile.getSpeed()  #: bytes/s
         return serverStatus
 
@@ -250,26 +250,26 @@ class Api(Iface):
     def freeSpace(self):
         """
         Available free space at download directory in bytes"""
-        return free_space(self.core.config.get("general", "download_folder"))
+        return free_space(self.pyload.config.get("general", "download_folder"))
 
 
     @permission(PERMS.ALL)
     def getServerVersion(self):
         """
         pyLoad Core version"""
-        return self.core.version
+        return self.pyload.version
 
 
     def kill(self):
         """
         Clean way to quit pyLoad"""
-        self.core.do_kill = True
+        self.pyload.do_kill = True
 
 
     def restart(self):
         """
         Restart pyload core"""
-        self.core.do_restart = True
+        self.pyload.do_restart = True
 
 
     @permission(PERMS.LOGS)
@@ -280,7 +280,7 @@ class Api(Iface):
         :param offset: line offset
         :return: List of log entries
         """
-        filename = os.path.join(self.core.config.get("log", "log_folder"), 'log.txt')
+        filename = os.path.join(self.pyload.config.get("log", "log_folder"), 'log.txt')
         try:
             with open(filename, "r") as fh:
                 lines = fh.readlines()
@@ -298,8 +298,8 @@ class Api(Iface):
 
         :return: bool
         """
-        start = self.core.config.get("downloadTime", "start").split(":")
-        end = self.core.config.get("downloadTime", "end").split(":")
+        start = self.pyload.config.get("downloadTime", "start").split(":")
+        end = self.pyload.config.get("downloadTime", "end").split(":")
         return compare_time(start, end)
 
 
@@ -310,9 +310,9 @@ class Api(Iface):
 
         :return: bool
         """
-        start = self.core.config.get("reconnect", "start").split(":")
-        end = self.core.config.get("reconnect", "end").split(":")
-        return compare_time(start, end) and self.core.config.get("reconnect", "activated")
+        start = self.pyload.config.get("reconnect", "start").split(":")
+        end = self.pyload.config.get("reconnect", "end").split(":")
+        return compare_time(start, end) and self.pyload.config.get("reconnect", "activated")
 
 
     @permission(PERMS.LIST)
@@ -323,7 +323,7 @@ class Api(Iface):
         :return: list of `DownloadStatus`
         """
         data = []
-        for pyfile in self.core.threadManager.getActiveFiles():
+        for pyfile in self.pyload.threadManager.getActiveFiles():
             if not isinstance(pyfile, PyFile):
                 continue
             data.append(DownloadInfo(
@@ -344,20 +344,20 @@ class Api(Iface):
         :param dest: `Destination`
         :return: package id of the new package
         """
-        if self.core.config.get("general", "folder_per_package"):
+        if self.pyload.config.get("general", "folder_per_package"):
             folder = urlparse.urlparse(name).path.split("/")[-1]
         else:
             folder = ""
 
         folder = safe_filename(folder)
 
-        pid = self.core.files.addPackage(name, folder, dest)
+        pid = self.pyload.files.addPackage(name, folder, dest)
 
-        self.core.files.addLinks(links, pid)
+        self.pyload.files.addLinks(links, pid)
 
-        self.core.log.info(_("Added package %(name)s containing %(count)d links") % {"name": decode(name), "count": len(links)})
+        self.pyload.log.info(_("Added package %(name)s containing %(count)d links") % {"name": decode(name), "count": len(links)})
 
-        self.core.files.save()
+        self.pyload.files.save()
 
         return pid
 
@@ -388,7 +388,7 @@ class Api(Iface):
         :param urls:
         :return: {plugin: urls}
         """
-        data = self.core.pluginManager.parseUrls(urls)
+        data = self.pyload.pluginManager.parseUrls(urls)
         plugins = {}
 
         for url, plugintype, pluginname in data:
@@ -408,9 +408,9 @@ class Api(Iface):
         :param urls:
         :return: initial set of data as `OnlineCheck` instance containing the result id
         """
-        data = self.core.pluginManager.parseUrls(urls)
+        data = self.pyload.pluginManager.parseUrls(urls)
 
-        rid = self.core.threadManager.createResultThread(data, False)
+        rid = self.pyload.threadManager.createResultThread(data, False)
 
         tmp = [(url, (url, OnlineStatus(url, (plugintype, pluginname), "unknown", 3, 0))) for url, plugintype, pluginname in data]
         data = parseNames(tmp)
@@ -433,7 +433,7 @@ class Api(Iface):
         :param data: file content
         :return: online check
         """
-        with open(os.path.join(self.core.config.get("general", "download_folder"), "tmp_" + container), "wb") as th:
+        with open(os.path.join(self.pyload.config.get("general", "download_folder"), "tmp_" + container), "wb") as th:
             th.write(str(data))
         return self.checkOnlineStatus(urls + [th.name])
 
@@ -446,7 +446,7 @@ class Api(Iface):
         :param rid: `ResultID`
         :return: `OnlineCheck`, if rid is -1 then no more data available
         """
-        result = self.core.threadManager.getInfoResult(rid)
+        result = self.pyload.threadManager.getInfoResult(rid)
         if "ALL_INFO_FETCHED" in result:
             del result['ALL_INFO_FETCHED']
             return OnlineCheck(-1, result)
@@ -488,8 +488,8 @@ class Api(Iface):
         :param dest: `Destination`
         :return: None
         """
-        data = self.core.pluginManager.parseUrls(links)
-        self.core.threadManager.createResultThread(data, True)
+        data = self.pyload.pluginManager.parseUrls(links)
+        self.pyload.threadManager.createResultThread(data, True)
 
 
     @permission(PERMS.LIST)
@@ -500,7 +500,7 @@ class Api(Iface):
         :param pid: package id
         :return: `PackageData` with .links attribute
         """
-        data = self.core.files.getPackageData(int(pid))
+        data = self.pyload.files.getPackageData(int(pid))
         if not data:
             raise PackageDoesNotExists(pid)
         return PackageData(data['id'], data['name'], data['folder'], data['site'], data['password'],
@@ -516,7 +516,7 @@ class Api(Iface):
         :param pid: package id
         :return: `PackageData` with .fid attribute
         """
-        data = self.core.files.getPackageData(int(pid))
+        data = self.pyload.files.getPackageData(int(pid))
 
         if not data:
             raise PackageDoesNotExists(pid)
@@ -533,7 +533,7 @@ class Api(Iface):
         :param fid: file id
         :return: `FileData`
         """
-        info = self.core.files.getFileData(int(fid))
+        info = self.pyload.files.getFileData(int(fid))
         if not info:
             raise FileDoesNotExists(fid)
         return self._convertPyFile(info.values()[0])
@@ -547,8 +547,8 @@ class Api(Iface):
         :param fids: list of file ids
         """
         for fid in fids:
-            self.core.files.deleteLink(int(fid))
-        self.core.files.save()
+            self.pyload.files.deleteLink(int(fid))
+        self.pyload.files.save()
 
 
     @permission(PERMS.DELETE)
@@ -559,8 +559,8 @@ class Api(Iface):
         :param pids: list of package ids
         """
         for pid in pids:
-            self.core.files.deletePackage(int(pid))
-        self.core.files.save()
+            self.pyload.files.deletePackage(int(pid))
+        self.pyload.files.save()
 
 
     @permission(PERMS.LIST)
@@ -575,7 +575,7 @@ class Api(Iface):
                             pack['password'], pack['queue'], pack['order'],
                             pack['linksdone'], pack['sizedone'], pack['sizetotal'],
                             pack['linkstotal'])
-                for pack in self.core.files.getInfoData(Destination.Queue).itervalues()]
+                for pack in self.pyload.files.getInfoData(Destination.Queue).itervalues()]
 
 
     @permission(PERMS.LIST)
@@ -590,7 +590,7 @@ class Api(Iface):
                             pack['password'], pack['queue'], pack['order'],
                             pack['linksdone'], pack['sizedone'], pack['sizetotal'],
                             links=[self._convertPyFile(x) for x in pack['links'].itervalues()])
-                for pack in self.core.files.getCompleteData(Destination.Queue).itervalues()]
+                for pack in self.pyload.files.getCompleteData(Destination.Queue).itervalues()]
 
 
     @permission(PERMS.LIST)
@@ -604,7 +604,7 @@ class Api(Iface):
                             pack['password'], pack['queue'], pack['order'],
                             pack['linksdone'], pack['sizedone'], pack['sizetotal'],
                             pack['linkstotal'])
-                for pack in self.core.files.getInfoData(Destination.Collector).itervalues()]
+                for pack in self.pyload.files.getInfoData(Destination.Collector).itervalues()]
 
 
     @permission(PERMS.LIST)
@@ -618,7 +618,7 @@ class Api(Iface):
                             pack['password'], pack['queue'], pack['order'],
                             pack['linksdone'], pack['sizedone'], pack['sizetotal'],
                             links=[self._convertPyFile(x) for x in pack['links'].itervalues()])
-                for pack in self.core.files.getCompleteData(Destination.Collector).itervalues()]
+                for pack in self.pyload.files.getCompleteData(Destination.Collector).itervalues()]
 
 
     @permission(PERMS.ADD)
@@ -629,9 +629,9 @@ class Api(Iface):
         :param pid: package id
         :param links: list of urls
         """
-        self.core.files.addLinks(links, int(pid))
-        self.core.log.info(_("Added %(count)d links to package #%(package)d ") % {"count": len(links), "package": pid})
-        self.core.files.save()
+        self.pyload.files.addLinks(links, int(pid))
+        self.pyload.log.info(_("Added %(count)d links to package #%(package)d ") % {"count": len(links), "package": pid})
+        self.pyload.files.save()
 
 
     @permission(PERMS.MODIFY)
@@ -641,7 +641,7 @@ class Api(Iface):
 
         :param pid: package id
         """
-        self.core.files.setPackageLocation(pid, Destination.Queue)
+        self.pyload.files.setPackageLocation(pid, Destination.Queue)
 
 
     @permission(PERMS.MODIFY)
@@ -651,7 +651,7 @@ class Api(Iface):
 
         :param pid: package id
         """
-        self.core.files.setPackageLocation(pid, Destination.Collector)
+        self.pyload.files.setPackageLocation(pid, Destination.Collector)
 
 
     @permission(PERMS.MODIFY)
@@ -661,7 +661,7 @@ class Api(Iface):
 
         :param pid: package id
         """
-        self.core.files.restartPackage(int(pid))
+        self.pyload.files.restartPackage(int(pid))
 
 
     @permission(PERMS.MODIFY)
@@ -671,7 +671,7 @@ class Api(Iface):
 
         :param fid:  file id
         """
-        self.core.files.restartFile(int(fid))
+        self.pyload.files.restartFile(int(fid))
 
 
     @permission(PERMS.MODIFY)
@@ -682,7 +682,7 @@ class Api(Iface):
         :param pid:
         :return:
         """
-        self.core.files.reCheckPackage(int(pid))
+        self.pyload.files.reCheckPackage(int(pid))
 
 
     @permission(PERMS.MODIFY)
@@ -690,7 +690,7 @@ class Api(Iface):
         """
         Aborts all running downloads."""
 
-        pyfiles = self.core.files.cache.values()
+        pyfiles = self.pyload.files.cache.values()
         for pyfile in pyfiles:
             pyfile.abortDownload()
 
@@ -703,7 +703,7 @@ class Api(Iface):
         :param fids: list of file ids
         :return:
         """
-        pyfiles = self.core.files.cache.values()
+        pyfiles = self.pyload.files.cache.values()
         for pyfile in pyfiles:
             if pyfile.id in fids:
                 pyfile.abortDownload()
@@ -717,7 +717,7 @@ class Api(Iface):
         :param pid: package id
         :param name: new package name
         """
-        pack = self.core.files.getPackage(pid)
+        pack = self.pyload.files.getPackage(pid)
         pack.name = name
         pack.sync()
 
@@ -731,7 +731,7 @@ class Api(Iface):
         :param pid: package id
         """
         if destination in (0, 1):
-            self.core.files.setPackageLocation(pid, destination)
+            self.pyload.files.setPackageLocation(pid, destination)
 
 
     @permission(PERMS.MODIFY)
@@ -755,7 +755,7 @@ class Api(Iface):
         :param filename: filename, extension is important so it can correctly decrypted
         :param data: file content
         """
-        with open(os.path.join(self.core.config.get("general", "download_folder"), "tmp_" + filename), "wb") as th:
+        with open(os.path.join(self.pyload.config.get("general", "download_folder"), "tmp_" + filename), "wb") as th:
             th.write(str(data))
         self.addPackage(th.name, [th.name], Destination.Queue)
 
@@ -768,7 +768,7 @@ class Api(Iface):
         :param pid: package id
         :param position:
         """
-        self.core.files.reorderPackage(pid, position)
+        self.pyload.files.reorderPackage(pid, position)
 
 
     @permission(PERMS.MODIFY)
@@ -779,7 +779,7 @@ class Api(Iface):
         :param fid: file id
         :param position:
         """
-        self.core.files.reorderFile(fid, position)
+        self.pyload.files.reorderFile(fid, position)
 
 
     @permission(PERMS.MODIFY)
@@ -790,7 +790,7 @@ class Api(Iface):
         :param pid: package id
         :param data: dict that maps attribute to desired value
         """
-        package = self.core.files.getPackage(pid)
+        package = self.pyload.files.getPackage(pid)
         if not package:
             raise PackageDoesNotExists(pid)
         for key, value in data.iteritems():
@@ -798,7 +798,7 @@ class Api(Iface):
                 continue
             setattr(package, key, value)
         package.sync()
-        self.core.files.save()
+        self.pyload.files.save()
 
 
     @permission(PERMS.DELETE)
@@ -808,14 +808,14 @@ class Api(Iface):
 
         :return: list of deleted package ids
         """
-        return self.core.files.deleteFinishedLinks()
+        return self.pyload.files.deleteFinishedLinks()
 
 
     @permission(PERMS.MODIFY)
     def restartFailed(self):
         """
         Restarts all failed failes."""
-        self.core.files.restartFailed()
+        self.pyload.files.restartFailed()
 
 
     @permission(PERMS.LIST)
@@ -826,10 +826,10 @@ class Api(Iface):
         :param destination: `Destination`
         :return: dict mapping order to package id
         """
-        packs = self.core.files.getInfoData(destination)
+        packs = self.pyload.files.getInfoData(destination)
         order = {}
         for pid in packs:
-            pack = self.core.files.getPackageData(int(pid))
+            pack = self.pyload.files.getPackageData(int(pid))
             while pack['order'] in order.keys():  #: just in case
                 pack['order'] += 1
             order[pack['order']] = pack['id']
@@ -844,7 +844,7 @@ class Api(Iface):
         :param pid:
         :return: dict mapping order to file id
         """
-        rawdata = self.core.files.getPackageData(int(pid))
+        rawdata = self.pyload.files.getPackageData(int(pid))
         order = {}
         for id, pyfile in rawdata['links'].iteritems():
             while pyfile['order'] in order.keys():  #: just in case
@@ -860,8 +860,8 @@ class Api(Iface):
 
         :return: bool
         """
-        self.core.lastClientConnected = time.time()
-        task = self.core.captchaManager.getTask()
+        self.pyload.lastClientConnected = time.time()
+        task = self.pyload.captchaManager.getTask()
         return not task is None
 
 
@@ -873,8 +873,8 @@ class Api(Iface):
         :param exclusive: unused
         :return: `CaptchaTask`
         """
-        self.core.lastClientConnected = time.time()
-        task = self.core.captchaManager.getTask()
+        self.pyload.lastClientConnected = time.time()
+        task = self.pyload.captchaManager.getTask()
         if task:
             task.setWatingForUser(exclusive=exclusive)
             data, type, result = task.getCaptcha()
@@ -891,8 +891,8 @@ class Api(Iface):
         :param tid: task id
         :return: string
         """
-        self.core.lastClientConnected = time.time()
-        task = self.core.captchaManager.getTaskByID(tid)
+        self.pyload.lastClientConnected = time.time()
+        task = self.pyload.captchaManager.getTaskByID(tid)
         return task.getStatus() if task else ""
 
 
@@ -904,11 +904,11 @@ class Api(Iface):
         :param tid: task id
         :param result: captcha result
         """
-        self.core.lastClientConnected = time.time()
-        task = self.core.captchaManager.getTaskByID(tid)
+        self.pyload.lastClientConnected = time.time()
+        task = self.pyload.captchaManager.getTaskByID(tid)
         if task:
             task.setResult(result)
-            self.core.captchaManager.removeTask(task)
+            self.pyload.captchaManager.removeTask(task)
 
 
     @permission(PERMS.STATUS)
@@ -919,7 +919,7 @@ class Api(Iface):
         :param uuid:
         :return: list of `Events`
         """
-        events = self.core.pullManager.getEvents(uuid)
+        events = self.pyload.pullManager.getEvents(uuid)
         new_events = []
 
 
@@ -952,7 +952,7 @@ class Api(Iface):
         :param refresh: reload account info
         :return: list of `AccountInfo`
         """
-        accs = self.core.accountManager.getAccountInfos(False, refresh)
+        accs = self.pyload.accountManager.getAccountInfos(False, refresh)
         for group in accs.values():
             accounts = [AccountInfo(acc['validuntil'], acc['login'], acc['options'], acc['valid'],
                                     acc['trafficleft'], acc['maxtraffic'], acc['premium'], acc['type'])
@@ -967,14 +967,14 @@ class Api(Iface):
 
         :return: list
         """
-        return self.core.accountManager.accounts.keys()
+        return self.pyload.accountManager.accounts.keys()
 
 
     @permission(PERMS.ACCOUNTS)
     def updateAccount(self, plugin, account, password=None, options={}):
         """
         Changes pw/options for specific account."""
-        self.core.accountManager.updateAccount(plugin, account, password, options)
+        self.pyload.accountManager.updateAccount(plugin, account, password, options)
 
 
     @permission(PERMS.ACCOUNTS)
@@ -985,7 +985,7 @@ class Api(Iface):
         :param plugin: pluginname
         :param account: accountname
         """
-        self.core.accountManager.removeAccount(plugin, account)
+        self.pyload.accountManager.removeAccount(plugin, account)
 
 
     @permission(PERMS.ALL)
@@ -1010,7 +1010,7 @@ class Api(Iface):
         :param remoteip:
         :return: dict with info, empty when login is incorrect
         """
-        return self.core.db.checkAuth(username, password) or None
+        return self.pyload.db.checkAuth(username, password) or None
 
 
     def isAuthorized(self, func, userdata):
@@ -1044,7 +1044,7 @@ class Api(Iface):
         """
         Returns all known user and info"""
         return dict((user, UserData(user, data['email'], data['role'], data['permission'], data['template'])) for user, data
-                in self.core.db.getAllUserData().iteritems())
+                in self.pyload.db.getAllUserData().iteritems())
 
 
     @permission(PERMS.STATUS)
@@ -1054,7 +1054,7 @@ class Api(Iface):
 
         :return: dict with this style: {"plugin": {"method": "description"}}
         """
-        return dict((plugin, funcs) for plugin, funcs in self.core.addonManager.methods.iteritems())
+        return dict((plugin, funcs) for plugin, funcs in self.pyload.addonManager.methods.iteritems())
 
 
     @permission(PERMS.STATUS)
@@ -1066,7 +1066,7 @@ class Api(Iface):
         :param func:
         :return: bool
         """
-        cont = self.core.addonManager.methods
+        cont = self.pyload.addonManager.methods
         return plugin in cont and func in cont[plugin]
 
 
@@ -1087,7 +1087,7 @@ class Api(Iface):
         if not self.hasService(plugin, func):
             raise ServiceDoesNotExists(plugin, func)
         try:
-            ret = self.core.addonManager.callRPC(plugin, func, args, parse)
+            ret = self.pyload.addonManager.callRPC(plugin, func, args, parse)
         except Exception, e:
             raise ServiceException(e.message)
 
@@ -1099,7 +1099,7 @@ class Api(Iface):
 
         :return: {"plugin": {"name": value}}
         """
-        return self.core.addonManager.getAllInfo()
+        return self.pyload.addonManager.getAllInfo()
 
 
     @permission(PERMS.STATUS)
@@ -1110,15 +1110,15 @@ class Api(Iface):
         :param plugin: pluginname
         :return: dict of attr names mapped to value {"name": value}
         """
-        return self.core.addonManager.getInfo(plugin)
+        return self.pyload.addonManager.getInfo(plugin)
 
 
     def changePassword(self, user, oldpw, newpw):
         """
         Changes password for specific user"""
-        return self.core.db.changePassword(user, oldpw, newpw)
+        return self.pyload.db.changePassword(user, oldpw, newpw)
 
 
     def setUserPermission(self, user, perm, role):
-        self.core.db.setPermission(user, perm)
-        self.core.db.setRole(user, role)
+        self.pyload.db.setPermission(user, perm)
+        self.pyload.db.setRole(user, role)

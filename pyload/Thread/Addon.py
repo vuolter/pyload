@@ -63,4 +63,4 @@ class AddonThread(PluginThread):
             for x in local:
                 self.finishFile(x)
 
-            self.m.localThreads.remove(self)
+            self.manager.localThreads.remove(self)

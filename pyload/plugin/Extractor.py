@@ -84,7 +84,9 @@ class Extractor:
                  keepbroken=False,
                  fid=None):
         """Initialize extractor for specific file"""
-        self.manager      = manager
+        self.pyload  = manager.pyload
+        self.manager = manager
+
         self.filename     = filename
         self.out          = out
         self.fullpath     = fullpath
@@ -95,7 +97,7 @@ class Extractor:
         self.keepbroken   = keepbroken
         self.files        = []  #: Store extracted files here
 
-        pyfile = self.manager.core.files.getFile(fid) if fid else None
+        pyfile = self.pyload.files.getFile(fid) if fid else None
         self.notifyProgress = lambda x: pyfile.setProgress(x) if pyfile else lambda x: None
 
 

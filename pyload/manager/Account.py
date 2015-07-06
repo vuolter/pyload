@@ -19,7 +19,7 @@ class AccountManager(object):
     def __init__(self, core):
         """Constructor"""
 
-        self.core = core
+        self.pyload = core
         self.lock = threading.Lock()
 
         self.initPlugins()
@@ -39,7 +39,7 @@ class AccountManager(object):
         try:
             if plugin in self.accounts:
                 if plugin not in self.plugins:
-                    klass = self.core.pluginManager.loadClass("accounts", plugin)
+                    klass = self.pyload.pluginManager.loadClass("accounts", plugin)
                     if klass:
                         self.plugins[plugin] = klass(self, self.accounts[plugin])
                     else:  #@NOTE: The account class no longer exists (blacklisted plugin). Skipping the account to avoid crash
@@ -77,11 +77,11 @@ class AccountManager(object):
                     f.seek(0)
                     f.write("version: " + str(ACC_VERSION))
 
-                    self.core.log.warning(_("Account settings deleted, due to new config format"))
+                    self.pyload.log.warning(_("Account settings deleted, due to new config format"))
                     return
 
         except IOError, e:
-            self.core.log.error(str(e))
+            self.pyload.log.error(str(e))
             return
 
         plugin = ""
@@ -138,14 +138,14 @@ class AccountManager(object):
                 pass
 
         except Exception, e:
-            self.core.log.error(str(e))
+            self.pyload.log.error(str(e))
 
 
     #----------------------------------------------------------------------
 
     def initAccountPlugins(self):
         """Init names"""
-        for name in self.core.pluginManager.getAccountPlugins():
+        for name in self.pyload.pluginManager.getAccountPlugins():
             self.accounts[name] = {}
 
 
@@ -177,7 +177,7 @@ class AccountManager(object):
         data = {}
 
         if refresh:
-            self.core.scheduler.addJob(0, self.core.accountManager.getAccountInfos)
+            self.pyload.scheduler.addJob(0, self.pyload.accountManager.getAccountInfos)
             force = False
 
         for p in self.accounts.keys():
@@ -190,10 +190,10 @@ class AccountManager(object):
             else:
                 data[p] = []
         e = AccountUpdateEvent()
-        self.core.pullManager.addEvent(e)
+        self.pyload.pullManager.addEvent(e)
         return data
 
 
     def sendChange(self):
         e = AccountUpdateEvent()
-        self.core.pullManager.addEvent(e)
+        self.pyload.pullManager.addEvent(e)

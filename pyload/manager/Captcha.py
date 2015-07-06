@@ -12,7 +12,7 @@ class CaptchaManager(object):
 
     def __init__(self, core):
         self.lock = threading.Lock()
-        self.core = core
+        self.pyload = core
         self.tasks = []  #: task store, for outgoing tasks only
         self.ids = 0  #: only for internal purpose
 
@@ -51,16 +51,16 @@ class CaptchaManager(object):
 
 
     def handleCaptcha(self, task, timeout=50):
-        cli = self.core.isClientConnected()
+        cli = self.pyload.isClientConnected()
 
         if cli:  #: client connected -> should solve the captcha
             task.setWaiting(timeout)  #: wait 50 sec for response
 
-        for plugin in self.core.addonManager.activePlugins():
+        for plugin in self.pyload.addonManager.activePlugins():
             try:
                 plugin.captchaTask(task)
             except Exception:
-                if self.core.debug:
+                if self.pyload.debug:
                     traceback.print_exc()
 
         if task.handler or cli:  #: the captcha was handled

@@ -9,7 +9,7 @@ from pyload.utils import uniqify
 class PullManager(object):
 
     def __init__(self, core):
-        self.core = core
+        self.pyload = core
         self.clients = []
 
 

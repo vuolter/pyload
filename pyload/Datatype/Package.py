@@ -9,8 +9,9 @@ class PyPackage(object):
     """Represents a package object at runtime"""
 
     def __init__(self, manager, id, name, folder, site, password, queue, order):
-        self.m = manager
-        self.m.packageCache[int(id)] = self
+        self.pyload  = manager.pyload
+        self.manager = manager
+        self.manager.packageCache[int(id)] = self
 
         self.id = int(id)
         self.name = name
@@ -49,24 +50,24 @@ class PyPackage(object):
 
     def getChildren(self):
         """Get information about contained links"""
-        return self.m.getPackageData(self.id)["links"]
+        return self.manager.getPackageData(self.id)["links"]
 
 
     def sync(self):
         """Sync with db"""
-        self.m.updatePackage(self)
+        self.manager.updatePackage(self)
 
 
     def release(self):
         """Sync and delete from cache"""
         self.sync()
-        self.m.releasePackage(self.id)
+        self.manager.releasePackage(self.id)
 
 
     def delete(self):
-        self.m.deletePackage(self.id)
+        self.manager.deletePackage(self.id)
 
 
     def notifyChange(self):
         e = UpdateEvent("pack", self.id, "collector" if not self.queue else "queue")
-        self.m.core.pullManager.addEvent(e)
+        self.pyload.pullManager.addEvent(e)

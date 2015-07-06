@@ -45,11 +45,11 @@ class APIExerciser(threading.Thread):
 
         threading.Thread.__init__(self)
         self.setDaemon(True)
-        self.core = core
+        self.pyload = core
         self.count = 0  #: number of methods
         self.time = time.time()
 
-        self.api = ThriftClient(user=user, password=pw) if thrift else core.api
+        self.api = ThriftClient(user=user, password=pw) if thrift else pyload.api
 
         self.id = idPool
 
@@ -60,7 +60,7 @@ class APIExerciser(threading.Thread):
 
     def run(self):
 
-        self.core.log.info("API Excerciser started %d" % self.id)
+        self.pyload.log.info("API Excerciser started %d" % self.id)
 
         with open("error.log", "ab") as out:
             # core errors are not logged of course
@@ -71,22 +71,22 @@ class APIExerciser(threading.Thread):
                 try:
                     self.testAPI()
                 except Exception:
-                    self.core.log.error("Excerciser %d throw an execption" % self.id)
+                    self.pyload.log.error("Excerciser %d throw an execption" % self.id)
                     traceback.print_exc()
                     out.write(traceback.format_exc() + 2 * "\n")
                     out.flush()
 
                 if not self.count % 100:
-                    self.core.log.info("Exerciser %d tested %d api calls" % (self.id, self.count))
+                    self.pyload.log.info("Exerciser %d tested %d api calls" % (self.id, self.count))
                 if not self.count % 1000:
                     out.flush()
 
                 if not sumCalled % 1000:  #: not thread safe
-                    self.core.log.info("Exercisers tested %d api calls" % sumCalled)
+                    self.pyload.log.info("Exercisers tested %d api calls" % sumCalled)
                     persec = sumCalled / (time.time() - self.time)
-                    self.core.log.info("Approx. %.2f calls per second." % persec)
-                    self.core.log.info("Approx. %.2f ms per call." % (1000 / persec))
-                    self.core.log.info("Collected garbage: %d" % gc.collect())
+                    self.pyload.log.info("Approx. %.2f calls per second." % persec)
+                    self.pyload.log.info("Approx. %.2f ms per call." % (1000 / persec))
+                    self.pyload.log.info("Collected garbage: %d" % gc.collect())
                     # time.sleep(random() / 500)
 
 

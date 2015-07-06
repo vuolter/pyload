@@ -46,7 +46,7 @@ class AddonManager(object):
     """
 
     def __init__(self, core):
-        self.core = core
+        self.pyload = core
 
         __builtin__.addonManager = self  #: needed to let addons register themself
 
@@ -57,7 +57,7 @@ class AddonManager(object):
         self.events = {}  #: contains events
 
         # registering callback for config event
-        self.core.config.pluginCB = types.MethodType(self.dispatchEvent, "pluginConfigChanged", basestring)  #@TODO: Rename event pluginConfigChanged
+        self.pyload.config.pluginCB = types.MethodType(self.dispatchEvent, "pluginConfigChanged", basestring)  #@TODO: Rename event pluginConfigChanged
 
         self.addEvent("pluginConfigChanged", self.manageAddon)
 
@@ -91,14 +91,14 @@ class AddonManager(object):
         for type in ("addon", "hook"):
             actived     = []
             deactivated = []
-            for pluginname in getattr(self.core.pluginManager, "%sPlugins" % type):
+            for pluginname in getattr(self.pyload.pluginManager, "%sPlugins" % type):
                 try:
-                    pluginClass = self.core.pluginManager.loadClass(type, pluginname)
+                    pluginClass = self.pyload.pluginManager.loadClass(type, pluginname)
                     if not pluginClass:
                         continue
 
-                    if self.core.config.getPlugin("%s_%s" % (pluginname, type), "activated"):
-                        plugin = pluginClass(self.core, self)
+                    if self.pyload.config.getPlugin("%s_%s" % (pluginname, type), "activated"):
+                        plugin = pluginClass(self.pyload, self)
                         plugins.append(plugin)
 
                         self.pluginMap[pluginClass.__name__] = plugin
@@ -109,12 +109,12 @@ class AddonManager(object):
                         deactivated.append(pluginClass.__name__)
 
                 except Exception:
-                    self.core.log.warning(_("Failed activating %(name)s") % {"name": pluginname})
-                    if self.core.debug:
+                    self.pyload.log.warning(_("Failed activating %(name)s") % {"name": pluginname})
+                    if self.pyload.debug:
                         traceback.print_exc()
 
-            self.core.log.info(_("Activate %ss: %s") % (type, ", ".join(sorted(actived))))
-            self.core.log.info(_("Deactivate %ss: %s") % (type, ", ".join(sorted(deactivated))))
+            self.pyload.log.info(_("Activate %ss: %s") % (type, ", ".join(sorted(actived))))
+            self.pyload.log.info(_("Deactivate %ss: %s") % (type, ", ".join(sorted(deactivated))))
 
         self.plugins = plugins
 
@@ -133,14 +133,14 @@ class AddonManager(object):
             if inst.__class__.__name__ == pluginname:
                 return
 
-        pluginClass = self.core.pluginManager.loadClass("addon", pluginname)
+        pluginClass = self.pyload.pluginManager.loadClass("addon", pluginname)
 
         if not pluginClass:
             return
 
-        self.core.log.debug("Activate addon: %s" % pluginname)
+        self.pyload.log.debug("Activate addon: %s" % pluginname)
 
-        addon = pluginClass(self.core, self)
+        addon = pluginClass(self.pyload, self)
         self.plugins.append(addon)
         self.pluginMap[pluginClass.__name__] = addon
 
@@ -155,12 +155,12 @@ class AddonManager(object):
         else:
             return
 
-        self.core.log.debug("Deactivate addon: %s" % pluginname)
+        self.pyload.log.debug("Deactivate addon: %s" % pluginname)
 
         addon.deactivate()
 
         # remove periodic call
-        self.core.log.debug("Removed callback: %s" % self.core.scheduler.removeJob(addon.cb))
+        self.pyload.log.debug("Removed callback: %s" % self.pyload.scheduler.removeJob(addon.cb))
 
         self.plugins.remove(addon)
         del self.pluginMap[addon.__class__.__name__]
@@ -239,7 +239,7 @@ class AddonManager(object):
 
 
     def startThread(self, function, *args, **kwargs):
-        return AddonThread(self.core.threadManager, function, args, kwargs)
+        return AddonThread(self.pyload.threadManager, function, args, kwargs)
 
 
     def activePlugins(self):
@@ -287,7 +287,7 @@ class AddonManager(object):
                 try:
                     f(*args)
                 except Exception, e:
-                    self.core.log.warning("Error calling event handler %s: %s, %s, %s"
+                    self.pyload.log.warning("Error calling event handler %s: %s, %s, %s"
                                           % (event, f, args, str(e)))
-                    if self.core.debug:
+                    if self.pyload.debug:
                         traceback.print_exc()

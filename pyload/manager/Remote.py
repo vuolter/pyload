@@ -9,8 +9,8 @@ class BackendBase(threading.Thread):
 
     def __init__(self, manager):
         threading.Thread.__init__(self)
-        self.m = manager
-        self.core = manager.core
+        self.manager = manager
+        self.pyload = manager.core
         self.enabled = True
         self.running = False
 
@@ -20,8 +20,8 @@ class BackendBase(threading.Thread):
         try:
             self.serve()
         except Exception, e:
-            self.core.log.error(_("Remote backend error: %s") % e)
-            if self.core.debug:
+            self.pyload.log.error(_("Remote backend error: %s") % e)
+            if self.pyload.debug:
                 traceback.print_exc()
         finally:
             self.running = False
@@ -53,18 +53,18 @@ class RemoteManager(object):
 
 
     def __init__(self, core):
-        self.core = core
+        self.pyload = core
         self.backends = []
 
-        if self.core.remote:
+        if self.pyload.remote:
             self.available.append("ThriftBackend")
         # else:
             # self.available.append("SocketBackend")
 
 
     def startBackends(self):
-        host = self.core.config.get("remote", "listenaddr")
-        port = self.core.config.get("remote", "port")
+        host = self.pyload.config.get("remote", "listenaddr")
+        port = self.pyload.config.get("remote", "port")
 
         for b in self.available:
             klass = getattr(__import__("pyload.remote.%s" % b, globals(), locals(), [b], -1), b)
@@ -73,10 +73,10 @@ class RemoteManager(object):
                 continue
             try:
                 backend.setup(host, port)
-                self.core.log.info(_("Starting %(name)s: %(addr)s:%(port)s") % {"name": b, "addr": host, "port": port})
+                self.pyload.log.info(_("Starting %(name)s: %(addr)s:%(port)s") % {"name": b, "addr": host, "port": port})
             except Exception, e:
-                self.core.log.error(_("Failed loading backend %(name)s | %(error)s") % {"name": b, "error": str(e)})
-                if self.core.debug:
+                self.pyload.log.error(_("Failed loading backend %(name)s | %(error)s") % {"name": b, "error": str(e)})
+                if self.pyload.debug:
                     traceback.print_exc()
             else:
                 backend.start()

@@ -24,7 +24,7 @@ class ClickNLoadBackend(BackendBase):
     def setup(self, host, port):
         self.httpd = BaseHTTPServer.HTTPServer((host, port), CNLHandler)
         global core, js
-        core = self.m.core
+        core = self.manager.core
         js = core.js
 
 

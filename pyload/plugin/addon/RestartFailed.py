@@ -25,7 +25,7 @@ class RestartFailed(Addon):
         # if name == "interval":
             # interval = value * 60
             # if self.MIN_CHECK_INTERVAL <= interval != self.interval:
-                # self.core.scheduler.removeJob(self.cb)
+                # self.pyload.scheduler.removeJob(self.cb)
                 # self.interval = interval
                 # self.initPeriodical()
             # else:
@@ -34,7 +34,7 @@ class RestartFailed(Addon):
 
     def periodical(self):
         self.logDebug(_("Restart failed downloads"))
-        self.core.api.restartFailed()
+        self.pyload.api.restartFailed()
 
 
     def activate(self):

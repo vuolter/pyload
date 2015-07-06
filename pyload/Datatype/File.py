@@ -42,7 +42,8 @@ class PyFile(object):
 
 
     def __init__(self, manager, id, url, name, size, status, error, plugin, package, order):
-        self.m = manager
+        self.pyload  = manager.pyload
+        self.manager = manager
 
         self.id = int(id)
         self.url = url
@@ -72,7 +73,7 @@ class PyFile(object):
         self.progress = 0
         self.maxprogress = 100
 
-        self.m.cache[int(id)] = self
+        self.manager.cache[int(id)] = self
 
     # will convert all sizes to ints
     size = property(lambda self: self._size, setSize)
@@ -86,8 +87,8 @@ class PyFile(object):
     def initPlugin(self):
         """Inits plugin instance"""
         if not self.plugin:
-            self.pluginmodule = self.m.core.pluginManager.pluginModule(self.plugintype, self.pluginname)
-            self.pluginclass  = self.m.core.pluginManager.pluginClass(self.plugintype, self.pluginname)
+            self.pluginmodule = self.pyload.pluginManager.pluginModule(self.plugintype, self.pluginname)
+            self.pluginclass  = self.pyload.pluginManager.pluginClass(self.plugintype, self.pluginname)
             self.plugin       = self.pluginclass(self)
 
 
@@ -103,7 +104,7 @@ class PyFile(object):
 
     def package(self):
         """Return package instance"""
-        return self.m.getPackage(self.packageid)
+        return self.manager.getPackage(self.packageid)
 
 
     def setStatus(self, status):
@@ -118,7 +119,7 @@ class PyFile(object):
 
     def getStatusName(self):
         if self.status not in (13, 14) or not self.statusname:
-            return self.m.statusMsg[self.status]
+            return self.manager.statusMsg[self.status]
         else:
             return self.statusname
 
@@ -129,7 +130,7 @@ class PyFile(object):
 
     def sync(self):
         """Sync PyFile instance with database"""
-        self.m.updateLink(self)
+        self.manager.updateLink(self)
 
 
     @lock
@@ -143,12 +144,12 @@ class PyFile(object):
             self.plugin.clean()
             del self.plugin
 
-        self.m.releaseLink(self.id)
+        self.manager.releaseLink(self.id)
 
 
     def delete(self):
         """Delete pyfile from database"""
-        self.m.deleteLink(self.id)
+        self.manager.deleteLink(self.id)
 
 
     def toDict(self):
@@ -186,7 +187,7 @@ class PyFile(object):
 
     def abortDownload(self):
         """Abort pyfile if possible"""
-        while self.id in self.m.core.threadManager.processingIds():
+        while self.id in self.pyload.threadManager.processingIds():
             self.abort = True
             if self.plugin and self.plugin.req:
                 self.plugin.req.abortDownloads()
@@ -202,17 +203,17 @@ class PyFile(object):
     def finishIfDone(self):
         """Set status to finish and release file if every thread is finished with it"""
 
-        if self.id in self.m.core.threadManager.processingIds():
+        if self.id in self.pyload.threadManager.processingIds():
             return False
 
         self.setStatus("finished")
         self.release()
-        self.m.checkAllLinksFinished()
+        self.manager.checkAllLinksFinished()
         return True
 
 
     def checkIfProcessed(self):
-        self.m.checkAllLinksProcessed(self.id)
+        self.manager.checkAllLinksProcessed(self.id)
 
 
     def formatWait(self):
@@ -292,7 +293,7 @@ class PyFile(object):
 
     def notifyChange(self):
         e = UpdateEvent("file", self.id, "collector" if not self.package().queue else "queue")
-        self.m.core.pullManager.addEvent(e)
+        self.pyload.pullManager.addEvent(e)
 
 
     def setProgress(self, value):

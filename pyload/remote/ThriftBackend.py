@@ -16,16 +16,16 @@ from pyload.remote.thriftbackend.Transport import TransportFactory
 class ThriftBackend(BackendBase):
 
     def setup(self, host, port):
-        processor = Processor(self.core.api)
+        processor = Processor(self.pyload.api)
 
         key = None
         cert = None
 
-        if self.core.config.get("ssl", "activated"):
-            if os.path.exists(self.core.config.get("ssl", "cert")) and os.path.exists(self.core.config.get("ssl", "key")):
-                self.core.log.info(_("Using SSL ThriftBackend"))
-                key = self.core.config.get("ssl", "key")
-                cert = self.core.config.get("ssl", "cert")
+        if self.pyload.config.get("ssl", "activated"):
+            if os.path.exists(self.pyload.config.get("ssl", "cert")) and os.path.exists(self.pyload.config.get("ssl", "key")):
+                self.pyload.log.info(_("Using SSL ThriftBackend"))
+                key = self.pyload.config.get("ssl", "key")
+                cert = self.pyload.config.get("ssl", "cert")
 
         transport = ServerSocket(port, host, key, cert)
 

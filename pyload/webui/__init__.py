@@ -19,7 +19,7 @@ PYLOAD_DIR = os.path.abspath(os.path.join(THEME_DIR, "..", "..", ".."))
 
 sys.path.append(PYLOAD_DIR)
 
-API = Server.core.api
+API = Server.pyload.api
 JS = JsEngine(Server.core)
 
 PREFIX = API.getConfigValue('webui', 'prefix')

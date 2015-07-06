@@ -41,11 +41,11 @@ class ClickNLoad(Addon):
 
 
     def activate(self):
-        if not self.core.config.get("webui", "activated"):
+        if not self.pyload.config.get("webui", "activated"):
             return
 
         ip      = "" if self.getConfig('extern') else "127.0.0.1"
-        webport = self.core.config.get("webui", "port")
+        webport = self.pyload.config.get("webui", "port")
         cnlport = self.getConfig('port')
 
         self.proxy(ip, webport, cnlport)

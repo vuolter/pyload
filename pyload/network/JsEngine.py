@@ -13,22 +13,22 @@ class JsEngine(object):
     """JS Engine superclass"""
 
     def __init__(self, core, engine=None):
-        self.core   = core
+        self.pyload   = core
         self.engine = None  #: Engine Instance
 
         if not engine:
-            engine = self.core.config.get("download", "jsengine")
+            engine = self.pyload.config.get("download", "jsengine")
 
         if engine != "auto" and self.set(engine) is False:
             engine = "auto"
-            self.core.log.warning("JS Engine set to \"auto\" for safely")
+            self.pyload.log.warning("JS Engine set to \"auto\" for safely")
 
         if engine == "auto":
             for E in self.find():
                 if self.set(E) is True:
                     break
             else:
-                self.core.log.error("No JS Engine available")
+                self.pyload.log.error("No JS Engine available")
 
 
     @classmethod
@@ -85,20 +85,20 @@ class JsEngine(object):
 
         results = [out]
 
-        if self.core.config.get("general", "debug"):
+        if self.pyload.config.get("general", "debug"):
             if err:
-                self.core.log.debug(JSE._name + ":", err)
+                self.pyload.log.debug(JSE._name + ":", err)
 
             engines = self.find()
             engines.remove(JSE)
             for E in engines:
                 out, err = E.eval(script)
                 res = err or out
-                self.core.log.debug(E._name + ":", res)
+                self.pyload.log.debug(E._name + ":", res)
                 results.append(res)
 
             if len(results) > 1 and len(uniqify(results)) > 1:
-                self.core.log.warning("JS output of two or more engines mismatch")
+                self.pyload.log.warning("JS output of two or more engines mismatch")
 
         return results[0]
 

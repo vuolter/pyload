@@ -80,9 +80,9 @@ def login():
     info = API.checkAuth(user, password)
 
     if info:
-        API.core.log.debug(_("API login from IP address: %s") % remote_addr)
+        API.pyload.log.debug(_("API login from IP address: %s") % remote_addr)
     else:
-        API.core.log.warning(_("Failed API login from IP address: %s") % remote_addr)
+        API.pyload.log.warning(_("Failed API login from IP address: %s") % remote_addr)
         return json_dumps(False)
 
     s = set_session(request, info)

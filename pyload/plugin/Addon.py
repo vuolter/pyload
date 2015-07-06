@@ -80,7 +80,7 @@ class Addon(Base):
 
 
     def initPeriodical(self, delay=0, threaded=False):
-        self.cb = self.core.scheduler.addJob(max(0, delay), self._periodical, [threaded], threaded=threaded)
+        self.cb = self.pyload.scheduler.addJob(max(0, delay), self._periodical, [threaded], threaded=threaded)
 
 
     def _periodical(self, threaded):
@@ -93,10 +93,10 @@ class Addon(Base):
 
         except Exception, e:
             self.logError(_("Error executing addon: %s") % e)
-            if self.core.debug:
+            if self.pyload.debug:
                 traceback.print_exc()
 
-        self.cb = self.core.scheduler.addJob(self.interval, self._periodical, [threaded], threaded=threaded)
+        self.cb = self.pyload.scheduler.addJob(self.interval, self._periodical, [threaded], threaded=threaded)
 
 
     def __repr__(self):
@@ -139,7 +139,7 @@ class Addon(Base):
 
 
     def exit(self):
-        """Called by core.shutdown just before pyLoad exit"""
+        """Called by pyload.shutdown just before pyLoad exit"""
         if has_method(self.__class__, "coreExiting"):
             self.coreExiting()
 

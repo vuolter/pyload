@@ -141,9 +141,9 @@ def login_post():
     info = API.checkAuth(user, password)
 
     if info:
-        API.core.log.debug(_("WebUI login from IP address: %s") % remote_addr)
+        API.pyload.log.debug(_("WebUI login from IP address: %s") % remote_addr)
     else:
-        API.core.log.warning(_("Failed WebUI login from IP address: %s") % remote_addr)
+        API.pyload.log.warning(_("Failed WebUI login from IP address: %s") % remote_addr)
         return render_to_response("login.html", {"errors": True}, [pre_processor])
 
     set_session(info)
@@ -259,7 +259,7 @@ def config():
         desc = plugin[entry].description
         name, none, type = desc.partition("_")
 
-        if type in API.core.pluginManager.TYPES:
+        if type in API.pyload.pluginManager.TYPES:
             if name == last_name or len([a for a, b in plugin.iteritems() if b.description.startswith(name + "_")]) > 1:
                 desc = name + " (" + type.title() + ")"
             else:
