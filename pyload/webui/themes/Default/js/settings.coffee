@@ -61,17 +61,17 @@ class SettingsUI
 
   configSubmit: (e) ->
     category = e.target.get("id").split("|")[0]
-    form = $("#{category}_form")
+    form = $ "#{category}_form"
 
     form.set "send", {
       'method': "post"
       'url': "/json/save_config/#{category}"
       "onSuccess" : ->
-        root.notify.alert '{{ _("Settings saved.")}}', {
+        root.notify.alert '{{_("Settings saved.")}}', {
               'className': 'success'
             }
       'onFailure': ->
-        root.notify.alert '{{ _("Error occured.")}}', {
+        root.notify.alert '{{_("Error occured.")}}', {
               'className': 'error'
             }
     }
@@ -98,9 +98,9 @@ class SettingsUI
        'method': "post",
        "onSuccess" : -> window.location.reload()
        'onFailure': ->
-         root.notify.alert('{{ _("Error occured.") }}', {
+         root.notify.alert '{{_("Error occured.")}}', {
                'className': 'error'
-             })
+             }
        }
 
     form.send()

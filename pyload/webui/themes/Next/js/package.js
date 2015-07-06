@@ -188,13 +188,13 @@ var Package = new Class({
     },
 
     createLinks: function(data) {
-        var ul = $("sort_children_{id}".substitute({"id": this.id}));
+        var ul = $("sort_children_{id}".substitute({'id': this.id}));
         ul.set("html", "");
         data.links.each(function(link) {
             link.id = link.fid;
             var li = new Element("li", {
-                "style": {
-                    "margin-left": 0
+                'style': {
+                    'margin-left': 0
                 }
             });
 
@@ -218,18 +218,18 @@ var Package = new Class({
             }
 
 
-            var html = "<span style='' class='child_status'><span style='margin-right: 2px;' class='{icon} sorthandle'></span></span>\n".substitute({"icon": link.icon});
-            html += "<span style='font-size: 18px; text-weight:bold'>{name}</span><br /><div class='child_secrow' style='margin-left: 21px; margin-bottom: 7px;'>".substitute({"name": link.name});
-            html += "<span class='child_status' style='font-size: 12px; color:#555'>{statusmsg}</span>{error}&nbsp;".substitute({"statusmsg": link.statusmsg, "error":link.error});
-            html += "<span class='child_status' style='font-size: 12px; color:#555'>{format_size}</span>".substitute({"format_size": link.format_size});
-            html += "<span class='child_status' style='font-size: 12px; color:#555'> {plugin}</span>&nbsp;&nbsp;".substitute({"plugin": link.plugin});
+            var html = "<span style='' class='child_status'><span style='margin-right: 2px;' class='{icon} sorthandle'></span></span>\n".substitute({'icon': link.icon});
+            html += "<span style='font-size: 18px; text-weight:bold'>{name}</span><br /><div class='child_secrow' style='margin-left: 21px; margin-bottom: 7px;'>".substitute({'name': link.name});
+            html += "<span class='child_status' style='font-size: 12px; color:#555'>{statusmsg}</span>{error}&nbsp;".substitute({'statusmsg': link.statusmsg, 'error':link.error});
+            html += "<span class='child_status' style='font-size: 12px; color:#555'>{format_size}</span>".substitute({'format_size': link.format_size});
+            html += "<span class='child_status' style='font-size: 12px; color:#555'> {plugin}</span>&nbsp;&nbsp;".substitute({'plugin': link.plugin});
             html += "<span class='glyphicon glyphicon-trash' title='{{_("Delete Link")}}' style='cursor: pointer;  font-size: 12px; color:#333;' ></span>&nbsp;&nbsp;";
             html += "<span class='glyphicon glyphicon-repeat' title='{{_("Restart Link")}}' style='cursor: pointer; font-size: 12px; color:#333;' ></span></div>";
 
             var div = new Element("div", {
-                "id": "file_" + link.id,
-                "class": "child",
-                "html": html
+                'id': "file_" + link.id,
+                'class': "child",
+                'html': html
             });
 
             li.store("order", link.order);
@@ -333,7 +333,7 @@ var Package = new Class({
         if (child.getStyle('display') == "block") {
             child.dissolve();
         }
-        var ul = $("sort_children_{id}".substitute({"id": this.id}));
+        var ul = $("sort_children_{id}".substitute({'id': this.id}));
         ul.erase("html");
         this.linksLoaded = false;
     },
