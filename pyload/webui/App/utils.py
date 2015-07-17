@@ -16,8 +16,7 @@ def get_theme()
 def render_to_response(file, args={}, proc=[]):
     for p in proc:
         args.update(p())
-    path = "tml/" + file
-    return env.get_template(path).render(**args)
+    return env.get_template(file).render(**args)
 
 
 def parse_permissions(session):
