@@ -59,6 +59,8 @@ class PluginThread(threading.Thread):
         except Exception, e:
             self.m.log.debug("Error creating zip file: %s" % e)
 
+            if os.path.isfile(dump_name):
+                os.remove(dump_name)
             dump_name = dump_name.replace(".zip", ".txt")
             with open(dump_name, "wb") as f:
                 f.write(dump)
