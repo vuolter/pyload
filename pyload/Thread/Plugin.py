@@ -38,12 +38,14 @@ class PluginThread(threading.Thread):
 
             zip = zipfile.ZipFile(dump_name, "w")
 
-            for f in os.listdir(os.path.join("tmp", pyfile.pluginname)):
-                try:
-                    # avoid encoding errors
-                    zip.write(os.path.join("tmp", pyfile.pluginname, f), fs_join(pyfile.pluginname, f))
-                except Exception:
-                    pass
+            tmp_path = os.path.join("tmp", pyfile.pluginname)
+            if os.path.exists(tmp_path):
+                for f in os.listdir(tmp_path):
+                    try:
+                        # avoid encoding errors
+                        zip.write(os.path.join(tmp_path, f), fs_join(pyfile.pluginname, f))
+                    except Exception:
+                        pass
 
             info = zipfile.ZipInfo(fs_join(pyfile.pluginname, "debug_Report.txt"), time.gmtime())
             info.external_attr = 0644 << 16L  #: change permissions
@@ -57,6 +59,8 @@ class PluginThread(threading.Thread):
         except Exception, e:
             self.m.log.debug("Error creating zip file: %s" % e)
 
+            if os.path.isfile(dump_name):
+                os.remove(dump_name)
             dump_name = dump_name.replace(".zip", ".txt")
             with open(dump_name, "wb") as f:
                 f.write(dump)
