@@ -2,6 +2,7 @@
 
 from __future__ import with_statement
 
+import re
 import os
 import shutil
 import time
@@ -147,16 +148,12 @@ class ConfigParser(object):
 
 
                     else:
-                        content, none, value = line.partition("=")
+                        pdict = re.search(r'^(?P<T>.+?)\s+(?P<O>.+?)\s*:\s*"(?P<D>.+?)"\s*= ?(?P<V>.*)', line).groupdict()
 
-                        content, none, desc = content.partition(":")
-
-                        desc = desc.replace('"', "").strip()
-
-                        typ, none, option = content.strip().rpartition(" ")
-
-                        value = value.strip()
-                        typ   = typ.strip()
+                        typ = pdict['T']
+                        option = pdict['O']
+                        desc = pdict['D'].strip()
+                        value = pdict['V'].strip()
 
                         if value.startswith("["):
                             if value.endswith("]"):
@@ -176,7 +173,8 @@ class ConfigParser(object):
                                                      "idx": len(conf[section])}
 
             except Exception, e:
-                print "Config Warning"
+                print "Config Warning:"
+                print(line)
                 traceback.print_exc()
 
         return conf
@@ -211,7 +209,7 @@ class ConfigParser(object):
                 pass
 
             f.write("version: %i \n" % CONF_VERSION)
-            for section in config.iterkeys():
+            for section in sorted(config.iterkeys()):
                 f.write('\n%s - "%s":\n' % (section, config[section]['desc']))
 
                 for option, data in sorted(config[section].items(), key=lambda i: i[1]['idx'] if i[0] not in ("desc", "outline") else 0):
