@@ -209,7 +209,7 @@ class ConfigParser(object):
                 pass
 
             f.write("version: %i \n" % CONF_VERSION)
-            for section in config.iterkeys():
+            for section in sorted(config.iterkeys()):
                 f.write('\n%s - "%s":\n' % (section, config[section]['desc']))
 
                 for option, data in sorted(config[section].items(), key=lambda i: i[1]['idx'] if i[0] not in ("desc", "outline") else 0):
