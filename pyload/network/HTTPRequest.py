@@ -31,7 +31,7 @@ class HTTPRequest(object):
 
     def __init__(self, cookies=None, options=None):
         self.c = pycurl.Curl()
-        self.rep = cStringIO.StringIO()
+        self.rep = None
 
         self.cj = cookies  #: cookiejar
 
@@ -109,10 +109,10 @@ class HTTPRequest(object):
         else:
             self.c.setopt(pycurl.IPRESOLVE, pycurl.IPRESOLVE_V4)
 
-        if "auth" in options:
+        if options and "auth" in options:
             self.c.setopt(pycurl.USERPWD, str(options['auth']))
 
-        if "timeout" in options:
+        if ptions and "timeout" in options:
             self.c.setopt(pycurl.LOW_SPEED_TIME, options['timeout'])
 
 
@@ -177,6 +177,8 @@ class HTTPRequest(object):
 
         self.setRequestContext(url, get, post, referer, cookies, multipart)
 
+        self.rep = cStringIO.StringIO()
+
         self.header = ""
 
         self.c.setopt(pycurl.HTTPHEADER, self.headers)
@@ -203,10 +205,15 @@ class HTTPRequest(object):
 
         self.c.setopt(pycurl.POSTFIELDS, "")
         self.lastEffectiveURL = self.c.getinfo(pycurl.EFFECTIVE_URL)
-        self.code = self.verifyHeader()
 
         if save_cookies:
             self.addCookies()
+
+        try:
+            self.code = self.verifyHeader()
+        finally:
+            self.rep.close()
+            self.rep = None
 
         if decode:
             rep = self.decodeResponse(rep)
@@ -233,10 +240,7 @@ class HTTPRequest(object):
         if self.rep is None:
             return ""
         else:
-            value = self.rep.getvalue()
-            self.rep.close()
-            self.rep = cStringIO.StringIO()
-            return value
+            return self.rep.getvalue()
 
 
     def decodeResponse(self, rep):
@@ -305,7 +309,8 @@ class HTTPRequest(object):
 
     def close(self):
         """Cleanup, unusable after this"""
-        self.rep.close()
+        if self.rep:
+            self.rep.close()
         if hasattr(self, "cj"):
             del self.cj
         if hasattr(self, "c"):
