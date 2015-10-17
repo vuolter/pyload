@@ -112,7 +112,7 @@ class HTTPRequest(object):
         if options and "auth" in options:
             self.c.setopt(pycurl.USERPWD, str(options['auth']))
 
-        if ptions and "timeout" in options:
+        if options and "timeout" in options:
             self.c.setopt(pycurl.LOW_SPEED_TIME, options['timeout'])
 
 
