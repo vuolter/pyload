@@ -143,8 +143,6 @@ class HTTPChunk(HTTPRequest):
 
         self.BOMChecked = False  #: check and remove byte order mark
 
-        self.rep = None
-
         self.sleep = 0.000
         self.lastSize = 0
 
