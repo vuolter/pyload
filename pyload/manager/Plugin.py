@@ -195,7 +195,7 @@ class PluginManager(object):
 
             url = urllib.unquote(url)
 
-            if last and last[2]['re'].match(url, re.U):
+            if last and last[2]['re'].match(url):
                 res.append((url, last[0], last[1]))
                 continue
 
@@ -204,7 +204,7 @@ class PluginManager(object):
                 for name, plugin in self.plugins[plugintype].iteritems():
                     try:
                         if 'pattern' in plugin:
-                            m = plugin['re'].match(url, re.U)
+                            m = plugin['re'].match(url)
 
                     except KeyError:
                         self.core.log.error(_("Plugin [%(type)s] %(name)s skipped due broken pattern")
