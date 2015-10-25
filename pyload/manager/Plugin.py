@@ -16,7 +16,7 @@ class PluginManager(object):
     USERROOT = "userplugins."
     TYPES    = ["account", "addon", "container", "crypter", "extractor", "hook", "hoster", "internal", "ocr"]
 
-    PATTERN = re.compile(r'__pattern\s*=\s*u?r("|\')([^"\']+)')
+    PATTERN = re.compile(r'__pattern\s*=\s*u?r("|\')([^"\']+)', re.U)
     VERSION = re.compile(r'__version\s*=\s*("|\')([\d.]+)')
     CONFIG  = re.compile(r'__config\s*=\s*\[([^\]]+)', re.M)
     DESC    = re.compile(r'__description\s*=\s*("|"""|\')([^"\']+)')
@@ -96,7 +96,7 @@ class PluginManager(object):
 
                 try:
                     with open(os.path.join(pfolder, f)) as data:
-                        content = data.read()
+                        content = data.read().decode("utf-8")
 
                 except IOError, e:
                     self.core.log.error(str(e))
@@ -134,7 +134,7 @@ class PluginManager(object):
                     pattern = pattern[0][1]
 
                     try:
-                        regexp = re.compile(pattern)
+                        regexp = re.compile(pattern, re.U)
                     except Exception:
                         self.core.log.error(_("%s has a invalid pattern") % name)
                         pattern = r'^unmatchable$'
