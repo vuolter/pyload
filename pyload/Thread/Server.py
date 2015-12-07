@@ -17,15 +17,15 @@ class WebServer(threading.Thread):
         global core
 
         threading.Thread.__init__(self)
-        self.pyload = pycore
-        core = pycore
+        self.pyload = core = pycore
+
         self.running = True
-        self.server = pycore.config.get("webui", "server")
-        self.https = pycore.config.get("webui", "ssl")
-        self.cert = pycore.config.get("ssl", "cert")
-        self.key = pycore.config.get("ssl", "key")
-        self.host = pycore.config.get("webui", "ip")
-        self.port = pycore.config.get("webui", "port")
+        self.server  = self.pyload.config.get("webui", "server")
+        self.https   = self.pyload.config.get("webui", "ssl")
+        self.cert    = self.pyload.config.get("ssl", "cert")
+        self.key     = self.pyload.config.get("ssl", "key")
+        self.host    = self.pyload.config.get("webui", "ip")
+        self.port    = self.pyload.config.get("webui", "port")
 
         self.setDaemon(True)
 

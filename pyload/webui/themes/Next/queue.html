@@ -1,4 +1,4 @@
-{% extends '/tml/base.html' %}
+{% extends 'base.html' %}
 {% block head %}
 
 <script type="text/javascript" src="/js/package.js"></script>
@@ -90,7 +90,7 @@ document.addEvent("domready", function(){
     <div class="form-group">
         <label for="pack_folder">{{_("Folder")}}</label>
         <input class="form-control" id="pack_folder" name="pack_folder" type="text" />
-        <p class="help-block">{{_("Name of subfolder for these downloads.")}}</p>
+        <p class="help-block">{{_("Name of subfolder for these storage.")}}</p>
     </div>
     <div class="form-group">
         <label for="pack_pws">{{_("Password")}}</label>

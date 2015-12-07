@@ -1,4 +1,4 @@
-{% extends '/tml/base.html' %}
+{% extends 'base.html' %}
 
 {% block head %}
 
@@ -12,11 +12,11 @@ document.addEvent("domready", function(){
 </script>
 {% endblock %}
 
-{% block title %}Downloads - {{super()}} {% endblock %}
+{% block title %}Storage - {{super()}} {% endblock %}
 
 
 {% block subtitle %}
-{{_("FileManager")}}
+{{_("File Manager")}}
 {% endblock %}
 
 {% macro display_file(file) %}
@@ -74,7 +74,5 @@ document.addEvent("domready", function(){
 <ul id="directories-list">
 {{ display_folder(root, true) }}
 </ul>
-
-{% include "/tml/rename_directory.html" %}
 
 {% endblock %}

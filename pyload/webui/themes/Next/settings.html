@@ -1,4 +1,4 @@
-{% extends '/tml/base.html' %}
+{% extends 'base.html' %}
 
 {% block title %}{{ _("Config") }} - {{ super() }} {% endblock %}
 {% block subtitle %}{{ _("Config") }}{% endblock %}
@@ -13,9 +13,16 @@
 {% block content %}
 
     <ul id="toptabs" class="nav nav-tabs">
-            <li role="presentation" class"active"><a href="#">{{ _("General") }}</a></li>
-            <li role="presentation"><a href="#">{{ _("Plugins") }}</a></li>
-            <li role="presentation"><a href="#">{{ _("Accounts") }}</a></li>
+        <li role="presentation" class"active"><a href="#">{{ _("General") }}</a></li>
+        <li role="presentation"><a href="#">{{ _("Accounts") }}</a></li>
+        <li role="presentation"><a href="#">{{ _("Addons") }}</a></li>
+        <li role="presentation"><a href="#">{{ _("Anti-captcha") }}</a></li>
+        <li role="presentation"><a href="#">{{ _("Containers") }}</a></li>
+        <li role="presentation"><a href="#">{{ _("Decrypters") }}</a></li>
+        <li role="presentation"><a href="#">{{ _("Extractors") }}</a></li>
+        <li role="presentation"><a href="#">{{ _("Hosters") }}</a></li>
+        <li role="presentation"><a href="#">{{ _("Java-script engines") }}</a></li>
+        <li role="presentation"><a href="#">{{ _("OCR") }}</a></li>
     </ul>
 
     <div id="tabsback" style="height: 20px; padding-left: 150px; color: white; font-weight: bold;">

@@ -421,14 +421,14 @@ class Core(object):
         self.log.setLevel(level)
 
         format  = "%(asctime)s  %(levelname)-8s  %(message)s"
-        datefmt = "%Y-%m-%d  %H:%M:%S"
+        datefmt = "%Y-%m-%d %H:%M:%S"
         console_formatter = logging.Formatter(format, datefmt)  #: console formatter did not use colors as default
 
         # Console formatter with colors
         if self.config.get("log", "color_console"):
             import colorlog
 
-            format  = "%(log_color)s%(asctime)s%(reset)s  %(label_log_color)s %(levelname)-8s %(reset)s  %(log_color)s%(message)s"
+            format  = "%(label_log_color)s %(levelname)-8s %(reset)s %(log_color)s%(asctime)s  %(message)s"
             datefmt = "%Y-%m-%d  %H:%M:%S"
 
             log_color = {

@@ -8,7 +8,7 @@
 
 <link rel="stylesheet" type="text/css" href="/css/window.css"/>
 <link rel="stylesheet" type="text/css" href="/css/MooDialog.css"/>
-<link rel="stylesheet" href="/lib/Bootstrap/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="/css/bootstrap.css"/>
 
 <script type="text/javascript" src="/lib/MooTools/MooTools-Core.js"></script>
 <script type="text/javascript" src="/lib/MooTools/MooTools-More.js"></script>
@@ -96,11 +96,11 @@
         <li {{ selected('collector') }}>
             <a href="/collector/" title=""><span class="glyphicon glyphicon-magnet"></span>  {{_("Collector")}}</a>
         </li>
-        <li {{ selected('downloads') }}>
-            <a href="/downloads/" title=""> <span class="glyphicon glyphicon-download"></span> {{_("Downloads")}}</a>
+        <li {{ selected('storage') }}>
+            <a href="/storage/" title=""> <span class="glyphicon glyphicon-download"></span> {{_("Storage")}}</a>
         </li>
 {#        <li {{ selected('filemanager') }}>#}
-{#            <a href="/filemanager/" title=""><span class="glyphicon glyphicon-magnet"></span>  {{_("FileManager")}}</a>#}
+{#            <a href="/filemanager/" title=""><span class="glyphicon glyphicon-magnet"></span>  {{_("File Manager")}}</a>#}
 {#        </li>#}
         <li {{ selected('logs', True) }}>
             <a href="/logs/"  class="action index" accesskey="x" rel="nofollow"><span class="glyphicon glyphicon-list"></span> {{_("Logs")}}</a>
@@ -189,8 +189,8 @@
 </div>
 
 <div style="display: none;">
-    {% include "/tml/window.html" %}
-    {% include "/tml/captcha.html" %}
+    {% include 'window.html' %}
+    {% include 'captcha.html' %}
     {% block hidden %}
     {% endblock %}
 </div>

@@ -1,4 +1,4 @@
-{% extends '/tml/base.html' %}
+{% extends 'base.html' %}
 {% block head %}
 
 <script type="text/javascript">
@@ -238,7 +238,7 @@ var LinkEntry = new Class({
 </script>
 {% endblock %}
 
-{% block subtitle %}{{_("Active Downloads")}}{% endblock %}
+{% block subtitle %}{{_("Active connections")}}{% endblock %}
 {% block content %}
 <table class="table" style="width:100%;">
     <thead>
