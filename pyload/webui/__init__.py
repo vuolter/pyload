@@ -75,7 +75,7 @@ web = GZipMiddleWare(web)
 if PREFIX:
     web = PrefixMiddleware(web, prefix=PREFIX)
 
-    
+
 from pyload.webui import App
 
 

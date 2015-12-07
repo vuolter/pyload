@@ -3,10 +3,7 @@
 
 from __future__ import with_statement
 
-try:
-    from pysqlite2 import dbapi2 as sqlite3
-except Exception:
-    import sqlite3
+import sqlite3
 
 import Queue
 import os
@@ -137,6 +134,7 @@ class DatabaseBackend(threading.Thread):
         convert = self._checkVersion()  #: returns None or current version
 
         self.conn = sqlite3.connect("files.db")
+        self.conn.text_factory = sqlite3.OptimizedUnicode
 
         try:
             os.chmod("files.db", 0600)
@@ -186,7 +184,7 @@ class DatabaseBackend(threading.Thread):
                     self.pyload.log.warning(_("Filedatabase was deleted due to incompatible version."))
                 except Exception:
                     print "Filedatabase was deleted due to incompatible version."
-                reshutil.move("files.version")
+                os.remove("files.version")
                 shutil.move("files.db", "files.backup.db")
 
             with open("files.version", "wb") as f:
@@ -269,6 +267,7 @@ class DatabaseBackend(threading.Thread):
             except Exception:
                 print "Converting old Django DB"
             conn = sqlite3.connect('pyload.db')
+            conn.text_factory = sqlite3.OptimizedUnicode
             c = conn.cursor()
             c.execute("SELECT username, password, email FROM auth_user WHERE is_superuser")
             users = []

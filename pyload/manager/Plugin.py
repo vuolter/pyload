@@ -10,6 +10,8 @@ import urllib
 
 import SafeEval
 
+from pyload.utils import exists, fs_join
+
 
 class PluginManager(object):
     ROOT     = "pyload.plugin."
@@ -380,3 +382,45 @@ class PluginManager(object):
     def reloadPlugin(self, type_plugin):
         """Reload and reindex ONE plugin"""
         return bool(self.reloadPlugins(type_plugin))
+        
+        
+    def removePlugins(self, type_plugins):
+        """Delete plugins from disk"""
+
+        if not type_plugins:
+            return
+
+        removed = set()
+
+        self.logDebug("Requested deletion of plugins: %s" % type_plugins)
+
+        for type, name in type_plugins:
+            rootplugins = os.path.join(pypath, "module", "plugins")
+
+            for dir in ("userplugins", rootplugins):
+                py_filename  = fs_join(dir, type, name + ".py")
+                pyc_filename = py_filename + "c"
+
+                if type == "addon":
+                    try:
+                        self.manager.deactivateAddon(name)
+
+                    except Exception, e:
+                        self.logDebug(e)
+
+                for filename in (py_filename, pyc_filename):
+                    if not exists(filename):
+                        continue
+
+                    try:
+                        os.remove(filename)
+
+                    except OSError, e:
+                        self.logError(_("Error removing: %s") % filename, e)
+
+                    else:
+                        id = (type, name)
+                        removed.add(id)
+
+        #: return a list of the plugins successfully removed
+        return list(removed)

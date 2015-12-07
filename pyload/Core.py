@@ -121,15 +121,6 @@ class Core(object):
         print
 
 
-    def toggle_pause(self):
-        if self.threadManager.pause:
-            self.threadManager.pause = False
-            return False
-        elif not self.threadManager.pause:
-            self.threadManager.pause = True
-            return True
-
-
     def quit(self, a, b):
         self.shutdown()
         self.log.info(_("Received Quit signal"))
@@ -209,11 +200,8 @@ class Core(object):
                 if not f.endswith(".pyo") and not f.endswith(".pyc"):
                     continue
 
-                if "_25" in f or "_26" in f or "_27" in f:
-                    continue
-
                 print os.path.join(path, f)
-                reshutil.move(os.path.join(path, f))
+                os.remove(os.path.join(path, f))
 
 
     def start(self, rpc=True, web=True):
@@ -378,12 +366,11 @@ class Core(object):
         self.log.info(_("Activating Accounts..."))
         self.accountManager.getAccountInfos()
 
-        self.threadManager.pause = False
-        self.running = True
-
         self.log.info(_("Activating Plugins..."))
         self.addonManager.coreReady()
 
+        self.running = True
+        self.threadManager.pause = False
         self.log.info(_("pyLoad is up and running"))
 
         locals().clear()
@@ -547,21 +534,16 @@ class Core(object):
         self.shutdown()
         os.chdir(owd)
         # close some open fds
-        for i in xrange(3, 50):
-            try:
-                os.close(i)
-            except Exception:
-                pass
-
-        os.execl(executable, executable, *sys.argv)
+        os.closerange(3, 50)
+        os.execl(sys.executable, sys.executable, *sys.argv)
         os._exit(0)
+        self.cleanTree()
 
 
     def shutdown(self):
         self.log.info(_("shutting down..."))
         try:
-            if hasattr(self, "webserver"):
-                self.webserver.quit()
+            self.webserver.quit()
 
             for thread in list(self.threadManager.threads):
                 thread.put("quit")
@@ -613,12 +595,7 @@ def deamon():
         sys.exit(1)
 
     # Iterate through and close some file descriptors.
-    for fd in xrange(0, 3):
-        try:
-            os.close(fd)
-        except OSError:    # ERROR, fd wasn't open to begin with (ignored)
-            pass
-
+    os.closerange(0, 3)
     os.open(os.devnull, os.O_RDWR)    # standard input (0)
     os.dup2(0, 1)            # standard output (1)
     os.dup2(0, 2)

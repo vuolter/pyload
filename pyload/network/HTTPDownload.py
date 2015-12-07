@@ -93,10 +93,10 @@ class HTTPDownload(object):
                                 break
                             fo.write(data)
                     if fo.tell() < self.info.getChunkRange(i)[1]:
-                        reshutil.move(init)
+                        os.remove(init)
                         self.info.remove()  #: there are probably invalid chunks
                         raise Exception("Downloaded content was smaller than expected. Try to reduce download connections.")
-                    reshutil.move(fname)  #: remove chunk
+                    os.remove(fname)  #: remove chunk
 
         if self.nameDisposition and self.disposition:
             self.filename = fs_join(os.path.dirname(self.filename), self.nameDisposition)
@@ -238,7 +238,7 @@ class HTTPDownload(object):
                         for chunk in to_clean:
                             self.closeChunk(chunk)
                             self.chunks.remove(chunk)
-                            reshutil.move(fs_encode(self.info.getChunkName(chunk.id)))
+                            os.remove(fs_encode(self.info.getChunkName(chunk.id)))
 
                         # let first chunk load the rest and update the info file
                         init.resetRange()

@@ -230,3 +230,15 @@ def check_prog(self, command):
 
     except Exception:
         return False
+
+        
+# Case-sensitive os.path.exists
+def exists(path):
+    if os.path.exists(path):
+        if os.name == 'nt':
+            dir, name = os.path.split(path)
+            return name in os.listdir(dir)
+        else:
+            return True
+    else:
+        return False

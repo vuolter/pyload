@@ -10,6 +10,7 @@ import time
 import urlparse
 
 from pyload.Datatype import PyFile
+from pyload.utils import decode
 from pyload.utils.packagetools import parseNames
 from pyload.network.RequestFactory import getURL
 from pyload.remote import activated
