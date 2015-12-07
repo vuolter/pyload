@@ -167,8 +167,6 @@ def html_unescape(text):
 def load_translation(name, locale, default="en"):
     """Load language and return its translation object or None"""
 
-    import traceback
-
     try:
         gettext.setpaths([os.path.join(os.sep, "usr", "share", "pyload", "locale"), None])
         translation = gettext.translation(name, os.path.join(pypath, "locale"),
