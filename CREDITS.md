@@ -46,4 +46,4 @@ opening topic to share tips and advices, fix troubles or simply discuss about th
 
 
 -----------------------------------
-###### pyLoad Team 2008-2015 ######
+###### pyLoad Team 2008-2016 ######

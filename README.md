@@ -268,4 +268,4 @@ Please refer to the attached [CREDITS.md](/CREDITS.md) for the extended credits.
 
 
 -----------------------------------
-###### pyLoad Team 2008-2015 ######
+###### pyLoad Team 2008-2016 ######

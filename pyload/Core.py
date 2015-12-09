@@ -98,7 +98,7 @@ class Core(object):
 
     def print_help(self):
         print
-        print "pyLoad v%s     2008-2015 the pyLoad Team" % pyload.__version__
+        print "pyLoad v%s     2008-2016 the pyLoad Team" % pyload.__version__
         print
         if sys.argv[0].endswith(".py"):
             print "Usage: python pyload.py [options]"
