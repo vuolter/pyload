@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class FilezyNet(DeadHoster):
+class Filezy_net(Dead_hoster):
     __name    = "FilezyNet"
     __type    = "hoster"
     __version = "0.20"

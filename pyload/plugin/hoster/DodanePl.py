@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class DodanePl(DeadHoster):
+class Dodane_pl(Dead_hoster):
     __name    = "DodanePl"
     __type    = "hoster"
     __version = "0.03"

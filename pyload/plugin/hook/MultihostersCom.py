@@ -3,7 +3,7 @@
 from pyload.plugin.hook.ZeveraCom import ZeveraCom
 
 
-class MultihostersCom(ZeveraCom):
+class Multihosters_com(Zevera_com):
     __name    = "MultihostersCom"
     __type    = "hook"
     __version = "0.02"

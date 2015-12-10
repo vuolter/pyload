@@ -5,7 +5,7 @@ import re
 from pyload.plugin.internal.MultiHook import MultiHook
 
 
-class MultishareCz(MultiHook):
+class Multishare_cz(Multi_hook):
     __name    = "MultishareCz"
     __type    = "hook"
     __version = "0.07"
@@ -24,6 +24,6 @@ class MultishareCz(MultiHook):
     HOSTER_PATTERN = r'<img class="logo-shareserveru"[^>]*?alt="(.+?)"></td>\s*<td class="stav">[^>]*?alt="OK"'
 
 
-    def getHosters(self):
+    def get_hosters(self):
         html = self.getURL("http://www.multishare.cz/monitoring/")
         return re.findall(self.HOSTER_PATTERN, html)

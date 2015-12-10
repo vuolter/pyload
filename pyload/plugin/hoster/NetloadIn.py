@@ -10,7 +10,7 @@ from pyload.plugin.Plugin import chunks
 from pyload.plugin.captcha.ReCaptcha import ReCaptcha
 
 
-def getInfo(urls):
+def get_info(urls):
     ##  returns list of tupels (name, size (in bytes), status (see database.File), url)
 
     apiurl = "http://api.netload.in/info.php"
@@ -32,11 +32,11 @@ def getInfo(urls):
                      decode=True)
 
         if api is None or len(api) < 10:
-            self.logDebug("Prefetch failed")
+            self.log_debug("Prefetch failed")
             return
 
         if api.find("unknown_auth") >= 0:
-            self.logDebug("Outdated auth code")
+            self.log_debug("Outdated auth code")
             return
 
         result = []
@@ -53,12 +53,12 @@ def getInfo(urls):
                 result.append((tmp[1], size, 2 if tmp[3] == "online" else 1, chunk[i] ))
 
             except Exception:
-                self.logDebug("Error while processing response: %s" % r)
+                self.log_debug("Error while processing response: %s" % r)
 
         yield result
 
 
-class NetloadIn(Hoster):
+class Netload_in(Hoster):
     __name    = "NetloadIn"
     __type    = "hoster"
     __version = "0.49"
@@ -96,15 +96,15 @@ class NetloadIn(Hoster):
             self.pyfile.name = self.api_data['filename']
 
         if self.premium:
-            self.logDebug("Use Premium Account")
+            self.log_debug("Use Premium Account")
 
             settings = self.load("http://www.netload.in/index.php", get={'id': 2, 'lang': "en"})
 
             if '<option value="2" selected="selected">Direkter Download' in settings:
-                self.logDebug("Using direct download")
+                self.log_debug("Using direct download")
                 return True
             else:
-                self.logDebug("Direct downloads not enabled. Parsing html for a download URL")
+                self.log_debug("Direct downloads not enabled. Parsing html for a download URL")
 
         if self.download_html():
             return True
@@ -121,7 +121,7 @@ class NetloadIn(Hoster):
         if match:
             # normalize url
             self.url = 'http://www.netload.in/datei%s.htm' % match.group('ID')
-            self.logDebug("URL: %s" % self.url)
+            self.log_debug("URL: %s" % self.url)
         else:
             self.api_data = False
             return
@@ -131,12 +131,12 @@ class NetloadIn(Hoster):
                         get={"file_id": match.group('ID'), "auth": "Zf9SnQh9WiReEsb18akjvQGqT0I830e8", "bz": "1",
                              "md5": "1"}, decode=True).strip()
         if not html and n <= 3:
-            self.setWait(2)
+            self.set_wait(2)
             self.wait()
             self.api_load(n + 1)
             return
 
-        self.logDebug("APIDATA: " + html)
+        self.log_debug("APIDATA: " + html)
 
         self.api_data = {}
 
@@ -162,9 +162,9 @@ class NetloadIn(Hoster):
     def final_wait(self, page):
         wait_time = self.get_wait_time.time(page)
 
-        self.setWait(wait_time)
+        self.set_wait(wait_time)
 
-        self.logDebug("Final wait %d seconds" % wait_time)
+        self.log_debug("Final wait %d seconds" % wait_time)
 
         self.wait()
 
@@ -174,7 +174,7 @@ class NetloadIn(Hoster):
     def check_free_wait(self, page):
         if ">An access request has been made from IP address <" in page:
             self.wantReconnect = True
-            self.setWait(self.get_wait_time.time(page) or 30)
+            self.set_wait(self.get_wait_time.time(page) or 30)
             self.wait()
             return True
         else:
@@ -185,11 +185,11 @@ class NetloadIn(Hoster):
         page = self.load(self.url, decode=True)
 
         if "/share/templates/download_hddcrash.tpl" in page:
-            self.logError(_("Netload HDD Crash"))
+            self.log_error(_("Netload HDD Crash"))
             self.fail(_("File temporarily not available"))
 
         if not self.api_data:
-            self.logDebug("API Data may be useless, get details from html page")
+            self.log_debug("API Data may be useless, get details from html page")
 
             if "* The file was deleted" in page:
                 self.offline()
@@ -209,23 +209,23 @@ class NetloadIn(Hoster):
                 t = time.time() + 30
 
             if "/share/templates/download_hddcrash.tpl" in page:
-                self.logError(_("Netload HDD Crash"))
+                self.log_error(_("Netload HDD Crash"))
                 self.fail(_("File temporarily not available"))
 
-            self.logDebug("Try number %d " % i)
+            self.log_debug("Try number %d " % i)
 
             if ">Your download is being prepared.<" in page:
-                self.logDebug("We will prepare your download")
+                self.log_debug("We will prepare your download")
                 self.final_wait(page)
                 return True
 
-            self.logDebug("Trying to find captcha")
+            self.log_debug("Trying to find captcha")
 
             try:
                 url_captcha_html = re.search(r'(index.php\?id=10&amp;.*&amp;captcha=1)', page).group(1).replace("amp;", "")
 
             except Exception, e:
-                self.logDebug("Exception during Captcha regex: %s" % e.message)
+                self.log_debug("Exception during Captcha regex: %s" % e.message)
                 page = None
 
             else:
@@ -249,12 +249,12 @@ class NetloadIn(Hoster):
                 break
 
             if self.check_free_wait(response_page):
-                self.logDebug("Had to wait for next free slot, trying again")
+                self.log_debug("Had to wait for next free slot, trying again")
                 return self.download_html()
 
             else:
                 download_url = self.get_file_url(response_page)
-                self.logDebug("Download URL after get_file: " + download_url)
+                self.log_debug("Download URL after get_file: " + download_url)
                 if not download_url.startswith("http://"):
                     self.error(_("Download url: %s") % download_url)
                 self.wait()
@@ -270,13 +270,13 @@ class NetloadIn(Hoster):
             if attempt:
                 return attempt.group(1)
             else:
-                self.logDebug("Backup try for final link")
+                self.log_debug("Backup try for final link")
                 file_url_pattern = r'<a href="(.+)" class="Orange_Link">Click here'
                 attempt = re.search(file_url_pattern, page)
                 return "http://netload.in/" + attempt.group(1)
 
         except Exception, e:
-            self.logDebug("Getting final link failed", e.message)
+            self.log_debug("Getting final link failed", e.message)
             return None
 
 
@@ -287,10 +287,10 @@ class NetloadIn(Hoster):
     def proceed(self, url):
         self.download(url, disposition=True)
 
-        check = self.checkDownload({'empty'  : re.compile(r'^$'),
+        check = self.check_download({'empty'  : re.compile(r'^$'),
                                     'offline': re.compile("The file was deleted")})
         if check == "empty":
-            self.logInfo(_("Downloaded File was empty"))
+            self.log_info(_("Downloaded File was empty"))
             self.retry()
 
         elif check == "offline":

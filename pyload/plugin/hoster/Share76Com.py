@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class Share76Com(DeadHoster):
+class Share76_com(Dead_hoster):
     __name    = "Share76Com"
     __type    = "hoster"
     __version = "0.04"

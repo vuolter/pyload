@@ -21,7 +21,7 @@ class Bucket(object):
         return self.rate >= MIN_RATE
 
 
-    def setRate(self, rate):
+    def set_rate(self, rate):
         self.lock.acquire()
         self.rate = int(rate)
         self.lock.release()

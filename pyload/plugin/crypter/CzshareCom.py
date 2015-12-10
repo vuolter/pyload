@@ -4,7 +4,7 @@ import re
 from pyload.plugin.Crypter import Crypter
 
 
-class CzshareCom(Crypter):
+class Czshare_com(Crypter):
     __name    = "CzshareCom"
     __type    = "crypter"
     __version = "0.20"

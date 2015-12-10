@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSAccount import XFSAccount
 
 
-class LinestorageCom(XFSAccount):
+class Linestorage_com(XFSAccount):
     __name    = "LinestorageCom"
     __type    = "account"
     __version = "0.03"

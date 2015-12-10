@@ -6,7 +6,7 @@
 from pyload.plugin.internal.XFSHoster import XFSHoster
 
 
-class VidPlayNet(XFSHoster):
+class Vid_play_net(XFSHoster):
     __name    = "VidPlayNet"
     __type    = "hoster"
     __version = "0.04"

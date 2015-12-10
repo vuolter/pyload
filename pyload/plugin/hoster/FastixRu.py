@@ -4,7 +4,7 @@ from pyload.utils import json_loads
 from pyload.plugin.internal.MultiHoster import MultiHoster
 
 
-class FastixRu(MultiHoster):
+class Fastix_ru(Multi_hoster):
     __name    = "FastixRu"
     __type    = "hoster"
     __version = "0.11"
@@ -22,7 +22,7 @@ class FastixRu(MultiHoster):
 
 
     def handle_premium(self, pyfile):
-        api_key = self.account.getAccountData(self.user)
+        api_key = self.account.get_account_data(self.user)
         api_key = api_key['api']
 
         self.html = self.load("http://fastix.ru/api_v2/",
@@ -30,7 +30,7 @@ class FastixRu(MultiHoster):
 
         data = json_loads(self.html)
 
-        self.logDebug("Json data", data)
+        self.log_debug("Json data", data)
 
         if "error\":true" in self.html:
             self.offline()

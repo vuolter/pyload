@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadCrypter import DeadCrypter
 
 
-class HotfileCom(DeadCrypter):
+class Hotfile_com(Dead_crypter):
     __name    = "HotfileCom"
     __type    = "crypter"
     __version = "0.30"

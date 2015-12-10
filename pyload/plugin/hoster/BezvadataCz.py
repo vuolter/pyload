@@ -5,7 +5,7 @@ import re
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class BezvadataCz(SimpleHoster):
+class Bezvadata_cz(Simple_hoster):
     __name    = "BezvadataCz"
     __type    = "hoster"
     __version = "0.26"
@@ -37,9 +37,9 @@ class BezvadataCz(SimpleHoster):
 
         # captcha form
         self.html = self.load(url)
-        self.checkErrors()
+        self.check_errors()
         for _i in xrange(5):
-            action, inputs = self.parseHtmlForm('frm-stahnoutFreeForm')
+            action, inputs = self.parse_html_form('frm-stahnoutFreeForm')
             if not inputs:
                 self.error(_("FreeForm"))
 
@@ -50,26 +50,26 @@ class BezvadataCz(SimpleHoster):
             # captcha image is contained in html page as base64encoded data but decryptCaptcha() expects image url
             self.load, proper_load = self.loadcaptcha, self.load
             try:
-                inputs['captcha'] = self.decryptCaptcha(m.group(1), imgtype='png')
+                inputs['captcha'] = self.decrypt_captcha(m.group(1), imgtype='png')
             finally:
                 self.load = proper_load
 
             if '<img src="data:image/png;base64' in self.html:
-                self.invalidCaptcha()
+                self.invalid_captcha()
             else:
-                self.correctCaptcha()
+                self.correct_captcha()
                 break
         else:
             self.fail(_("No valid captcha code entered"))
 
         # download url
         self.html = self.load("http://bezvadata.cz%s" % action, post=inputs)
-        self.checkErrors()
+        self.check_errors()
         m = re.search(r'<a class="stahnoutSoubor2" href="(.*?)">', self.html)
         if m is None:
             self.error(_("Page 2 URL not found"))
         url = "http://bezvadata.cz%s" % m.group(1)
-        self.logDebug("DL URL %s" % url)
+        self.log_debug("DL URL %s" % url)
 
         # countdown
         m = re.search(r'id="countdown">(\d\d):(\d\d)<', self.html)
@@ -79,11 +79,11 @@ class BezvadataCz(SimpleHoster):
         self.link = url
 
 
-    def checkErrors(self):
+    def check_errors(self):
         if 'images/button-download-disable.png' in self.html:
-            self.longWait(5 * 60, 24)  #: parallel dl limit
+            self.long_wait(5 * 60, 24)  #: parallel dl limit
         elif '<div class="infobox' in self.html:
-            self.tempOffline()
+            self.temp_offline()
 
         self.info.pop('error', None)
 

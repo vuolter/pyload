@@ -4,7 +4,7 @@ from pyload.plugin.Account import Account
 from pyload.utils import json_loads
 
 
-class FourSharedCom(Account):
+class Four_shared_com(Account):
     __name    = "FourSharedCom"
     __type    = "account"
     __version = "0.04"
@@ -15,7 +15,7 @@ class FourSharedCom(Account):
                        ("stickell", "l.stickell@yahoo.it")]
 
 
-    def loadAccountInfo(self, user, req):
+    def load_account_info(self, user, req):
         # Free mode only for now
         return {"premium": False}
 
@@ -32,4 +32,4 @@ class FourSharedCom(Account):
                        decode=True)
 
         if 'Please log in to access your 4shared account' in res:
-            self.wrongPassword()
+            self.wrong_password()

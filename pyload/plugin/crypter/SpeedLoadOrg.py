@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadCrypter import DeadCrypter
 
 
-class SpeedLoadOrg(DeadCrypter):
+class Speed_load_org(Dead_crypter):
     __name    = "SpeedLoadOrg"
     __type    = "crypter"
     __version = "0.30"

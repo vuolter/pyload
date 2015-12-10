@@ -8,7 +8,7 @@ from pyload.plugin.extractor.UnRar import ArchiveError, CRCError, PasswordError,
 from pyload.utils import fs_encode, fs_join
 
 
-class SevenZip(UnRar):
+class Seven_zip(Un_rar):
     __name    = "SevenZip"
     __type    = "extractor"
     __version = "0.11"
@@ -39,7 +39,7 @@ class SevenZip(UnRar):
 
 
     @classmethod
-    def isUsable(cls):
+    def is_usable(cls):
         if os.name == "nt":
             cls.CMD = os.path.join(pypath, "7z.exe")
             p = subprocess.Popen([cls.CMD], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -148,7 +148,7 @@ class SevenZip(UnRar):
         #@NOTE: return codes are not reliable, some kind of threading, cleanup whatever issue
         call = [self.CMD, command] + args + list(xargs)
 
-        self.manager.logDebug(" ".join(call))
+        self.manager.log_debug(" ".join(call))
 
         p = subprocess.Popen(call, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         return p

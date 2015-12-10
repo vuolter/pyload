@@ -8,7 +8,7 @@ from pyload.plugin.internal.SimpleHoster import SimpleHoster, replace_patterns, 
 from pyload.utils import fixup
 
 
-class SimpleCrypter(Crypter, SimpleHoster):
+class Simple_crypter(Crypter, Simple_hoster):
     __name    = "SimpleCrypter"
     __type    = "crypter"
     __version = "0.43"
@@ -48,7 +48,7 @@ class SimpleCrypter(Crypter, SimpleHoster):
 
     and its loadPage method:
 
-      def loadPage(self, page_n):
+      def load_page(self, page_n):
           return the html of the page number page_n
     """
 
@@ -75,7 +75,7 @@ class SimpleCrypter(Crypter, SimpleHoster):
         if self.LOGIN_ACCOUNT and not self.account:
             self.fail(_("Required account not found"))
 
-        self.req.setOption("timeout", 120)
+        self.req.set_option("timeout", 120)
 
         if isinstance(self.COOKIES, list):
             set_cookies(self.req.cj, self.COOKIES)
@@ -87,14 +87,14 @@ class SimpleCrypter(Crypter, SimpleHoster):
         self.prepare()
 
         self.preload()
-        self.checkInfo()
+        self.check_info()
 
-        self.links = self.getLinks()
+        self.links = self.get_links()
 
         if hasattr(self, 'PAGES_PATTERN') and hasattr(self, 'loadPage'):
             self.handle_pages(pyfile)
 
-        self.logDebug("Package has %d links" % len(self.links))
+        self.log_debug("Package has %d links" % len(self.links))
 
         if self.links:
             self.packages = [(self.info['name'], self.links, self.info['folder'])]
@@ -103,11 +103,11 @@ class SimpleCrypter(Crypter, SimpleHoster):
             self.fail(_("No link grabbed"))
 
 
-    def checkNameSize(self, getinfo=True):
+    def check_name_size(self, getinfo=True):
         if not self.info or getinfo:
-            self.logDebug("File info (BEFORE): %s" % self.info)
-            self.info.update(self.getInfo(self.pyfile.url, self.html))
-            self.logDebug("File info (AFTER): %s"  % self.info)
+            self.log_debug("File info (BEFORE): %s" % self.info)
+            self.info.update(self.get_info(self.pyfile.url, self.html))
+            self.log_debug("File info (AFTER): %s"  % self.info)
 
         try:
             url  = self.info['url'].strip()
@@ -124,11 +124,11 @@ class SimpleCrypter(Crypter, SimpleHoster):
         except Exception:
             pass
 
-        self.logDebug("File name: %s"   % self.pyfile.name,
+        self.log_debug("File name: %s"   % self.pyfile.name,
                       "File folder: %s" % self.pyfile.name)
 
 
-    def getLinks(self):
+    def get_links(self):
         """
         Returns the links extracted from self.html
         You should override this only if it's impossible to extract links using only the LINK_PATTERN.
@@ -147,5 +147,5 @@ class SimpleCrypter(Crypter, SimpleHoster):
             pages = 1
 
         for p in xrange(2, pages + 1):
-            self.html = self.loadPage(p)
-            self.links += self.getLinks()
+            self.html = self.load_page(p)
+            self.links += self.get_links()

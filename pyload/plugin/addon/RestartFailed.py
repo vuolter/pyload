@@ -3,7 +3,7 @@
 from pyload.plugin.Addon import Addon
 
 
-class RestartFailed(Addon):
+class Restart_failed(Addon):
     __name    = "RestartFailed"
     __type    = "addon"
     __version = "1.58"
@@ -21,23 +21,23 @@ class RestartFailed(Addon):
     MIN_CHECK_INTERVAL = 15 * 60  #: 15 minutes
 
 
-    # def pluginConfigChanged(self, plugin, name, value):
+    # def plugin_config_changed(self, plugin, name, value):
         # if name == "interval":
             # interval = value * 60
             # if self.MIN_CHECK_INTERVAL <= interval != self.interval:
-                # self.pyload.scheduler.removeJob(self.cb)
+                # self.pyload.scheduler.remove_job(self.cb)
                 # self.interval = interval
-                # self.initPeriodical()
+                # self.init_periodical()
             # else:
-                # self.logDebug("Invalid interval value, kept current")
+                # self.log_debug("Invalid interval value, kept current")
 
 
     def periodical(self):
-        self.logDebug(_("Restart failed downloads"))
-        self.pyload.api.restartFailed()
+        self.log_debug(_("Restart failed downloads"))
+        self.pyload.api.restart_failed()
 
 
     def activate(self):
-        # self.pluginConfigChanged(self.getClassName(), "interval", self.getConfig('interval'))
-        self.interval = max(self.MIN_CHECK_INTERVAL, self.getConfig('interval') * 60)
-        self.initPeriodical()
+        # self.plugin_config_changed(self.get_class_name(), "interval", self.get_config('interval'))
+        self.interval = max(self.MIN_CHECK_INTERVAL, self.get_config('interval') * 60)
+        self.init_periodical()

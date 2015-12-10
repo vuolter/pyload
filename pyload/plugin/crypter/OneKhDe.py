@@ -7,7 +7,7 @@ from pyload.utils import html_unescape
 from pyload.plugin.Crypter import Crypter
 
 
-class OneKhDe(Crypter):
+class One_kh_de(Crypter):
     __name    = "OneKhDe"
     __type    = "crypter"
     __version = "0.11"

@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class UnrestrictLi(DeadHoster):
+class Unrestrict_li(Dead_hoster):
     __name    = "UnrestrictLi"
     __type    = "hoster"
     __version = "0.23"

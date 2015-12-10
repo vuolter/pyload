@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadCrypter import DeadCrypter
 
 
-class RSLayerCom(DeadCrypter):
+class RSLayer_com(Dead_crypter):
     __name    = "RSLayerCom"
     __type    = "crypter"
     __version = "0.21"

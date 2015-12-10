@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSAccount import XFSAccount
 
 
-class SendmywayCom(XFSAccount):
+class Sendmyway_com(XFSAccount):
     __name    = "SendmywayCom"
     __type    = "account"
     __version = "0.02"

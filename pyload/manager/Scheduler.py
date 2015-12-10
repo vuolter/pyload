@@ -6,7 +6,7 @@ import threading
 import time
 
 
-class AlreadyCalled(Exception):
+class Already_called(Exception):
     pass
 
 
@@ -17,7 +17,7 @@ class Deferred(object):
         self.result = ()
 
 
-    def addCallback(self, f, *cargs, **ckwargs):
+    def add_callback(self, f, *cargs, **ckwargs):
         self.call.append((f, cargs, ckwargs))
 
 
@@ -36,10 +36,10 @@ class Scheduler(object):
     def __init__(self, core):
         self.pyload = core
 
-        self.queue = PriorityQueue()
+        self.queue = Priority_queue()
 
 
-    def addJob(self, t, call, args=[], kwargs={}, threaded=True):
+    def add_job(self, t, call, args=[], kwargs={}, threaded=True):
         d = Deferred()
         t += time.time()
         j = Job(t, call, args, kwargs, d, threaded)
@@ -47,7 +47,7 @@ class Scheduler(object):
         return d
 
 
-    def removeJob(self, d):
+    def remove_job(self, d):
         """
         :param d: defered object
         :return: if job was deleted
@@ -106,7 +106,7 @@ class Job(object):
             self.run()
 
 
-class PriorityQueue(object):
+class Priority_queue(object):
     """A non blocking priority queue"""
 
     def __init__(self):

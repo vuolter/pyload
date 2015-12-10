@@ -3,7 +3,7 @@
 from pyload.plugin.internal.SimpleCrypter import SimpleCrypter
 
 
-class FilefactoryCom(SimpleCrypter):
+class Filefactory_com(Simple_crypter):
     __name    = "FilefactoryCom"
     __type    = "crypter"
     __version = "0.32"
@@ -25,5 +25,5 @@ class FilefactoryCom(SimpleCrypter):
     PAGES_PATTERN = r'data-paginator-totalPages="(\d+)'
 
 
-    def loadPage(self, page_n):
+    def load_page(self, page_n):
         return self.load(self.pyfile.url, get={'page': page_n, 'show': 100})

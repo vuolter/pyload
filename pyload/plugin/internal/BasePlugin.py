@@ -9,7 +9,7 @@ from pyload.plugin.internal.SimpleHoster import getFileURL
 from pyload.plugin.Hoster import Hoster
 
 
-class BasePlugin(Hoster):
+class Base_plugin(Hoster):
     __name    = "BasePlugin"
     __type    = "hoster"
     __version = "0.43"
@@ -23,7 +23,7 @@ class BasePlugin(Hoster):
 
 
     @classmethod
-    def getInfo(cls, url="", html=""):  #@TODO: Move to hoster class in 0.4.10
+    def get_info(cls, url="", html=""):  #@TODO: Move to hoster class in 0.4.10
         url   = urllib.unquote(url)
         url_p = urlparse.urlparse(url)
         return {'name'  : (url_p.path.split('/')[-1]
@@ -41,7 +41,7 @@ class BasePlugin(Hoster):
     def process(self, pyfile):
         """Main function"""
 
-        pyfile.name = self.getInfo(pyfile.url)['name']
+        pyfile.name = self.get_info(pyfile.url)['name']
 
         if not pyfile.url.startswith("http"):
             self.fail(_("No plugin matched"))
@@ -60,19 +60,19 @@ class BasePlugin(Hoster):
                     self.offline()
 
                 elif e.code in (401, 403):
-                    self.logDebug("Auth required", "Received HTTP status code: %d" % e.code)
+                    self.log_debug("Auth required", "Received HTTP status code: %d" % e.code)
 
-                    account = self.pyload.accountManager.getAccountPlugin('Http')
+                    account = self.pyload.accountManager.get_account_plugin('Http')
                     servers = [x['login'] for x in account.getAllAccounts()]
                     server  = urlparse.urlparse(pyfile.url).netloc
 
                     if server in servers:
-                        self.logDebug("Logging on to %s" % server)
-                        self.req.addAuth(account.getAccountData(server)['password'])
+                        self.log_debug("Logging on to %s" % server)
+                        self.req.add_auth(account.get_account_data(server)['password'])
                     else:
-                        pwd = self.getPassword()
+                        pwd = self.get_password()
                         if ':' in pwd:
-                            self.req.addAuth(pwd)
+                            self.req.add_auth(pwd)
                         else:
                             self.fail(_("Authorization required"))
                 else:
@@ -82,7 +82,7 @@ class BasePlugin(Hoster):
         else:
             self.fail(_("No file downloaded"))  #@TODO: Move to hoster class in 0.4.10
 
-        errmsg = self.checkDownload({'Empty file'   : re.compile(r'\A\s*\Z'),
+        errmsg = self.check_download({'Empty file'   : re.compile(r'\A\s*\Z'),
                                      'Html error'   : re.compile(r'\A(?:\s*<.+>)?((?:[\w\s]*(?:[Ee]rror|ERROR)\s*\:?)?\s*\d{3})(?:\Z|\s+)'),
                                      'Html file'    : re.compile(r'\A\s*<!DOCTYPE html'),
                                      'Request error': re.compile(r'([Aa]n error occured while processing your request)')})
@@ -94,5 +94,5 @@ class BasePlugin(Hoster):
         except Exception:
             pass
 
-        self.logWarning("Check result: " + errmsg, "Waiting 1 minute and retry")
+        self.log_warning("Check result: " + errmsg, "Waiting 1 minute and retry")
         self.retry(3, 60, errmsg)

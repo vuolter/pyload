@@ -6,7 +6,7 @@ import time
 from pyload.plugin.Account import Account
 
 
-class MegaRapidCz(Account):
+class Mega_rapid_cz(Account):
     __name    = "MegaRapidCz"
     __type    = "account"
     __version = "0.35"
@@ -24,12 +24,12 @@ class MegaRapidCz(Account):
     TRAFFIC_LEFT_PATTERN = r'<tr><td>Kredit</td><td>(.*?) GiB'
 
 
-    def loadAccountInfo(self, user, req):
+    def load_account_info(self, user, req):
         htmll = req.load("http://megarapid.cz/mujucet/", decode=True)
 
         m = re.search(self.LIMITDL_PATTERN, htmll)
         if m:
-            data = self.getAccountData(user)
+            data = self.get_account_data(user)
             data['options']['limitDL'] = [int(m.group(1))]
 
         m = re.search(self.VALID_UNTIL_PATTERN, htmll)

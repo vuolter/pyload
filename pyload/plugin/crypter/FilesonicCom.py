@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadCrypter import DeadCrypter
 
 
-class FilesonicCom(DeadCrypter):
+class Filesonic_com(Dead_crypter):
     __name    = "FilesonicCom"
     __type    = "crypter"
     __version = "0.12"

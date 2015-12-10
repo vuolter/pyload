@@ -14,7 +14,7 @@ import traceback
 from pyload.remote.thriftbackend.ThriftClient import ThriftClient, Destination
 
 
-def createURLs():
+def create_URLs():
     """Create some urls, some may fail"""
     urls = []
     for x in xrange(0, random.randint(20, 100)):
@@ -33,7 +33,7 @@ idPool = 0
 sumCalled = 0
 
 
-def startApiExerciser(core, n):
+def start_api_exerciser(core, n):
     for _i in xrange(n):
         APIExerciser(core).start()
 
@@ -44,12 +44,12 @@ class APIExerciser(threading.Thread):
         global idPool
 
         threading.Thread.__init__(self)
-        self.setDaemon(True)
+        self.set_daemon(True)
         self.pyload = core
         self.count = 0  #: number of methods
         self.time = time.time()
 
-        self.api = ThriftClient(user=user, password=pw) if thrift else pyload.api
+        self.api = Thrift_client(user=user, password=pw) if thrift else pyload.api
 
         self.id = idPool
 
@@ -111,15 +111,15 @@ class APIExerciser(threading.Thread):
         # print res
 
 
-    def addPackage(self):
+    def add_package(self):
         name = "".join(random.sample(string.ascii_letters, 10))
         urls = createURLs()
 
-        self.api.addPackage(name, urls, random.choice([Destination.Queue.Queue, Destination.Collector]))
+        self.api.add_package(name, urls, random.choice([Destination.Queue.Queue, Destination.Collector]))
 
 
-    def deleteFiles(self):
-        info = self.api.getQueueData()
+    def delete_files(self):
+        info = self.api.get_queue_data()
         if not info:
             return
 
@@ -128,37 +128,37 @@ class APIExerciser(threading.Thread):
 
         if len(fids):
             fids = [f.fid for f in random.sample(fids, random.randint(1, max(len(fids) / 2, 1)))]
-            self.api.deleteFiles(fids)
+            self.api.delete_files(fids)
 
 
-    def deletePackages(self):
-        info = random.choice([self.api.getQueue(), self.api.getCollector()])
+    def delete_packages(self):
+        info = random.choice([self.api.get_queue(), self.api.get_collector()])
         if not info:
             return
 
         pids = [p.pid for p in info]
         if pids:
             pids = random.sample(pids, random.randint(1, max(math.floor(len(pids) / 2.5), 1)))
-            self.api.deletePackages(pids)
+            self.api.delete_packages(pids)
 
 
-    def getFileData(self):
-        info = self.api.getQueueData()
+    def get_file_data(self):
+        info = self.api.get_queue_data()
         if info:
             p = random.choice(info)
             if p.links:
-                self.api.getFileData(random.choice(p.links).fid)
+                self.api.get_file_data(random.choice(p.links).fid)
 
 
-    def getPackageData(self):
-        info = self.api.getQueue()
+    def get_package_data(self):
+        info = self.api.get_queue()
         if info:
-            self.api.getPackageData(random.choice(info).pid)
+            self.api.get_package_data(random.choice(info).pid)
 
 
-    def getAccounts(self):
-        self.api.getAccounts(False)
+    def get_accounts(self):
+        self.api.get_accounts(False)
 
 
-    def getCaptchaTask(self):
-        self.api.getCaptchaTask(False)
+    def get_captcha_task(self):
+        self.api.get_captcha_task(False)

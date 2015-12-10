@@ -4,7 +4,7 @@ from pyload.utils import json_loads
 from pyload.plugin.internal.MultiHoster import MultiHoster
 
 
-class PremiumizeMe(MultiHoster):
+class Premiumize_me(Multi_hoster):
     __name    = "PremiumizeMe"
     __type    = "hoster"
     __version = "0.16"
@@ -29,7 +29,7 @@ class PremiumizeMe(MultiHoster):
             pyfile.name = ".".join(temp)
 
         # Get account data
-        user, data = self.account.selectAccount()
+        user, data = self.account.select_account()
 
         # Get rewritten link using the premiumize.me api v1 (see https://secure.premiumize.me/?show=api)
         data = json_loads(self.load("https://api.premiumize.me/pm-api/v1.php",
@@ -52,7 +52,7 @@ class PremiumizeMe(MultiHoster):
             self.offline()
 
         elif status >= 500:
-            self.tempOffline()
+            self.temp_offline()
 
         else:
             self.fail(data['statusmessage'])

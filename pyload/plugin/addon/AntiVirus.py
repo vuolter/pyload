@@ -13,7 +13,7 @@ from pyload.plugin.Addon import Addon, Expose, threaded
 from pyload.utils import fs_encode, fs_join
 
 
-class AntiVirus(Addon):
+class Anti_virus(Addon):
     __name    = "AntiVirus"
     __type    = "addon"
     __version = "0.09"
@@ -40,8 +40,8 @@ class AntiVirus(Addon):
     def scan(self, pyfile, thread):
         file     = fs_encode(pyfile.plugin.lastDownload)
         filename = os.path.basename(pyfile.plugin.lastDownload)
-        cmdfile  = fs_encode(self.getConfig('cmdfile'))
-        cmdargs  = fs_encode(self.getConfig('cmdargs').strip())
+        cmdfile  = fs_encode(self.get_config('cmdfile'))
+        cmdargs  = fs_encode(self.get_config('cmdargs').strip())
 
         if not os.path.isfile(file) or not os.path.isfile(cmdfile):
             return
@@ -56,20 +56,20 @@ class AntiVirus(Addon):
             out, err = map(str.strip, p.communicate())
 
             if out:
-                self.logInfo(filename, out)
+                self.log_info(filename, out)
 
             if err:
-                self.logWarning(filename, err)
-                if not self.getConfig('ignore-err'):
-                    self.logDebug("Delete/Quarantine task is aborted")
+                self.log_warning(filename, err)
+                if not self.get_config('ignore-err'):
+                    self.log_debug("Delete/Quarantine task is aborted")
                     return
 
             if p.returncode:
                 pyfile.error = _("infected file")
-                action = self.getConfig('action')
+                action = self.get_config('action')
                 try:
                     if action == "Delete":
-                        if not self.getConfig('deltotrash'):
+                        if not self.get_config('deltotrash'):
                             os.remove(file)
 
                         else:
@@ -77,39 +77,39 @@ class AntiVirus(Addon):
                                 send2trash.send2trash(file)
 
                             except NameError:
-                                self.logWarning(_("Send2Trash lib not found, moving to quarantine instead"))
+                                self.log_warning(_("Send2Trash lib not found, moving to quarantine instead"))
                                 pyfile.setCustomStatus(_("file moving"))
-                                shutil.move(file, self.getConfig('quardir'))
+                                shutil.move(file, self.get_config('quardir'))
 
                             except Exception, e:
-                                self.logWarning(_("Unable to move file to trash: %s, moving to quarantine instead") % e.message)
+                                self.log_warning(_("Unable to move file to trash: %s, moving to quarantine instead") % e.message)
                                 pyfile.setCustomStatus(_("file moving"))
-                                shutil.move(file, self.getConfig('quardir'))
+                                shutil.move(file, self.get_config('quardir'))
 
                             else:
-                                self.logDebug(_("Successfully moved file to trash"))
+                                self.log_debug(_("Successfully moved file to trash"))
 
                     elif action == "Quarantine":
                         pyfile.setCustomStatus(_("file moving"))
-                        shutil.move(file, self.getConfig('quardir'))
+                        shutil.move(file, self.get_config('quardir'))
 
                 except (IOError, shutil.Error), e:
-                    self.logError(filename, action + " action failed!", e)
+                    self.log_error(filename, action + " action failed!", e)
 
             elif not out and not err:
-                self.logDebug(filename, "No infected file found")
+                self.log_debug(filename, "No infected file found")
 
         finally:
             pyfile.setProgress(100)
             thread.finishFile(pyfile)
 
 
-    def downloadFinished(self, pyfile):
+    def download_finished(self, pyfile):
         return self.scan(pyfile)
 
 
-    def downloadFailed(self, pyfile):
+    def download_failed(self, pyfile):
         #: Check if pyfile is still "failed",
         #  maybe might has been restarted in meantime
-        if pyfile.status == 8 and self.getConfig('scanfailed'):
+        if pyfile.status == 8 and self.get_config('scanfailed'):
             return self.scan(pyfile)

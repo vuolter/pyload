@@ -3,7 +3,7 @@
 from pyload.plugin.Account import Account
 
 
-class FilesMailRu(Account):
+class Files_mail_ru(Account):
     __name    = "FilesMailRu"
     __type    = "account"
     __version = "0.11"
@@ -13,7 +13,7 @@ class FilesMailRu(Account):
     __authors     = [("RaNaN", "RaNaN@pyload.org")]
 
 
-    def loadAccountInfo(self, user, req):
+    def load_account_info(self, user, req):
         return {"validuntil": None, "trafficleft": None}
 
 
@@ -28,4 +28,4 @@ class FilesMailRu(Account):
                         decode=True)
 
         if "Неверное имя пользователя или пароль" in html:
-            self.wrongPassword()
+            self.wrong_password()

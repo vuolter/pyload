@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSAccount import XFSAccount
 
 
-class FilerioCom(XFSAccount):
+class Filerio_com(XFSAccount):
     __name    = "FilerioCom"
     __type    = "account"
     __version = "0.03"

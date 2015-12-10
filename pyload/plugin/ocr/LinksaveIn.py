@@ -11,7 +11,7 @@ import os
 from pyload.plugin.OCR import OCR
 
 
-class LinksaveIn(OCR):
+class Linksave_in(OCR):
     __name    = "LinksaveIn"
     __type    = "ocr"
     __version = "0.11"

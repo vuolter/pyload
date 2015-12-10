@@ -10,7 +10,7 @@ from pyload.plugin.internal.SimpleHoster import SimpleHoster, replace_patterns
 from pyload.utils import json_loads
 
 
-class CustomBrowser(Browser):
+class Custom_browser(Browser):
 
     def __init__(self, bucket=None, options={}):
         Browser.__init__(self, bucket, options)
@@ -34,7 +34,7 @@ class CustomBrowser(Browser):
         return Browser.load(self, *args, **kwargs)
 
 
-class DlFreeFr(SimpleHoster):
+class Dl_free_fr(Simple_hoster):
     __name    = "DlFreeFr"
     __type    = "hoster"
     __version = "0.28"
@@ -63,7 +63,7 @@ class DlFreeFr(SimpleHoster):
 
     def init(self):
         factory = self.pyload.requestFactory
-        self.req = CustomBrowser(factory.bucket, factory.getOptions())
+        self.req = Custom_browser(factory.bucket, factory.get_options())
 
 
     def process(self, pyfile):
@@ -93,14 +93,14 @@ class DlFreeFr(SimpleHoster):
 
 
     def handle_free(self, pyfile):
-        action, inputs = self.parseHtmlForm('action="getfile.pl"')
+        action, inputs = self.parse_html_form('action="getfile.pl"')
 
         adyoulike = AdYouLike(self)
         response, challenge = adyoulike.challenge()
         inputs.update(response)
 
         self.load("http://dl.free.fr/getfile.pl", post=inputs)
-        headers = self.getLastHeaders()
+        headers = self.get_last_headers()
         if headers.get("code") == 302 and "set-cookie" in headers and "location" in headers:
             m = re.search("(.*?)=(.*?); path=(.*?); domain=(.*?)", headers.get("set-cookie"))
             cj = CookieJar(__name)
@@ -111,12 +111,12 @@ class DlFreeFr(SimpleHoster):
 
             self.link = headers.get("location")
 
-            self.req.setCookieJar(cj)
+            self.req.set_cookie_jar(cj)
         else:
             self.fail(_("Invalid response"))
 
 
-    def getLastHeaders(self):
+    def get_last_headers(self):
         # parse header
         header = {"code": self.req.code}
         for line in self.req.http.header.splitlines():

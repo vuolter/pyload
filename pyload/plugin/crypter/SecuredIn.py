@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadCrypter import DeadCrypter
 
 
-class SecuredIn(DeadCrypter):
+class Secured_in(Dead_crypter):
     __name    = "SecuredIn"
     __type    = "crypter"
     __version = "0.21"

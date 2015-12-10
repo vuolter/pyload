@@ -6,7 +6,7 @@ import time
 from pyload.plugin.Account import Account
 
 
-class DepositfilesCom(Account):
+class Depositfiles_com(Account):
     __name    = "DepositfilesCom"
     __type    = "account"
     __version = "0.32"
@@ -18,7 +18,7 @@ class DepositfilesCom(Account):
                        ("Walter Purcaro", "vuolter@gmail.com")]
 
 
-    def loadAccountInfo(self, user, req):
+    def load_account_info(self, user, req):
         html = req.load("https://dfiles.eu/de/gold/")
         validuntil = re.search(r"Sie haben Gold Zugang bis: <b>(.*?)</b></div>", html).group(1)
 
@@ -33,4 +33,4 @@ class DepositfilesCom(Account):
                         decode=True)
 
         if r'<div class="error_message">Sie haben eine falsche Benutzername-Passwort-Kombination verwendet.</div>' in html:
-            self.wrongPassword()
+            self.wrong_password()

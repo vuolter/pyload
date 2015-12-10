@@ -9,7 +9,7 @@ from pyxmpp.jabber.client import JabberClient
 from pyload.plugin.addon.IRCInterface import IRCInterface
 
 
-class XMPPInterface(IRCInterface, JabberClient):
+class XMPPInterface(IRCInterface, Jabber_client):
     __name    = "XMPPInterface"
     __type    = "addon"
     __version = "0.11"
@@ -33,14 +33,14 @@ class XMPPInterface(IRCInterface, JabberClient):
     def __init__(self, core, manager):
         IRCInterface.__init__(self, core, manager)
 
-        self.jid = JID(self.getConfig('jid'))
-        password = self.getConfig('pw')
+        self.jid = JID(self.get_config('jid'))
+        password = self.get_config('pw')
 
         # if bare JID is provided add a resource -- it is required
         if not self.jid.resource:
             self.jid = JID(self.jid.node, self.jid.domain, "pyLoad")
 
-        if self.getConfig('tls'):
+        if self.get_config('tls'):
             tls_settings = streamtls.TLSSettings(require=True, verify_peer=False)
             auth = ("sasl:PLAIN", "sasl:DIGEST-MD5")
         else:
@@ -65,17 +65,17 @@ class XMPPInterface(IRCInterface, JabberClient):
         self.start()
 
 
-    def packageFinished(self, pypack):
+    def package_finished(self, pypack):
         try:
-            if self.getConfig('info_pack'):
+            if self.get_config('info_pack'):
                 self.announce(_("Package finished: %s") % pypack.name)
         except Exception:
             pass
 
 
-    def downloadFinished(self, pyfile):
+    def download_finished(self, pyfile):
         try:
-            if self.getConfig('info_file'):
+            if self.get_config('info_file'):
                 self.announce(
                     _("Download finished: %(name)s @ %(plugin)s") % {"name": pyfile.name, "plugin": pyfile.pluginname})
         except Exception:
@@ -88,26 +88,26 @@ class XMPPInterface(IRCInterface, JabberClient):
         try:
             self.loop()
         except Exception, ex:
-            self.logError(ex)
+            self.log_error(ex)
 
 
     def stream_state_changed(self, state, arg):
         """This one is called when the state of stream connecting the component
         to a server changes. This will usually be used to let the user
         know what is going on."""
-        self.logDebug("*** State changed: %s %r ***" % (state, arg))
+        self.log_debug("*** State changed: %s %r ***" % (state, arg))
 
 
     def disconnected(self):
-        self.logDebug("Client was disconnected")
+        self.log_debug("Client was disconnected")
 
 
     def stream_closed(self, stream):
-        self.logDebug("Stream was closed", stream)
+        self.log_debug("Stream was closed", stream)
 
 
     def stream_error(self, err):
-        self.logDebug("Stream Error", err)
+        self.log_debug("Stream Error", err)
 
 
     def get_message_handlers(self):
@@ -123,8 +123,8 @@ class XMPPInterface(IRCInterface, JabberClient):
         subject = stanza.get_subject()
         body = stanza.get_body()
         t = stanza.get_type()
-        self.logDebug("Message from %s received." % unicode(stanza.get_from()))
-        self.logDebug("Body: %s Subject: %s Type: %s" % (body, subject, t))
+        self.log_debug("Message from %s received." % unicode(stanza.get_from()))
+        self.log_debug("Body: %s Subject: %s Type: %s" % (body, subject, t))
 
         if t == "headline":
             # 'headline' messages should never be replied to
@@ -139,7 +139,7 @@ class XMPPInterface(IRCInterface, JabberClient):
         to_name = to_jid.as_utf8()
         from_name = from_jid.as_utf8()
 
-        names = self.getConfig('owners').split(";")
+        names = self.get_config('owners').split(";")
 
         if to_name in names or to_jid.node + "@" + to_jid.domain in names:
             messages = []
@@ -168,7 +168,7 @@ class XMPPInterface(IRCInterface, JabberClient):
 
                     messages.append(m)
             except Exception, e:
-                self.logError(e)
+                self.log_error(e)
 
             return messages
 
@@ -182,8 +182,8 @@ class XMPPInterface(IRCInterface, JabberClient):
 
     def announce(self, message):
         """Send message to all owners"""
-        for user in self.getConfig('owners').split(";"):
-            self.logDebug("Send message to", user)
+        for user in self.get_config('owners').split(";"):
+            self.log_debug("Send message to", user)
 
             to_jid = JID(user)
 
@@ -200,15 +200,15 @@ class XMPPInterface(IRCInterface, JabberClient):
             stream.send(m)
 
 
-    def beforeReconnecting(self, ip):
+    def before_reconnecting(self, ip):
         self.disconnect()
 
 
-    def afterReconnecting(self, ip):
+    def after_reconnecting(self, ip):
         self.connect()
 
 
-class VersionHandler(object):
+class Version_handler(object):
     """Provides handler for a version query.
     This class will answer version query and announce 'jabber:iq:version' namespace
     in the client's disco#info results."""

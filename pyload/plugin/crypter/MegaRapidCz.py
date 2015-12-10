@@ -3,7 +3,7 @@
 from pyload.plugin.internal.SimpleCrypter import SimpleCrypter
 
 
-class MegaRapidCz(SimpleCrypter):
+class Mega_rapid_cz(Simple_crypter):
     __name    = "MegaRapidCz"
     __type    = "crypter"
     __version = "0.02"

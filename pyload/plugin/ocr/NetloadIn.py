@@ -3,7 +3,7 @@
 from pyload.plugin.OCR import OCR
 
 
-class NetloadIn(OCR):
+class Netload_in(OCR):
     __name    = "NetloadIn"
     __type    = "ocr"
     __version = "0.11"

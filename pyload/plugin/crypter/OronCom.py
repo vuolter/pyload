@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadCrypter import DeadCrypter
 
 
-class OronCom(DeadCrypter):
+class Oron_com(Dead_crypter):
     __name    = "OronCom"
     __type    = "crypter"
     __version = "0.11"

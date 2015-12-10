@@ -5,7 +5,7 @@ import re
 from pyload.plugin.internal.SimpleCrypter import SimpleCrypter
 
 
-class NetfolderIn(SimpleCrypter):
+class Netfolder_in(Simple_crypter):
     __name    = "NetfolderIn"
     __type    = "crypter"
     __version = "0.72"
@@ -28,44 +28,44 @@ class NetfolderIn(SimpleCrypter):
         super(NetfolderIn, self).prepare()
 
         # Check for password protection
-        if self.isPasswordProtected():
-            self.html = self.submitPassword()
+        if self.is_password_protected():
+            self.html = self.submit_password()
             if not self.html:
                 self.fail(_("Incorrect password, please set right password on Add package form and retry"))
 
 
-    def isPasswordProtected(self):
+    def is_password_protected(self):
         if '<input type="password" name="password"' in self.html:
-            self.logDebug("Links are password protected")
+            self.log_debug("Links are password protected")
             return True
         return False
 
 
-    def submitPassword(self):
+    def submit_password(self):
         # Gather data
         try:
             m  = re.match(self.__pattern, self.pyfile.url)
             id = m.group('ID')
         except AttributeError:
-            self.logDebug("Unable to get package id from url [%s]" % self.pyfile.url)
+            self.log_debug("Unable to get package id from url [%s]" % self.pyfile.url)
             return
         url = "http://netfolder.in/folder.php?folder_id=" + id
-        password = self.getPassword()
+        password = self.get_password()
 
         # Submit package password
         post = {'password': password, 'save': 'Absenden'}
-        self.logDebug("Submitting password [%s] for protected links with id [%s]" % (password, id))
+        self.log_debug("Submitting password [%s] for protected links with id [%s]" % (password, id))
         html = self.load(url, {}, post)
 
         # Check for invalid password
         if '<div class="InPage_Error">' in html:
-            self.logDebug("Incorrect password, please set right password on Edit package form and retry")
+            self.log_debug("Incorrect password, please set right password on Edit package form and retry")
             return None
 
         return html
 
 
-    def getLinks(self):
+    def get_links(self):
         links = re.search(r'name="list" value="(.*?)"', self.html).group(1).split(",")
-        self.logDebug("Package has %d links" % len(links))
+        self.log_debug("Package has %d links" % len(links))
         return links

@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSAccount import XFSAccount
 
 
-class File4SafeCom(XFSAccount):
+class File4_safe_com(XFSAccount):
     __name    = "File4SafeCom"
     __type    = "account"
     __version = "0.05"

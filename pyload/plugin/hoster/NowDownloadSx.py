@@ -6,7 +6,7 @@ from pyload.plugin.internal.SimpleHoster import SimpleHoster
 from pyload.utils import fixup
 
 
-class NowDownloadSx(SimpleHoster):
+class Now_download_sx(Simple_hoster):
     __name    = "NowDownloadSx"
     __type    = "hoster"
     __version = "0.09"

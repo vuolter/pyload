@@ -6,7 +6,7 @@ import re
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class LolabitsEs(SimpleHoster):
+class Lolabits_es(Simple_hoster):
     __name    = "LolabitsEs"
     __type    = "hoster"
     __version = "0.02"
@@ -33,10 +33,10 @@ class LolabitsEs(SimpleHoster):
 
     def handle_free(self, pyfile):
         fileid = re.search(self.FILEID_PATTERN, self.html).group(1)
-        self.logDebug("FileID: " + fileid)
+        self.log_debug("FileID: " + fileid)
 
         token = re.search(self.TOKEN_PATTERN, self.html).group(1)
-        self.logDebug("Token: " + token)
+        self.log_debug("Token: " + token)
 
         self.html = self.load("http://lolabits.es/action/License/Download",
                               post={'fileId'                     : fileid,

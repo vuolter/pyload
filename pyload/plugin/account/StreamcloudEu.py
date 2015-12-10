@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSAccount import XFSAccount
 
 
-class StreamcloudEu(XFSAccount):
+class Streamcloud_eu(XFSAccount):
     __name    = "StreamcloudEu"
     __type    = "account"
     __version = "0.02"

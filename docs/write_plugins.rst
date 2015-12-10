@@ -22,7 +22,7 @@ How basic hoster plugin header could look like: ::
         from pyload.plugin.Hoster import Hoster
 
 
-        class MyFileHoster(Hoster):
+        class My_file_hoster(Hoster):
                 __name = "MyFileHoster"
                 __version = "0.1"
                 __pattern = r"http://myfilehoster.example.com/file_id/[0-9]+"
@@ -45,15 +45,15 @@ An example ``process`` function could look like this ::
         from pyload.plugin.Hoster import Hoster
 
 
-        class MyFileHoster(Hoster):
+        class My_file_hoster(Hoster):
             """Plugin code"""
 
             def process(self, pyfile):
                 html = self.load(pyfile.url)  #: load the content of the orginal pyfile.url to html
 
                 # parse the name from the site and set attribute in pyfile
-                pyfile.name = self.myFunctionToParseTheName(html)
-                parsed_url = self.myFunctionToParseUrl(html)
+                pyfile.name = self.my_function_to_parse_the_name(html)
+                parsed_url = self.my_function_to_parse_url(html)
 
                 # download the file, destination is determined by pyLoad
                 self.download(parsed_url)
@@ -64,13 +64,13 @@ Some tasks your plugin should handle:  proof if file is online, get filename, wa
 Wait times
 __________
 
-Some hoster require you to wait a specific time. Just set the time with ``self.setWait(seconds)`` or
-``self.setWait(seconds, True)`` if you want pyLoad to perform a reconnect if needed.
+Some hoster require you to wait a specific time. Just set the time with ``self.set_wait(seconds)`` or
+``self.set_wait(seconds, True)`` if you want pyLoad to perform a reconnect if needed.
 
 Captcha decrypting
 __________________
 
-To handle captcha input just use ``self.decryptCaptcha(url, ...)``, it will be send to clients
+To handle captcha input just use ``self.decrypt_captcha(url, ...)``, it will be send to clients
 or handled by :class:`Addon <pyload.plugin.Addon.Addon>` plugins
 
 Crypter
@@ -84,7 +84,7 @@ Example: ::
     from pyload.plugin.Crypter import Crypter
 
 
-    class MyFileCrypter(Crypter):
+    class My_file_crypter(Crypter):
         """Plugin code"""
 
         def decrypt(self, pyfile):

@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class MegauploadCom(DeadHoster):
+class Megaupload_com(Dead_hoster):
     __name    = "MegauploadCom"
     __type    = "hoster"
     __version = "0.31"

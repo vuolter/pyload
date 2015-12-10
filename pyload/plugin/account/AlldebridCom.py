@@ -9,7 +9,7 @@ import BeautifulSoup
 from pyload.plugin.Account import Account
 
 
-class AlldebridCom(Account):
+class Alldebrid_com(Account):
     __name    = "AlldebridCom"
     __type    = "account"
     __version = "0.23"
@@ -19,8 +19,8 @@ class AlldebridCom(Account):
     __authors     = [("Andy Voigt", "spamsales@online.de")]
 
 
-    def loadAccountInfo(self, user, req):
-        data = self.getAccountData(user)
+    def load_account_info(self, user, req):
+        data = self.get_account_data(user)
         html = req.load("http://www.alldebrid.com/account/")
         soup = BeautifulSoup.BeautifulSoup(html)
 
@@ -28,7 +28,7 @@ class AlldebridCom(Account):
         try:
             time_text = soup.find('div', attrs={'class': 'remaining_time_text'}).strong.string
 
-            self.logDebug("Account expires in: %s" % time_text)
+            self.log_debug("Account expires in: %s" % time_text)
 
             p = re.compile('\d+')
             exp_data = p.findall(time_text)
@@ -37,11 +37,11 @@ class AlldebridCom(Account):
 
         # Get expiration date from API
         except Exception:
-            data = self.getAccountData(user)
+            data = self.get_account_data(user)
             html = req.load("http://www.alldebrid.com/api.php",
                             get={'action': "info_user", 'login': user, 'pw': data['password']})
 
-            self.logDebug(html)
+            self.log_debug(html)
 
             xml = dom.parseString(html)
             exp_time = time.time() + int(xml.getElementsByTagName("date")[0].childNodes[0].nodeValue) * 24 * 60 * 60
@@ -60,4 +60,4 @@ class AlldebridCom(Account):
         if "This login doesn't exist" in html \
            or "The password is not valid" in html \
            or "Invalid captcha" in html:
-            self.wrongPassword()
+            self.wrong_password()

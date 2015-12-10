@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class FilebeerInfo(DeadHoster):
+class Filebeer_info(Dead_hoster):
     __name    = "FilebeerInfo"
     __type    = "hoster"
     __version = "0.03"

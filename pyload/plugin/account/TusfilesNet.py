@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSAccount import XFSAccount
 
 
-class TusfilesNet(XFSAccount):
+class Tusfiles_net(XFSAccount):
     __name    = "TusfilesNet"
     __type    = "account"
     __version = "0.06"

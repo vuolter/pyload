@@ -5,7 +5,7 @@ import random
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class MultishareCz(SimpleHoster):
+class Multishare_cz(Simple_hoster):
     __name    = "MultishareCz"
     __type    = "hoster"
     __version = "0.40"
@@ -38,9 +38,9 @@ class MultishareCz(SimpleHoster):
     def handle_multi(self, pyfile):
         self.html = self.load('http://www.multishare.cz/html/mms_ajax.php', post={"link": pyfile.url}, decode=True)
 
-        self.checkInfo()
+        self.check_info()
 
-        if not self.checkTrafficLeft():
+        if not self.check_traffic_left():
             self.fail(_("Not enough credit left to download file"))
 
         self.download("http://dl%d.mms.multishare.cz/html/mms_process.php" % round(random.random() * 10000 * random.random()),

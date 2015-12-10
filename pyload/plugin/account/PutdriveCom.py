@@ -3,7 +3,7 @@
 from pyload.plugin.account.ZeveraCom import ZeveraCom
 
 
-class PutdriveCom(ZeveraCom):
+class Putdrive_com(Zevera_com):
     __name    = "PutdriveCom"
     __type    = "account"
     __version = "0.02"

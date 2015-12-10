@@ -6,7 +6,7 @@ import time
 from pyload.plugin.Account import Account
 
 
-class NetloadIn(Account):
+class Netload_in(Account):
     __name    = "NetloadIn"
     __type    = "account"
     __version = "0.24"
@@ -23,12 +23,12 @@ class NetloadIn(Account):
                              'user_password': password}).strip()
 
 
-    def loadAccountInfo(self, user, req):
+    def load_account_info(self, user, req):
         validuntil  = None
         trafficleft = -1
         premium     = False
 
-        html = self.api_response(user, self.getAccountData(user)['password'], req)
+        html = self.api_response(user, self.get_account_data(user)['password'], req)
 
         if html == "-1":
             premium = True
@@ -41,10 +41,10 @@ class NetloadIn(Account):
                 validuntil = time.mktime(time.strptime(html, "%Y-%m-%d %H:%M"))
 
             except Exception, e:
-                self.logError(e)
+                self.log_error(e)
 
             else:
-                self.logDebug("Valid until: %s" % validuntil)
+                self.log_debug("Valid until: %s" % validuntil)
 
                 if validuntil > time.mktime(time.gmtime()):
                     premium = True
@@ -60,4 +60,4 @@ class NetloadIn(Account):
         html = self.api_response(user, data['password'], req)
 
         if not html or re.search(r'disallowed_agent|unknown_auth|login_failed', html):
-            self.wrongPassword()
+            self.wrong_password()

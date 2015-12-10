@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSCrypter import XFSCrypter
 
 
-class EasybytezCom(XFSCrypter):
+class Easybytez_com(XFSCrypter):
     __name    = "EasybytezCom"
     __type    = "crypter"
     __version = "0.10"

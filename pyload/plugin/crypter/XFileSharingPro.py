@@ -5,7 +5,7 @@ import re
 from pyload.plugin.internal.XFSCrypter import XFSCrypter
 
 
-class XFileSharingPro(XFSCrypter):
+class XFile_sharing_pro(XFSCrypter):
     __name    = "XFileSharingPro"
     __type    = "crypter"
     __version = "0.05"
@@ -22,18 +22,18 @@ class XFileSharingPro(XFSCrypter):
     def _log(self, type, args):
         msg = " | ".join(str(a).strip() for a in args if a)
         logger = getattr(self.log, type)
-        logger("%s: %s: %s" % (self.getClassName(), self.HOSTER_NAME, msg or _("%s MARK" % type.upper())))
+        logger("%s: %s: %s" % (self.get_class_name(), self.HOSTER_NAME, msg or _("%s MARK" % type.upper())))
 
 
     def init(self):
         super(XFileSharingPro, self).init()
 
-        self.__pattern = self.core.pluginManager.crypterPlugins[self.getClassName()]['pattern']
+        self.__pattern = self.core.pluginManager.crypterPlugins[self.get_class_name()]['pattern']
 
         self.HOSTER_DOMAIN = re.match(self.__pattern, self.pyfile.url).group("DOMAIN").lower()
         self.HOSTER_NAME   = "".join(part.capitalize() for part in re.split(r'(\.|\d+)', self.HOSTER_DOMAIN) if part != '.')
 
-        account = self.core.accountManager.getAccountPlugin(self.HOSTER_NAME)
+        account = self.core.accountManager.get_account_plugin(self.HOSTER_NAME)
 
         if account and account.canUse():
             self.account = account
@@ -44,6 +44,6 @@ class XFileSharingPro(XFSCrypter):
         else:
             return
 
-        self.user, data = self.account.selectAccount()
-        self.req        = self.account.getAccountRequest(self.user)
-        self.premium    = self.account.isPremium(self.user)
+        self.user, data = self.account.select_account()
+        self.req        = self.account.get_account_request(self.user)
+        self.premium    = self.account.is_premium(self.user)

@@ -9,7 +9,7 @@ import re
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class BasketbuildCom(SimpleHoster):
+class Basketbuild_com(Simple_hoster):
     __name    = "BasketbuildCom"
     __type    = "hoster"
     __version = "0.03"
@@ -42,15 +42,15 @@ class BasketbuildCom(SimpleHoster):
             self.error(_("Hop #1 not found"))
 
         else:
-            self.logDebug("Next hop: %s" % link1)
+            self.log_debug("Next hop: %s" % link1)
 
         try:
             wait = re.search(r'var sec = (\d+)', self.html).group(1)
-            self.logDebug("Wait %s seconds" % wait)
+            self.log_debug("Wait %s seconds" % wait)
             self.wait(wait)
 
         except AttributeError:
-            self.logDebug("No wait time found")
+            self.log_debug("No wait time found")
 
         try:
             self.link = re.search(r'id="dlLink">\s*<a href="(.+?)"', self.html).group(1)

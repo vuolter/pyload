@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class CloudzerNet(DeadHoster):
+class Cloudzer_net(Dead_hoster):
     __name    = "CloudzerNet"
     __type    = "hoster"
     __version = "0.05"

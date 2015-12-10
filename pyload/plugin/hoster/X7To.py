@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class X7To(DeadHoster):
+class X7_to(Dead_hoster):
     __name    = "X7To"
     __type    = "hoster"
     __version = "0.41"

@@ -4,7 +4,7 @@ from pyload.utils import json_loads
 from pyload.plugin.internal.MultiHoster import MultiHoster
 
 
-class MyfastfileCom(MultiHoster):
+class Myfastfile_com(Multi_hoster):
     __name    = "MyfastfileCom"
     __type    = "hoster"
     __version = "0.08"
@@ -23,9 +23,9 @@ class MyfastfileCom(MultiHoster):
 
     def handle_premium(self, pyfile):
         self.html = self.load('http://myfastfile.com/api.php',
-                         get={'user': self.user, 'pass': self.account.getAccountData(self.user)['password'],
+                         get={'user': self.user, 'pass': self.account.get_account_data(self.user)['password'],
                               'link': pyfile.url})
-        self.logDebug("JSON data: " + self.html)
+        self.log_debug("JSON data: " + self.html)
 
         self.html = json_loads(self.html)
         if self.html['status'] != 'ok':

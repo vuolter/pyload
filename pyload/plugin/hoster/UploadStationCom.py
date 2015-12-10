@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class UploadStationCom(DeadHoster):
+class Upload_station_com(Dead_hoster):
     __name    = "UploadStationCom"
     __type    = "hoster"
     __version = "0.52"

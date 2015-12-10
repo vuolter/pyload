@@ -6,7 +6,7 @@ import urllib
 from pyload.plugin.Hoster import Hoster
 
 
-class YourfilesTo(Hoster):
+class Yourfiles_to(Hoster):
     __name    = "YourfilesTo"
     __type    = "hoster"
     __version = "0.22"
@@ -32,7 +32,7 @@ class YourfilesTo(Hoster):
         self.pyfile.name = self.get_file_name()
 
         wait_time = self.get_waiting_time()
-        self.setWait(wait_time)
+        self.set_wait(wait_time)
         self.wait()
 
 

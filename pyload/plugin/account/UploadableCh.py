@@ -3,7 +3,7 @@
 from pyload.plugin.Account import Account
 
 
-class UploadableCh(Account):
+class Uploadable_ch(Account):
     __name    = "UploadableCh"
     __type    = "account"
     __version = "0.03"
@@ -13,7 +13,7 @@ class UploadableCh(Account):
     __authors     = [("Sasch", "gsasch@gmail.com")]
 
 
-    def loadAccountInfo(self, user, req):
+    def load_account_info(self, user, req):
         html = req.load("http://www.uploadable.ch/login.php")
 
         premium     = '<a href="/logout.php"' in html
@@ -31,4 +31,4 @@ class UploadableCh(Account):
                         decode=True)
 
         if "Login failed" in html:
-            self.wrongPassword()
+            self.wrong_password()

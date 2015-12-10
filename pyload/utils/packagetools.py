@@ -44,7 +44,7 @@ pat3 = re.compile(r'(.+)[\.\-_]+$')
 pat4 = re.compile(r'(.+)\.\d+\.xtm$')
 
 
-def matchFirst(string, *args):
+def match_first(string, *args):
     """Matches against list of regexp and returns first match"""
     for patternlist in args:
         for pattern in patternlist:
@@ -56,7 +56,7 @@ def matchFirst(string, *args):
     return string
 
 
-def parseNames(files):
+def parse_names(files):
     """
     Generates packages names from name, data lists
 

@@ -5,7 +5,7 @@ import re
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class IfolderRu(SimpleHoster):
+class Ifolder_ru(Simple_hoster):
     __name    = "IfolderRu"
     __type    = "hoster"
     __version = "0.39"
@@ -41,20 +41,20 @@ class IfolderRu(SimpleHoster):
     def handle_free(self, pyfile):
         url = "http://rusfolder.com/%s" % self.info['pattern']['ID']
         self.html = self.load("http://rusfolder.com/%s" % self.info['pattern']['ID'], decode=True)
-        self.getFileInfo()
+        self.get_file_info()
 
         session_id = re.search(self.SESSION_ID_PATTERN, self.html).groups()
 
         captcha_url = "http://ints.rusfolder.com/random/images/?session=%s" % session_id
         for _i in xrange(5):
-            action, inputs = self.parseHtmlForm('id="download-step-one-form"')
-            inputs['confirmed_number'] = self.decryptCaptcha(captcha_url, cookies=True)
+            action, inputs = self.parse_html_form('id="download-step-one-form"')
+            inputs['confirmed_number'] = self.decrypt_captcha(captcha_url, cookies=True)
             inputs['action'] = '1'
-            self.logDebug(inputs)
+            self.log_debug(inputs)
 
             self.html = self.load(url, decode=True, post=inputs)
             if self.WRONG_CAPTCHA_PATTERN in self.html:
-                self.invalidCaptcha()
+                self.invalid_captcha()
             else:
                 break
         else:

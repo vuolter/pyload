@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSHoster import XFSHoster
 
 
-class SecureUploadEu(XFSHoster):
+class Secure_upload_eu(XFSHoster):
     __name    = "SecureUploadEu"
     __type    = "hoster"
     __version = "0.05"

@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadCrypter import DeadCrypter
 
 
-class CryptItCom(DeadCrypter):
+class Crypt_it_com(Dead_crypter):
     __name    = "CryptItCom"
     __type    = "crypter"
     __version = "0.11"

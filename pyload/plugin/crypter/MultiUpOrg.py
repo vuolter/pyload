@@ -6,7 +6,7 @@ import urlparse
 from pyload.plugin.internal.SimpleCrypter import SimpleCrypter
 
 
-class MultiUpOrg(SimpleCrypter):
+class Multi_up_org(Simple_crypter):
     __name    = "MultiUpOrg"
     __type    = "crypter"
     __version = "0.03"
@@ -24,7 +24,7 @@ class MultiUpOrg(SimpleCrypter):
     NAME_PATTERN = r'<title>.*(?:Project|Projet|ownload|élécharger) (?P<N>.+?) (\(|- )'
 
 
-    def getLinks(self):
+    def get_links(self):
         m_type = re.match(self.__pattern, self.pyfile.url).group('TYPE')
 
         if m_type == "project":

@@ -3,7 +3,7 @@
 from pyload.plugin.OCR import OCR
 
 
-class ShareonlineBiz(OCR):
+class Shareonline_biz(OCR):
     __name    = "ShareonlineBiz"
     __type    = "ocr"
     __version = "0.11"

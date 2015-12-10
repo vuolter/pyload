@@ -6,7 +6,7 @@ import urlparse
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class FileSharkPl(SimpleHoster):
+class File_shark_pl(Simple_hoster):
     __name    = "FileSharkPl"
     __type    = "hoster"
     __version = "0.10"
@@ -46,7 +46,7 @@ class FileSharkPl(SimpleHoster):
             self.multiDL = False
 
 
-    def checkErrors(self):
+    def check_errors(self):
         # check if file is now available for download (-> file name can be found in html body)
         m = re.search(self.WAIT_PATTERN, self.html)
         if m:
@@ -62,7 +62,7 @@ class FileSharkPl(SimpleHoster):
 
             elif re.match(self.SLOT_ERROR_PATTERN, alert):
                 errmsg = self.info['error'] = _("No free download slots available")
-                self.logWarning(errmsg)
+                self.log_warning(errmsg)
                 self.retry(10, 30 * 60, _("Still no free download slots available"))
 
             else:
@@ -84,10 +84,10 @@ class FileSharkPl(SimpleHoster):
         m = re.search(self.WAIT_PATTERN, self.html)
         if m:
             seconds = int(m.group(1))
-            self.logDebug("Wait %s seconds" % seconds)
+            self.log_debug("Wait %s seconds" % seconds)
             self.wait(seconds)
 
-        action, inputs = self.parseHtmlForm('action=""')
+        action, inputs = self.parse_html_form('action=""')
 
         m = re.search(self.TOKEN_PATTERN, self.html)
         if m is None:
@@ -102,7 +102,7 @@ class FileSharkPl(SimpleHoster):
         tmp_load  = self.load
         self.load = self._decode64  #: work-around: injects decode64 inside decryptCaptcha
 
-        inputs['form[captcha]'] = self.decryptCaptcha(m.group(1), imgtype='jpeg')
+        inputs['form[captcha]'] = self.decrypt_captcha(m.group(1), imgtype='jpeg')
         inputs['form[start]'] = ""
 
         self.load = tmp_load

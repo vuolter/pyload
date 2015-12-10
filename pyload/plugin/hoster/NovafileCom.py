@@ -7,7 +7,7 @@
 from pyload.plugin.internal.XFSHoster import XFSHoster
 
 
-class NovafileCom(XFSHoster):
+class Novafile_com(XFSHoster):
     __name    = "NovafileCom"
     __type    = "hoster"
     __version = "0.05"

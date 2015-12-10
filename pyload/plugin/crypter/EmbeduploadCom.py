@@ -5,7 +5,7 @@ from pyload.plugin.Crypter import Crypter
 from pyload.network.HTTPRequest import BadHeader
 
 
-class EmbeduploadCom(Crypter):
+class Embedupload_com(Crypter):
     __name    = "EmbeduploadCom"
     __type    = "crypter"
     __version = "0.02"
@@ -30,25 +30,25 @@ class EmbeduploadCom(Crypter):
 
         m = re.findall(self.LINK_PATTERN, self.html)
         if m:
-            prefered_set = set(self.getConfig('preferedHoster').split('|'))
+            prefered_set = set(self.get_config('preferedHoster').split('|'))
             prefered_set = map(lambda s: s.lower().split('.')[0], prefered_set)
 
-            self.logDebug("PF: %s" % prefered_set)
+            self.log_debug("PF: %s" % prefered_set)
 
             tmp_links.extend(x[1] for x in m if x[0] in prefered_set)
-            self.urls = self.getLocation(tmp_links)
+            self.urls = self.get_location(tmp_links)
 
             if not self.urls:
-                ignored_set = set(self.getConfig('ignoredHoster').split('|'))
+                ignored_set = set(self.get_config('ignoredHoster').split('|'))
                 ignored_set = map(lambda s: s.lower().split('.')[0], ignored_set)
 
-                self.logDebug("IG: %s" % ignored_set)
+                self.log_debug("IG: %s" % ignored_set)
 
                 tmp_links.extend(x[1] for x in m if x[0] not in ignored_set)
-                self.urls = self.getLocation(tmp_links)
+                self.urls = self.get_location(tmp_links)
 
 
-    def getLocation(self, tmp_links):
+    def get_location(self, tmp_links):
         new_links = []
         for link in tmp_links:
             try:

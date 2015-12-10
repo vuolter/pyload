@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadCrypter import DeadCrypter
 
 
-class StealthTo(DeadCrypter):
+class Stealth_to(Dead_crypter):
     __name    = "StealthTo"
     __type    = "crypter"
     __version = "0.20"

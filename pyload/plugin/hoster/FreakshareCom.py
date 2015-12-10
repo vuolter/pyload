@@ -7,7 +7,7 @@ from pyload.plugin.captcha.ReCaptcha import ReCaptcha
 from pyload.plugin.internal.SimpleHoster import secondsToMidnight
 
 
-class FreakshareCom(Hoster):
+class Freakshare_com(Hoster):
     __name    = "FreakshareCom"
     __type    = "hoster"
     __version = "0.40"
@@ -43,7 +43,7 @@ class FreakshareCom(Hoster):
 
             self.download(pyfile.url, post=self.req_opts)
 
-            check = self.checkDownload({"bad"           : "bad try",
+            check = self.check_download({"bad"           : "bad try",
                                         "paralell"      : "> Sorry, you cant download more then 1 files at time. <",
                                         "empty"         : "Warning: Unknown: Filename cannot be empty",
                                         "wrong_captcha" : "Wrong Captcha!",
@@ -53,7 +53,7 @@ class FreakshareCom(Hoster):
                 self.fail(_("Bad Try"))
 
             elif check == "paralell":
-                self.setWait(300, True)
+                self.set_wait(300, True)
                 self.wait()
                 self.retry()
 
@@ -61,7 +61,7 @@ class FreakshareCom(Hoster):
                 self.fail(_("File not downloadable"))
 
             elif check == "wrong_captcha":
-                self.invalidCaptcha()
+                self.invalid_captcha()
                 self.retry()
 
             elif check == "downloadserver":
@@ -76,7 +76,7 @@ class FreakshareCom(Hoster):
         if not self.file_exists():
             self.offline()
 
-        self.setWait(self.get_waiting_time())
+        self.set_wait(self.get_waiting_time())
 
         pyfile.name = self.get_file_name()
         pyfile.size = self.get_file_size()

@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class MegareleaseOrg(DeadHoster):
+class Megarelease_org(Dead_hoster):
     __name    = "MegareleaseOrg"
     __type    = "hoster"
     __version = "0.02"

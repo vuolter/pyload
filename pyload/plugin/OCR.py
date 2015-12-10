@@ -28,7 +28,7 @@ class OCR(Base):
 
 
     def __init__(self):
-        self.logger = logging.getLogger("log")
+        self.logger = logging.get_logger("log")
 
 
     def load_image(self, image):
@@ -60,15 +60,15 @@ class OCR(Base):
     def run_tesser(self, subset=False, digits=True, lowercase=True, uppercase=True, pagesegmode=None):
         # tmpTif = tempfile.NamedTemporaryFile(suffix=".tif")
         try:
-            tmpTif = open(fs_join("tmp", "tmpTif_%s.tif" % self.getClassName()), "wb")
+            tmpTif = open(fs_join("tmp", "tmpTif_%s.tif" % self.get_class_name()), "wb")
             tmpTif.close()
 
             # tmpTxt = tempfile.NamedTemporaryFile(suffix=".txt")
-            tmpTxt = open(fs_join("tmp", "tmpTxt_%s.txt" % self.getClassName()), "wb")
+            tmpTxt = open(fs_join("tmp", "tmpTxt_%s.txt" % self.get_class_name()), "wb")
             tmpTxt.close()
 
         except IOError, e:
-            self.logError(e)
+            self.log_error(e)
             return
 
         self.logger.debug("save tiff")
@@ -86,7 +86,7 @@ class OCR(Base):
 
         if subset and (digits or lowercase or uppercase):
             # tmpSub = tempfile.NamedTemporaryFile(suffix=".subset")
-            with open(fs_join("tmp", "tmpSub_%s.subset" % self.getClassName()), "wb") as tmpSub:
+            with open(fs_join("tmp", "tmpSub_%s.subset" % self.get_class_name()), "wb") as tmpSub:
                 tmpSub.write("tessedit_char_whitelist ")
 
                 if digits:

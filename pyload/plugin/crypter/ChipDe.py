@@ -4,7 +4,7 @@ import re
 from pyload.plugin.Crypter import Crypter
 
 
-class ChipDe(Crypter):
+class Chip_de(Crypter):
     __name    = "ChipDe"
     __type    = "crypter"
     __version = "0.10"
@@ -26,4 +26,4 @@ class ChipDe(Crypter):
             self.fail(_("Failed to find the URL"))
         else:
             self.urls = [f.group(1)]
-            self.logDebug("The file URL is %s" % self.urls[0])
+            self.log_debug("The file URL is %s" % self.urls[0])

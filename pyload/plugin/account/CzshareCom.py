@@ -6,7 +6,7 @@ import time
 from pyload.plugin.Account import Account
 
 
-class CzshareCom(Account):
+class Czshare_com(Account):
     __name    = "CzshareCom"
     __type    = "account"
     __version = "0.18"
@@ -20,7 +20,7 @@ class CzshareCom(Account):
     CREDIT_LEFT_PATTERN = r'<tr class="active">\s*<td>([\d ,]+) (KiB|MiB|GiB)</td>\s*<td>([^<]*)</td>\s*</tr>'
 
 
-    def loadAccountInfo(self, user, req):
+    def load_account_info(self, user, req):
         premium     = False
         validuntil  = None
         trafficleft = None
@@ -29,11 +29,11 @@ class CzshareCom(Account):
 
         try:
             m = re.search(self.CREDIT_LEFT_PATTERN, html)
-            trafficleft = self.parseTraffic(m.group(1).replace(' ', '').replace(',', '.')) + m.group(2)
+            trafficleft = self.parse_traffic(m.group(1).replace(' ', '').replace(',', '.')) + m.group(2)
             validuntil  = time.mktime(time.strptime(m.group(3), '%d.%m.%y %H:%M'))
 
         except Exception, e:
-            self.logError(e)
+            self.log_error(e)
 
         else:
             premium = True
@@ -51,4 +51,4 @@ class CzshareCom(Account):
                         decode=True)
 
         if '<div class="login' in html:
-            self.wrongPassword()
+            self.wrong_password()

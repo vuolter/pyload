@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSAccount import XFSAccount
 
 
-class FileomCom(XFSAccount):
+class Fileom_com(XFSAccount):
     __name    = "FileomCom"
     __type    = "account"
     __version = "0.02"

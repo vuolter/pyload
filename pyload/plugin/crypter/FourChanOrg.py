@@ -7,7 +7,7 @@ import re
 from pyload.plugin.Crypter import Crypter
 
 
-class FourChanOrg(Crypter):
+class Four_chan_org(Crypter):
     __name    = "FourChanOrg"
     __type    = "crypter"
     __version = "0.31"

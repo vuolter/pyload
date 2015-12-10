@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSAccount import XFSAccount
 
 
-class NosuploadCom(XFSAccount):
+class Nosupload_com(XFSAccount):
     __name    = "NosuploadCom"
     __type    = "account"
     __version = "0.02"

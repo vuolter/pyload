@@ -4,7 +4,7 @@ from pyload.utils import json_loads
 from pyload.plugin.internal.MultiHook import MultiHook
 
 
-class RPNetBiz(MultiHook):
+class RPNet_biz(Multi_hook):
     __name    = "RPNetBiz"
     __type    = "hook"
     __version = "0.14"
@@ -20,9 +20,9 @@ class RPNetBiz(MultiHook):
     __authors     = [("Dman", "dmanugm@gmail.com")]
 
 
-    def getHosters(self):
+    def get_hosters(self):
         # Get account data
-        user, data = self.account.selectAccount()
+        user, data = self.account.select_account()
 
         res = self.getURL("https://premium.rpnet.biz/client_api.php",
                      get={'username': user, 'password': data['password'], 'action': "showHosterList"})

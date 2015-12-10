@@ -3,7 +3,7 @@
 from pyload.plugin.internal.SimpleCrypter import SimpleCrypter
 
 
-class BitshareCom(SimpleCrypter):
+class Bitshare_com(Simple_crypter):
     __name    = "BitshareCom"
     __type    = "crypter"
     __version = "0.03"

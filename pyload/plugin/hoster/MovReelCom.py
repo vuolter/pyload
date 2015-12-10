@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSHoster import XFSHoster
 
 
-class MovReelCom(XFSHoster):
+class Mov_reel_com(XFSHoster):
     __name    = "MovReelCom"
     __type    = "hoster"
     __version = "1.24"

@@ -6,7 +6,7 @@ from pyload.utils import json_loads
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class YibaishiwuCom(SimpleHoster):
+class Yibaishiwu_com(Simple_hoster):
     __name    = "YibaishiwuCom"
     __type    = "hoster"
     __version = "0.14"
@@ -33,7 +33,7 @@ class YibaishiwuCom(SimpleHoster):
 
         url = m.group(1)
 
-        self.logDebug(('FREEUSER' if m.group(2) == 'download' else 'GUEST') + ' URL', url)
+        self.log_debug(('FREEUSER' if m.group(2) == 'download' else 'GUEST') + ' URL', url)
 
         res = json_loads(self.load("http://115.com" + url, decode=False))
         if "urls" in res:
@@ -48,7 +48,7 @@ class YibaishiwuCom(SimpleHoster):
         for mr in mirrors:
             try:
                 self.link = mr['url'].replace("\\", "")
-                self.logDebug("Trying URL: " + self.link)
+                self.log_debug("Trying URL: " + self.link)
                 break
             except Exception:
                 continue

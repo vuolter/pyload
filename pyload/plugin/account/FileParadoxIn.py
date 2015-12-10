@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSAccount import XFSAccount
 
 
-class FileParadoxIn(XFSAccount):
+class File_paradox_in(XFSAccount):
     __name    = "FileParadoxIn"
     __type    = "account"
     __version = "0.02"

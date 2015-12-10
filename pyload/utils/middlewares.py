@@ -8,7 +8,7 @@ except ImportError:
     from StringIO import StringIO
 
 
-class StripPathMiddleware(object):
+class Strip_path_middleware(object):
 
     def __init__(self, app):
         self.app = app
@@ -19,7 +19,7 @@ class StripPathMiddleware(object):
         return self.app(e, h)
 
 
-class PrefixMiddleware(object):
+class Prefix_middleware(object):
 
     def __init__(self, app, prefix="/pyload"):
         self.app = app
@@ -42,7 +42,7 @@ class PrefixMiddleware(object):
 # Gzip-encodes the response.
 
 
-class GZipMiddleWare(object):
+class GZip_middle_ware(object):
 
     def __init__(self, application, compress_level=6):
         self.application = application
@@ -81,7 +81,7 @@ def remove_header(headers, key):
             break
 
 
-class GzipResponse(object):
+class Gzip_response(object):
 
     def __init__(self, start_response, compress_level):
         self.start_response = start_response

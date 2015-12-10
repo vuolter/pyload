@@ -5,7 +5,7 @@ import re
 from pyload.plugin.Account import Account
 
 
-class FastshareCz(Account):
+class Fastshare_cz(Account):
     __name    = "FastshareCz"
     __type    = "account"
     __version = "0.06"
@@ -19,7 +19,7 @@ class FastshareCz(Account):
     CREDIT_PATTERN = r'Credit\s*:\s*</td>\s*<td>(.+?)\s*<'
 
 
-    def loadAccountInfo(self, user, req):
+    def load_account_info(self, user, req):
         validuntil  = -1
         trafficleft = None
         premium     = False
@@ -28,7 +28,7 @@ class FastshareCz(Account):
 
         m = re.search(self.CREDIT_PATTERN, html)
         if m:
-            trafficleft = self.parseTraffic(m.group(1))
+            trafficleft = self.parse_traffic(m.group(1))
 
         premium = bool(trafficleft)
 
@@ -47,4 +47,4 @@ class FastshareCz(Account):
                         decode=True)
 
         if ">Wrong username or password" in html:
-            self.wrongPassword()
+            self.wrong_password()

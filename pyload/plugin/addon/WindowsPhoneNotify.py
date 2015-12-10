@@ -6,7 +6,7 @@ import time
 from pyload.plugin.Addon import Addon, Expose
 
 
-class WindowsPhoneNotify(Addon):
+class Windows_phone_notify(Addon):
     __name    = "WindowsPhoneNotify"
     __type    = "addon"
     __version = "0.09"
@@ -37,14 +37,14 @@ class WindowsPhoneNotify(Addon):
 
 
     def plugin_updated(self, type_plugins):
-        if not self.getConfig('notifyupdate'):
+        if not self.get_config('notifyupdate'):
             return
 
         self.notify(_("Plugins updated"), str(type_plugins))
 
 
     def exit(self):
-        if not self.getConfig('notifyexit'):
+        if not self.get_config('notifyexit'):
             return
 
         if self.pyload.do_restart:
@@ -53,29 +53,29 @@ class WindowsPhoneNotify(Addon):
             self.notify(_("Exiting pyLoad"))
 
 
-    def newCaptchaTask(self, task):
-        if not self.getConfig('notifycaptcha'):
+    def new_captcha_task(self, task):
+        if not self.get_config('notifycaptcha'):
             return
 
         self.notify(_("Captcha"), _("New request waiting user input"))
 
 
-    def packageFinished(self, pypack):
-        if self.getConfig('notifypackage'):
+    def package_finished(self, pypack):
+        if self.get_config('notifypackage'):
             self.notify(_("Package finished"), pypack.name)
 
 
-    def allDownloadsProcessed(self):
-        if not self.getConfig('notifyprocessed'):
+    def all_downloads_processed(self):
+        if not self.get_config('notifyprocessed'):
             return
 
-        if any(True for pdata in self.pyload.api.getQueue() if pdata.linksdone < pdata.linkstotal):
+        if any(True for pdata in self.pyload.api.get_queue() if pdata.linksdone < pdata.linkstotal):
             self.notify(_("Package failed"), _("One or more packages was not completed successfully"))
         else:
             self.notify(_("All packages finished"))
 
 
-    def getXmlData(self, msg):
+    def get_xml_data(self, msg):
         return ("<?xml version='1.0' encoding='utf-8'?> <wp:Notification xmlns:wp='WPNotification'> "
                 "<wp:Toast> <wp:Text1>pyLoad</wp:Text1> <wp:Text2>%s</wp:Text2> "
                 "</wp:Toast> </wp:Notification>" % msg)
@@ -85,29 +85,29 @@ class WindowsPhoneNotify(Addon):
     def notify(self,
                event,
                msg="",
-               key=(self.getConfig('id'), self.getConfig('url'))):
+               key=(self.get_config('id'), self.get_config('url'))):
 
         id, url = key
 
         if not id or not url:
             return
 
-        if self.pyload.isClientConnected() and not self.getConfig('ignoreclient'):
+        if self.pyload.is_client_connected() and not self.get_config('ignoreclient'):
             return
 
         elapsed_time = time.time() - self.last_notify
 
-        if elapsed_time < self.getConf("sendtimewait"):
+        if elapsed_time < self.get_conf("sendtimewait"):
             return
 
         if elapsed_time > 60:
             self.notifications = 0
 
-        elif self.notifications >= self.getConf("sendpermin"):
+        elif self.notifications >= self.get_conf("sendpermin"):
             return
 
 
-        request    = self.getXmlData("%s: %s" % (event, msg) if msg else event)
+        request    = self.get_xml_data("%s: %s" % (event, msg) if msg else event)
         webservice = httplib.HTTP(url)
 
         webservice.putrequest("POST", id)

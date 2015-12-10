@@ -3,7 +3,7 @@
 from pyload.plugin.internal.MultiHoster import MultiHoster, replace_patterns
 
 
-class SimplydebridCom(MultiHoster):
+class Simplydebrid_com(Multi_hoster):
     __name    = "SimplydebridCom"
     __type    = "hoster"
     __version = "0.17"
@@ -37,8 +37,8 @@ class SimplydebridCom(MultiHoster):
         self.wait(5)
 
 
-    def checkFile(self, rules={}):
-        if self.checkDownload({"error": "No address associated with hostname"}):
+    def check_file(self, rules={}):
+        if self.check_download({"error": "No address associated with hostname"}):
             self.retry(24, 3 * 60, _("Bad file downloaded"))
 
         return super(SimplydebridCom, self).checkFile(rules)

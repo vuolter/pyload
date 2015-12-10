@@ -28,15 +28,15 @@ class Container(Crypter):
         self.setup()
         self.thread = thread
 
-        self.loadToDisk()
+        self.load_to_disk()
 
         self.decrypt(self.pyfile)
-        self.deleteTmp()
+        self.delete_tmp()
 
-        self.createPackages()
+        self.create_packages()
 
 
-    def loadToDisk(self):
+    def load_to_disk(self):
         """Loads container to disk if its stored remotely and overwrite url,
         or check existent on several places at disk"""
 
@@ -59,6 +59,6 @@ class Container(Crypter):
                     self.fail(_("File not exists"))
 
 
-    def deleteTmp(self):
+    def delete_tmp(self):
         if self.pyfile.name.startswith("tmp_"):
             os.remove(self.pyfile.url)

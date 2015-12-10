@@ -10,13 +10,13 @@ from pyload.network.HTTPRequest import HTTPRequest
 from pyload.network.XDCCRequest import XDCCRequest
 
 
-class RequestFactory(object):
+class Request_factory(object):
 
     def __init__(self, core):
         self.lock = threading.Lock()
         self.pyload = core
         self.bucket = Bucket()
-        self.updateBucket()
+        self.update_bucket()
         self.cookiejars = {}
 
 
@@ -24,16 +24,16 @@ class RequestFactory(object):
         return self.pyload.config.get("download", "interface")
 
 
-    def getRequest(self, pluginName, account=None, type="HTTP"):
+    def get_request(self, plugin_name, account=None, type="HTTP"):
         self.lock.acquire()
 
         if type == "XDCC":
-            return XDCCRequest(proxies=self.getProxies())
+            return XDCCRequest(proxies=self.get_proxies())
 
-        req = Browser(self.bucket, self.getOptions())
+        req = Browser(self.bucket, self.get_options())
 
         if account:
-            cj = self.getCookieJar(pluginName, account)
+            cj = self.get_cookie_jar(pluginName, account)
             req.setCookieJar(cj)
         else:
             req.setCookieJar(CookieJar(pluginName))
@@ -42,9 +42,9 @@ class RequestFactory(object):
         return req
 
 
-    def getHTTPRequest(self, **kwargs):
+    def get_HTTP_request(self, **kwargs):
         """Returns a http request, dont forget to close it !"""
-        options = self.getOptions()
+        options = self.get_options()
         options.update(kwargs)  #: submit kwargs as additional options
         return HTTPRequest(CookieJar(None), options)
 
@@ -62,7 +62,7 @@ class RequestFactory(object):
                     if isinstance(cookie, tuple) and len(cookie) == 3:
                         cj.setCookie(*cookie)
 
-        h = HTTPRequest(cj, self.getOptions())
+        h = HTTPRequest(cj, self.get_options())
         try:
             rep = h.load(*args, **kwargs)
         finally:
@@ -71,7 +71,7 @@ class RequestFactory(object):
         return rep
 
 
-    def getCookieJar(self, pluginName, account=None):
+    def get_cookie_jar(self, plugin_name, account=None):
         if (pluginName, account) in self.cookiejars:
             return self.cookiejars[(pluginName, account)]
 
@@ -80,7 +80,7 @@ class RequestFactory(object):
         return cj
 
 
-    def getProxies(self):
+    def get_proxies(self):
         """Returns a proxy list for the request classes"""
         if not self.pyload.config.get("proxy", "activated"):
             return {}
@@ -109,19 +109,19 @@ class RequestFactory(object):
             }
 
 
-    def getOptions(self):
+    def get_options(self):
         """Returns options needed for pycurl"""
         return {"interface": self.iface(),
-                "proxies": self.getProxies(),
+                "proxies": self.get_proxies(),
                 "ipv6": self.pyload.config.get("download", "ipv6")}
 
 
-    def updateBucket(self):
+    def update_bucket(self):
         """Set values in the bucket according to settings"""
         if not self.pyload.config.get("download", "limit_speed"):
-            self.bucket.setRate(-1)
+            self.bucket.set_rate(-1)
         else:
-            self.bucket.setRate(self.pyload.config.get("download", "max_speed") * 1024)
+            self.bucket.set_rate(self.pyload.config.get("download", "max_speed") * 1024)
 
 
 # needs pyreq in global namespace
@@ -129,5 +129,5 @@ def getURL(*args, **kwargs):
     return pyreq.getURL(*args, **kwargs)
 
 
-def getRequest(*args, **kwargs):
+def get_request(*args, **kwargs):
     return pyreq.getHTTPRequest()

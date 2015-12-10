@@ -59,7 +59,7 @@ class style(object):
         return x
 
 
-class DatabaseJob(object):
+class Database_job(object):
 
     def __init__(self, f, *args, **kwargs):
         self.done = threading.Event()
@@ -89,7 +89,7 @@ class DatabaseJob(object):
         return "DataBase Job %s:%s\n%sResult: %s" % (self.f.__name__, self.args[1:], output, self.result)
 
 
-    def processJob(self):
+    def process_job(self):
         try:
             self.result = self.f(*self.args, **self.kwargs)
         except Exception, e:
@@ -108,13 +108,13 @@ class DatabaseJob(object):
         self.done.wait()
 
 
-class DatabaseBackend(threading.Thread):
+class Database_backend(threading.Thread):
     subs = []
 
 
     def __init__(self, core):
         threading.Thread.__init__(self)
-        self.setDaemon(True)
+        self.set_daemon(True)
         self.pyload = core
 
         self.jobs = Queue.Queue()
@@ -131,7 +131,7 @@ class DatabaseBackend(threading.Thread):
 
     def run(self):
         """Main loop, which executes commands"""
-        convert = self._checkVersion()  #: returns None or current version
+        convert = self._check_version()  #: returns None or current version
 
         self.conn = sqlite3.connect("files.db")
         self.conn.text_factory = sqlite3.OptimizedUnicode
@@ -146,8 +146,8 @@ class DatabaseBackend(threading.Thread):
         if convert is not None:
             self._convertDB(convert)
 
-        self._createTables()
-        self._migrateUser()
+        self._create_tables()
+        self._migrate_user()
 
         self.conn.commit()
 
@@ -168,7 +168,7 @@ class DatabaseBackend(threading.Thread):
         self.jobs.put("quit")
 
 
-    def _checkVersion(self):
+    def _check_version(self):
         """Check db version and delete it if needed"""
         if not os.path.exists("files.version"):
             with open("files.version", "wb") as f:
@@ -205,17 +205,17 @@ class DatabaseBackend(threading.Thread):
     # convert scripts start ---------------------------------------------------
 
 
-    def _convertV2(self):
+    def _convert_v2(self):
         self.c.execute(
             'CREATE TABLE IF NOT EXISTS "storage" ("id" INTEGER PRIMARY KEY AUTOINCREMENT, "identifier" TEXT NOT NULL, "key" TEXT NOT NULL, "value" TEXT DEFAULT "")')
         try:
             self.pyload.log.info(_("Database was converted from v2 to v3."))
         except Exception:
             print "Database was converted from v2 to v3."
-        self._convertV3()
+        self._convert_v3()
 
 
-    def _convertV3(self):
+    def _convert_v3(self):
         self.c.execute(
             'CREATE TABLE IF NOT EXISTS "users" ("id" INTEGER PRIMARY KEY AUTOINCREMENT, "name" TEXT NOT NULL, "email" TEXT DEFAULT "" NOT NULL, "password" TEXT NOT NULL, "role" INTEGER DEFAULT 0 NOT NULL, "permission" INTEGER DEFAULT 0 NOT NULL, "template" TEXT DEFAULT "default" NOT NULL)')
         try:
@@ -226,7 +226,7 @@ class DatabaseBackend(threading.Thread):
     # convert scripts end -----------------------------------------------------
 
 
-    def _createTables(self):
+    def _create_tables(self):
         """Create tables for database"""
 
         self.c.execute(
@@ -260,7 +260,7 @@ class DatabaseBackend(threading.Thread):
         self.c.execute('VACUUM')
 
 
-    def _migrateUser(self):
+    def _migrate_user(self):
         if os.path.exists("pyload.db"):
             try:
                 self.pyload.log.info(_("Converting old Django DB"))
@@ -281,7 +281,7 @@ class DatabaseBackend(threading.Thread):
             shutil.move("pyload.db", "pyload.old.db")
 
 
-    def createCursor(self):
+    def create_cursor(self):
         return self.conn.cursor()
 
 
@@ -291,7 +291,7 @@ class DatabaseBackend(threading.Thread):
 
 
     @style.queue
-    def syncSave(self):
+    def sync_save(self):
         self.conn.commit()
 
 
@@ -315,12 +315,12 @@ class DatabaseBackend(threading.Thread):
 
 
     @classmethod
-    def registerSub(cls, klass):
+    def register_sub(cls, klass):
         cls.subs.append(klass)
 
 
     @classmethod
-    def unregisterSub(cls, klass):
+    def unregister_sub(cls, klass):
         cls.subs.remove(klass)
 
 

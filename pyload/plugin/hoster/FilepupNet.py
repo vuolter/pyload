@@ -9,7 +9,7 @@ import re
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class FilepupNet(SimpleHoster):
+class Filepup_net(Simple_hoster):
     __name    = "FilepupNet"
     __type    = "hoster"
     __version = "0.03"

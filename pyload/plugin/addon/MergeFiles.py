@@ -10,7 +10,7 @@ from pyload.plugin.Addon import Addon, threaded
 from pyload.utils import fs_join
 
 
-class MergeFiles(Addon):
+class Merge_files(Addon):
     __name    = "MergeFiles"
     __type    = "addon"
     __version = "0.14"
@@ -26,7 +26,7 @@ class MergeFiles(Addon):
 
 
     @threaded
-    def packageFinished(self, pack):
+    def package_finished(self, pack):
         files = {}
         fid_dict = {}
         for fid, data in pack.getChildren().iteritems():
@@ -43,13 +43,13 @@ class MergeFiles(Addon):
             download_folder = fs_join(download_folder, pack.folder)
 
         for name, file_list in files.iteritems():
-            self.logInfo(_("Starting merging of"), name)
+            self.log_info(_("Starting merging of"), name)
 
             with open(fs_join(download_folder, name), "wb") as final_file:
                 for splitted_file in file_list:
-                    self.logDebug("Merging part", splitted_file)
+                    self.log_debug("Merging part", splitted_file)
 
-                    pyfile = self.pyload.files.getFile(fid_dict[splitted_file])
+                    pyfile = self.pyload.files.get_file(fid_dict[splitted_file])
 
                     pyfile.setStatus("processing")
 
@@ -67,7 +67,7 @@ class MergeFiles(Addon):
                                 else:
                                     break
 
-                        self.logDebug("Finished merging part", splitted_file)
+                        self.log_debug("Finished merging part", splitted_file)
 
                     except Exception, e:
                         traceback.print_exc()
@@ -77,4 +77,4 @@ class MergeFiles(Addon):
                         pyfile.setStatus("finished")
                         pyfile.release()
 
-            self.logInfo(_("Finished merging of"), name)
+            self.log_info(_("Finished merging of"), name)

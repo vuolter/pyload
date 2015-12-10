@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSHoster import XFSHoster
 
 
-class UptoboxCom(XFSHoster):
+class Uptobox_com(XFSHoster):
     __name    = "UptoboxCom"
     __type    = "hoster"
     __version = "0.18"

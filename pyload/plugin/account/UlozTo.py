@@ -6,7 +6,7 @@ import urlparse
 from pyload.plugin.Account import Account
 
 
-class UlozTo(Account):
+class Uloz_to(Account):
     __name    = "UlozTo"
     __type    = "account"
     __version = "0.10"
@@ -20,7 +20,7 @@ class UlozTo(Account):
     TRAFFIC_LEFT_PATTERN = r'<li class="menu-kredit"><a .*?title=".+?GB = ([\d.]+) MB"'
 
 
-    def loadAccountInfo(self, user, req):
+    def load_account_info(self, user, req):
         html = req.load("http://www.ulozto.net/", decode=True)
 
         m = re.search(self.TRAFFIC_LEFT_PATTERN, html)
@@ -46,4 +46,4 @@ class UlozTo(Account):
                         decode=True)
 
         if '<div class="flash error">' in html:
-            self.wrongPassword()
+            self.wrong_password()

@@ -3,7 +3,7 @@
 from pyload.plugin.Account import Account
 
 
-class PremiumTo(Account):
+class Premium_to(Account):
     __name    = "PremiumTo"
     __type    = "account"
     __version = "0.08"
@@ -15,7 +15,7 @@ class PremiumTo(Account):
                        ("stickell", "l.stickell@yahoo.it")]
 
 
-    def loadAccountInfo(self, user, req):
+    def load_account_info(self, user, req):
         traffic = req.load("http://premium.to/api/straffic.php",
                            get={'username': self.username, 'password': self.password})
 
@@ -34,4 +34,4 @@ class PremiumTo(Account):
                             decode=True)
 
         if "wrong username" in authcode:
-            self.wrongPassword()
+            self.wrong_password()

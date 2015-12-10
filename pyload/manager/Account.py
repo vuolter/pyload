@@ -13,7 +13,7 @@ from pyload.utils import lock
 ACC_VERSION = 1
 
 
-class AccountManager(object):
+class Account_manager(object):
     """Manages all accounts"""
 
     def __init__(self, core):
@@ -22,24 +22,24 @@ class AccountManager(object):
         self.pyload = core
         self.lock = threading.Lock()
 
-        self.initPlugins()
-        self.saveAccounts()  #: save to add categories to conf
+        self.init_plugins()
+        self.save_accounts()  #: save to add categories to conf
 
 
-    def initPlugins(self):
+    def init_plugins(self):
         self.accounts = {}  #: key = ( plugin )
         self.plugins = {}
 
-        self.initAccountPlugins()
-        self.loadAccounts()
+        self.init_account_plugins()
+        self.load_accounts()
 
 
-    def getAccountPlugin(self, plugin):
+    def get_account_plugin(self, plugin):
         """Get account instance for plugin or None if anonymous"""
         try:
             if plugin in self.accounts:
                 if plugin not in self.plugins:
-                    klass = self.pyload.pluginManager.loadClass("accounts", plugin)
+                    klass = self.pyload.pluginManager.load_class("accounts", plugin)
                     if klass:
                         self.plugins[plugin] = klass(self, self.accounts[plugin])
                     else:  #@NOTE: The account class no longer exists (blacklisted plugin). Skipping the account to avoid crash
@@ -52,19 +52,19 @@ class AccountManager(object):
             return None
 
 
-    def getAccountPlugins(self):
+    def get_account_plugins(self):
         """Get all account instances"""
 
         plugins = []
         for plugin in self.accounts.keys():
-            plugins.append(self.getAccountPlugin(plugin))
+            plugins.append(self.get_account_plugin(plugin))
 
         return plugins
 
 
     #----------------------------------------------------------------------
 
-    def loadAccounts(self):
+    def load_accounts(self):
         """Loads all accounts available"""
 
         try:
@@ -115,7 +115,7 @@ class AccountManager(object):
 
     #----------------------------------------------------------------------
 
-    def saveAccounts(self):
+    def save_accounts(self):
         """Save all account information"""
 
         try:
@@ -143,46 +143,46 @@ class AccountManager(object):
 
     #----------------------------------------------------------------------
 
-    def initAccountPlugins(self):
+    def init_account_plugins(self):
         """Init names"""
-        for name in self.pyload.pluginManager.getAccountPlugins():
+        for name in self.pyload.pluginManager.get_account_plugins():
             self.accounts[name] = {}
 
 
     @lock
-    def updateAccount(self, plugin, user, password=None, options={}):
+    def update_account(self, plugin, user, password=None, options={}):
         """Add or update account"""
         if plugin in self.accounts:
-            p = self.getAccountPlugin(plugin)
+            p = self.get_account_plugin(plugin)
             updated = p.updateAccounts(user, password, options)
             # since accounts is a ref in plugin self.accounts doesnt need to be updated here
 
-            self.saveAccounts()
+            self.save_accounts()
             if updated: p.scheduleRefresh(user, force=False)
 
 
     @lock
-    def removeAccount(self, plugin, user):
+    def remove_account(self, plugin, user):
         """Remove account"""
 
         if plugin in self.accounts:
-            p = self.getAccountPlugin(plugin)
+            p = self.get_account_plugin(plugin)
             p.removeAccount(user)
 
-            self.saveAccounts()
+            self.save_accounts()
 
 
     @lock
-    def getAccountInfos(self, force=True, refresh=False):
+    def get_account_infos(self, force=True, refresh=False):
         data = {}
 
         if refresh:
-            self.pyload.scheduler.addJob(0, self.pyload.accountManager.getAccountInfos)
+            self.pyload.scheduler.add_job(0, self.pyload.accountManager.getAccountInfos)
             force = False
 
         for p in self.accounts.keys():
             if self.accounts[p]:
-                p = self.getAccountPlugin(p)
+                p = self.get_account_plugin(p)
                 if p:
                     data[p.__class__.__name__] = p.getAllAccounts(force)
                 else:  #@NOTE: When an account has been skipped, p is None
@@ -190,10 +190,10 @@ class AccountManager(object):
             else:
                 data[p] = []
         e = AccountUpdateEvent()
-        self.pyload.pullManager.addEvent(e)
+        self.pyload.pullManager.add_event(e)
         return data
 
 
-    def sendChange(self):
+    def send_change(self):
         e = AccountUpdateEvent()
-        self.pyload.pullManager.addEvent(e)
+        self.pyload.pullManager.add_event(e)

@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class BayfilesCom(DeadHoster):
+class Bayfiles_com(Dead_hoster):
     __name    = "BayfilesCom"
     __type    = "hoster"
     __version = "0.09"

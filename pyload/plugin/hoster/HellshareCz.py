@@ -3,7 +3,7 @@
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class HellshareCz(SimpleHoster):
+class Hellshare_cz(Simple_hoster):
     __name    = "HellshareCz"
     __type    = "hoster"
     __version = "0.85"

@@ -13,11 +13,11 @@ from pyload.network.HTTPRequest import HTTPRequest
 from pyload.utils import fs_encode
 
 
-class WrongFormat(Exception):
+class Wrong_format(Exception):
     pass
 
 
-class ChunkInfo(object):
+class Chunk_info(object):
 
     def __init__(self, name):
         self.name = unicode(name)
@@ -33,11 +33,11 @@ class ChunkInfo(object):
         return ret
 
 
-    def setSize(self, size):
+    def set_size(self, size):
         self.size = int(size)
 
 
-    def addChunk(self, name, range):
+    def add_chunk(self, name, range):
         self.chunks.append((name, range))
 
 
@@ -45,14 +45,14 @@ class ChunkInfo(object):
         self.chunks = []
 
 
-    def createChunks(self, chunks):
+    def create_chunks(self, chunks):
         self.clear()
         chunk_size = self.size / chunks
 
         current = 0
         for i in xrange(chunks):
             end = self.size - 1 if (i == chunks - 1) else current + chunk_size
-            self.addChunk("%s.chunk%s" % (self.name, i), (current, end))
+            self.add_chunk("%s.chunk%s" % (self.name, i), (current, end))
             current += chunk_size + 1
 
 
@@ -106,15 +106,15 @@ class ChunkInfo(object):
         if os.path.exists(fs_name): os.remove(fs_name)
 
 
-    def getCount(self):
+    def get_count(self):
         return len(self.chunks)
 
 
-    def getChunkName(self, index):
+    def get_chunk_name(self, index):
         return self.chunks[index][0]
 
 
-    def getChunkRange(self, index):
+    def get_chunk_range(self, index):
         return self.chunks[index][1]
 
 
@@ -138,8 +138,8 @@ class HTTPChunk(HTTPRequest):
 
         self.fp = None  #: file handle
 
-        self.initHandle()
-        self.setInterface(self.p.options)
+        self.init_handle()
+        self.set_interface(self.p.options)
 
         self.BOMChecked = False  #: check and remove byte order mark
 
@@ -158,16 +158,16 @@ class HTTPChunk(HTTPRequest):
         return self.p.cj
 
 
-    def getHandle(self):
+    def get_handle(self):
         """Returns a Curl handle ready to use for perform/multiperform"""
 
-        self.setRequestContext(self.p.url, self.p.get, self.p.post, self.p.referer, self.p.cj)
+        self.set_request_context(self.p.url, self.p.get, self.p.post, self.p.referer, self.p.cj)
         self.c.setopt(pycurl.WRITEFUNCTION, self.writeBody)
         self.c.setopt(pycurl.HEADERFUNCTION, self.writeHeader)
 
         # request all bytes, since some servers in russia seems to have a defect arihmetic unit
 
-        fs_name = fs_encode(self.p.info.getChunkName(self.id))
+        fs_name = fs_encode(self.p.info.get_chunk_name(self.id))
         if self.resume:
             self.fp = open(fs_name, "ab")
             self.arrived = self.fp.tell()
@@ -205,12 +205,12 @@ class HTTPChunk(HTTPRequest):
         return self.c
 
 
-    def writeHeader(self, buf):
+    def write_header(self, buf):
         self.header += buf
         #@TODO forward headers?, this is possibly unneeeded, when we just parse valid 200 headers
         # as first chunk, we will parse the headers
         if not self.range and self.header.endswith("\r\n\r\n"):
-            self.parseHeader()
+            self.parse_header()
         elif not self.range and buf.startswith("150") and "data connection" in buf.lower():  #: ftp file size parsing
             size = re.search(r"(\d+) bytes", buf)
             if size:
@@ -220,7 +220,7 @@ class HTTPChunk(HTTPRequest):
         self.headerParsed = True
 
 
-    def writeBody(self, buf):
+    def write_body(self, buf):
         # ignore BOM, it confuses unrar
         if not self.BOMChecked:
             if [ord(b) for b in buf[:3]] == [239, 187, 191]:
@@ -253,9 +253,9 @@ class HTTPChunk(HTTPRequest):
             return 0  #: close if we have enough data
 
 
-    def parseHeader(self):
+    def parse_header(self):
         """Parse data from recieved header"""
-        for orgline in self.decodeResponse(self.header).splitlines():
+        for orgline in self.decode_response(self.header).splitlines():
             line = orgline.strip().lower()
 
             if line.startswith("accept-ranges") and "bytes" in line:
@@ -288,17 +288,17 @@ class HTTPChunk(HTTPRequest):
         self.size = 0
 
 
-    def resetRange(self):
+    def reset_range(self):
         """Reset the range, so the download will load all data available"""
         self.range = None
 
 
-    def setRange(self, range):
+    def set_range(self, range):
         self.range = range
         self.size = range[1] - range[0]
 
 
-    def flushFile(self):
+    def flush_file(self):
         """Flush and close file"""
         self.fp.flush()
         os.fsync(self.fp.fileno())  #: make sure everything was written to disk
@@ -313,6 +313,6 @@ class HTTPChunk(HTTPRequest):
             del self.p
 
 
-def charEnc(enc):
+def char_enc(enc):
     return {'utf-8'     : "utf_8",
             'iso-8859-1': "latin_1"}.get(enc, "unknown")

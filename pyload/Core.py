@@ -74,18 +74,18 @@ class Core(object):
                     elif option in ("-d", "--debug"):
                         self.doDebug = True
                     elif option in ("-q", "--quit"):
-                        self.quitInstance()
+                        self.quit_instance()
                         sys.exit()
                     elif option == "--status":
-                        pid = self.isAlreadyRunning()
-                        if self.isAlreadyRunning():
+                        pid = self.is_already_running()
+                        if self.is_already_running():
                             print pid
                             sys.exit(0)
                         else:
                             print "false"
                             sys.exit(1)
                     elif option == "--clean":
-                        self.cleanTree()
+                        self.clean_tree()
                         sys.exit()
                     elif option == "--no-remote":
                         self.remote = False
@@ -127,20 +127,20 @@ class Core(object):
         os._exit(1)
 
 
-    def writePidFile(self):
-        self.deletePidFile()
+    def write_pid_file(self):
+        self.delete_pid_file()
         pid = os.getpid()
         with open(self.pidfile, "wb") as f:
             f.write(str(pid))
 
 
-    def deletePidFile(self):
-        if self.checkPidFile():
+    def delete_pid_file(self):
+        if self.check_pid_file():
             self.log.debug("Deleting old pidfile %s" % self.pidfile)
             os.remove(self.pidfile)
 
 
-    def checkPidFile(self):
+    def check_pid_file(self):
         """Return pid as int or 0"""
         if os.path.isfile(self.pidfile):
             with open(self.pidfile, "rb") as f:
@@ -152,8 +152,8 @@ class Core(object):
         return 0
 
 
-    def isAlreadyRunning(self):
-        pid = self.checkPidFile()
+    def is_already_running(self):
+        pid = self.check_pid_file()
         if not pid or os.name == "nt":
             return False
         try:
@@ -164,12 +164,12 @@ class Core(object):
         return pid
 
 
-    def quitInstance(self):
+    def quit_instance(self):
         if os.name == "nt":
             print "Not supported on windows."
             return
 
-        pid = self.isAlreadyRunning()
+        pid = self.is_already_running()
         if not pid:
             print "No pyLoad running."
             return
@@ -194,7 +194,7 @@ class Core(object):
             print "Error quitting pyLoad"
 
 
-    def cleanTree(self):
+    def clean_tree(self):
         for path, dirs, files in os.walk(self.path("")):
             for f in files:
                 if not f.endswith(".pyo") and not f.endswith(".pyc"):
@@ -219,7 +219,7 @@ class Core(object):
         except Exception:
             pass
 
-        self.config = ConfigParser()
+        self.config = Config_parser()
 
         gettext.setpaths([os.path.join(os.sep, "usr", "share", "pyload", "locale"), None])
         translation = gettext.translation("pyLoad", self.path("locale"),
@@ -229,7 +229,7 @@ class Core(object):
         self.debug = self.doDebug or self.config.get("general", "debug_mode")
         self.remote &= self.config.get("remote", "activated")
 
-        pid = self.isAlreadyRunning()
+        pid = self.is_already_running()
         if pid:
             print _("pyLoad already running with pid %s") % pid
             sys.exit()
@@ -272,7 +272,7 @@ class Core(object):
         self.log.info(_("Starting") + " pyLoad %s" % pyload.__version__)
         self.log.info(_("Using home directory: %s") % os.getcwd())
 
-        self.writePidFile()
+        self.write_pid_file()
 
         #@TODO refractor
 
@@ -295,19 +295,19 @@ class Core(object):
         self.setupDB()
 
         if first_start:
-            self.db.addUser("admin", "pyload")
+            self.db.add_user("admin", "pyload")
 
         elif self.config.oldRemoteData:
             self.log.info(_("Moving old user config to DB"))
-            self.db.addUser(self.config.oldRemoteData['username'], self.config.oldRemoteData['password'])
+            self.db.add_user(self.config.oldRemoteData['username'], self.config.oldRemoteData['password'])
 
             self.log.info(_("Please check your logindata with ./pyload.py -u"))
 
         if self.deleteLinks:
             self.log.info(_("All links removed"))
-            self.db.purgeLinks()
+            self.db.purge_links()
 
-        self.requestFactory = RequestFactory(self)
+        self.requestFactory = Request_factory(self)
         __builtin__.pyreq = self.requestFactory
 
         self.lastClientConnected = 0
@@ -325,20 +325,20 @@ class Core(object):
         self.scheduler = Scheduler(self)
 
         # hell yeah, so many important managers :D
-        self.pluginManager = PluginManager(self)
-        self.pullManager = PullManager(self)
-        self.accountManager = AccountManager(self)
-        self.threadManager = ThreadManager(self)
-        self.captchaManager = CaptchaManager(self)
-        self.addonManager = AddonManager(self)
-        self.remoteManager = RemoteManager(self)
+        self.pluginManager = Plugin_manager(self)
+        self.pullManager = Pull_manager(self)
+        self.accountManager = Account_manager(self)
+        self.threadManager = Thread_manager(self)
+        self.captchaManager = Captcha_manager(self)
+        self.addonManager = Addon_manager(self)
+        self.remoteManager = Remote_manager(self)
 
-        self.js = JsEngine(self)
+        self.js = Js_engine(self)
 
-        self.log.info(_("Downloadtime: %s") % self.api.isTimeDownload())
+        self.log.info(_("Downloadtime: %s") % self.api.is_time_download())
 
         if rpc:
-            self.remoteManager.startBackends()
+            self.remoteManager.start_backends()
 
         if web:
             self.init_webserver()
@@ -354,20 +354,20 @@ class Core(object):
         if os.path.exists(link_file):
             with open(link_file, "rb") as f:
                 if f.read().strip():
-                    self.api.addPackage("links.txt", [link_file], 1)
+                    self.api.add_package("links.txt", [link_file], 1)
 
         link_file = "links.txt"
         if os.path.exists(link_file):
             with open(link_file, "rb") as f:
                 if f.read().strip():
-                    self.api.addPackage("links.txt", [link_file], 1)
+                    self.api.add_package("links.txt", [link_file], 1)
 
-        # self.scheduler.addJob(0, self.accountManager.getAccountInfos)
+        # self.scheduler.add_job(0, self.accountManager.getAccountInfos)
         self.log.info(_("Activating Accounts..."))
-        self.accountManager.getAccountInfos()
+        self.accountManager.get_account_infos()
 
         self.log.info(_("Activating Plugins..."))
-        self.addonManager.coreReady()
+        self.addonManager.core_ready()
 
         self.running = True
         self.threadManager.pause = False
@@ -383,7 +383,7 @@ class Core(object):
             if self.do_kill:
                 self.shutdown()
                 self.log.info(_("pyLoad quits"))
-                self.removeLogger()
+                self.remove_logger()
                 os._exit(0)  #@TODO thrift blocks shutdown
 
             self.threadManager.work()
@@ -391,21 +391,21 @@ class Core(object):
 
 
     def setupDB(self):
-        self.db = DatabaseBackend(self)  #: the backend
+        self.db = Database_backend(self)  #: the backend
         self.db.setup()
 
-        self.files = FileHandler(self)
+        self.files = File_handler(self)
         self.db.manager = self.files  #: ugly?
 
 
     def init_webserver(self):
-        self.webserver = WebServer(self)
+        self.webserver = Web_server(self)
         self.webserver.start()
 
 
     def init_logger(self, level):
-        self.log = logging.getLogger("log")
-        self.log.setLevel(level)
+        self.log = logging.get_logger("log")
+        self.log.set_level(level)
 
         format  = "%(asctime)s  %(levelname)-8s  %(message)s"
         datefmt = "%Y-%m-%d %H:%M:%S"
@@ -442,7 +442,7 @@ class Core(object):
         # Set console formatter
         console = logging.StreamHandler(sys.stdout)
         console.setFormatter(console_formatter)
-        self.log.addHandler(console)
+        self.log.add_handler(console)
 
         log_folder = self.config.get("log", "log_folder")
         if not os.path.exists(log_folder):
@@ -461,12 +461,12 @@ class Core(object):
                 file_handler = logging.FileHandler(os.path.join(log_folder, 'log.txt'), encoding="utf8")
 
             file_handler.setFormatter(file_handler_formatter)
-            self.log.addHandler(file_handler)
+            self.log.add_handler(file_handler)
 
 
-    def removeLogger(self):
+    def remove_logger(self):
         for h in list(self.log.handlers):
-            self.log.removeHandler(h)
+            self.log.remove_handler(h)
             h.close()
 
 
@@ -526,7 +526,7 @@ class Core(object):
                         sys.exit()
 
 
-    def isClientConnected(self):
+    def is_client_connected(self):
         return (self.lastClientConnected + 30) > time.time()
 
 
@@ -537,7 +537,7 @@ class Core(object):
         os.closerange(3, 50)
         os.execl(sys.executable, sys.executable, *sys.argv)
         os._exit(0)
-        self.cleanTree()
+        self.clean_tree()
 
 
     def shutdown(self):
@@ -552,7 +552,7 @@ class Core(object):
             for pyfile in pyfiles:
                 pyfile.abortDownload()
 
-            self.addonManager.coreExiting()
+            self.addonManager.core_exiting()
 
         except Exception:
             if self.debug:
@@ -560,10 +560,10 @@ class Core(object):
             self.log.info(_("error while shutting down"))
 
         finally:
-            self.files.syncSave()
+            self.files.sync_save()
             self.shuttedDown = True
 
-        self.deletePidFile()
+        self.delete_pid_file()
 
 
     def path(self, *args):

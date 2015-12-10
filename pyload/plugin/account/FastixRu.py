@@ -4,7 +4,7 @@ from pyload.plugin.Account import Account
 from pyload.utils import json_loads
 
 
-class FastixRu(Account):
+class Fastix_ru(Account):
     __name    = "FastixRu"
     __type    = "account"
     __version = "0.03"
@@ -14,8 +14,8 @@ class FastixRu(Account):
     __authors     = [("Massimo Rosamilia", "max@spiritix.eu")]
 
 
-    def loadAccountInfo(self, user, req):
-        data = self.getAccountData(user)
+    def load_account_info(self, user, req):
+        data = self.get_account_data(user)
         html = json_loads(req.load("http://fastix.ru/api_v2/", get={'apikey': data['api'], 'sub': "getaccountdetails"}))
 
         points      = html['points']
@@ -39,4 +39,4 @@ class FastixRu(Account):
         data['api'] = api
 
         if "error_code" in html:
-            self.wrongPassword()
+            self.wrong_password()

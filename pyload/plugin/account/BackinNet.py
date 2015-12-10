@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSAccount import XFSAccount
 
 
-class BackinNet(XFSAccount):
+class Backin_net(XFSAccount):
     __name    = "BackinNet"
     __type    = "account"
     __version = "0.01"

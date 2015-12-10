@@ -3,7 +3,7 @@
 from pyload.plugin.internal.MultiHook import MultiHook
 
 
-class AlldebridCom(MultiHook):
+class Alldebrid_com(Multi_hook):
     __name    = "AlldebridCom"
     __type    = "hook"
     __version = "0.16"
@@ -20,8 +20,8 @@ class AlldebridCom(MultiHook):
     __authors     = [("Andy Voigt", "spamsales@online.de")]
 
 
-    def getHosters(self):
-        https = "https" if self.getConfig('ssl') else "http"
+    def get_hosters(self):
+        https = "https" if self.get_config('ssl') else "http"
         html = self.getURL(https + "://www.alldebrid.com/api.php", get={'action': "get_host"}).replace("\"", "").strip()
 
         return [x.strip() for x in html.split(",") if x.strip()]

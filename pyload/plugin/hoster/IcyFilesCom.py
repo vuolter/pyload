@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class IcyFilesCom(DeadHoster):
+class Icy_files_com(Dead_hoster):
     __name    = "IcyFilesCom"
     __type    = "hoster"
     __version = "0.06"

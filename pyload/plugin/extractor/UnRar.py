@@ -18,7 +18,7 @@ def renice(pid, value):
             pass
 
 
-class UnRar(Extractor):
+class Un_rar(Extractor):
     __name    = "UnRar"
     __type    = "extractor"
     __version = "1.20"
@@ -48,7 +48,7 @@ class UnRar(Extractor):
 
 
     @classmethod
-    def isUsable(cls):
+    def is_usable(cls):
         if os.name == "nt":
             try:
                 cls.CMD = os.path.join(pypath, "RAR.exe")
@@ -79,7 +79,7 @@ class UnRar(Extractor):
 
 
     @classmethod
-    def isMultipart(cls, filename):
+    def is_multipart(cls, filename):
         return cls.re_multipart.search(filename) is not None
 
 
@@ -131,7 +131,7 @@ class UnRar(Extractor):
                 break
             # reading a percentage sign -> set progress and restart
             if c == '%':
-                self.notifyProgress(int(s))
+                self.notify_progress(int(s))
                 s = ""
             # not reading a digit -> therefore restart
             elif c not in string.digits:
@@ -168,7 +168,7 @@ class UnRar(Extractor):
         self.files = self.list(password)
 
 
-    def getDeleteFiles(self):
+    def get_delete_files(self):
         dir, name = os.path.split(self.filename)
 
         # actually extracted file
@@ -191,7 +191,7 @@ class UnRar(Extractor):
             raise ArchiveError(_("Cannot open file"))
 
         if err.strip():  #: only log error at this point
-            self.manager.logError(err.strip())
+            self.manager.log_error(err.strip())
 
         result = set()
         if not self.fullpath and self.VERSION.startswith('5'):
@@ -237,7 +237,7 @@ class UnRar(Extractor):
         # NOTE: return codes are not reliable, some kind of threading, cleanup whatever issue
         call = [self.CMD, command] + args + list(xargs)
 
-        self.manager.logDebug(" ".join(call))
+        self.manager.log_debug(" ".join(call))
 
         p = subprocess.Popen(call, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         return p

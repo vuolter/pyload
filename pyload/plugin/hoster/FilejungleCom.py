@@ -4,7 +4,7 @@ from pyload.plugin.hoster.FileserveCom import FileserveCom, checkFile
 from pyload.plugin.Plugin import chunks
 
 
-class FilejungleCom(FileserveCom):
+class Filejungle_com(Fileserve_com):
     __name    = "FilejungleCom"
     __type    = "hoster"
     __version = "0.51"
@@ -24,6 +24,6 @@ class FilejungleCom(FileserveCom):
     LONG_WAIT_PATTERN = r'<h1>Please wait for (\d+) (\w+)\s*to download the next file\.</h1>'
 
 
-def getInfo(urls):
+def get_info(urls):
     for chunk in chunks(urls, 100):
         yield checkFile(FilejungleCom, chunk)

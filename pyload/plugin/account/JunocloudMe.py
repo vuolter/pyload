@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSAccount import XFSAccount
 
 
-class JunocloudMe(XFSAccount):
+class Junocloud_me(XFSAccount):
     __name    = "JunocloudMe"
     __type    = "account"
     __version = "0.02"

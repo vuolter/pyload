@@ -3,7 +3,7 @@
 from pyload.plugin.internal.SimpleCrypter import SimpleCrypter
 
 
-class XFSCrypter(SimpleCrypter):
+class XFSCrypter(Simple_crypter):
     __name    = "XFSCrypter"
     __type    = "crypter"
     __version = "0.09"
@@ -31,8 +31,8 @@ class XFSCrypter(SimpleCrypter):
             if self.account:
                 account      = self.account
             else:
-                account_name = (self.getClassName() + ".py").replace("Folder.py", "").replace(".py", "")
-                account      = self.pyfile.m.core.accountManager.getAccountPlugin(account_name)
+                account_name = (self.get_class_name() + ".py").replace("Folder.py", "").replace(".py", "")
+                account      = self.pyfile.m.core.accountManager.get_account_plugin(account_name)
 
             if account and hasattr(account, "HOSTER_DOMAIN") and account.HOSTER_DOMAIN:
                 self.HOSTER_DOMAIN = account.HOSTER_DOMAIN

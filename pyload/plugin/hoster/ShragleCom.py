@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class ShragleCom(DeadHoster):
+class Shragle_com(Dead_hoster):
     __name    = "ShragleCom"
     __type    = "hoster"
     __version = "0.22"

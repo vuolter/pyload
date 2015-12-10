@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSHoster import XFSHoster
 
 
-class RapidfileshareNet(XFSHoster):
+class Rapidfileshare_net(XFSHoster):
     __name    = "RapidfileshareNet"
     __type    = "hoster"
     __version = "0.03"

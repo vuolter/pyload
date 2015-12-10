@@ -5,7 +5,7 @@ import re
 from pyload.plugin.Crypter import Crypter
 
 
-class MegaCoNz(Crypter):
+class Mega_co_nz(Crypter):
     __name    = "MegaCoNz"
     __type    = "crypter"
     __version = "0.04"
@@ -20,7 +20,7 @@ class MegaCoNz(Crypter):
 
 
     def setup(self):
-        self.req.setOption("timeout", 300)
+        self.req.set_option("timeout", 300)
 
 
     def decrypt(self, pyfile):

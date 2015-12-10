@@ -4,7 +4,7 @@ from pyload.utils import json_loads
 from pyload.plugin.internal.MultiHoster import MultiHoster
 
 
-class MegaDebridEu(MultiHoster):
+class Mega_debrid_eu(Multi_hoster):
     __name    = "MegaDebridEu"
     __type    = "hoster"
     __version = "0.47"
@@ -25,7 +25,7 @@ class MegaDebridEu(MultiHoster):
         Connexion to the mega-debrid API
         Return True if succeed
         """
-        user, data = self.account.selectAccount()
+        user, data = self.account.select_account()
         jsonResponse = self.load(self.API_URL,
                                  get={'action': 'connectUser', 'login': user, 'password': data['password']})
         res = json_loads(jsonResponse)

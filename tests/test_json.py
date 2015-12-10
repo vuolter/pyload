@@ -10,7 +10,7 @@ import urllib2
 url = "http://localhost:8001/api/%s"
 
 
-class TestJson(object):
+class Test_json(object):
 
     def call(self, name, post=None):
         if not post: post = {}
@@ -19,7 +19,7 @@ class TestJson(object):
         return json.loads(u.read())
 
 
-    def setUp(self):
+    def set_up(self):
         u = urllib2.urlopen(url % "login", data=urlencode({"username": "TestUser", "password": "pwhere"}))
         self.key = json.loads(u.read())
         assert self.key is not False

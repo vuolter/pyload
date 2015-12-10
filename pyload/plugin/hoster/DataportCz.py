@@ -3,7 +3,7 @@
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class DataportCz(SimpleHoster):
+class Dataport_cz(Simple_hoster):
     __name    = "DataportCz"
     __type    = "hoster"
     __version = "0.41"
@@ -28,8 +28,8 @@ class DataportCz(SimpleHoster):
         captchas = {"1": "jkeG", "2": "hMJQ", "3": "vmEK", "4": "ePQM", "5": "blBd"}
 
         for _i in xrange(60):
-            action, inputs = self.parseHtmlForm('free_download_form')
-            self.logDebug(action, inputs)
+            action, inputs = self.parse_html_form('free_download_form')
+            self.log_debug(action, inputs)
             if not action or not inputs:
                 self.error(_("free_download_form"))
 
@@ -40,13 +40,13 @@ class DataportCz(SimpleHoster):
 
             self.download("http://www.dataport.cz%s" % action, post=inputs)
 
-            check = self.checkDownload({"captcha": 'alert("\u0160patn\u011b opsan\u00fd k\u00f3d z obr\u00e1zu");',
+            check = self.check_download({"captcha": 'alert("\u0160patn\u011b opsan\u00fd k\u00f3d z obr\u00e1zu");',
                                         "slot"   : 'alert("Je n\u00e1m l\u00edto, ale moment\u00e1ln\u011b nejsou'})
             if check == "captcha":
                 self.error(_("invalid captcha"))
 
             elif check == "slot":
-                self.logDebug("No free slots - wait 60s and retry")
+                self.log_debug("No free slots - wait 60s and retry")
                 self.wait(60, False)
                 self.html = self.load(pyfile.url, decode=True)
                 continue

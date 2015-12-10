@@ -6,7 +6,7 @@ import time
 from pyload.plugin.Account import Account
 
 
-class FilerNet(Account):
+class Filer_net(Account):
     __name    = "FilerNet"
     __type    = "account"
     __version = "0.04"
@@ -22,7 +22,7 @@ class FilerNet(Account):
     FREE_PATTERN = r'Account Status</th>\s*<td>\s*Free'
 
 
-    def loadAccountInfo(self, user, req):
+    def load_account_info(self, user, req):
         html = req.load("https://filer.net/profile")
 
         # Free user
@@ -34,11 +34,11 @@ class FilerNet(Account):
 
         if until and traffic:
             validuntil  = time.mktime(time.strptime(until.group(1), "%d.%m.%Y %H:%M:%S"))
-            trafficleft = self.parseTraffic(traffic.group(1))
+            trafficleft = self.parse_traffic(traffic.group(1))
             return {"premium": True, "validuntil": validuntil, "trafficleft": trafficleft}
 
         else:
-            self.logError(_("Unable to retrieve account information"))
+            self.log_error(_("Unable to retrieve account information"))
             return {"premium": False, "validuntil": None, "trafficleft": None}
 
 
@@ -56,4 +56,4 @@ class FilerNet(Account):
                         decode=True)
 
         if 'Logout' not in html:
-            self.wrongPassword()
+            self.wrong_password()

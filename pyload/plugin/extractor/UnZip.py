@@ -10,7 +10,7 @@ from pyload.plugin.Extractor import Extractor, ArchiveError, CRCError, PasswordE
 from pyload.utils import fs_encode
 
 
-class UnZip(Extractor):
+class Un_zip(Extractor):
     __name    = "UnZip"
     __type    = "extractor"
     __version = "1.12"
@@ -26,7 +26,7 @@ class UnZip(Extractor):
 
 
     @classmethod
-    def isUsable(cls):
+    def is_usable(cls):
         return sys.version_info[:2] >= (2, 6)
 
 

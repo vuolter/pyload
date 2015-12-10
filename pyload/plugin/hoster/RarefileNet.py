@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSHoster import XFSHoster
 
 
-class RarefileNet(XFSHoster):
+class Rarefile_net(XFSHoster):
     __name    = "RarefileNet"
     __type    = "hoster"
     __version = "0.09"

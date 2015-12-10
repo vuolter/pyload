@@ -5,7 +5,7 @@ import re
 from pyload.plugin.Hoster import Hoster
 
 
-class YoupornCom(Hoster):
+class Youporn_com(Hoster):
     __name    = "YoupornCom"
     __type    = "hoster"
     __version = "0.20"

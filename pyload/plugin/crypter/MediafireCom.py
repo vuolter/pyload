@@ -6,7 +6,7 @@ from pyload.plugin.hoster.MediafireCom import checkHTMLHeader
 from pyload.utils import json_loads
 
 
-class MediafireCom(Crypter):
+class Mediafire_com(Crypter):
     __name    = "MediafireCom"
     __type    = "crypter"
     __version = "0.14"
@@ -26,7 +26,7 @@ class MediafireCom(Crypter):
 
     def decrypt(self, pyfile):
         url, result = checkHTMLHeader(pyfile.url)
-        self.logDebug("Location (%d): %s" % (result, url))
+        self.log_debug("Location (%d): %s" % (result, url))
 
         if result == 0:
             # load and parse html
@@ -40,13 +40,13 @@ class MediafireCom(Crypter):
                 m = re.search(self.FOLDER_KEY_PATTERN, html)
                 if m:
                     folder_key = m.group(1)
-                    self.logDebug("FOLDER KEY: %s" % folder_key)
+                    self.log_debug("FOLDER KEY: %s" % folder_key)
 
                     json_resp = json_loads(self.load("http://www.mediafire.com/api/folder/get_info.php",
                                                      get={'folder_key'     : folder_key,
                                                           'response_format': "json",
                                                           'version'        : 1}))
-                    # self.logInfo(json_resp)
+                    # self.log_info(json_resp)
                     if json_resp['response']['result'] == "Success":
                         for link in json_resp['response']['folder_info']['files']:
                             self.urls.append("http://www.mediafire.com/file/%s" % link['quickkey'])

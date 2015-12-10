@@ -8,7 +8,7 @@ from pyload.plugin.Account import Account
 from pyload.utils import json_loads
 
 
-class RapideoPl(Account):
+class Rapideo_pl(Account):
     __name = "RapideoPl"
     __version = "0.01"
     __type = "account"
@@ -32,10 +32,10 @@ class RapideoPl(Account):
     _pwd = None
 
 
-    def loadAccountInfo(self, name, req):
+    def load_account_info(self, name, req):
         self._req = req
         try:
-            result = json_loads(self.runAuthQuery())
+            result = json_loads(self.run_auth_query())
         except Exception:
             #@TODO: return or let it be thrown?
             return
@@ -60,17 +60,17 @@ class RapideoPl(Account):
         self._pwd = hashlib.md5(data['password']).hexdigest()
         self._req = req
         try:
-            response = json_loads(self.runAuthQuery())
+            response = json_loads(self.run_auth_query())
         except Exception:
-            self.wrongPassword()
+            self.wrong_password()
 
         if "errno" in response.keys():
-            self.wrongPassword()
+            self.wrong_password()
         data['usr'] = self._usr
         data['pwd'] = self._pwd
 
 
-    def createAuthQuery(self):
+    def create_auth_query(self):
         query = self._api_query
         query['username'] = self._usr
         query['password'] = self._pwd
@@ -78,7 +78,7 @@ class RapideoPl(Account):
         return query
 
 
-    def runAuthQuery(self):
-        data = self._req.load(self._api_url, post=self.createAuthQuery())
+    def run_auth_query(self):
+        data = self._req.load(self._api_url, post=self.create_auth_query())
 
         return data

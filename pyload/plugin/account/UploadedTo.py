@@ -6,7 +6,7 @@ import time
 from pyload.plugin.Account import Account
 
 
-class UploadedTo(Account):
+class Uploaded_to(Account):
     __name    = "UploadedTo"
     __type    = "account"
     __version = "0.30"
@@ -21,7 +21,7 @@ class UploadedTo(Account):
     TRAFFIC_LEFT_PATTERN = r'<b class="cB">(?P<S>[\d.,]+) (?P<U>[\w^_]+)'
 
 
-    def loadAccountInfo(self, user, req):
+    def load_account_info(self, user, req):
         validuntil  = None
         trafficleft = None
         premium     = None
@@ -49,7 +49,7 @@ class UploadedTo(Account):
             size    = traffic['S'].replace('.', '')
             unit    = traffic['U'].lower()
 
-            trafficleft = self.parseTraffic(size + unit)
+            trafficleft = self.parse_traffic(size + unit)
 
         return {'validuntil' : validuntil,
                 'trafficleft': trafficleft,
@@ -64,4 +64,4 @@ class UploadedTo(Account):
                         decode=True)
 
         if '"err"' in html:
-            self.wrongPassword()
+            self.wrong_password()

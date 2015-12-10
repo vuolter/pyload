@@ -5,7 +5,7 @@ import re
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class CloudzillaTo(SimpleHoster):
+class Cloudzilla_to(Simple_hoster):
     __name    = "CloudzillaTo"
     __type    = "hoster"
     __version = "0.06"
@@ -24,10 +24,10 @@ class CloudzillaTo(SimpleHoster):
     PASSWORD_PATTERN = r'<div id="pwd_protected">'
 
 
-    def checkErrors(self):
+    def check_errors(self):
         m = re.search(self.PASSWORD_PATTERN, self.html)
         if m:
-            self.html = self.load(self.pyfile.url, get={'key': self.getPassword()})
+            self.html = self.load(self.pyfile.url, get={'key': self.get_password()})
 
         if re.search(self.PASSWORD_PATTERN, self.html):
             self.retry(reason="Wrong password")
@@ -35,11 +35,11 @@ class CloudzillaTo(SimpleHoster):
 
     def handle_free(self, pyfile):
         self.html = self.load("http://www.cloudzilla.to/generateticket/",
-                              post={'file_id': self.info['pattern']['ID'], 'key': self.getPassword()})
+                              post={'file_id': self.info['pattern']['ID'], 'key': self.get_password()})
 
         ticket = dict(re.findall(r'<(.+?)>([^<>]+?)</', self.html))
 
-        self.logDebug(ticket)
+        self.log_debug(ticket)
 
         if 'error' in ticket:
             if "File is password protected" in ticket['error']:

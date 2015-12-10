@@ -4,7 +4,7 @@ from pyload.utils import json_loads
 from pyload.plugin.internal.MultiHook import MultiHook
 
 
-class PremiumizeMe(MultiHook):
+class Premiumize_me(Multi_hook):
     __name    = "PremiumizeMe"
     __type    = "hook"
     __version = "0.17"
@@ -20,9 +20,9 @@ class PremiumizeMe(MultiHook):
     __authors     = [("Florian Franzen", "FlorianFranzen@gmail.com")]
 
 
-    def getHosters(self):
+    def get_hosters(self):
         # Get account data
-        user, data = self.account.selectAccount()
+        user, data = self.account.select_account()
 
         # Get supported hosters list from premiumize.me using the
         # json API v1 (see https://secure.premiumize.me/?show=api)

@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class EgoFilesCom(DeadHoster):
+class Ego_files_com(Dead_hoster):
     __name    = "EgoFilesCom"
     __type    = "hoster"
     __version = "0.16"

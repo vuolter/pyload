@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSHoster import XFSHoster
 
 
-class EasybytezCom(XFSHoster):
+class Easybytez_com(XFSHoster):
     __name    = "EasybytezCom"
     __type    = "hoster"
     __version = "0.23"

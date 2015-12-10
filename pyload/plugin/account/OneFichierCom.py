@@ -7,7 +7,7 @@ import time
 from pyload.plugin.Account import Account
 
 
-class OneFichierCom(Account):
+class One_fichier_com(Account):
     __name    = "OneFichierCom"
     __type    = "account"
     __version = "0.12"
@@ -21,7 +21,7 @@ class OneFichierCom(Account):
     VALID_UNTIL_PATTERN = r'Your Premium Status will end the (\d+/\d+/\d+)'
 
 
-    def loadAccountInfo(self, user, req):
+    def load_account_info(self, user, req):
         validuntil = None
         trafficleft = -1
         premium = None
@@ -31,12 +31,12 @@ class OneFichierCom(Account):
         m = re.search(self.VALID_UNTIL_PATTERN, html)
         if m:
             expiredate = m.group(1)
-            self.logDebug("Expire date: " + expiredate)
+            self.log_debug("Expire date: " + expiredate)
 
             try:
                 validuntil = time.mktime(time.strptime(expiredate, "%d/%m/%Y"))
             except Exception, e:
-                self.logError(e)
+                self.log_error(e)
             else:
                 premium = True
 
@@ -55,4 +55,4 @@ class OneFichierCom(Account):
                         decode=True)
 
         if '>Invalid email address' in html or '>Invalid password' in html:
-            self.wrongPassword()
+            self.wrong_password()

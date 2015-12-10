@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadCrypter import DeadCrypter
 
 
-class WiiReloadedOrg(DeadCrypter):
+class Wii_reloaded_org(Dead_crypter):
     __name    = "WiiReloadedOrg"
     __type    = "crypter"
     __version = "0.11"

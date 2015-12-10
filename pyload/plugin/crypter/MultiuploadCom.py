@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadCrypter import DeadCrypter
 
 
-class MultiuploadCom(DeadCrypter):
+class Multiupload_com(Dead_crypter):
     __name    = "MultiuploadCom"
     __type    = "crypter"
     __version = "0.02"

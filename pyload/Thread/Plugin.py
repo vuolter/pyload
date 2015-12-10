@@ -19,21 +19,21 @@ from pyload.utils.packagetools import parseNames
 from pyload.utils import fs_join
 
 
-class PluginThread(threading.Thread):
+class Plugin_thread(threading.Thread):
     """Abstract base class for thread types"""
 
     def __init__(self, manager):
         """Constructor"""
         threading.Thread.__init__(self)
-        self.setDaemon(True)
+        self.set_daemon(True)
 
         self.pyload  = manager.pyload
         self.manager = manager  #: thread manager
 
 
-    def writeDebugReport(self, pyfile):
+    def write_debug_report(self, pyfile):
         dump_name = "debug_%s_%s.zip" % (pyfile.pluginname, time.strftime("%d-%m-%Y_%H-%M-%S"))
-        dump = self.getDebugDump(pyfile)
+        dump = self.get_debug_dump(pyfile)
 
         try:
             import zipfile
@@ -66,9 +66,9 @@ class PluginThread(threading.Thread):
         self.pyload.log.info("Debug Report written to %s" % dump_name)
 
 
-    def getDebugDump(self, pyfile):
+    def get_debug_dump(self, pyfile):
         dump = "pyLoad %s Debug Report of %s %s \n\nTRACEBACK:\n %s \n\nFRAMESTACK:\n" % (
-            self.pyload.api.getServerVersion(), pyfile.pluginname, pyfile.plugin.__version, traceback.format_exc())
+            self.pyload.api.get_server_version(), pyfile.pluginname, pyfile.plugin.__version, traceback.format_exc())
 
         tb = sys.exc_info()[2]
         stack = []

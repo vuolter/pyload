@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSAccount import XFSAccount
 
 
-class ExashareCom(XFSAccount):
+class Exashare_com(XFSAccount):
     __name    = "ExashareCom"
     __type    = "account"
     __version = "0.01"

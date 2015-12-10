@@ -6,7 +6,7 @@ import time
 from pyload.plugin.Account import Account
 
 
-class EuroshareEu(Account):
+class Euroshare_eu(Account):
     __name    = "EuroshareEu"
     __type    = "account"
     __version = "0.02"
@@ -16,7 +16,7 @@ class EuroshareEu(Account):
     __authors     = [("zoidberg", "zoidberg@mujmail.cz")]
 
 
-    def loadAccountInfo(self, user, req):
+    def load_account_info(self, user, req):
         self.relogin(user)
         html = req.load("http://euroshare.eu/customer-zone/settings/")
 
@@ -38,4 +38,4 @@ class EuroshareEu(Account):
                         decode=True)
 
         if u">Nesprávne prihlasovacie meno alebo heslo" in html:
-            self.wrongPassword()
+            self.wrong_password()

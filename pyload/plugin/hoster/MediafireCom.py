@@ -4,7 +4,7 @@ from pyload.plugin.captcha.SolveMedia import SolveMedia
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class MediafireCom(SimpleHoster):
+class Mediafire_com(Simple_hoster):
     __name    = "MediafireCom"
     __type    = "hoster"
     __version = "0.86"
@@ -46,12 +46,12 @@ class MediafireCom(SimpleHoster):
                                   decode=True)
 
         if self.PASSWORD_PATTERN in self.html:
-            password = self.getPassword()
+            password = self.get_password()
 
             if not password:
                 self.fail(_("No password found"))
             else:
-                self.logInfo(_("Password protected link, trying: ") + password)
+                self.log_info(_("Password protected link, trying: ") + password)
                 self.html = self.load(self.link, post={'downloadp': password})
 
                 if self.PASSWORD_PATTERN in self.html:

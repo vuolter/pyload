@@ -6,7 +6,7 @@ import urlparse
 from pyload.plugin.internal.XFSHoster import XFSHoster
 
 
-class UpleaCom(XFSHoster):
+class Uplea_com(XFSHoster):
     __name    = "UpleaCom"
     __type    = "hoster"
     __version = "0.10"
@@ -51,7 +51,7 @@ class UpleaCom(XFSHoster):
 
         m = re.search(self.WAIT_PATTERN, self.html)
         if m:
-            self.logDebug(_("Waiting %s seconds") % m.group(1))
+            self.log_debug(_("Waiting %s seconds") % m.group(1))
             self.wait(m.group(1), True)
             self.retry()
 

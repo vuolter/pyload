@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class MegavideoCom(DeadHoster):
+class Megavideo_com(Dead_hoster):
     __name    = "MegavideoCom"
     __type    = "hoster"
     __version = "0.21"

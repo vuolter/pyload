@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSAccount import XFSAccount
 
 
-class RarefileNet(XFSAccount):
+class Rarefile_net(XFSAccount):
     __name    = "RarefileNet"
     __type    = "account"
     __version = "0.04"

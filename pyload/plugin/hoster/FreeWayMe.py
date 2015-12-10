@@ -3,7 +3,7 @@
 from pyload.plugin.internal.MultiHoster import MultiHoster
 
 
-class FreeWayMe(MultiHoster):
+class Free_way_me(Multi_hoster):
     __name    = "FreeWayMe"
     __type    = "hoster"
     __version = "0.16"
@@ -23,7 +23,7 @@ class FreeWayMe(MultiHoster):
 
 
     def handle_premium(self, pyfile):
-        user, data = self.account.selectAccount()
+        user, data = self.account.select_account()
 
         for _i in xrange(5):
             # try it five times
@@ -31,7 +31,7 @@ class FreeWayMe(MultiHoster):
                                get={'multiget': 7,
                                     'url'     : pyfile.url,
                                     'user'    : user,
-                                    'pw'      : self.account.getAccountData(user)['password'],
+                                    'pw'      : self.account.get_account_data(user)['password'],
                                     'json'    : ""},
                                just_header=True)
 
@@ -39,13 +39,13 @@ class FreeWayMe(MultiHoster):
                 headers = self.load(header['location'], just_header=True)
                 if headers['code'] == 500:
                     # error on 2nd stage
-                    self.logError(_("Error [stage2]"))
+                    self.log_error(_("Error [stage2]"))
                 else:
                     # seems to work..
                     self.download(header['location'])
                     break
             else:
                 # error page first stage
-                self.logError(_("Error [stage1]"))
+                self.log_error(_("Error [stage1]"))
 
             #@TODO: handle errors

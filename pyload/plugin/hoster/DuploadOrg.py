@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class DuploadOrg(DeadHoster):
+class Dupload_org(Dead_hoster):
     __name    = "DuploadOrg"
     __type    = "hoster"
     __version = "0.02"

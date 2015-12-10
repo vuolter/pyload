@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadCrypter import DeadCrypter
 
 
-class FilebeerInfo(DeadCrypter):
+class Filebeer_info(Dead_crypter):
     __name    = "FilebeerInfo"
     __type    = "crypter"
     __version = "0.02"

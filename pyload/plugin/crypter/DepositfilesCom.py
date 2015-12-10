@@ -3,7 +3,7 @@
 from pyload.plugin.internal.SimpleCrypter import SimpleCrypter
 
 
-class DepositfilesCom(SimpleCrypter):
+class Depositfiles_com(Simple_crypter):
     __name    = "DepositfilesCom"
     __type    = "crypter"
     __version = "0.01"

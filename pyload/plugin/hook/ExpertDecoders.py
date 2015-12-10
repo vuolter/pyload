@@ -12,7 +12,7 @@ from pyload.network.RequestFactory import getURL, getRequest
 from pyload.plugin.Hook import Hook, threaded
 
 
-class ExpertDecoders(Hook):
+class Expert_decoders(Hook):
     __name    = "ExpertDecoders"
     __type    = "hook"
     __version = "0.04"
@@ -30,24 +30,24 @@ class ExpertDecoders(Hook):
 
 
     def activate(self):
-        if self.getConfig('ssl'):
+        if self.get_config('ssl'):
             self.API_URL = self.API_URL.replace("http://", "https://")
 
 
-    def getCredits(self):
-        res = getURL(self.API_URL, post={"key": self.getConfig('passkey'), "action": "balance"})
+    def get_credits(self):
+        res = getURL(self.API_URL, post={"key": self.get_config('passkey'), "action": "balance"})
 
         if res.isdigit():
-            self.logInfo(_("%s credits left") % res)
+            self.log_info(_("%s credits left") % res)
             self.info['credits'] = credits = int(res)
             return credits
         else:
-            self.logError(res)
+            self.log_error(res)
             return 0
 
 
     @threaded
-    def _processCaptcha(self, task):
+    def _process_captcha(self, task):
         task.data['ticket'] = ticket = uuid.uuid4()
         result = None
 
@@ -61,42 +61,42 @@ class ExpertDecoders(Hook):
         try:
             result = req.load(self.API_URL,
                               post={'action'     : "upload",
-                                    'key'        : self.getConfig('passkey'),
+                                    'key'        : self.get_config('passkey'),
                                     'file'       : base64.b64encode(data),
                                     'gen_task_id': ticket})
         finally:
             req.close()
 
-        self.logDebug("Result %s : %s" % (ticket, result))
+        self.log_debug("Result %s : %s" % (ticket, result))
         task.setResult(result)
 
 
-    def captchaTask(self, task):
+    def captcha_task(self, task):
         if not task.isTextual():
             return False
 
-        if not self.getConfig('passkey'):
+        if not self.get_config('passkey'):
             return False
 
-        if self.pyload.isClientConnected() and not self.getConfig('force'):
+        if self.pyload.is_client_connected() and not self.get_config('force'):
             return False
 
-        if self.getCredits() > 0:
+        if self.get_credits() > 0:
             task.handler.append(self)
             task.setWaiting(100)
-            self._processCaptcha(task)
+            self._process_captcha(task)
 
         else:
-            self.logInfo(_("Your ExpertDecoders Account has not enough credits"))
+            self.log_info(_("Your ExpertDecoders Account has not enough credits"))
 
 
-    def captchaInvalid(self, task):
+    def captcha_invalid(self, task):
         if "ticket" in task.data:
 
             try:
                 res = getURL(self.API_URL,
-                             post={'action': "refund", 'key': self.getConfig('passkey'), 'gen_task_id': task.data['ticket']})
-                self.logInfo(_("Request refund"), res)
+                             post={'action': "refund", 'key': self.get_config('passkey'), 'gen_task_id': task.data['ticket']})
+                self.log_info(_("Request refund"), res)
 
             except BadHeader, e:
-                self.logError(_("Could not send refund request"), e)
+                self.log_error(_("Could not send refund request"), e)

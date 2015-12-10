@@ -5,7 +5,7 @@ import re
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class SizedriveCom(SimpleHoster):
+class Sizedrive_com(Simple_hoster):
     __name    = "SizedriveCom"
     __type    = "hoster"
     __version = "0.01"

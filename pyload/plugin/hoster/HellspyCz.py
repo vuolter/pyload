@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class HellspyCz(DeadHoster):
+class Hellspy_cz(Dead_hoster):
     __name    = "HellspyCz"
     __type    = "hoster"
     __version = "0.28"

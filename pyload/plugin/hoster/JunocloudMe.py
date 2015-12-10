@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSHoster import XFSHoster
 
 
-class JunocloudMe(XFSHoster):
+class Junocloud_me(XFSHoster):
     __name    = "JunocloudMe"
     __type    = "hoster"
     __version = "0.05"

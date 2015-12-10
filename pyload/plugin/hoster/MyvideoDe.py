@@ -6,7 +6,7 @@ from pyload.plugin.Hoster import Hoster
 from pyload.utils import html_unescape
 
 
-class MyvideoDe(Hoster):
+class Myvideo_de(Hoster):
     __name    = "MyvideoDe"
     __type    = "hoster"
     __version = "0.90"

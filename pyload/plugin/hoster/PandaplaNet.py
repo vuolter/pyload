@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class PandaplaNet(DeadHoster):
+class Pandapla_net(Dead_hoster):
     __name    = "PandaplaNet"
     __type    = "hoster"
     __version = "0.03"

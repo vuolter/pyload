@@ -7,7 +7,7 @@ from pyload.plugin.Crypter import Crypter
 from pyload.plugin.internal.SimpleHoster import getFileURL, set_cookies
 
 
-class SimpleDereferer(Crypter):
+class Simple_dereferer(Crypter):
     __name    = "SimpleDereferer"
     __type    = "crypter"
     __version = "0.11"
@@ -53,9 +53,9 @@ class SimpleDereferer(Crypter):
             except Exception:
                 self.prepare()
                 self.preload()
-                self.checkStatus()
+                self.check_status()
 
-                link = self.getLink()
+                link = self.get_link()
 
         if link.strip():
             self.urls = [link]
@@ -65,7 +65,7 @@ class SimpleDereferer(Crypter):
         self.info = {}
         self.html = ""
 
-        self.req.setOption("timeout", 120)
+        self.req.set_option("timeout", 120)
 
         if isinstance(self.COOKIES, list):
             set_cookies(self.req.cj, self.COOKIES)
@@ -78,15 +78,15 @@ class SimpleDereferer(Crypter):
             self.html = unicode(self.html, self.TEXT_ENCODING)
 
 
-    def checkStatus(self):
+    def check_status(self):
         if hasattr(self, "OFFLINE_PATTERN") and re.search(self.OFFLINE_PATTERN, self.html):
             self.offline()
 
         elif hasattr(self, "TEMP_OFFLINE_PATTERN") and re.search(self.TEMP_OFFLINE_PATTERN, self.html):
-            self.tempOffline()
+            self.temp_offline()
 
 
-    def getLink(self):
+    def get_link(self):
         try:
             return re.search(self.LINK_PATTERN, self.html).group(1)
 

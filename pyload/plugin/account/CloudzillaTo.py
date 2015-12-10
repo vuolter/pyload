@@ -5,7 +5,7 @@ import re
 from pyload.plugin.Account import Account
 
 
-class CloudzillaTo(Account):
+class Cloudzilla_to(Account):
     __name    = "CloudzillaTo"
     __type    = "account"
     __version = "0.02"
@@ -18,7 +18,7 @@ class CloudzillaTo(Account):
     PREMIUM_PATTERN = r'<h2>account type</h2>\s*Premium Account'
 
 
-    def loadAccountInfo(self, user, req):
+    def load_account_info(self, user, req):
         html = req.load("http://www.cloudzilla.to/")
 
         premium = re.search(self.PREMIUM_PATTERN, html) is not None
@@ -34,4 +34,4 @@ class CloudzillaTo(Account):
                         decode=True)
 
         if "ERROR" in html:
-            self.wrongPassword()
+            self.wrong_password()

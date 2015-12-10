@@ -8,7 +8,7 @@ import time
 from pyload.plugin.Account import Account
 
 
-class WebshareCz(Account):
+class Webshare_cz(Account):
     __name    = "WebshareCz"
     __type    = "account"
     __version = "0.07"
@@ -23,18 +23,18 @@ class WebshareCz(Account):
     TRAFFIC_LEFT_PATTERN = r'<bytes>(.+)</bytes>'
 
 
-    def loadAccountInfo(self, user, req):
+    def load_account_info(self, user, req):
         html = req.load("https://webshare.cz/api/user_data/",
                         post={'wst': self.infos['wst']},
                         decode=True)
 
-        self.logDebug("Response: " + html)
+        self.log_debug("Response: " + html)
 
         expiredate = re.search(self.VALID_UNTIL_PATTERN, html).group(1)
-        self.logDebug("Expire date: " + expiredate)
+        self.log_debug("Expire date: " + expiredate)
 
         validuntil  = time.mktime(time.strptime(expiredate, "%Y-%m-%d %H:%M:%S"))
-        trafficleft = self.parseTraffic(re.search(self.TRAFFIC_LEFT_PATTERN, html).group(1))
+        trafficleft = self.parse_traffic(re.search(self.TRAFFIC_LEFT_PATTERN, html).group(1))
         premium     = validuntil > time.time()
 
         return {'validuntil': validuntil, 'trafficleft': -1, 'premium': premium}
@@ -47,7 +47,7 @@ class WebshareCz(Account):
                         decode=True)
 
         if "<status>OK</status>" not in salt:
-            self.wrongPassword()
+            self.wrong_password()
 
         salt     = re.search('<salt>(.+)</salt>', salt).group(1)
         password = hashlib.sha1(passlib.hash.md5_crypt.encrypt(data['password'], salt=salt)).hexdigest()
@@ -62,6 +62,6 @@ class WebshareCz(Account):
                          decode=True)
 
         if "<status>OK</status>" not in login:
-            self.wrongPassword()
+            self.wrong_password()
 
         self.infos['wst'] = re.search('<token>(.+)</token>', login).group(1)

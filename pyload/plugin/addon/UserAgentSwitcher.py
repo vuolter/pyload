@@ -10,7 +10,7 @@ from pyload.plugin.Addon import Addon
 from pyload.utils import fs_encode
 
 
-class UserAgentSwitcher(Addon):
+class User_agent_switcher(Addon):
     __name    = "UserAgentSwitcher"
     __type    = "addon"
     __version = "0.04"
@@ -25,16 +25,16 @@ class UserAgentSwitcher(Addon):
     __authors     = [("Walter Purcaro", "vuolter@gmail.com")]
 
 
-    def downloadPreparing(self, pyfile):
-        uar = self.getConfig('uar')
-        uaf = fs_encode(self.getConfig('uaf'))
+    def download_preparing(self, pyfile):
+        uar = self.get_config('uar')
+        uaf = fs_encode(self.get_config('uaf'))
 
         if uar and os.path.isfile(uaf):
             with open(uaf) as f:
                 uas = random.choice([ua for ua in f.read().splitlines()])
         else:
-            uas = self.getConfig('uas')
+            uas = self.get_config('uas')
 
         if uas:
-            self.logDebug("Use custom user-agent string: " + uas)
+            self.log_debug("Use custom user-agent string: " + uas)
             pyfile.plugin.req.http.c.setopt(pycurl.USERAGENT, uas.encode('utf-8'))

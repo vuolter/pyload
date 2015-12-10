@@ -6,7 +6,7 @@ import time
 from pyload.plugin.Account import Account
 
 
-class DebridItaliaCom(Account):
+class Debrid_italia_com(Account):
     __name    = "DebridItaliaCom"
     __type    = "account"
     __version = "0.13"
@@ -20,7 +20,7 @@ class DebridItaliaCom(Account):
     WALID_UNTIL_PATTERN = r'Premium valid till: (.+?) \|'
 
 
-    def loadAccountInfo(self, user, req):
+    def load_account_info(self, user, req):
         info = {'premium': False, 'validuntil': None, 'trafficleft': None}
         html = req.load("http://debriditalia.com/")
 
@@ -30,7 +30,7 @@ class DebridItaliaCom(Account):
                 validuntil = time.mktime(time.strptime(m.group(1), "%d/%m/%Y %H:%M"))
                 info = {'premium': True, 'validuntil': validuntil, 'trafficleft': -1}
             else:
-                self.logError(_("Unable to retrieve account information"))
+                self.log_error(_("Unable to retrieve account information"))
 
         return info
 
@@ -41,4 +41,4 @@ class DebridItaliaCom(Account):
                         decode=True)
 
         if 'NO' in html:
-            self.wrongPassword()
+            self.wrong_password()

@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSHoster import XFSHoster
 
 
-class CramitIn(XFSHoster):
+class Cramit_in(XFSHoster):
     __name    = "CramitIn"
     __type    = "hoster"
     __version = "0.07"

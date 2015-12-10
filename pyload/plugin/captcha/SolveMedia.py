@@ -5,7 +5,7 @@ import re
 from pyload.plugin.Captcha import Captcha
 
 
-class SolveMedia(Captcha):
+class Solve_media(Captcha):
     __name    = "SolveMedia"
     __type    = "captcha"
     __version = "0.12"
@@ -30,10 +30,10 @@ class SolveMedia(Captcha):
         m = re.search(self.KEY_PATTERN, html)
         if m:
             self.key = m.group(1).strip()
-            self.logDebug("Key: %s" % self.key)
+            self.log_debug("Key: %s" % self.key)
             return self.key
         else:
-            self.logDebug("Key not found")
+            self.log_debug("Key not found")
             return None
 
 
@@ -58,7 +58,7 @@ class SolveMedia(Captcha):
             self.plugin.fail(errmsg)
             raise AttributeError(errmsg)
 
-        self.logDebug("Challenge: %s" % challenge)
+        self.log_debug("Challenge: %s" % challenge)
 
         result = self.result(server, challenge)
 
@@ -66,11 +66,11 @@ class SolveMedia(Captcha):
             magic = re.search(r'name="magic" value="(.+?)"', html).group(1)
 
         except AttributeError:
-            self.logDebug("Magic code not found")
+            self.log_debug("Magic code not found")
 
         else:
             if not self._verify(key, magic, result, challenge):
-                self.logDebug("Captcha code was invalid")
+                self.log_debug("Captcha code was invalid")
 
         return result, challenge
 
@@ -104,11 +104,11 @@ class SolveMedia(Captcha):
 
 
     def result(self, server, challenge):
-        result = self.plugin.decryptCaptcha(server,
+        result = self.plugin.decrypt_captcha(server,
                                             get={'c': challenge},
                                             cookies=True,
                                             imgtype="gif")
 
-        self.logDebug("Result: %s" % result)
+        self.log_debug("Result: %s" % result)
 
         return result

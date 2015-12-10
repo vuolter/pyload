@@ -4,7 +4,7 @@ from pyload.plugin.internal.SimpleCrypter import SimpleCrypter
 from pyload.utils import uniqify
 
 
-class ImgurComAlbum(SimpleCrypter):
+class Imgur_com_album(Simple_crypter):
     __name    = "ImgurComAlbum"
     __type    = "crypter"
     __version = "0.51"
@@ -23,6 +23,6 @@ class ImgurComAlbum(SimpleCrypter):
     LINK_PATTERN = r'i\.imgur\.com/\w{7}s?\.(?:jpeg|jpg|png|gif|apng)'
 
 
-    def getLinks(self):
+    def get_links(self):
         f = lambda url: "http://" + re.sub(r'(\w{7})s\.', r'\1.', url)
         return uniqify(map(f, re.findall(self.LINK_PATTERN, self.html)))

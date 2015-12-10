@@ -229,7 +229,7 @@ def check_prog(self, command):
     except Exception:
         return False
 
-        
+
 # Case-sensitive os.path.exists
 def exists(path):
     if os.path.exists(path):

@@ -5,7 +5,7 @@ import threading
 import traceback
 
 
-class BackendBase(threading.Thread):
+class Backend_base(threading.Thread):
 
     def __init__(self, manager):
         threading.Thread.__init__(self)
@@ -31,7 +31,7 @@ class BackendBase(threading.Thread):
         pass
 
 
-    def checkDeps(self):
+    def check_deps(self):
         return True
 
 
@@ -48,7 +48,7 @@ class BackendBase(threading.Thread):
         self.shutdown()
 
 
-class RemoteManager(object):
+class Remote_manager(object):
     available = []
 
 
@@ -62,7 +62,7 @@ class RemoteManager(object):
             # self.available.append("SocketBackend")
 
 
-    def startBackends(self):
+    def start_backends(self):
         host = self.pyload.config.get("remote", "listenaddr")
         port = self.pyload.config.get("remote", "port")
 

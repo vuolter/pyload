@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class FileApeCom(DeadHoster):
+class File_ape_com(Dead_hoster):
     __name    = "FileApeCom"
     __type    = "hoster"
     __version = "0.12"

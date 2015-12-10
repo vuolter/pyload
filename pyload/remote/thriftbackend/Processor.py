@@ -55,10 +55,10 @@ class Processor(Pyload.Processor):
             iprot.readMessageEnd()
             result = Pyload.login_result()
             # api login
-            if self._handler.getConfigValue("remote", "nolocalauth") and trans.remoteaddr[0] in ("127.0.0.1", "localhost"):
+            if self._handler.get_config_value("remote", "nolocalauth") and trans.remoteaddr[0] in ("127.0.0.1", "localhost"):
                 self.authenticated[trans] = "local"
             else:
-                self.authenticated[trans] = self._handler.checkAuth(args.username, args.password)
+                self.authenticated[trans] = self._handler.check_auth(args.username, args.password)
 
             result.success = bool(self.authenticated[trans])
             oprot.writeMessageBegin("login", Pyload.TMessageType.REPLY, seqid)
@@ -66,7 +66,7 @@ class Processor(Pyload.Processor):
             oprot.writeMessageEnd()
             oprot.trans.flush()
 
-        elif self._handler.isAuthorized(name, authenticated):
+        elif self._handler.is_authorized(name, authenticated):
             self._processMap[name](self, seqid, iprot, oprot)
 
         else:

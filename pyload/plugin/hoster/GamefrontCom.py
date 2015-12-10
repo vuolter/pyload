@@ -7,7 +7,7 @@ from pyload.plugin.Hoster import Hoster
 from pyload.utils import parse_size
 
 
-class GamefrontCom(Hoster):
+class Gamefront_com(Hoster):
     __name    = "GamefrontCom"
     __type    = "hoster"
     __version = "0.04"
@@ -34,12 +34,12 @@ class GamefrontCom(Hoster):
         self.pyfile = pyfile
         self.html = self.load(pyfile.url, decode=True)
 
-        if not self._checkOnline():
+        if not self._check_online():
             self.offline()
 
-        pyfile.name = self._getName()
+        pyfile.name = self._get_name()
 
-        link = self._getLink()
+        link = self._get_link()
 
         if not link.startswith('http://'):
             link = "http://www.gamefront.com/" + link
@@ -47,14 +47,14 @@ class GamefrontCom(Hoster):
         self.download(link)
 
 
-    def _checkOnline(self):
+    def _check_online(self):
         if re.search(self.PATTERN_OFFLINE, self.html):
             return False
         else:
             return True
 
 
-    def _getName(self):
+    def _get_name(self):
         name = re.search(self.PATTERN_FILENAME, self.html)
         if name is None:
             self.fail(_("Plugin broken")
@@ -62,13 +62,13 @@ class GamefrontCom(Hoster):
         return name.group(1)
 
 
-    def _getLink(self):
+    def _get_link(self):
         self.html2 = self.load("http://www.gamefront.com/" + re.search("(files/service/thankyou\\?id=\w+)",
                                                                        self.html).group(1))
         return re.search("<a href=\"(http://media\d+\.gamefront.com/.*)\">click here</a>", self.html2).group(1).replace("&amp;", "&")
 
 
-def getInfo(urls):
+def get_info(urls):
     result = []
 
     for url in urls:

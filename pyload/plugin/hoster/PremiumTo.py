@@ -8,7 +8,7 @@ from pyload.plugin.internal.MultiHoster import MultiHoster
 from pyload.utils import fs_encode
 
 
-class PremiumTo(MultiHoster):
+class Premium_to(Multi_hoster):
     __name    = "PremiumTo"
     __type    = "hoster"
     __version = "0.22"
@@ -35,8 +35,8 @@ class PremiumTo(MultiHoster):
                       disposition=True)
 
 
-    def checkFile(self, rules={}):
-        if self.checkDownload({'nopremium': "No premium account available"}):
+    def check_file(self, rules={}):
+        if self.check_download({'nopremium': "No premium account available"}):
             self.retry(60, 5 * 60, "No premium account available")
 
         err = ''

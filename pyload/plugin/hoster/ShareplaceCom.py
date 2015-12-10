@@ -6,7 +6,7 @@ import urllib
 from pyload.plugin.Hoster import Hoster
 
 
-class ShareplaceCom(Hoster):
+class Shareplace_com(Hoster):
     __name    = "ShareplaceCom"
     __type    = "hoster"
     __version = "0.12"
@@ -31,7 +31,7 @@ class ShareplaceCom(Hoster):
         self.pyfile.name = self.get_file_name()
 
         wait_time = self.get_waiting_time()
-        self.setWait(wait_time)
+        self.set_wait(wait_time)
         self.wait()
 
 
@@ -63,7 +63,7 @@ class ShareplaceCom(Hoster):
             url = urllib.unquote(
                 url.replace("http://http:/", "").replace("vvvvvvvvv", "").replace("lllllllll", "").replace(
                     "teletubbies", ""))
-            self.logDebug("URL: %s" % url)
+            self.log_debug("URL: %s" % url)
             return url
         else:
             self.error(_("Absolute filepath not found"))

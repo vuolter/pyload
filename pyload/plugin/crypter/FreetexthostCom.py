@@ -5,7 +5,7 @@ import re
 from pyload.plugin.internal.SimpleCrypter import SimpleCrypter
 
 
-class FreetexthostCom(SimpleCrypter):
+class Freetexthost_com(Simple_crypter):
     __name    = "FreetexthostCom"
     __type    = "crypter"
     __version = "0.01"
@@ -20,7 +20,7 @@ class FreetexthostCom(SimpleCrypter):
     __authors     = [("stickell", "l.stickell@yahoo.it")]
 
 
-    def getLinks(self):
+    def get_links(self):
         m = re.search(r'<div id="contentsinner">\s*(.+)<div class="viewcount">', self.html, re.S)
         if m is None:
             self.error(_("Unable to extract links"))

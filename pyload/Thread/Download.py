@@ -13,7 +13,7 @@ from pyload.Thread.Plugin import PluginThread
 from pyload.plugin.Plugin import Abort, Fail, Reconnect, Retry, SkipDownload
 
 
-class DownloadThread(PluginThread):
+class Download_thread(Plugin_thread):
     """Thread for downloading files from 'real' hoster plugins"""
 
     def __init__(self, manager):
@@ -52,13 +52,13 @@ class DownloadThread(PluginThread):
                 self.pyload.log.info(_("Download starts: %s" % pyfile.name))
 
                 # start download
-                self.pyload.addonManager.downloadPreparing(pyfile)
+                self.pyload.addonManager.download_preparing(pyfile)
                 pyfile.error = ""
                 pyfile.plugin.preprocessing(self)
 
                 self.pyload.log.info(_("Download finished: %s") % pyfile.name)
-                self.pyload.addonManager.downloadFinished(pyfile)
-                self.pyload.files.checkPackageFinished(pyfile)
+                self.pyload.addonManager.download_finished(pyfile)
+                self.pyload.files.check_package_finished(pyfile)
 
             except NotImplementedError:
                 self.pyload.log.error(_("Plugin %s is missing a function.") % pyfile.pluginname)
@@ -85,7 +85,7 @@ class DownloadThread(PluginThread):
                 self.queue.put(pyfile)
                 # pyfile.req.clearCookies()
 
-                while self.manager.reconnecting.isSet():
+                while self.manager.reconnecting.is_set():
                     time.sleep(0.5)
 
                 continue
@@ -113,7 +113,7 @@ class DownloadThread(PluginThread):
                 if self.pyload.debug:
                     traceback.print_exc()
 
-                self.pyload.addonManager.downloadFailed(pyfile)
+                self.pyload.addonManager.download_failed(pyfile)
                 self.clean(pyfile)
                 continue
 
@@ -152,9 +152,9 @@ class DownloadThread(PluginThread):
                     self.pyload.log.error("pycurl error %s: %s" % (code, msg))
                     if self.pyload.debug:
                         traceback.print_exc()
-                        self.writeDebugReport(pyfile)
+                        self.write_debug_report(pyfile)
 
-                    self.pyload.addonManager.downloadFailed(pyfile)
+                    self.pyload.addonManager.download_failed(pyfile)
 
                 self.clean(pyfile)
                 continue
@@ -166,7 +166,7 @@ class DownloadThread(PluginThread):
 
                 self.clean(pyfile)
 
-                self.pyload.files.checkPackageFinished(pyfile)
+                self.pyload.files.check_package_finished(pyfile)
 
                 self.active = False
                 self.pyload.files.save()
@@ -180,9 +180,9 @@ class DownloadThread(PluginThread):
 
                 if self.pyload.debug:
                     traceback.print_exc()
-                    self.writeDebugReport(pyfile)
+                    self.write_debug_report(pyfile)
 
-                self.pyload.addonManager.downloadFailed(pyfile)
+                self.pyload.addonManager.download_failed(pyfile)
                 self.clean(pyfile)
                 continue
 

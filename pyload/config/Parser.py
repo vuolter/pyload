@@ -13,7 +13,7 @@ from pyload.utils import encode, decode
 CONF_VERSION = 1
 
 
-class ConfigParser(object):
+class Config_parser(object):
     """
     holds and manage the configuration
 
@@ -40,12 +40,12 @@ class ConfigParser(object):
 
         self.pluginCB = None  #: callback when plugin config value is changed
 
-        self.checkVersion()
+        self.check_version()
 
-        self.readConfig()
+        self.read_config()
 
 
-    def checkVersion(self, n=0):
+    def check_version(self, n=0):
         """Determines if config need to be copied"""
         try:
             if not os.path.exists("pyload.conf"):
@@ -76,29 +76,29 @@ class ConfigParser(object):
             if n >= 3:
                 raise
             time.sleep(0.3)
-            self.checkVersion(n + 1)
+            self.check_version(n + 1)
 
 
-    def readConfig(self):
+    def read_config(self):
         """Reads the config file"""
-        self.config = self.parseConfig(os.path.join(pypath, "pyload", "config", "default.conf"))
-        self.plugin = self.parseConfig("plugin.conf")
+        self.config = self.parse_config(os.path.join(pypath, "pyload", "config", "default.conf"))
+        self.plugin = self.parse_config("plugin.conf")
 
         try:
-            homeconf = self.parseConfig("pyload.conf")
+            homeconf = self.parse_config("pyload.conf")
             if "username" in homeconf['remote']:
                 if "password" in homeconf['remote']:
                     self.oldRemoteData = {"username": homeconf['remote']['username']['value'],
                                           "password": homeconf['remote']['password']['value']}
                     del homeconf['remote']['password']
                 del homeconf['remote']['username']
-            self.updateValues(homeconf, self.config)
+            self.update_values(homeconf, self.config)
         except Exception:
             print "Config Warning"
             traceback.print_exc()
 
 
-    def parseConfig(self, config):
+    def parse_config(self, config):
         """Parses a given configfile"""
 
         with open(config) as f:
@@ -182,7 +182,7 @@ class ConfigParser(object):
         return conf
 
 
-    def updateValues(self, config, dest):
+    def update_values(self, config, dest):
         """Sets the config values from a parsed config file to values in destination"""
 
         for section in config.iterkeys():
@@ -202,7 +202,7 @@ class ConfigParser(object):
                        # dest[section] = config[section]
 
 
-    def saveConfig(self, config, filename):
+    def save_config(self, config, filename):
         """Saves config to filename"""
         with open(filename, "wb") as f:
             try:
@@ -257,8 +257,8 @@ class ConfigParser(object):
 
     def save(self):
         """Saves the configs to disk"""
-        self.saveConfig(self.config, "pyload.conf")
-        self.saveConfig(self.plugin, "plugin.conf")
+        self.save_config(self.config, "pyload.conf")
+        self.save_config(self.plugin, "plugin.conf")
 
 
     def __getitem__(self, section):
@@ -279,13 +279,13 @@ class ConfigParser(object):
         self.save()
 
 
-    def getPlugin(self, plugin, option):
+    def get_plugin(self, plugin, option):
         """Gets a value for a plugin"""
         value = self.plugin[plugin][option]['value']
         return encode(value)
 
 
-    def setPlugin(self, plugin, option, value):
+    def set_plugin(self, plugin, option, value):
         """Sets a value for a plugin"""
 
         value = self.cast(self.plugin[plugin][option]['type'], value)
@@ -296,18 +296,18 @@ class ConfigParser(object):
         self.save()
 
 
-    def removeDeletedPlugins(self, plugins):
+    def remove_deleted_plugins(self, plugins):
         for name in self.plugin.keys():
             if not name in plugins:
                 del self.plugin[name]
 
 
-    def getMetaData(self, section, option):
+    def get_meta_data(self, section, option):
         """Get all config data for an option"""
         return self.config[section][option]
 
 
-    def addPluginConfig(self, name, config, outline=""):
+    def add_plugin_config(self, name, config, outline=""):
         """Adds config options with tuples (name, type, desc, default)"""
         if name not in self.plugin:
             conf = {"desc": name,
@@ -336,7 +336,7 @@ class ConfigParser(object):
                 del conf[item]
 
 
-    def deleteConfig(self, name):
+    def delete_config(self, name):
         """Removes a plugin config"""
         if name in self.plugin:
             del self.plugin[name]

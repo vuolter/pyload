@@ -7,7 +7,7 @@ from pyload.plugin.captcha.ReCaptcha import ReCaptcha
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class FilecloudIo(SimpleHoster):
+class Filecloud_io(Simple_hoster):
     __name    = "FilecloudIo"
     __type    = "hoster"
     __version = "0.08"
@@ -68,13 +68,13 @@ class FilecloudIo(SimpleHoster):
 
         json_url = "http://filecloud.io/download-request.json"
         res = self.load(json_url, post=data)
-        self.logDebug(res)
+        self.log_debug(res)
         res = json_loads(res)
 
         if "error" in res and res['error']:
             self.fail(res)
 
-        self.logDebug(res)
+        self.log_debug(res)
         if res['captcha']:
             data['ctype'] = "recaptcha"
 
@@ -83,13 +83,13 @@ class FilecloudIo(SimpleHoster):
 
                 json_url = "http://filecloud.io/download-request.json"
                 res = self.load(json_url, post=data)
-                self.logDebug(res)
+                self.log_debug(res)
                 res = json_loads(res)
 
                 if "retry" in res and res['retry']:
-                    self.invalidCaptcha()
+                    self.invalid_captcha()
                 else:
-                    self.correctCaptcha()
+                    self.correct_captcha()
                     break
             else:
                 self.fail(_("Incorrect captcha"))
@@ -110,12 +110,12 @@ class FilecloudIo(SimpleHoster):
 
 
     def handle_premium(self, pyfile):
-        akey = self.account.getAccountData(self.user)['akey']
+        akey = self.account.get_account_data(self.user)['akey']
         ukey = self.info['pattern']['ID']
-        self.logDebug("Akey: %s | Ukey: %s" % (akey, ukey))
+        self.log_debug("Akey: %s | Ukey: %s" % (akey, ukey))
         rep = self.load("http://api.filecloud.io/api-fetch_download_url.api",
                         post={"akey": akey, "ukey": ukey})
-        self.logDebug("FetchDownloadUrl: " + rep)
+        self.log_debug("FetchDownloadUrl: " + rep)
         rep = json_loads(rep)
         if rep['status'] == 'ok':
             self.link = rep['download_url']

@@ -7,7 +7,7 @@ import time
 from pyload.plugin.Account import Account
 
 
-class UploadheroCom(Account):
+class Uploadhero_com(Account):
     __name    = "UploadheroCom"
     __type    = "account"
     __version = "0.21"
@@ -17,10 +17,10 @@ class UploadheroCom(Account):
     __authors     = [("mcmyst", "mcmyst@hotmail.fr")]
 
 
-    def loadAccountInfo(self, user, req):
+    def load_account_info(self, user, req):
         premium_pattern = re.compile('Il vous reste <span class="bleu">(\d+)</span> jours premium')
 
-        data = self.getAccountData(user)
+        data = self.get_account_data(user)
         html = req.load("http://uploadhero.co/my-account")
 
         if premium_pattern.search(html):
@@ -39,4 +39,4 @@ class UploadheroCom(Account):
                         decode=True)
 
         if "mot de passe invalide" in html:
-            self.wrongPassword()
+            self.wrong_password()

@@ -5,7 +5,7 @@ from pyload.manager.Event import UpdateEvent
 from pyload.utils import safe_filename
 
 
-class PyPackage(object):
+class Py_package(object):
     """Represents a package object at runtime"""
 
     def __init__(self, manager, id, name, folder, site, password, queue, order):
@@ -28,7 +28,7 @@ class PyPackage(object):
         return safe_filename(self._folder)
 
 
-    def toDict(self):
+    def to_dict(self):
         """
         Returns a dictionary representation of the data.
 
@@ -48,26 +48,26 @@ class PyPackage(object):
         }
 
 
-    def getChildren(self):
+    def get_children(self):
         """Get information about contained links"""
-        return self.manager.getPackageData(self.id)["links"]
+        return self.manager.get_package_data(self.id)["links"]
 
 
     def sync(self):
         """Sync with db"""
-        self.manager.updatePackage(self)
+        self.manager.update_package(self)
 
 
     def release(self):
         """Sync and delete from cache"""
         self.sync()
-        self.manager.releasePackage(self.id)
+        self.manager.release_package(self.id)
 
 
     def delete(self):
-        self.manager.deletePackage(self.id)
+        self.manager.delete_package(self.id)
 
 
-    def notifyChange(self):
+    def notify_change(self):
         e = UpdateEvent("pack", self.id, "collector" if not self.queue else "queue")
-        self.pyload.pullManager.addEvent(e)
+        self.pyload.pullManager.add_event(e)

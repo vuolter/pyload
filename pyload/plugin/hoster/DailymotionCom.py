@@ -8,7 +8,7 @@ from pyload.network.RequestFactory import getURL
 from pyload.plugin.Hoster import Hoster
 
 
-def getInfo(urls):
+def get_info(urls):
     result  = []
     regex   = re.compile(DailymotionCom.__pattern)
     apiurl  = "https://api.dailymotion.com/video/%s"
@@ -37,7 +37,7 @@ def getInfo(urls):
     return result
 
 
-class DailymotionCom(Hoster):
+class Dailymotion_com(Hoster):
     __name    = "DailymotionCom"
     __type    = "hoster"
     __version = "0.20"
@@ -55,7 +55,7 @@ class DailymotionCom(Hoster):
         self.multiDL        = True
 
 
-    def getStreams(self):
+    def get_streams(self):
         streams = []
 
         for result in re.finditer(r"\"(?P<URL>http:\\/\\/www.dailymotion.com\\/cdn\\/H264-(?P<QF>.*?)\\.*?)\"",
@@ -71,8 +71,8 @@ class DailymotionCom(Hoster):
         return sorted(streams, key=lambda x: x[0][::-1])
 
 
-    def getQuality(self):
-        q = self.getConfig('quality')
+    def get_quality(self):
+        q = self.get_config('quality')
 
         if q == "Lowest":
             quality = 0
@@ -84,7 +84,7 @@ class DailymotionCom(Hoster):
         return quality
 
 
-    def getLink(self, streams, quality):
+    def get_link(self, streams, quality):
         if quality > 0:
             for x, s in [item for item in enumerate(streams)][::-1]:
                 qf = s[0][1]
@@ -98,28 +98,28 @@ class DailymotionCom(Hoster):
 
         s = streams[idx]
 
-        self.logInfo(_("Download video quality %sx%s") % s[0])
+        self.log_info(_("Download video quality %sx%s") % s[0])
 
         return s[1]
 
 
-    def checkInfo(self, pyfile):
+    def check_info(self, pyfile):
         pyfile.name, pyfile.size, pyfile.status, pyfile.url = getInfo([pyfile.url])[0]
 
         if pyfile.status == 1:
             self.offline()
 
         elif pyfile.status == 6:
-            self.tempOffline()
+            self.temp_offline()
 
 
     def process(self, pyfile):
-        self.checkInfo(pyfile)
+        self.check_info(pyfile)
 
         id = re.match(self.__pattern, pyfile.url).group('ID')
         self.html = self.load("http://www.dailymotion.com/embed/video/" + id, decode=True)
 
-        streams = self.getStreams()
-        quality = self.getQuality()
+        streams = self.get_streams()
+        quality = self.get_quality()
 
-        self.download(self.getLink(streams, quality))
+        self.download(self.get_link(streams, quality))

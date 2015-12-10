@@ -3,7 +3,7 @@
 from pyload.plugin.internal.MultiHoster import MultiHoster
 
 
-class ZeveraCom(MultiHoster):
+class Zevera_com(Multi_hoster):
     __name    = "ZeveraCom"
     __type    = "hoster"
     __version = "0.29"
@@ -21,8 +21,8 @@ class ZeveraCom(MultiHoster):
         self.link = "https://%s/getFiles.ashx?ourl=%s" % (self.account.HOSTER_DOMAIN, pyfile.url)
 
 
-    def checkFile(self, rules={}):
-        if self.checkDownload({"error": 'action="ErrorDownload.aspx'}):
+    def check_file(self, rules={}):
+        if self.check_download({"error": 'action="ErrorDownload.aspx'}):
             self.fail(_("Error response received"))
 
         return super(ZeveraCom, self).checkFile(rules)

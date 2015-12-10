@@ -5,7 +5,7 @@ import re
 from pyload.plugin.Crypter import Crypter
 
 
-class LinkdecrypterCom(Crypter):
+class Linkdecrypter_com(Crypter):
     __name    = "LinkdecrypterCom"
     __type    = "crypter"
     __version = "0.29"
@@ -27,8 +27,8 @@ class LinkdecrypterCom(Crypter):
 
 
     def setup(self):
-        self.password = self.getPassword()
-        self.req.setOption("timeout", 300)
+        self.password = self.get_password()
+        self.req.set_option("timeout", 300)
 
 
     def decrypt(self, pyfile):
@@ -49,9 +49,9 @@ class LinkdecrypterCom(Crypter):
 
                 m = re.search(r"<p><i><b>([^<]+)</b></i></p>", self.html)
                 msg = m.group(1) if m else ""
-                self.logInfo(_("Captcha protected link"), result_type, msg)
+                self.log_info(_("Captcha protected link"), result_type, msg)
 
-                captcha = self.decryptCaptcha(captcha_url, result_type=result_type)
+                captcha = self.decrypt_captcha(captcha_url, result_type=result_type)
                 if result_type == "positional":
                     captcha = "%d|%d" % captcha
                 self.html = self.load('http://linkdecrypter.com/', post={"captcha": captcha}, decode=True)
@@ -59,7 +59,7 @@ class LinkdecrypterCom(Crypter):
 
             elif self.PASSWORD_PATTERN in self.html:
                 if self.password:
-                    self.logInfo(_("Password protected link"))
+                    self.log_info(_("Password protected link"))
                     self.html = self.load('http://linkdecrypter.com/', post={'password': self.password}, decode=True)
                 else:
                     self.fail(_("Missing password"))

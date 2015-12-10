@@ -116,7 +116,7 @@ def login_required(perm=None):
     return _dec
 
 
-class CherryPyWSGI(bottle.ServerAdapter):
+class Cherry_pyWSGI(bottle.Server_adapter):
 
     def run(self, handler):
         from wsgiserver import CherryPyWSGIServer

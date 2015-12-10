@@ -7,7 +7,7 @@ from pyload.utils import json_loads
 from pyload.plugin.internal.SimpleHoster import SimpleHoster, timestamp
 
 
-class UploadingCom(SimpleHoster):
+class Uploading_com(Simple_hoster):
     __name    = "UploadingCom"
     __type    = "hoster"
     __version = "0.40"
@@ -36,7 +36,7 @@ class UploadingCom(SimpleHoster):
             pyfile.url = pyfile.url.replace("/files", "/files/get")
 
         self.html = self.load(pyfile.url, decode=True)
-        self.getFileInfo()
+        self.get_file_info()
 
         if self.premium:
             self.handle_premium(pyfile)
@@ -61,7 +61,7 @@ class UploadingCom(SimpleHoster):
         m = re.search('<h2>((Daily )?Download Limit)</h2>', self.html)
         if m:
             pyfile.error = m.group(1)
-            self.logWarning(pyfile.error)
+            self.log_warning(pyfile.error)
             self.retry(6, (6 * 60 if m.group(2) else 15) * 60, pyfile.error)
 
         ajax_url = "http://uploading.com/files/get/?ajax"
@@ -72,7 +72,7 @@ class UploadingCom(SimpleHoster):
 
         if 'answer' in res and 'wait_time' in res['answer']:
             wait_time = int(res['answer']['wait_time'])
-            self.logInfo(_("Waiting %d seconds") % wait_time)
+            self.log_info(_("Waiting %d seconds") % wait_time)
             self.wait(wait_time)
         else:
             self.error(_("No AJAX/WAIT"))

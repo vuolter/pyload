@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSAccount import XFSAccount
 
 
-class NovafileCom(XFSAccount):
+class Novafile_com(XFSAccount):
     __name    = "NovafileCom"
     __type    = "account"
     __version = "0.02"

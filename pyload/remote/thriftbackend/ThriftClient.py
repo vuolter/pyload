@@ -17,11 +17,11 @@ from pyload.remote.thriftbackend.thriftgen.pyload.ttypes import *
 ConnectionClosed = thrift.transport.TTransport.TTransportException
 
 
-class WrongLogin(Exception):
+class Wrong_login(Exception):
     pass
 
 
-class NoConnection(Exception):
+class No_connection(Exception):
     pass
 
 
@@ -29,11 +29,11 @@ class NoSSL(Exception):
     pass
 
 
-class ThriftClient(object):
+class Thrift_client(object):
 
     def __init__(self, host="localhost", port=7227, user="", password=""):
 
-        self.createConnection(host, port)
+        self.create_connection(host, port)
         try:
             self.transport.open()
 
@@ -51,9 +51,9 @@ class ThriftClient(object):
             if e.args and e.args[0] == 104:
                 # connection reset by peer, probably wants ssl
                 try:
-                    self.createConnection(host, port, True)
+                    self.create_connection(host, port, True)
                     # set timeout or a ssl socket will block when querying none ssl server
-                    self.socket.setTimeout(10)
+                    self.socket.set_timeout(10)
 
                 except ImportError:
                     #@TODO untested
@@ -62,7 +62,7 @@ class ThriftClient(object):
                    self.transport.open()
                    correct = self.client.login(user, password)
                 finally:
-                    self.socket.setTimeout(None)
+                    self.socket.set_timeout(None)
             elif e.args and e.args[0] == 32:
                 raise NoConnection
             else:
@@ -74,10 +74,10 @@ class ThriftClient(object):
             raise WrongLogin
 
 
-    def createConnection(self, host, port, ssl=False):
+    def create_connection(self, host, port, ssl=False):
         self.socket = Socket(host, port, ssl)
-        self.transport = thrift.transport.TTransport.TBufferedTransport(self.socket)
-        # self.transport = thrift.transport.TZlibTransport.TZlibTransport(thrift.transport.TTransport.TBufferedTransport(self.socket))
+        self.transport = thrift.transport.TTransport.TBuffered_transport(self.socket)
+        # self.transport = thrift.transport.TZlibTransport.TZlib_transport(thrift.transport.TTransport.TBuffered_transport(self.socket))
 
         protocol = Protocol(self.transport)
         self.client = Pyload.Client(protocol)

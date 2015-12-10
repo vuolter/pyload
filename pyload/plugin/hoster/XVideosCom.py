@@ -6,7 +6,7 @@ import urllib
 from pyload.plugin.Hoster import Hoster
 
 
-class XVideosCom(Hoster):
+class XVideos_com(Hoster):
     __name    = "XVideos.com"
     __type    = "hoster"
     __version = "0.10"

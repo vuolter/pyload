@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class EpicShareNet(DeadHoster):
+class Epic_share_net(Dead_hoster):
     __name    = "EpicShareNet"
     __type    = "hoster"
     __version = "0.02"

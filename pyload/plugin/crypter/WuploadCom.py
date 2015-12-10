@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadCrypter import DeadCrypter
 
 
-class WuploadCom(DeadCrypter):
+class Wupload_com(Dead_crypter):
     __name    = "WuploadCom"
     __type    = "crypter"
     __version = "0.01"

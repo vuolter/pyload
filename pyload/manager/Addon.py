@@ -15,7 +15,7 @@ from pyload.utils import lock
 from pyload.utils.decorators import try_catch
 
 
-class AddonManager(object):
+class Addon_manager(object):
     """
     Manages addons, delegates and handles Events.
 
@@ -57,12 +57,12 @@ class AddonManager(object):
         self.events = {}  #: contains events
 
         # registering callback for config event
-        self.pyload.config.pluginCB = types.MethodType(self.dispatchEvent, "pluginConfigChanged", basestring)  #@TODO: Rename event pluginConfigChanged
+        self.pyload.config.pluginCB = types.Method_type(self.dispatchEvent, "pluginConfigChanged", basestring)  #@TODO: Rename event pluginConfigChanged
 
-        self.addEvent("pluginConfigChanged", self.manageAddon)
+        self.add_event("pluginConfigChanged", self.manageAddon)
 
         self.lock = threading.RLock()
-        self.createIndex()
+        self.create_index()
 
 
     def addRPC(self, plugin, func, doc):
@@ -85,7 +85,7 @@ class AddonManager(object):
         return f(*args)
 
 
-    def createIndex(self):
+    def create_index(self):
         plugins  = []
 
         for type in ("addon", "hook"):
@@ -93,11 +93,11 @@ class AddonManager(object):
             deactivated = []
             for pluginname in getattr(self.pyload.pluginManager, "%sPlugins" % type):
                 try:
-                    pluginClass = self.pyload.pluginManager.loadClass(type, pluginname)
+                    pluginClass = self.pyload.pluginManager.load_class(type, pluginname)
                     if not pluginClass:
                         continue
 
-                    if self.pyload.config.getPlugin("%s_%s" % (pluginname, type), "activated"):
+                    if self.pyload.config.get_plugin("%s_%s" % (pluginname, type), "activated"):
                         plugin = pluginClass(self.pyload, self)
                         plugins.append(plugin)
 
@@ -119,21 +119,21 @@ class AddonManager(object):
         self.plugins = plugins
 
 
-    def manageAddon(self, plugin, name, value):
+    def manage_addon(self, plugin, name, value):
         if name == "activated" and value:
-            self.activateAddon(plugin)
+            self.activate_addon(plugin)
 
         elif name == "activated" and not value:
-            self.deactivateAddon(plugin)
+            self.deactivate_addon(plugin)
 
 
-    def activateAddon(self, pluginname):
+    def activate_addon(self, pluginname):
         # check if already loaded
         for inst in self.plugins:
             if inst.__class__.__name__ == pluginname:
                 return
 
-        pluginClass = self.pyload.pluginManager.loadClass("addon", pluginname)
+        pluginClass = self.pyload.pluginManager.load_class("addon", pluginname)
 
         if not pluginClass:
             return
@@ -147,7 +147,7 @@ class AddonManager(object):
         addon.activate()
 
 
-    def deactivateAddon(self, pluginname):
+    def deactivate_addon(self, pluginname):
         for plugin in self.plugins:
             if plugin.__class__.__name__ == pluginname:
                 addon = plugin
@@ -160,94 +160,94 @@ class AddonManager(object):
         addon.deactivate()
 
         # remove periodic call
-        self.pyload.log.debug("Removed callback: %s" % self.pyload.scheduler.removeJob(addon.cb))
+        self.pyload.log.debug("Removed callback: %s" % self.pyload.scheduler.remove_job(addon.cb))
 
         self.plugins.remove(addon)
         del self.pluginMap[addon.__class__.__name__]
 
 
     @try_catch
-    def coreReady(self):
+    def core_ready(self):
         for plugin in self.plugins:
             if plugin.isActivated():
                 plugin.activate()
 
-        self.dispatchEvent("addon-start")
+        self.dispatch_event("addon-start")
 
 
     @try_catch
-    def coreExiting(self):
+    def core_exiting(self):
         for plugin in self.plugins:
             if plugin.isActivated():
                 plugin.exit()
 
-        self.dispatchEvent("addon-exit")
+        self.dispatch_event("addon-exit")
 
 
     @lock
-    def downloadPreparing(self, pyfile):
+    def download_preparing(self, pyfile):
         for plugin in self.plugins:
             if plugin.isActivated():
                 plugin.downloadPreparing(pyfile)
 
-        self.dispatchEvent("download-preparing", pyfile)
+        self.dispatch_event("download-preparing", pyfile)
 
 
     @lock
-    def downloadFinished(self, pyfile):
+    def download_finished(self, pyfile):
         for plugin in self.plugins:
             if plugin.isActivated():
                 plugin.downloadFinished(pyfile)
 
-        self.dispatchEvent("download-finished", pyfile)
+        self.dispatch_event("download-finished", pyfile)
 
 
     @lock
     @try_catch
-    def downloadFailed(self, pyfile):
+    def download_failed(self, pyfile):
         for plugin in self.plugins:
             if plugin.isActivated():
                 plugin.downloadFailed(pyfile)
 
-        self.dispatchEvent("download-failed", pyfile)
+        self.dispatch_event("download-failed", pyfile)
 
 
     @lock
-    def packageFinished(self, package):
+    def package_finished(self, package):
         for plugin in self.plugins:
             if plugin.isActivated():
                 plugin.packageFinished(package)
 
-        self.dispatchEvent("package-finished", package)
+        self.dispatch_event("package-finished", package)
 
 
     @lock
-    def beforeReconnecting(self, ip):
+    def before_reconnecting(self, ip):
         for plugin in self.plugins:
             plugin.beforeReconnecting(ip)
 
-        self.dispatchEvent("beforeReconnecting", ip)
+        self.dispatch_event("beforeReconnecting", ip)
 
 
     @lock
-    def afterReconnecting(self, ip, oldip):
+    def after_reconnecting(self, ip, oldip):
         for plugin in self.plugins:
             if plugin.isActivated():
                 plugin.afterReconnecting(ip, oldip)
 
-        self.dispatchEvent("afterReconnecting", ip, oldip)
+        self.dispatch_event("afterReconnecting", ip, oldip)
 
 
-    def startThread(self, function, *args, **kwargs):
+    def start_thread(self, function, *args, **kwargs):
         return AddonThread(self.pyload.threadManager, function, args, kwargs)
 
 
-    def activePlugins(self):
+    def active_plugins(self):
         """Returns all active plugins"""
-        return [x for x in self.plugins if x.isActivated()]
+        return [x for x in self.plugins if x.is_activated()]
 
 
-    def getAllInfo(self):
+    def get_all_info(self):
         """Returns info stored by addon plugins"""
         info = {}
         for name, plugin in self.pluginMap.iteritems():
@@ -258,7 +258,7 @@ class AddonManager(object):
         return info
 
 
-    def getInfo(self, plugin):
+    def get_info(self, plugin):
         info = {}
         if plugin in self.pluginMap and self.pluginMap[plugin].info:
             info = dict((x, str(y) if not isinstance(y, basestring) else y)
@@ -266,7 +266,7 @@ class AddonManager(object):
         return info
 
 
-    def addEvent(self, event, func):
+    def add_event(self, event, func):
         """Adds an event listener for event name"""
         if event in self.events:
             self.events[event].append(func)
@@ -274,13 +274,13 @@ class AddonManager(object):
             self.events[event] = [func]
 
 
-    def removeEvent(self, event, func):
+    def remove_event(self, event, func):
         """Removes previously added event listener"""
         if event in self.events:
             self.events[event].remove(func)
 
 
-    def dispatchEvent(self, event, *args):
+    def dispatch_event(self, event, *args):
         """Dispatches event with args"""
         if event in self.events:
             for f in self.events[event]:

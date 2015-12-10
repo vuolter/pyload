@@ -6,7 +6,7 @@ from pyload.plugin.Plugin import Fail, Retry
 from pyload.plugin.internal.SimpleHoster import SimpleHoster, replace_patterns, set_cookies
 
 
-class MultiHoster(SimpleHoster):
+class Multi_hoster(Simple_hoster):
     __name    = "MultiHoster"
     __type    = "hoster"
     __version = "0.39"
@@ -35,13 +35,13 @@ class MultiHoster(SimpleHoster):
         self.link     = ""     #@TODO: Move to hoster class in 0.4.10
         self.directDL = False  #@TODO: Move to hoster class in 0.4.10
 
-        if not self.getConfig('use_premium', True):
-            self.retryFree()
+        if not self.get_config('use_premium', True):
+            self.retry_free()
 
         if self.LOGIN_ACCOUNT and not self.account:
             self.fail(_("Required account not found"))
 
-        self.req.setOption("timeout", 120)
+        self.req.set_option("timeout", 120)
 
         if isinstance(self.COOKIES, list):
             set_cookies(self.req.cj, self.COOKIES)
@@ -59,35 +59,35 @@ class MultiHoster(SimpleHoster):
             self.prepare()
 
             if self.directDL:
-                self.checkInfo()
-                self.logDebug("Looking for direct download link...")
+                self.check_info()
+                self.log_debug("Looking for direct download link...")
                 self.handle_direct(pyfile)
 
             if not self.link and not self.lastDownload:
                 self.preload()
 
-                self.checkErrors()
-                self.checkStatus(getinfo=False)
+                self.check_errors()
+                self.check_status(getinfo=False)
 
-                if self.premium and (not self.CHECK_TRAFFIC or self.checkTrafficLeft()):
-                    self.logDebug("Handled as premium download")
+                if self.premium and (not self.CHECK_TRAFFIC or self.check_traffic_left()):
+                    self.log_debug("Handled as premium download")
                     self.handle_premium(pyfile)
 
-                elif not self.LOGIN_ACCOUNT or (not self.CHECK_TRAFFIC or self.checkTrafficLeft()):
-                    self.logDebug("Handled as free download")
+                elif not self.LOGIN_ACCOUNT or (not self.CHECK_TRAFFIC or self.check_traffic_left()):
+                    self.log_debug("Handled as free download")
                     self.handle_free(pyfile)
 
-            self.downloadLink(self.link, True)
-            self.checkFile()
+            self.download_link(self.link, True)
+            self.check_file()
 
         except Fail, e:  #@TODO: Move to PluginThread in 0.4.10
             if self.premium:
-                self.logWarning(_("Premium download failed"))
-                self.retryFree()
+                self.log_warning(_("Premium download failed"))
+                self.retry_free()
 
-            elif self.getConfig('revertfailed', True) \
-                 and "new_module" in self.core.pluginManager.hosterPlugins[self.getClassName()]:
-                hdict = self.core.pluginManager.hosterPlugins[self.getClassName()]
+            elif self.get_config('revertfailed', True) \
+                 and "new_module" in self.core.pluginManager.hosterPlugins[self.get_class_name()]:
+                hdict = self.core.pluginManager.hosterPlugins[self.get_class_name()]
 
                 tmp_module = hdict['new_module']
                 tmp_name   = hdict['new_name']

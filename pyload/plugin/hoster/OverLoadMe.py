@@ -5,7 +5,7 @@ from pyload.plugin.internal.MultiHoster import MultiHoster
 from pyload.utils import parse_size
 
 
-class OverLoadMe(MultiHoster):
+class Over_load_me(Multi_hoster):
     __name    = "OverLoadMe"
     __type    = "hoster"
     __version = "0.11"
@@ -23,23 +23,23 @@ class OverLoadMe(MultiHoster):
 
 
     def handle_premium(self, pyfile):
-        https = "https" if self.getConfig('ssl') else "http"
-        data  = self.account.getAccountData(self.user)
+        https = "https" if self.get_config('ssl') else "http"
+        data  = self.account.get_account_data(self.user)
         page  = self.load(https + "://api.over-load.me/getdownload.php",
                           get={'auth': data['password'],
                                'link': pyfile.url})
 
         data = json_loads(page)
 
-        self.logDebug(data)
+        self.log_debug(data)
 
         if data['error'] == 1:
-            self.logWarning(data['msg'])
-            self.tempOffline()
+            self.log_warning(data['msg'])
+            self.temp_offline()
         else:
             if pyfile.name and pyfile.name.endswith('.tmp') and data['filename']:
                 pyfile.name = data['filename']
                 pyfile.size = parse_size(data['filesize'])
 
             http_repl = ["http://", "https://"]
-            self.link = data['downloadlink'].replace(*http_repl if self.getConfig('ssl') else http_repl[::-1])
+            self.link = data['downloadlink'].replace(*http_repl if self.get_config('ssl') else http_repl[::-1])

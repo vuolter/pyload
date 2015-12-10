@@ -8,7 +8,7 @@ from pyload.plugin.captcha.ReCaptcha import ReCaptcha
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class RapiduNet(SimpleHoster):
+class Rapidu_net(Simple_hoster):
     __name    = "RapiduNet"
     __type    = "hoster"
     __version = "0.08"
@@ -40,7 +40,7 @@ class RapiduNet(SimpleHoster):
         self.req.http.lastURL = pyfile.url
         self.req.http.c.setopt(pycurl.HTTPHEADER, ["X-Requested-With: XMLHttpRequest"])
 
-        jsvars = self.getJsonResponse("https://rapidu.net/ajax.php",
+        jsvars = self.get_json_response("https://rapidu.net/ajax.php",
                                       get={'a': "getLoadTimeToDownload"},
                                       post={'_go': ""},
                                       decode=True)
@@ -48,7 +48,7 @@ class RapiduNet(SimpleHoster):
         if str(jsvars['timeToDownload']) is "stop":
             t = (24 * 60 * 60) - (int(time.time()) % (24 * 60 * 60)) + time.altzone
 
-            self.logInfo("You've reach your daily download transfer")
+            self.log_info("You've reach your daily download transfer")
 
             self.retry(10, 10 if t < 1 else None, _("Try tomorrow again"))  #@NOTE: check t in case of not synchronised clock
 
@@ -58,7 +58,7 @@ class RapiduNet(SimpleHoster):
         recaptcha = ReCaptcha(self)
         response, challenge = recaptcha.challenge(self.RECAPTCHA_KEY)
 
-        jsvars = self.getJsonResponse("https://rapidu.net/ajax.php",
+        jsvars = self.get_json_response("https://rapidu.net/ajax.php",
                                       get={'a': "getCheckCaptcha"},
                                       post={'_go'     : "",
                                             'captcha1': challenge,
@@ -70,11 +70,11 @@ class RapiduNet(SimpleHoster):
             self.link = jsvars['url']
 
 
-    def getJsonResponse(self, *args, **kwargs):
+    def get_json_response(self, *args, **kwargs):
         res = self.load(*args, **kwargs)
         if not res.startswith('{'):
             self.retry()
 
-        self.logDebug(res)
+        self.log_debug(res)
 
         return json_loads(res)

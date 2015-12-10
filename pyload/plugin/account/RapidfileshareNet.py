@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSAccount import XFSAccount
 
 
-class RapidfileshareNet(XFSAccount):
+class Rapidfileshare_net(XFSAccount):
     __name    = "RapidfileshareNet"
     __type    = "account"
     __version = "0.05"

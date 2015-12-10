@@ -8,7 +8,7 @@ import re
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class AndroidfilehostCom(SimpleHoster):
+class Androidfilehost_com(Simple_hoster):
     __name    = "AndroidfilehostCom"
     __type    = "hoster"
     __version = "0.01"
@@ -38,10 +38,10 @@ class AndroidfilehostCom(SimpleHoster):
 
     def handle_free(self, pyfile):
         wait = re.search(self.WAIT_PATTERN, self.html)
-        self.logDebug("Waiting time: %s seconds" % wait.group(1))
+        self.log_debug("Waiting time: %s seconds" % wait.group(1))
 
         fid = re.search(r'id="fid" value="(\d+)" />', self.html).group(1)
-        self.logDebug("fid: %s" % fid)
+        self.log_debug("fid: %s" % fid)
 
         html = self.load("https://www.androidfilehost.com/libs/otf/mirrors.otf.php",
                          post={'submit': 'submit',
@@ -52,7 +52,7 @@ class AndroidfilehostCom(SimpleHoster):
         self.link   = re.findall('"url":"(.*?)"', html)[0].replace("\\", "")
         mirror_host = self.link.split("/")[2]
 
-        self.logDebug("Mirror Host: %s" % mirror_host)
+        self.log_debug("Mirror Host: %s" % mirror_host)
 
         html = self.load("https://www.androidfilehost.com/libs/otf/stats.otf.php",
                          get={'fid'   : fid,

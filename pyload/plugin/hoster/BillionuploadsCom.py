@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class BillionuploadsCom(DeadHoster):
+class Billionuploads_com(Dead_hoster):
     __name    = "BillionuploadsCom"
     __type    = "hoster"
     __version = "0.06"

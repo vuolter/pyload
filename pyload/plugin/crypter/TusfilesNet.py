@@ -7,7 +7,7 @@ import urlparse
 from pyload.plugin.internal.XFSCrypter import XFSCrypter
 
 
-class TusfilesNet(XFSCrypter):
+class Tusfiles_net(XFSCrypter):
     __name    = "TusfilesNet"
     __type    = "crypter"
     __version = "0.08"
@@ -27,7 +27,7 @@ class TusfilesNet(XFSCrypter):
     URL_REPLACEMENTS = [(__pattern + ".*", r'https://www.tusfiles.net/go/\g<ID>/')]
 
 
-    def loadPage(self, page_n):
+    def load_page(self, page_n):
         return self.load(urlparse.urljoin(self.pyfile.url, str(page_n)), decode=True)
 
 
@@ -39,5 +39,5 @@ class TusfilesNet(XFSCrypter):
             return
 
         for p in xrange(2, pages + 1):
-            self.html = self.loadPage(p)
-            self.links += self.getLinks()
+            self.html = self.load_page(p)
+            self.links += self.get_links()

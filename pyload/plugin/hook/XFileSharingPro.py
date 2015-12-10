@@ -5,7 +5,7 @@ import re
 from pyload.plugin.Hook import Hook
 
 
-class XFileSharingPro(Hook):
+class XFile_sharing_pro(Hook):
     __name    = "XFileSharingPro"
     __type    = "hook"
     __version = "0.37"
@@ -41,25 +41,25 @@ class XFileSharingPro(Hook):
     CRYPTER_BUILTIN = ["junocloud.me", "rapidfileshare.net"]
 
 
-    # def pluginConfigChanged(self, plugin, name, value):
-        # self.loadPattern()
+    # def plugin_config_changed(self, plugin, name, value):
+        # self.load_pattern()
 
 
     def activate(self):
-        self.loadPattern()
+        self.load_pattern()
 
 
-    def loadPattern(self):
-        use_builtin_list = self.getConfig("use_builtin_list")
+    def load_pattern(self):
+        use_builtin_list = self.get_config("use_builtin_list")
 
         for type in ("hoster", "crypter"):
-            every_plugin = not self.getConfig('use_%s_list' % type)
+            every_plugin = not self.get_config('use_%s_list' % type)
 
             if every_plugin:
-                self.logInfo(_("Handling any %s I can!") % type)
+                self.log_info(_("Handling any %s I can!") % type)
                 pattern = self.regexp[type][0]
             else:
-                plugins    = self.getConfig('%s_list' % type)
+                plugins    = self.get_config('%s_list' % type)
                 plugin_set = set(plugins.replace(' ', '').replace('\\', '').replace('|', ',').replace(';', ',').lower().split(','))
 
                 if use_builtin_list:
@@ -68,14 +68,14 @@ class XFileSharingPro(Hook):
                 plugin_set -= set(('', u''))
 
                 if not plugin_set:
-                    self.logInfo(_("No %s to handle") % type)
+                    self.log_info(_("No %s to handle") % type)
                     self._unload(type)
                     return
 
                 match_list = '|'.join(sorted(plugin_set))
 
                 len_match_list = len(plugin_set)
-                self.logInfo(_("Handling %d %s%s: %s") % (len_match_list,
+                self.log_info(_("Handling %d %s%s: %s") % (len_match_list,
                                                           type,
                                                           "" if len_match_list == 1 else "s",
                                                           match_list.replace('|', ', ')))
@@ -86,7 +86,7 @@ class XFileSharingPro(Hook):
             dict['pattern'] = pattern
             dict['re'] = re.compile(pattern)
 
-            self.logDebug("Loaded %s pattern: %s" % (type, pattern))
+            self.log_debug("Loaded %s pattern: %s" % (type, pattern))
 
 
     def _unload(self, type):
@@ -96,15 +96,15 @@ class XFileSharingPro(Hook):
 
 
     def deactivate(self):
-        # self.unloadHoster("BasePlugin")
+        # self.unload_hoster("BasePlugin")
         for type in ("hoster", "crypter"):
             self._unload(type, "XFileSharingPro")
 
 
-    # def downloadFailed(self, pyfile):
+    # def download_failed(self, pyfile):
         # if pyfile.pluginname == "BasePlugin" \
            # and pyfile.hasStatus("failed") \
-           # and not self.getConfig('use_hoster_list') \
-           # and self.unloadHoster("BasePlugin"):
-            # self.logDebug("Unloaded XFileSharingPro from BasePlugin")
+           # and not self.get_config('use_hoster_list') \
+           # and self.unload_hoster("BasePlugin"):
+            # self.log_debug("Unloaded XFileSharingPro from BasePlugin")
             # pyfile.setStatus("queued")

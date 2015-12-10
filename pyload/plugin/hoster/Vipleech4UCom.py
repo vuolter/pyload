@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class Vipleech4UCom(DeadHoster):
+class Vipleech4UCom(Dead_hoster):
     __name    = "Vipleech4UCom"
     __type    = "hoster"
     __version = "0.20"

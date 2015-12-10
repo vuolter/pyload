@@ -6,7 +6,7 @@ import time
 from pyload.plugin.Account import Account
 
 
-class HellshareCz(Account):
+class Hellshare_cz(Account):
     __name    = "HellshareCz"
     __type    = "account"
     __version = "0.16"
@@ -19,7 +19,7 @@ class HellshareCz(Account):
     CREDIT_LEFT_PATTERN = r'<div class="credit-link">\s*<table>\s*<tr>\s*<th>(\d+|\d\d\.\d\d\.)</th>'
 
 
-    def loadAccountInfo(self, user, req):
+    def load_account_info(self, user, req):
         self.relogin(user)
         html = req.load("http://www.hellshare.com/")
 
@@ -41,10 +41,10 @@ class HellshareCz(Account):
                     trafficleft = -1
                 else:
                     # Traffic-based account
-                    trafficleft = self.parseTraffic(credit + "MB")
+                    trafficleft = self.parse_traffic(credit + "MB")
                     validuntil = -1
             except Exception, e:
-                self.logError(_("Unable to parse credit info"), e)
+                self.log_error(_("Unable to parse credit info"), e)
                 validuntil = -1
                 trafficleft = -1
 
@@ -55,17 +55,17 @@ class HellshareCz(Account):
         html = req.load('http://www.hellshare.com/', decode=True)
         if req.lastEffectiveURL != 'http://www.hellshare.com/':
             # Switch to English
-            self.logDebug("Switch lang - URL: %s" % req.lastEffectiveURL)
+            self.log_debug("Switch lang - URL: %s" % req.lastEffectiveURL)
 
             json = req.load("%s?do=locRouter-show" % req.lastEffectiveURL)
             hash = re.search(r"(\-\-[0-9a-f]+\-)", json).group(1)
 
-            self.logDebug("Switch lang - HASH: %s" % hash)
+            self.log_debug("Switch lang - HASH: %s" % hash)
 
             html = req.load('http://www.hellshare.com/%s/' % hash, decode=True)
 
         if re.search(self.CREDIT_LEFT_PATTERN, html):
-            self.logDebug("Already logged in")
+            self.log_debug("Already logged in")
             return
 
         html = req.load('http://www.hellshare.com/login?do=loginForm-submit',
@@ -76,4 +76,4 @@ class HellshareCz(Account):
                         decode=True)
 
         if "<p>You input a wrong user name or wrong password</p>" in html:
-            self.wrongPassword()
+            self.wrong_password()

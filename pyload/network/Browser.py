@@ -11,7 +11,7 @@ class Browser(object):
 
 
     def __init__(self, bucket=None, options={}):
-        self.log = logging.getLogger("log")
+        self.log = logging.get_logger("log")
 
         self.options = options  #: holds pycurl options
         self.bucket = bucket
@@ -19,17 +19,17 @@ class Browser(object):
         self.cj = None  #: needs to be setted later
         self._size = 0
 
-        self.renewHTTPRequest()
+        self.renew_HTTP_request()
         self.dl = None
 
 
-    def renewHTTPRequest(self):
+    def renew_HTTP_request(self):
         if hasattr(self, "http"):
             self.http.close()
         self.http = HTTPRequest(self.cj, self.options)
 
 
-    def setLastURL(self, val):
+    def set_lastURL(self, val):
         self.http.lastURL = val
 
     # tunnel some attributes from HTTP Request to Browser
@@ -39,7 +39,7 @@ class Browser(object):
     cookieJar = property(lambda self: self.cj)
 
 
-    def setCookieJar(self, cj):
+    def set_cookie_jar(self, cj):
         self.cj = cj
         self.http.cj = cj
 
@@ -70,24 +70,24 @@ class Browser(object):
         return (self.arrived * 100) / self.size if self.size else 0
 
 
-    def clearCookies(self):
+    def clear_cookies(self):
         if self.cj:
             self.cj.clear()
-        self.http.clearCookies()
+        self.http.clear_cookies()
 
 
-    def clearReferer(self):
+    def clear_referer(self):
         self.http.lastURL = None
 
 
-    def abortDownloads(self):
+    def abort_downloads(self):
         self.http.abort = True
         if self.dl:
             self._size = self.dl.size
             self.dl.abort = True
 
 
-    def httpDownload(self, url, filename, get={}, post={}, ref=True, cookies=True, chunks=1, resume=False,
+    def http_download(self, url, filename, get={}, post={}, ref=True, cookies=True, chunks=1, resume=False,
                      progressNotify=None, disposition=False):
         """This can also download ftp"""
         self._size = 0
@@ -106,39 +106,39 @@ class Browser(object):
         return self.http.load(*args, **kwargs)
 
 
-    def putHeader(self, name, value):
+    def put_header(self, name, value):
         """Add a header to the request"""
-        self.http.putHeader(name, value)
+        self.http.put_header(name, value)
 
 
-    def addAuth(self, pwd):
+    def add_auth(self, pwd):
         """
         Adds user and pw for http auth
 
         :param pwd: string, user:password
         """
         self.options['auth'] = pwd
-        self.renewHTTPRequest()  #: we need a new request
+        self.renew_HTTP_request()  #: we need a new request
 
 
-    def removeAuth(self):
+    def remove_auth(self):
         if "auth" in self.options:
             del self.options['auth']
-        self.renewHTTPRequest()
+        self.renew_HTTP_request()
 
 
-    def setOption(self, name, value):
+    def set_option(self, name, value):
         """Adds an option to the request, see HTTPRequest for existing ones"""
         self.options[name] = value
 
 
-    def deleteOption(self, name):
+    def delete_option(self, name):
         if name in self.options:
             del self.options[name]
 
 
-    def clearHeaders(self):
-        self.http.clearHeaders()
+    def clear_headers(self):
+        self.http.clear_headers()
 
 
     def close(self):

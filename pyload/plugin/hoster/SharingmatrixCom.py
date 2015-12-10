@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class SharingmatrixCom(DeadHoster):
+class Sharingmatrix_com(Dead_hoster):
     __name    = "SharingmatrixCom"
     __type    = "hoster"
     __version = "0.01"

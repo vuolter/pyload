@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class ZShareNet(DeadHoster):
+class ZShare_net(Dead_hoster):
     __name    = "ZShareNet"
     __type    = "hoster"
     __version = "0.21"

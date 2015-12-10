@@ -5,7 +5,7 @@ import re
 from pyload.plugin.internal.SimpleCrypter import SimpleCrypter
 
 
-class FreakhareCom(SimpleCrypter):
+class Freakhare_com(Simple_crypter):
     __name    = "FreakhareCom"
     __type    = "crypter"
     __version = "0.03"
@@ -25,7 +25,7 @@ class FreakhareCom(SimpleCrypter):
     PAGES_PATTERN = r'Pages: +(\d+)'
 
 
-    def loadPage(self, page_n):
+    def load_page(self, page_n):
         if not hasattr(self, 'f_id') and not hasattr(self, 'f_md5'):
             m = re.search(r'http://freakshare.com/\?x=folder&f_id=(\d+)&f_md5=(\w+)', self.html)
             if m:

@@ -3,7 +3,7 @@
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class TwoSharedCom(SimpleHoster):
+class Two_shared_com(Simple_hoster):
     __name    = "TwoSharedCom"
     __type    = "hoster"
     __version = "0.13"

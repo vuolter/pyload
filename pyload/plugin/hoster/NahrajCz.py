@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class NahrajCz(DeadHoster):
+class Nahraj_cz(Dead_hoster):
     __name    = "NahrajCz"
     __type    = "hoster"
     __version = "0.21"

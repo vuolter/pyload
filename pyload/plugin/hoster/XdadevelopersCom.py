@@ -6,7 +6,7 @@
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class XdadevelopersCom(SimpleHoster):
+class Xdadevelopers_com(Simple_hoster):
     __name    = "XdadevelopersCom"
     __type    = "hoster"
     __version = "0.03"

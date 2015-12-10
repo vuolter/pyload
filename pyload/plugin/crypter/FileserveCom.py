@@ -5,7 +5,7 @@ import re
 from pyload.plugin.Crypter import Crypter
 
 
-class FileserveCom(Crypter):
+class Fileserve_com(Crypter):
     __name    = "FileserveCom"
     __type    = "crypter"
     __version = "0.11"

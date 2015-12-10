@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class IFileWs(DeadHoster):
+class IFile_ws(Dead_hoster):
     __name    = "IFileWs"
     __type    = "hoster"
     __version = "0.02"

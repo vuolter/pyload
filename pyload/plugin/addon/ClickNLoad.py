@@ -44,9 +44,9 @@ class ClickNLoad(Addon):
         if not self.pyload.config.get("webui", "activated"):
             return
 
-        ip      = "" if self.getConfig('extern') else "127.0.0.1"
+        ip      = "" if self.get_config('extern') else "127.0.0.1"
         webport = self.pyload.config.get("webui", "port")
-        cnlport = self.getConfig('port')
+        cnlport = self.get_config('port')
 
         self.proxy(ip, webport, cnlport)
 
@@ -55,7 +55,7 @@ class ClickNLoad(Addon):
     def proxy(self, ip, webport, cnlport):
         time.sleep(10)  #@TODO: Remove in 0.4.10 (implement addon delay on startup)
 
-        self.logInfo(_("Proxy listening on %s:%s") % (ip or "0.0.0.0", cnlport))
+        self.log_info(_("Proxy listening on %s:%s") % (ip or "0.0.0.0", cnlport))
 
         self._server(ip, webport, cnlport)
 
@@ -73,7 +73,7 @@ class ClickNLoad(Addon):
 
             while True:
                 client_socket, client_addr = dock_socket.accept()
-                self.logDebug("Connection from %s:%s" % client_addr)
+                self.log_debug("Connection from %s:%s" % client_addr)
 
                 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -82,25 +82,25 @@ class ClickNLoad(Addon):
                         server_socket = ssl.wrap_socket(server_socket)
 
                     except NameError:
-                        self.logError(_("pyLoad's webinterface is configured to use HTTPS, Please install python's ssl lib or disable HTTPS"))
+                        self.log_error(_("pyLoad's webinterface is configured to use HTTPS, Please install python's ssl lib or disable HTTPS"))
                         client_socket.close()  #: reset the connection.
                         continue
 
                     except Exception, e:
-                        self.logError(_("SSL error: %s") % e.message)
+                        self.log_error(_("SSL error: %s") % e.message)
                         client_socket.close()  #: reset the connection.
                         continue
 
                 server_socket.connect(("127.0.0.1", webport))
 
-                self.manager.startThread(forward, client_socket, server_socket)
-                self.manager.startThread(forward, server_socket, client_socket)
+                self.manager.start_thread(forward, client_socket, server_socket)
+                self.manager.start_thread(forward, server_socket, client_socket)
 
         except socket.timeout:
-            self.logDebug("Connection timed out, retrying...")
+            self.log_debug("Connection timed out, retrying...")
             return self._server(ip, webport, cnlport)
 
         except socket.error, e:
-            self.logError(e)
+            self.log_error(e)
             time.sleep(240)
             return self._server(ip, webport, cnlport)

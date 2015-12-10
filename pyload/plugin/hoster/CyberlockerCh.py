@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class CyberlockerCh(DeadHoster):
+class Cyberlocker_ch(Dead_hoster):
     __name    = "CyberlockerCh"
     __type    = "hoster"
     __version = "0.02"

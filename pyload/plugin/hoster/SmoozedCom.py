@@ -4,7 +4,7 @@ from pyload.utils import json_loads
 from pyload.plugin.internal.MultiHoster import MultiHoster
 
 
-class SmoozedCom(MultiHoster):
+class Smoozed_com(Multi_hoster):
     __name    = "SmoozedCom"
     __type    = "hoster"
     __version = "0.05"
@@ -30,7 +30,7 @@ class SmoozedCom(MultiHoster):
             pyfile.name = ".".join(temp)
 
         # Check the link
-        get_data = {'session_key': self.account.getAccountInfo(self.user)['session'],
+        get_data = {'session_key': self.account.get_account_info(self.user)['session'],
                     'url'        : pyfile.url}
 
         data = json_loads(self.load("http://www2.smoozed.com/api/check", get=get_data))
@@ -56,8 +56,8 @@ class SmoozedCom(MultiHoster):
             self.link = header['location'][-1] if isinstance(header['location'], list) else header['location']
 
 
-    def checkFile(self, rules={}):
-        if self.checkDownload({'error': '{"state":"error"}',
+    def check_file(self, rules={}):
+        if self.check_download({'error': '{"state":"error"}',
                                'retry': '{"state":"retry"}'}):
             self.fail(_("Error response received"))
 

@@ -3,7 +3,7 @@
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class RgHostNet(SimpleHoster):
+class Rg_host_net(Simple_hoster):
     __name    = "RgHostNet"
     __type    = "hoster"
     __version = "0.04"

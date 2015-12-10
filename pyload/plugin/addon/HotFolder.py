@@ -10,7 +10,7 @@ from pyload.plugin.Addon import Addon
 from pyload.utils import fs_encode, fs_join
 
 
-class HotFolder(Addon):
+class Hot_folder(Addon):
     __name    = "HotFolder"
     __type    = "addon"
     __version = "0.14"
@@ -30,18 +30,18 @@ class HotFolder(Addon):
 
 
     def activate(self):
-        self.initPeriodical()
+        self.init_periodical()
 
 
     def periodical(self):
-        folder = fs_encode(self.getConfig('folder'))
-        file   = fs_encode(self.getConfig('file'))
+        folder = fs_encode(self.get_config('folder'))
+        file   = fs_encode(self.get_config('file'))
 
         try:
             if not os.path.isdir(os.path.join(folder, "finished")):
                 os.makedirs(os.path.join(folder, "finished"))
 
-            if self.getConfig('watch_file'):
+            if self.get_config('watch_file'):
                 with open(file, "a+") as f:
                     f.seek(0)
                     content = f.read().strip()
@@ -55,7 +55,7 @@ class HotFolder(Addon):
                     with open(fs_join(folder, "finished", name), "wb") as f:
                         f.write(content)
 
-                    self.pyload.api.addPackage(f.name, [f.name], 1)
+                    self.pyload.api.add_package(f.name, [f.name], 1)
 
             for f in os.listdir(folder):
                 path = os.path.join(folder, f)
@@ -63,11 +63,11 @@ class HotFolder(Addon):
                 if not os.path.isfile(path) or f.endswith("~") or f.startswith("#") or f.startswith("."):
                     continue
 
-                newpath = os.path.join(folder, "finished", f if self.getConfig('keep') else "tmp_" + f)
+                newpath = os.path.join(folder, "finished", f if self.get_config('keep') else "tmp_" + f)
                 shutil.move(path, newpath)
 
-                self.logInfo(_("Added %s from HotFolder") % f)
-                self.pyload.api.addPackage(f, [newpath], 1)
+                self.log_info(_("Added %s from HotFolder") % f)
+                self.pyload.api.add_package(f, [newpath], 1)
 
         except (IOError, OSError), e:
-            self.logError(e)
+            self.log_error(e)

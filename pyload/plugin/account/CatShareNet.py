@@ -6,7 +6,7 @@ import time
 from pyload.plugin.Account import Account
 
 
-class CatShareNet(Account):
+class Cat_share_net(Account):
     __name    = "CatShareNet"
     __type    = "account"
     __version = "0.05"
@@ -21,7 +21,7 @@ class CatShareNet(Account):
     TRAFFIC_LEFT_PATTERN = r'<a href="/premium">([0-9.]+ [kMG]B)'
 
 
-    def loadAccountInfo(self, user, req):
+    def load_account_info(self, user, req):
         premium     = False
         validuntil  = -1
         trafficleft = -1
@@ -33,7 +33,7 @@ class CatShareNet(Account):
 
         try:
             expiredate = re.search(self.VALID_UNTIL_PATTERN, html).group(1)
-            self.logDebug("Expire date: " + expiredate)
+            self.log_debug("Expire date: " + expiredate)
 
             validuntil = time.mktime(time.strptime(expiredate, "%Y-%m-%d %H:%M:%S"))
 
@@ -41,7 +41,7 @@ class CatShareNet(Account):
             pass
 
         try:
-            trafficleft = self.parseTraffic(re.search(self.TRAFFIC_LEFT_PATTERN, html).group(1))
+            trafficleft = self.parse_traffic(re.search(self.TRAFFIC_LEFT_PATTERN, html).group(1))
 
         except Exception:
             pass
@@ -58,4 +58,4 @@ class CatShareNet(Account):
                         decode=True)
 
         if not '<a href="/logout">Wyloguj</a>' in html:
-            self.wrongPassword()
+            self.wrong_password()

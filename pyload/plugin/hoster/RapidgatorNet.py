@@ -11,7 +11,7 @@ from pyload.plugin.captcha.SolveMedia import SolveMedia
 from pyload.plugin.internal.SimpleHoster import SimpleHoster, secondsToMidnight
 
 
-class RapidgatorNet(SimpleHoster):
+class Rapidgator_net(Simple_hoster):
     __name    = "RapidgatorNet"
     __type    = "hoster"
     __version = "0.33"
@@ -50,7 +50,7 @@ class RapidgatorNet(SimpleHoster):
 
     def setup(self):
         if self.account:
-            self.sid = self.account.getAccountInfo(self.user).get('sid', None)
+            self.sid = self.account.get_account_info(self.user).get('sid', None)
         else:
             self.sid = None
 
@@ -66,13 +66,13 @@ class RapidgatorNet(SimpleHoster):
             json = self.load('%s/%s' % (self.API_URL, cmd),
                              get={'sid': self.sid,
                                   'url': self.pyfile.url}, decode=True)
-            self.logDebug("API:%s" % cmd, json, "SID: %s" % self.sid)
+            self.log_debug("API:%s" % cmd, json, "SID: %s" % self.sid)
             json = json_loads(json)
             status = json['response_status']
             msg = json['response_details']
 
         except BadHeader, e:
-            self.logError("API: %s" % cmd, e, "SID: %s" % self.sid)
+            self.log_error("API: %s" % cmd, e, "SID: %s" % self.sid)
             status = e.code
             msg = e
 
@@ -100,20 +100,20 @@ class RapidgatorNet(SimpleHoster):
 
     def handle_free(self, pyfile):
         jsvars = dict(re.findall(self.JSVARS_PATTERN, self.html))
-        self.logDebug(jsvars)
+        self.log_debug(jsvars)
 
         self.req.http.lastURL = pyfile.url
         self.req.http.c.setopt(pycurl.HTTPHEADER, ["X-Requested-With: XMLHttpRequest"])
 
         url = "http://rapidgator.net%s?fid=%s" % (
             jsvars.get('startTimerUrl', '/download/AjaxStartTimer'), jsvars['fid'])
-        jsvars.update(self.getJsonResponse(url))
+        jsvars.update(self.get_json_response(url))
 
         self.wait(jsvars.get('secs', 45), False)
 
         url = "http://rapidgator.net%s?sid=%s" % (
             jsvars.get('getDownloadUrl', '/download/AjaxGetDownload'), jsvars['sid'])
-        jsvars.update(self.getJsonResponse(url))
+        jsvars.update(self.get_json_response(url))
 
         self.req.http.lastURL = pyfile.url
         self.req.http.c.setopt(pycurl.HTTPHEADER, ["X-Requested-With:"])
@@ -127,7 +127,7 @@ class RapidgatorNet(SimpleHoster):
                 self.link = m.group(1)
                 break
             else:
-                captcha = self.handleCaptcha()
+                captcha = self.handle_captcha()
 
                 if not captcha:
                     self.error(_("Captcha pattern not found"))
@@ -139,23 +139,23 @@ class RapidgatorNet(SimpleHoster):
                                                  'adcopy_response'             : response})
 
                 if "The verification code is incorrect" in self.html:
-                    self.invalidCaptcha()
+                    self.invalid_captcha()
                 else:
-                    self.correctCaptcha()
+                    self.correct_captcha()
         else:
             self.error(_("Download link"))
 
 
-    def handleCaptcha(self):
+    def handle_captcha(self):
         for klass in (AdsCaptcha, ReCaptcha, SolveMedia):
             inst = klass(self)
             if inst.detect_key():
                 return inst
 
 
-    def getJsonResponse(self, url):
+    def get_json_response(self, url):
         res = self.load(url, decode=True)
         if not res.startswith('{'):
             self.retry()
-        self.logDebug(url, res)
+        self.log_debug(url, res)
         return json_loads(res)

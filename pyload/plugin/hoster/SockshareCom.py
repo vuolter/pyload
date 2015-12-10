@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class SockshareCom(DeadHoster):
+class Sockshare_com(Dead_hoster):
     __name    = "SockshareCom"
     __type    = "hoster"
     __version = "0.05"

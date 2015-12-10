@@ -4,7 +4,7 @@ from pyload.network.HTTPRequest import BadHeader
 from pyload.plugin.internal.XFSHoster import XFSHoster
 
 
-class TusfilesNet(XFSHoster):
+class Tusfiles_net(XFSHoster):
     __name    = "TusfilesNet"
     __type    = "hoster"
     __version = "0.10"
@@ -27,7 +27,7 @@ class TusfilesNet(XFSHoster):
         self.resumeDownload = True
 
 
-    def downloadLink(self, link, disposition=True):
+    def download_link(self, link, disposition=True):
         try:
             return super(TusfilesNet, self).downloadLink(link, disposition)
 

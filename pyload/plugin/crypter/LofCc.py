@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadCrypter import DeadCrypter
 
 
-class LofCc(DeadCrypter):
+class Lof_cc(Dead_crypter):
     __name    = "LofCc"
     __type    = "crypter"
     __version = "0.21"

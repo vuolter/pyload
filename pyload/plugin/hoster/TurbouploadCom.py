@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class TurbouploadCom(DeadHoster):
+class Turboupload_com(Dead_hoster):
     __name    = "TurbouploadCom"
     __type    = "hoster"
     __version = "0.03"

@@ -3,7 +3,7 @@
 from pyload.plugin.internal.MultiHoster import MultiHoster
 
 
-class RehostTo(MultiHoster):
+class Rehost_to(Multi_hoster):
     __name    = "RehostTo"
     __type    = "hoster"
     __version = "0.21"
@@ -19,6 +19,6 @@ class RehostTo(MultiHoster):
     def handle_premium(self, pyfile):
         self.download("http://rehost.to/process_download.php",
                       get={'user': "cookie",
-                           'pass': self.account.getAccountInfo(self.user)['session'],
+                           'pass': self.account.get_account_info(self.user)['session'],
                            'dl'  : pyfile.url},
                       disposition=True)

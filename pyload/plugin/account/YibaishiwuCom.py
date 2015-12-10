@@ -5,7 +5,7 @@ import re
 from pyload.plugin.Account import Account
 
 
-class YibaishiwuCom(Account):
+class Yibaishiwu_com(Account):
     __name    = "YibaishiwuCom"
     __type    = "account"
     __version = "0.02"
@@ -18,7 +18,7 @@ class YibaishiwuCom(Account):
     ACCOUNT_INFO_PATTERN = r'var USER_PERMISSION = {(.*?)}'
 
 
-    def loadAccountInfo(self, user, req):
+    def load_account_info(self, user, req):
         # self.relogin(user)
         html = req.load("http://115.com/", decode=True)
 
@@ -37,4 +37,4 @@ class YibaishiwuCom(Account):
                         decode=True)
 
         if not 'var USER_PERMISSION = {' in html:
-            self.wrongPassword()
+            self.wrong_password()

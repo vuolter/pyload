@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadCrypter import DeadCrypter
 
 
-class ILoadTo(DeadCrypter):
+class ILoad_to(Dead_crypter):
     __name    = "ILoadTo"
     __type    = "crypter"
     __version = "0.11"

@@ -3,7 +3,7 @@
 from pyload.plugin.internal.MultiHook import MultiHook
 
 
-class OverLoadMe(MultiHook):
+class Over_load_me(Multi_hook):
     __name    = "OverLoadMe"
     __type    = "hook"
     __version = "0.04"
@@ -20,10 +20,10 @@ class OverLoadMe(MultiHook):
     __authors     = [("marley", "marley@over-load.me")]
 
 
-    def getHosters(self):
-        https = "https" if self.getConfig('ssl') else "http"
+    def get_hosters(self):
+        https = "https" if self.get_config('ssl') else "http"
         html = self.getURL(https + "://api.over-load.me/hoster.php",
                       get={'auth': "0001-cb1f24dadb3aa487bda5afd3b76298935329be7700cd7-5329be77-00cf-1ca0135f"}).replace("\"", "").strip()
-        self.logDebug("Hosterlist", html)
+        self.log_debug("Hosterlist", html)
 
         return [x.strip() for x in html.split(",") if x.strip()]

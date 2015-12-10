@@ -6,7 +6,7 @@ from pyload.plugin.internal.SimpleCrypter import SimpleCrypter
 from pyload.utils import json_loads
 
 
-class TurbobitNet(SimpleCrypter):
+class Turbobit_net(Simple_crypter):
     __name    = "TurbobitNet"
     __type    = "crypter"
     __version = "0.05"
@@ -25,7 +25,7 @@ class TurbobitNet(SimpleCrypter):
     NAME_PATTERN = r'src=\'/js/lib/grid/icon/folder.png\'> <span>(?P<N>.+?)</span>'
 
 
-    def _getLinks(self, id, page=1):
+    def _get_links(self, id, page=1):
         gridFile = self.load("http://turbobit.net/downloadfolder/gridFile",
                              get={"rootId": id, "rows": 200, "page": page}, decode=True)
         grid = json_loads(gridFile)
@@ -33,13 +33,13 @@ class TurbobitNet(SimpleCrypter):
         if grid['rows']:
             for i in grid['rows']:
                 yield i['id']
-            for id in self._getLinks(id, page + 1):
+            for id in self._get_links(id, page + 1):
                 yield id
         else:
             return
 
 
-    def getLinks(self):
+    def get_links(self):
         id = re.match(self.__pattern, self.pyfile.url).group('ID')
         fixurl = lambda id: "http://turbobit.net/%s.html" % id
-        return map(fixurl, self._getLinks(id))
+        return map(fixurl, self._get_links(id))

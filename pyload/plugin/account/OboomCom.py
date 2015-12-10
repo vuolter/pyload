@@ -22,7 +22,7 @@ from pyload.utils import json_loads
 from pyload.plugin.Account import Account
 
 
-class OboomCom(Account):
+class Oboom_com(Account):
     __name    = "OboomCom"
     __type    = "account"
     __version = "0.24"
@@ -32,22 +32,22 @@ class OboomCom(Account):
     __authors     = [("stanley", "stanley.foerster@gmail.com")]
 
 
-    def loadAccountData(self, user, req):
-        passwd = self.getAccountData(user)['password']
+    def load_account_data(self, user, req):
+        passwd = self.get_account_data(user)['password']
         salt   = passwd[::-1]
         pbkdf2 = PBKDF2(passwd, salt, 1000).hexread(16)
 
         result = json_loads(req.load("https://www.oboom.com/1/login", get={"auth": user, "pass": pbkdf2}))
 
         if not result[0] == 200:
-            self.logWarning(_("Failed to log in: %s") % result[1])
-            self.wrongPassword()
+            self.log_warning(_("Failed to log in: %s") % result[1])
+            self.wrong_password()
 
         return result[1]
 
 
-    def loadAccountInfo(self, name, req):
-        accountData = self.loadAccountData(name, req)
+    def load_account_info(self, name, req):
+        accountData = self.load_account_data(name, req)
 
         userData = accountData['user']
 
@@ -76,4 +76,4 @@ class OboomCom(Account):
 
 
     def login(self, user, data, req):
-        self.loadAccountData(user, req)
+        self.load_account_data(user, req)

@@ -4,7 +4,7 @@ from pyload.plugin.Account import Account
 # from pyload.utils import json_loads, json_dumps
 
 
-class LetitbitNet(Account):
+class Letitbit_net(Account):
     __name    = "LetitbitNet"
     __type    = "account"
     __version = "0.02"
@@ -14,16 +14,16 @@ class LetitbitNet(Account):
     __authors     = [("stickell", "l.stickell@yahoo.it")]
 
 
-    def loadAccountInfo(self, user, req):
+    def load_account_info(self, user, req):
         ## DISABLED BECAUSE IT GET 'key exausted' EVEN IF VALID ##
-        # api_key = self.getAccountData(user)['password']
+        # api_key = self.get_account_data(user)['password']
         # json_data = [api_key, ['key/info']]
         # api_rep = req.load('http://api.letitbit.net/json', post={'r': json_dumps(json_data)})
-        # self.logDebug("API Key Info: " + api_rep)
+        # self.log_debug("API Key Info: " + api_rep)
         # api_rep = json_loads(api_rep)
         #
         # if api_rep['status'] == 'FAIL':
-        #     self.logWarning(api_rep['data'])
+        #     self.log_warning(api_rep['data'])
         #     return {'valid': False, 'premium': False}
 
         return {"premium": True}
@@ -31,4 +31,4 @@ class LetitbitNet(Account):
 
     def login(self, user, data, req):
         # API_KEY is the username and the PREMIUM_KEY is the password
-        self.logInfo(_("You must use your API KEY as username and the PREMIUM KEY as password"))
+        self.log_info(_("You must use your API KEY as username and the PREMIUM KEY as password"))

@@ -6,7 +6,7 @@ import re
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class NarodRu(SimpleHoster):
+class Narod_ru(Simple_hoster):
     __name    = "NarodRu"
     __type    = "hoster"
     __version = "0.12"
@@ -41,18 +41,18 @@ class NarodRu(SimpleHoster):
 
             post_data = {"action": "sendcapcha"}
             captcha_url, post_data['key'] = m.groups()
-            post_data['rep'] = self.decryptCaptcha(captcha_url)
+            post_data['rep'] = self.decrypt_captcha(captcha_url)
 
             self.html = self.load(pyfile.url, post=post_data, decode=True)
 
             m = re.search(self.LINK_FREE_PATTERN, self.html)
             if m:
                 self.link = 'http://narod.ru' + m.group(1)
-                self.correctCaptcha()
+                self.correct_captcha()
                 break
 
             elif u'<b class="error-msg"><strong>Ошиблись?</strong>' in self.html:
-                self.invalidCaptcha()
+                self.invalid_captcha()
 
             else:
                 self.error(_("Download link"))

@@ -8,7 +8,7 @@ from pyload.plugin.captcha.ReCaptcha import ReCaptcha
 from pyload.plugin.internal.SimpleHoster import SimpleHoster, secondsToMidnight
 
 
-class ExtabitCom(SimpleHoster):
+class Extabit_com(Simple_hoster):
     __name    = "ExtabitCom"
     __type    = "hoster"
     __version = "0.65"
@@ -37,10 +37,10 @@ class ExtabitCom(SimpleHoster):
         if m:
             self.wait(int(m.group(1)) * 60, True)
         elif "The daily downloads limit from your IP is exceeded" in self.html:
-            self.logWarning(_("You have reached your daily downloads limit for today"))
-            self.wait(secondsToMidnight(gmt=2), True)
+            self.log_warning(_("You have reached your daily downloads limit for today"))
+            self.wait(seconds_to_midnight(gmt=2), True)
 
-        self.logDebug("URL: " + self.req.http.lastEffectiveURL)
+        self.log_debug("URL: " + self.req.http.lastEffectiveURL)
         m = re.match(self.__pattern, self.req.http.lastEffectiveURL)
         fileID = m.group('ID') if m else self.info['pattern']['ID']
 
@@ -54,10 +54,10 @@ class ExtabitCom(SimpleHoster):
                 get_data['capture'], get_data['challenge'] = recaptcha.challenge(captcha_key)
                 res = json_loads(self.load("http://extabit.com/file/%s/" % fileID, get=get_data))
                 if "ok" in res:
-                    self.correctCaptcha()
+                    self.correct_captcha()
                     break
                 else:
-                    self.invalidCaptcha()
+                    self.invalid_captcha()
             else:
                 self.fail(_("Invalid captcha"))
         else:

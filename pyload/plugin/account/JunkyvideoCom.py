@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSAccount import XFSAccount
 
 
-class JunkyvideoCom(XFSAccount):
+class Junkyvideo_com(XFSAccount):
     __name    = "JunkyvideoCom"
     __type    = "account"
     __version = "0.01"

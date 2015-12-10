@@ -6,7 +6,7 @@ import re
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class WrzucTo(SimpleHoster):
+class Wrzuc_to(Simple_hoster):
     __name    = "WrzucTo"
     __type    = "hoster"
     __version = "0.03"

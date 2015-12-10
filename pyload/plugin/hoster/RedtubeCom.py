@@ -6,7 +6,7 @@ from pyload.plugin.Hoster import Hoster
 from pyload.utils import html_unescape
 
 
-class RedtubeCom(Hoster):
+class Redtube_com(Hoster):
     __name    = "RedtubeCom"
     __type    = "hoster"
     __version = "0.20"

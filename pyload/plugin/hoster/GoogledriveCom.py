@@ -9,7 +9,7 @@ from pyload.plugin.internal.SimpleHoster import SimpleHoster
 from pyload.utils import html_unescape
 
 
-class GoogledriveCom(SimpleHoster):
+class Googledrive_com(Simple_hoster):
     __name    = "GoogledriveCom"
     __type    = "hoster"
     __version = "0.08"
@@ -43,7 +43,7 @@ class GoogledriveCom(SimpleHoster):
             self.error(_("Hop #1 not found"))
 
         else:
-            self.logDebug("Next hop: %s" % link1)
+            self.log_debug("Next hop: %s" % link1)
 
         self.html = self.load(link1).decode('unicode-escape')
 
@@ -55,9 +55,9 @@ class GoogledriveCom(SimpleHoster):
             self.error(_("Hop #2 not found"))
 
         else:
-            self.logDebug("Next hop: %s" % link2)
+            self.log_debug("Next hop: %s" % link2)
 
         link3 = self.load("https://docs.google.com" + link2, just_header=True)
-        self.logDebug("DL-Link: %s" % link3['location'])
+        self.log_debug("DL-Link: %s" % link3['location'])
 
         self.link = link3['location']

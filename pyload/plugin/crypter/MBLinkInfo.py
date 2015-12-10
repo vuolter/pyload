@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadCrypter import DeadCrypter
 
 
-class MBLinkInfo(DeadCrypter):
+class MBLink_info(Dead_crypter):
     __name    = "MBLinkInfo"
     __type    = "crypter"
     __version = "0.03"

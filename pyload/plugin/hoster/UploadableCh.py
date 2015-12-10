@@ -6,7 +6,7 @@ from pyload.plugin.captcha.ReCaptcha import ReCaptcha
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class UploadableCh(SimpleHoster):
+class Uploadable_ch(Simple_hoster):
     __name    = "UploadableCh"
     __type    = "hoster"
     __version = "0.09"
@@ -35,13 +35,13 @@ class UploadableCh(SimpleHoster):
     def handle_free(self, pyfile):
         # Click the "free user" button and wait
         a = self.load(pyfile.url, post={'downloadLink': "wait"}, decode=True)
-        self.logDebug(a)
+        self.log_debug(a)
 
         self.wait(30)
 
         # Make the recaptcha appear and show it the pyload interface
         b = self.load(pyfile.url, post={'checkDownload': "check"}, decode=True)
-        self.logDebug(b)  #: Expected output: {"success":"showCaptcha"}
+        self.log_debug(b)  #: Expected output: {"success":"showCaptcha"}
 
         recaptcha = ReCaptcha(self)
 
@@ -65,9 +65,9 @@ class UploadableCh(SimpleHoster):
         self.download(pyfile.url, post={'download': "normal"}, disposition=True)
 
 
-    def checkFile(self, rules={}):
-        if self.checkDownload({'wait': re.compile("Please wait for")}):
-            self.logInfo("Downloadlimit reached, please wait or reconnect")
+    def check_file(self, rules={}):
+        if self.check_download({'wait': re.compile("Please wait for")}):
+            self.log_info("Downloadlimit reached, please wait or reconnect")
             self.wait(60 * 60, True)
             self.retry()
 

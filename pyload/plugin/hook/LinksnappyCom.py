@@ -4,7 +4,7 @@ from pyload.utils import json_loads
 from pyload.plugin.internal.MultiHook import MultiHook
 
 
-class LinksnappyCom(MultiHook):
+class Linksnappy_com(Multi_hook):
     __name    = "LinksnappyCom"
     __type    = "hook"
     __version = "0.04"
@@ -20,7 +20,7 @@ class LinksnappyCom(MultiHook):
     __authors     = [("stickell", "l.stickell@yahoo.it")]
 
 
-    def getHosters(self):
+    def get_hosters(self):
         json_data = self.getURL("http://gen.linksnappy.com/lseAPI.php", get={'act': "FILEHOSTS"})
         json_data = json_loads(json_data)
 

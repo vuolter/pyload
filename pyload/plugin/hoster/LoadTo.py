@@ -10,7 +10,7 @@ from pyload.plugin.captcha.SolveMedia import SolveMedia
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class LoadTo(SimpleHoster):
+class Load_to(Simple_hoster):
     __name    = "LoadTo"
     __type    = "hoster"
     __version = "0.22"

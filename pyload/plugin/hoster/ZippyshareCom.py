@@ -9,7 +9,7 @@ from pyload.plugin.captcha.ReCaptcha import ReCaptcha
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class ZippyshareCom(SimpleHoster):
+class Zippyshare_com(Simple_hoster):
     __name    = "ZippyshareCom"
     __type    = "hoster"
     __version = "0.78"
@@ -66,7 +66,7 @@ class ZippyshareCom(SimpleHoster):
         initScripts = set()
 
 
-        def replElementById(element):
+        def repl_element_by_id(element):
             id   = element.group(1)  #: id might be either 'x' (a real id) or x (a variable)
             attr = element.group(4)  #: attr might be None
 

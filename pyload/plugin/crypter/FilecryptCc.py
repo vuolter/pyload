@@ -13,7 +13,7 @@ from pyload.plugin.Crypter import Crypter
 from pyload.plugin.captcha.ReCaptcha import ReCaptcha
 
 
-class FilecryptCc(Crypter):
+class Filecrypt_cc(Crypter):
     __name    = "FilecryptCc"
     __type    = "crypter"
     __version = "0.14"
@@ -47,9 +47,9 @@ class FilecryptCc(Crypter):
         if "content notfound" in self.html:  #@NOTE: "content notfound" is NOT a typo
             self.offline()
 
-        self.handlePasswordProtection()
-        self.handleCaptcha()
-        self.handleMirrorPages()
+        self.handle_password_protection()
+        self.handle_captcha()
+        self.handle_mirror_pages()
 
         for handle in (self.handleCNL, self.handleWeblinks, self.handleDlcContainer):
             handle()
@@ -58,25 +58,25 @@ class FilecryptCc(Crypter):
                 return
 
 
-    def handleMirrorPages(self):
+    def handle_mirror_pages(self):
         if "mirror=" not in self.siteWithLinks:
             return
 
         mirror = re.findall(self.MIRROR_PAGE_PATTERN, self.siteWithLinks)
 
-        self.logInfo(_("Found %d mirrors") % len(mirror))
+        self.log_info(_("Found %d mirrors") % len(mirror))
 
         for i in mirror[1:]:
             self.siteWithLinks = self.siteWithLinks + self.load(i).decode("utf-8", "replace")
 
 
-    def handlePasswordProtection(self):
+    def handle_password_protection(self):
         if '<input type="text" name="password"' not in self.html:
             return
 
-        self.logInfo(_("Folder is password protected"))
+        self.log_info(_("Folder is password protected"))
 
-        password = self.getPassword()
+        password = self.get_password()
 
         if not password:
             self.fail(_("Please enter the password in package section and try again"))
@@ -84,14 +84,14 @@ class FilecryptCc(Crypter):
         self.html = self.load(self.pyfile.url, post={"password": password})
 
 
-    def handleCaptcha(self):
+    def handle_captcha(self):
         m  = re.search(self.CAPTCHA_PATTERN, self.html)
         m2 = re.search(self.CIRCLE_CAPTCHA_PATTERN, self.html)
 
         if m:  #: normal captcha
-            self.logDebug("Captcha-URL: %s" % m.group(1))
+            self.log_debug("Captcha-URL: %s" % m.group(1))
 
-            captcha_code = self.decryptCaptcha(urlparse.urljoin(self.base_url, m.group(1)),
+            captcha_code = self.decrypt_captcha(urlparse.urljoin(self.base_url, m.group(1)),
                                                forceUser=True,
                                                imgtype="gif")
 
@@ -99,9 +99,9 @@ class FilecryptCc(Crypter):
                                            post={'recaptcha_response_field': captcha_code},
                                            decode=True)
         elif m2:  #: circle captcha
-            self.logDebug("Captcha-URL: %s" % m2.group(1))
+            self.log_debug("Captcha-URL: %s" % m2.group(1))
 
-            captcha_code = self.decryptCaptcha('%s%s?c=abc' %(self.base_url, m2.group(1)),
+            captcha_code = self.decrypt_captcha('%s%s?c=abc' %(self.base_url, m2.group(1)),
                                                result_type='positional')
 
             self.siteWithLinks = self.load(self.pyfile.url,
@@ -118,15 +118,15 @@ class FilecryptCc(Crypter):
                                                 post={'g-recaptcha-response': response},
                                                 decode=True)
             else:
-                self.logInfo(_("No captcha found"))
+                self.log_info(_("No captcha found"))
                 self.siteWithLinks = self.html
 
         if "recaptcha_image" in self.siteWithLinks or "data-sitekey" in self.siteWithLinks:
-            self.invalidCaptcha()
+            self.invalid_captcha()
             self.retry()
 
 
-    def handleDlcContainer(self):
+    def handle_dlc_container(self):
         dlc = re.findall(self.DLC_LINK_PATTERN, self.siteWithLinks)
 
         if not dlc:
@@ -136,7 +136,7 @@ class FilecryptCc(Crypter):
             self.links.append("%s/DLC/%s.dlc" % (self.base_url, i))
 
 
-    def handleWeblinks(self):
+    def handle_weblinks(self):
         try:
             weblinks = re.findall(self.WEBLINK_PATTERN, self.siteWithLinks)
 
@@ -147,7 +147,7 @@ class FilecryptCc(Crypter):
                 self.links.append(res2['location'])
 
         except Exception, e:
-            self.logDebug("Error decrypting weblinks: %s" % e)
+            self.log_debug("Error decrypting weblinks: %s" % e)
 
 
     def handleCNL(self):
@@ -156,13 +156,13 @@ class FilecryptCc(Crypter):
             vcrypted = re.findall('<input type="hidden" name="crypted" value="(.*)">', self.siteWithLinks)
 
             for i in xrange(len(vcrypted)):
-                self.links.extend(self._getLinks(vcrypted[i], vjk[i]))
+                self.links.extend(self._get_links(vcrypted[i], vjk[i]))
 
         except Exception, e:
-            self.logDebug("Error decrypting CNL: %s" % e)
+            self.log_debug("Error decrypting CNL: %s" % e)
 
 
-    def _getLinks(self, crypted, jk):
+    def _get_links(self, crypted, jk):
         # Get key
         key = binascii.unhexlify(str(jk))
 

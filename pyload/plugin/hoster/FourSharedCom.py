@@ -5,7 +5,7 @@ import re
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class FourSharedCom(SimpleHoster):
+class Four_shared_com(Simple_hoster):
     __name    = "FourSharedCom"
     __type    = "hoster"
     __version = "0.31"
@@ -53,7 +53,7 @@ class FourSharedCom(SimpleHoster):
         try:
             m = re.search(self.ID_PATTERN, self.html)
             res = self.load('http://www.4shared.com/web/d2/getFreeDownloadLimitInfo?fileId=%s' % m.group(1))
-            self.logDebug(res)
+            self.log_debug(res)
         except Exception:
             pass
 

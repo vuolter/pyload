@@ -6,7 +6,7 @@ import urlparse
 from pyload.plugin.internal.SimpleCrypter import SimpleCrypter
 
 
-class UploadedTo(SimpleCrypter):
+class Uploaded_to(Simple_crypter):
     __name    = "UploadedTo"
     __type    = "crypter"
     __version = "0.42"
@@ -25,7 +25,7 @@ class UploadedTo(SimpleCrypter):
     NAME_PATTERN = r'<title>(?P<N>.+?)<'
 
 
-    def getLinks(self):
+    def get_links(self):
         m = re.search(self.PLAIN_PATTERN, self.html)
         if m is None:
             self.error(_("PLAIN_PATTERN not found"))

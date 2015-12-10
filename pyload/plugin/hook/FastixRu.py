@@ -4,7 +4,7 @@ from pyload.utils import json_loads
 from pyload.plugin.internal.MultiHook import MultiHook
 
 
-class FastixRu(MultiHook):
+class Fastix_ru(Multi_hook):
     __name    = "FastixRu"
     __type    = "hook"
     __version = "0.05"
@@ -20,7 +20,7 @@ class FastixRu(MultiHook):
     __authors     = [("Massimo Rosamilia", "max@spiritix.eu")]
 
 
-    def getHosters(self):
+    def get_hosters(self):
         html = self.getURL("http://fastix.ru/api_v2",
                       get={'apikey': "5182964c3f8f9a7f0b00000a_kelmFB4n1IrnCDYuIFn2y",
                            'sub'   : "allowed_sources"})

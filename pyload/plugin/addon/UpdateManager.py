@@ -26,7 +26,7 @@ def exists(path):
         return False
 
 
-class UpdateManager(Addon):
+class Update_manager(Addon):
     __name    = "UpdateManager"
     __type    = "addon"
     __version = "0.51"
@@ -56,7 +56,7 @@ class UpdateManager(Addon):
         if self.checkonstart:
             self.update()
 
-        self.initPeriodical()
+        self.init_periodical()
 
 
     def setup(self):
@@ -64,8 +64,8 @@ class UpdateManager(Addon):
         self.info     = {'pyload': False, 'version': None, 'plugins': False, 'last_check': time.time()}
         self.mtimes   = {}  #: store modification time for each plugin
 
-        if self.getConfig('checkonstart'):
-            self.core.api.pauseServer()
+        if self.get_config('checkonstart'):
+            self.core.api.pause_server()
             self.checkonstart = True
         else:
             self.checkonstart = False
@@ -73,27 +73,27 @@ class UpdateManager(Addon):
         self.do_restart = False
 
 
-    def allDownloadsProcessed(self):
+    def all_downloads_processed(self):
         if self.do_restart is True:
-            self.logWarning(_("Downloads are done, restarting pyLoad to reload the updated plugins"))
+            self.log_warning(_("Downloads are done, restarting pyLoad to reload the updated plugins"))
             self.core.api.restart()
 
 
     def periodical(self):
         if self.core.debug:
-            if self.getConfig('reloadplugins'):
-                self.autoreloadPlugins()
+            if self.get_config('reloadplugins'):
+                self.autoreload_plugins()
 
-            if self.getConfig('nodebugupdate'):
+            if self.get_config('nodebugupdate'):
                 return
 
-        if self.getConfig('checkperiod') \
-           and time.time() - max(self.MIN_CHECK_INTERVAL, self.getConfig('checkinterval') * 60 * 60) > self.info['last_check']:
+        if self.get_config('checkperiod') \
+           and time.time() - max(self.MIN_CHECK_INTERVAL, self.get_config('checkinterval') * 60 * 60) > self.info['last_check']:
             self.update()
 
 
     @Expose
-    def autoreloadPlugins(self):
+    def autoreload_plugins(self):
         """Reload and reindex all modified plugins"""
         modules = filter(
             lambda m: m and (m.__name__.startswith("pyload.plugin.") or
@@ -119,15 +119,15 @@ class UpdateManager(Addon):
                     reloads.append(id)
                     self.mtimes[id] = mtime
 
-        return bool(self.core.pluginManager.reloadPlugins(reloads))
+        return bool(self.core.pluginManager.reload_plugins(reloads))
 
 
     def server_response(self):
         try:
-            return getURL(self.SERVER_URL, get={'v': self.core.api.getServerVersion()}).splitlines()
+            return getURL(self.SERVER_URL, get={'v': self.core.api.get_server_version()}).splitlines()
 
         except Exception:
-            self.logWarning(_("Unable to retrieve server to get updates"))
+            self.log_warning(_("Unable to retrieve server to get updates"))
 
 
     @Expose
@@ -135,16 +135,16 @@ class UpdateManager(Addon):
     def update(self):
         """Check for updates"""
 
-        self.core.api.pauseServer()
+        self.core.api.pause_server()
 
-        if self._update() is 2 and self.getConfig('autorestart'):
-            if not self.core.api.statusDownloads():
+        if self._update() is 2 and self.get_config('autorestart'):
+            if not self.core.api.status_downloads():
                 self.core.api.restart()
             else:
                 self.do_restart = True
-                self.logWarning(_("Downloads are active, will restart once the download is done"))
+                self.log_warning(_("Downloads are active, will restart once the download is done"))
         else:
-            self.core.api.unpauseServer()
+            self.core.api.unpause_server()
 
 
     def _update(self):
@@ -156,15 +156,15 @@ class UpdateManager(Addon):
             exitcode = 0
 
         elif data[0] == "None":
-            self.logInfo(_("No new pyLoad version available"))
-            exitcode = self._updatePlugins(data[1:])
+            self.log_info(_("No new pyLoad version available"))
+            exitcode = self._update_plugins(data[1:])
 
         elif onlyplugin:
             exitcode = 0
 
         else:
-            self.logInfo(_("***  New pyLoad Version %s available  ***") % data[0])
-            self.logInfo(_("***  Get it here: https://github.com/pyload/pyload/releases  ***"))
+            self.log_info(_("***  New pyLoad Version %s available  ***") % data[0])
+            self.log_info(_("***  Get it here: https://github.com/pyload/pyload/releases  ***"))
             self.info['pyload']  = True
             self.info['version'] = data[0]
             exitcode = 3
@@ -177,7 +177,7 @@ class UpdateManager(Addon):
         return exitcode
 
 
-    def _updatePlugins(self, data):
+    def _update_plugins(self, data):
         """Check for plugin updates"""
 
         exitcode = 0
@@ -213,8 +213,8 @@ class UpdateManager(Addon):
                         updatelist.pop(idx)
                         break
 
-            for t, n in self.removePlugins(sorted(type_plugins)):
-                self.logInfo(_("Removed blacklisted plugin: [%(type)s] %(name)s") % {
+            for t, n in self.remove_plugins(sorted(type_plugins)):
+                self.log_info(_("Removed blacklisted plugin: [%(type)s] %(name)s") % {
                     'type': t,
                     'name': n,
                 })
@@ -241,7 +241,7 @@ class UpdateManager(Addon):
             else:
                 continue
 
-            self.logInfo(_(msg) % {'type': type,
+            self.log_info(_(msg) % {'type': type,
                                    'name': name,
                                    'oldver': oldver,
                                    'newver': newver})
@@ -258,21 +258,21 @@ class UpdateManager(Addon):
                     raise Exception, _("Version mismatch")
 
             except Exception, e:
-                self.logError(_("Error updating plugin: %s") % filename, e)
+                self.log_error(_("Error updating plugin: %s") % filename, e)
 
         if updated:
-            self.logInfo(_("*** Plugins updated ***"))
+            self.log_info(_("*** Plugins updated ***"))
 
-            if self.core.pluginManager.reloadPlugins(updated):
+            if self.core.pluginManager.reload_plugins(updated):
                 exitcode = 1
             else:
-                self.logWarning(_("pyLoad restart required to reload the updated plugins"))
+                self.log_warning(_("pyLoad restart required to reload the updated plugins"))
                 self.info['plugins'] = True
                 exitcode = 2
 
-            self.manager.dispatchEvent("plugin_updated", updated)
+            self.manager.dispatch_event("plugin_updated", updated)
         else:
-            self.logInfo(_("No plugin updates available"))
+            self.log_info(_("No plugin updates available"))
 
         # Exit codes:
         # 0 = No plugin updated
@@ -282,7 +282,7 @@ class UpdateManager(Addon):
 
 
     @Expose
-    def removePlugins(self, type_plugins):
+    def remove_plugins(self, type_plugins):
         """Delete plugins from disk"""
 
         if not type_plugins:
@@ -290,7 +290,7 @@ class UpdateManager(Addon):
 
         removed = set()
 
-        self.logDebug("Requested deletion of plugins: %s" % type_plugins)
+        self.log_debug("Requested deletion of plugins: %s" % type_plugins)
 
         for type, name in type_plugins:
             rootplugins = os.path.join(pypath, "module", "plugins")
@@ -301,10 +301,10 @@ class UpdateManager(Addon):
 
                 if type == "addon":
                     try:
-                        self.manager.deactivateAddon(name)
+                        self.manager.deactivate_addon(name)
 
                     except Exception, e:
-                        self.logDebug(e)
+                        self.log_debug(e)
 
                 for filename in (py_filename, pyc_filename):
                     if not exists(filename):
@@ -314,7 +314,7 @@ class UpdateManager(Addon):
                         os.remove(filename)
 
                     except OSError, e:
-                        self.logError(_("Error removing: %s") % filename, e)
+                        self.log_error(_("Error removing: %s") % filename, e)
 
                     else:
                         id = (type, name)

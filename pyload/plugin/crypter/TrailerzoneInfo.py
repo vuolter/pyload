@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadCrypter import DeadCrypter
 
 
-class TrailerzoneInfo(DeadCrypter):
+class Trailerzone_info(Dead_crypter):
     __name    = "TrailerzoneInfo"
     __type    = "crypter"
     __version = "0.03"

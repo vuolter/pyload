@@ -3,7 +3,7 @@
 from pyload.plugin.internal.SimpleCrypter import SimpleCrypter
 
 
-class PastebinCom(SimpleCrypter):
+class Pastebin_com(Simple_crypter):
     __name    = "PastebinCom"
     __type    = "crypter"
     __version = "0.03"

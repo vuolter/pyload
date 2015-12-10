@@ -6,7 +6,7 @@ from pyload.plugin.internal.MultiHoster import MultiHoster
 from pyload.plugin.internal.SimpleHoster import secondsToMidnight
 
 
-class SimplyPremiumCom(MultiHoster):
+class Simply_premium_com(Multi_hoster):
     __name    = "SimplyPremiumCom"
     __type    = "hoster"
     __version = "0.08"
@@ -23,7 +23,7 @@ class SimplyPremiumCom(MultiHoster):
         self.chunkLimit = 16
 
 
-    def checkErrors(self):
+    def check_errors(self):
         if '<valid>0</valid>' in self.html or (
                 "You are not allowed to download from this host" in self.html and self.premium):
             self.account.relogin(self.user)
@@ -33,15 +33,15 @@ class SimplyPremiumCom(MultiHoster):
             self.offline()
 
         elif "downloadlimit" in self.html:
-            self.logWarning(_("Reached maximum connctions"))
+            self.log_warning(_("Reached maximum connctions"))
             self.retry(5, 60, _("Reached maximum connctions"))
 
         elif "trafficlimit" in self.html:
-            self.logWarning(_("Reached daily limit for this host"))
-            self.retry(wait_time=secondsToMidnight(gmt=2), reason="Daily limit for this host reached")
+            self.log_warning(_("Reached daily limit for this host"))
+            self.retry(wait_time=seconds_to_midnight(gmt=2), reason="Daily limit for this host reached")
 
         elif "hostererror" in self.html:
-            self.logWarning(_("Hoster temporarily unavailable, waiting 1 minute and retry"))
+            self.log_warning(_("Hoster temporarily unavailable, waiting 1 minute and retry"))
             self.retry(5, 60, _("Hoster is temporarily unavailable"))
 
 
@@ -50,13 +50,13 @@ class SimplyPremiumCom(MultiHoster):
             self.html = self.load("http://www.simply-premium.com/premium.php", get={'info': "", 'link': self.pyfile.url})
 
             if self.html:
-                self.logDebug("JSON data: " + self.html)
+                self.log_debug("JSON data: " + self.html)
                 break
         else:
-            self.logInfo(_("Unable to get API data, waiting 1 minute and retry"))
+            self.log_info(_("Unable to get API data, waiting 1 minute and retry"))
             self.retry(5, 60, _("Unable to get API data"))
 
-        self.checkErrors()
+        self.check_errors()
 
         try:
             self.pyfile.name = re.search(r'<name>([^<]+)</name>', self.html).group(1)

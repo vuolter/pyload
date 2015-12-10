@@ -4,7 +4,7 @@ import re
 from pyload.plugin.Crypter import Crypter
 
 
-class QuickshareCz(Crypter):
+class Quickshare_cz(Crypter):
     __name    = "QuickshareCz"
     __type    = "crypter"
     __version = "0.10"

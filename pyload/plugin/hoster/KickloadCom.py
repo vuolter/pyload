@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class KickloadCom(DeadHoster):
+class Kickload_com(Dead_hoster):
     __name    = "KickloadCom"
     __type    = "hoster"
     __version = "0.21"

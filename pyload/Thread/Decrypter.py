@@ -11,7 +11,7 @@ from pyload.Thread.Plugin import PluginThread
 from pyload.plugin.Plugin import Abort, Fail, Retry
 
 
-class DecrypterThread(PluginThread):
+class Decrypter_thread(Plugin_thread):
 
     """Thread for decrypting"""
 
@@ -27,7 +27,7 @@ class DecrypterThread(PluginThread):
         self.start()
 
 
-    def getActiveFiles(self):
+    def get_active_files(self):
         return [self.active]
 
 
@@ -84,7 +84,7 @@ class DecrypterThread(PluginThread):
 
             if self.pyload.debug:
                 traceback.print_exc()
-                self.writeDebugReport(pyfile)
+                self.write_debug_report(pyfile)
 
             return
 

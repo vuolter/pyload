@@ -14,7 +14,7 @@ __all__ = ["ConfigParser", "Section"]
 SectionTuple = namedtuple("SectionTuple", "label description explanation config")
 
 
-class ConfigParser:
+class Config_parser:
     """Holds and manages the configuration + meta data for config read from file"""
 
     CONFIG = "pyload.conf"
@@ -24,21 +24,21 @@ class ConfigParser:
             self.CONFIG = config
 
         # Meta data information
-        self.config = OrderedDict()
+        self.config = Ordered_dict()
         # The actual config values
         self.values = {}
 
-        self.checkVersion()
+        self.check_version()
 
-        self.loadDefault()
-        self.parseValues(self.CONFIG)
+        self.load_default()
+        self.parse_values(self.CONFIG)
 
 
-    def loadDefault(self):
+    def load_default(self):
         default.make_config(self)
 
 
-    def checkVersion(self):
+    def check_version(self):
         """Determines if config needs to be deleted"""
         if path.exists(self.CONFIG):
             f = open(self.CONFIG, "rb")
@@ -57,7 +57,7 @@ class ConfigParser:
             f.close()
 
 
-    def parseValues(self, filename):
+    def parse_values(self, filename):
         """Read config values from file"""
         f = open(filename, "rb")
         config = f.readlines()[1:]
@@ -155,23 +155,23 @@ class ConfigParser:
         return False
 
 
-    def getMetaData(self, section, option):
+    def get_meta_data(self, section, option):
         """Get all config data for an option"""
         return self.config[section].config[option]
 
 
-    def iterSections(self):
+    def iter_sections(self):
         """Yields section, config info, values, for all sections"""
         for name, config in self.config.iteritems():
             yield name, config, self.values[name] if name in self.values else {}
 
 
-    def getSection(self, section):
+    def get_section(self, section):
         """Retrieves single config as tuple (section, values)"""
         return self.config[section], self.values[section] if section in self.values else {}
 
 
-    def addConfigSection(self, section, label, desc, expl, config):
+    def add_config_section(self, section, label, desc, expl, config):
         """
         Adds a section to the config. `config` is a list of config tuple as used in plugin api defined as:
         The order of the config elements is preserved with OrderedDict

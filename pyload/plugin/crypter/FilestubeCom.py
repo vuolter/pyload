@@ -3,7 +3,7 @@
 from pyload.plugin.internal.SimpleCrypter import SimpleCrypter
 
 
-class FilestubeCom(SimpleCrypter):
+class Filestube_com(Simple_crypter):
     __name    = "FilestubeCom"
     __type    = "crypter"
     __version = "0.05"

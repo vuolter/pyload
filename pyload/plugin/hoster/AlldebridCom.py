@@ -5,7 +5,7 @@ from pyload.plugin.internal.MultiHoster import MultiHoster
 from pyload.utils import parse_size
 
 
-class AlldebridCom(MultiHoster):
+class Alldebrid_com(Multi_hoster):
     __name    = "AlldebridCom"
     __type    = "hoster"
     __version = "0.46"
@@ -23,26 +23,26 @@ class AlldebridCom(MultiHoster):
 
 
     def handle_premium(self, pyfile):
-        password = self.getPassword()
+        password = self.get_password()
 
         data = json_loads(self.load("http://www.alldebrid.com/service.php",
                                      get={'link': pyfile.url, 'json': "true", 'pw': password}))
 
-        self.logDebug("Json data", data)
+        self.log_debug("Json data", data)
 
         if data['error']:
             if data['error'] == "This link isn't available on the hoster website.":
                 self.offline()
             else:
-                self.logWarning(data['error'])
-                self.tempOffline()
+                self.log_warning(data['error'])
+                self.temp_offline()
         else:
             if pyfile.name and not pyfile.name.endswith('.tmp'):
                 pyfile.name = data['filename']
             pyfile.size = parse_size(data['filesize'])
             self.link = data['link']
 
-        if self.getConfig('ssl'):
+        if self.get_config('ssl'):
             self.link = self.link.replace("http://", "https://")
         else:
             self.link = self.link.replace("https://", "http://")

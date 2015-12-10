@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadCrypter import DeadCrypter
 
 
-class Movie2KTo(DeadCrypter):
+class Movie2KTo(Dead_crypter):
     __name    = "Movie2KTo"
     __type    = "crypter"
     __version = "0.51"

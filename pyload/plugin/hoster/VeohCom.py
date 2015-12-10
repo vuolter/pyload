@@ -5,7 +5,7 @@ import re
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class VeohCom(SimpleHoster):
+class Veoh_com(Simple_hoster):
     __name    = "VeohCom"
     __type    = "hoster"
     __version = "0.22"
@@ -34,7 +34,7 @@ class VeohCom(SimpleHoster):
 
 
     def handle_free(self, pyfile):
-        quality = self.getConfig('quality')
+        quality = self.get_config('quality')
         if quality == "Auto":
             quality = ("High", "Low")
 
@@ -46,6 +46,6 @@ class VeohCom(SimpleHoster):
                 self.link = m.group(1).replace("\\", "")
                 return
             else:
-                self.logInfo(_("No %s quality video found") % q.upper())
+                self.log_info(_("No %s quality video found") % q.upper())
         else:
             self.fail(_("No video found!"))

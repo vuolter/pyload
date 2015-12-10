@@ -6,7 +6,7 @@ import time
 from pyload.plugin.Account import Account
 
 
-class MegaRapidoNet(Account):
+class Mega_rapido_net(Account):
     __name    = "MegaRapidoNet"
     __type    = "account"
     __version = "0.02"
@@ -20,7 +20,7 @@ class MegaRapidoNet(Account):
     USER_ID_PATTERN     = r'<\s*?div[^>]*?class\s*?=\s*?["\']checkbox_compartilhar["\'].*?>.*?<\s*?input[^>]*?name\s*?=\s*?["\']usar["\'].*?>.*?<\s*?input[^>]*?name\s*?=\s*?["\']user["\'][^>]*?value\s*?=\s*?["\'](.*?)\s*?["\']'
 
 
-    def loadAccountInfo(self, user, req):
+    def load_account_info(self, user, req):
         validuntil  = None
         trafficleft = None
         premium     = False
@@ -48,7 +48,7 @@ class MegaRapidoNet(Account):
         html = req.load("http://megarapido.net/gerador")
 
         if "sair" not in html.lower():
-            self.wrongPassword()
+            self.wrong_password()
         else:
             m = re.search(self.USER_ID_PATTERN, html)
             if m:

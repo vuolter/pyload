@@ -3,7 +3,7 @@
 from pyload.plugin.internal.SimpleCrypter import SimpleCrypter
 
 
-class FshareVn(SimpleCrypter):
+class Fshare_vn(Simple_crypter):
     __name    = "FshareVn"
     __type    = "crypter"
     __version = "0.01"

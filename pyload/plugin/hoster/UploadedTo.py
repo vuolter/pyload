@@ -8,7 +8,7 @@ from pyload.plugin.captcha.ReCaptcha import ReCaptcha
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class UploadedTo(SimpleHoster):
+class Uploaded_to(Simple_hoster):
     __name    = "UploadedTo"
     __type    = "hoster"
     __version = "0.87"
@@ -36,7 +36,7 @@ class UploadedTo(SimpleHoster):
 
 
     @classmethod
-    def apiInfo(cls, url="", get={}, post={}):
+    def api_info(cls, url="", get={}, post={}):
         info = super(UploadedTo, cls).apiInfo(url)
 
         for _i in xrange(5):
@@ -62,9 +62,9 @@ class UploadedTo(SimpleHoster):
         self.chunkLimit = 1  #: critical problems with more chunks
 
 
-    def checkErrors(self):
+    def check_errors(self):
         if 'var free_enabled = false;' in self.html:
-            self.logError(_("Free-download capacities exhausted"))
+            self.log_error(_("Free-download capacities exhausted"))
             self.retry(24, 5 * 60)
 
         elif "limit-size" in self.html:
@@ -82,7 +82,7 @@ class UploadedTo(SimpleHoster):
             self.retry()
 
         elif '"err":"captcha"' in self.html:
-            self.invalidCaptcha()
+            self.invalid_captcha()
 
         else:
             m = re.search(self.WAIT_PATTERN, self.html)
@@ -103,18 +103,18 @@ class UploadedTo(SimpleHoster):
                                     'recaptcha_response_field' : response})
 
         if "type:'download'" in self.html:
-            self.correctCaptcha()
+            self.correct_captcha()
             try:
                 self.link = re.search("url:'(.+?)'", self.html).group(1)
 
             except Exception:
                 pass
 
-        self.checkErrors()
+        self.check_errors()
 
 
-    def checkFile(self, rules={}):
-        if self.checkDownload({'limit-dl': self.DL_LIMIT_ERROR}):
+    def check_file(self, rules={}):
+        if self.check_download({'limit-dl': self.DL_LIMIT_ERROR}):
             self.wait(3 * 60 * 60, True)
             self.retry()
 

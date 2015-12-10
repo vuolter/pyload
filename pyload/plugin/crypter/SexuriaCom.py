@@ -5,7 +5,7 @@ import re
 from pyload.plugin.Crypter import Crypter
 
 
-class SexuriaCom(Crypter):
+class Sexuria_com(Crypter):
     __name    = "SexuriaCom"
     __type    = "crypter"
     __version = "0.01"
@@ -34,11 +34,11 @@ class SexuriaCom(Crypter):
         self.package = pyfile.package()
 
         # Get package links
-        package_name, self.links, folder_name, package_pwd = self.decryptLinks(self.pyfile.url)
+        package_name, self.links, folder_name, package_pwd = self.decrypt_links(self.pyfile.url)
         self.packages = [(package_name, self.links, folder_name)]
 
 
-    def decryptLinks(self, url):
+    def decrypt_links(self, url):
         linklist = []
         name = self.package.name
         folder = self.package.folder
@@ -65,30 +65,30 @@ class SexuriaCom(Crypter):
             title = re.search(self.PATTERN_TITLE, html).group('TITLE').strip()
             if title:
                 name = folder = title
-                self.logDebug("Package info found, name [%s] and folder [%s]" % (name, folder))
+                self.log_debug("Package info found, name [%s] and folder [%s]" % (name, folder))
 
             pwd = re.search(self.PATTERN_PASSWORD, html).group('PWD')
             if pwd:
                 password = pwd.strip()
-                self.logDebug("Password info [%s] found" % password)
+                self.log_debug("Password info [%s] found" % password)
 
             # Process link (dl_link)
             html = self.load(url)
             links = re.findall(self.PATTERN_REDIRECT_LINKS, html)
             if len(links) == 0:
-                self.LogError("Broken for link %s" % link)
+                self.Log_error("Broken for link %s" % link)
             else:
                 for link in links:
                     link = link.replace("http://sexuria.com/", "http://www.sexuria.com/")
                     finallink = self.load(link, just_header=True)['location']
                     if not finallink or "sexuria.com/" in finallink:
-                        self.LogError("Broken for link %s" % link)
+                        self.Log_error("Broken for link %s" % link)
                     else:
                         linklist.append(finallink)
 
         # Debug log
-        self.logDebug("%d supported links" % len(linklist))
+        self.log_debug("%d supported links" % len(linklist))
         for i, link in enumerate(linklist):
-            self.logDebug("Supported link %d, %s" % (i + 1, link))
+            self.log_debug("Supported link %d, %s" % (i + 1, link))
 
         return name, linklist, folder, password

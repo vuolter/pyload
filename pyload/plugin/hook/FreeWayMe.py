@@ -3,7 +3,7 @@
 from pyload.plugin.internal.MultiHook import MultiHook
 
 
-class FreeWayMe(MultiHook):
+class Free_way_me(Multi_hook):
     __name    = "FreeWayMe"
     __type    = "hook"
     __version = "0.15"
@@ -19,14 +19,14 @@ class FreeWayMe(MultiHook):
     __authors     = [("Nicolas Giese", "james@free-way.me")]
 
 
-    def getHosters(self):
+    def get_hosters(self):
         # Get account data
-        if not self.account or not self.account.canUse():
+        if not self.account or not self.account.can_use():
            hostis = self.getURL("https://www.free-way.me/ajax/jd.php", get={"id": 3}).replace("\"", "").strip()
         else:
-           self.logDebug("AccountInfo available - Get HosterList with User Pass")
-           (user, data) = self.account.selectAccount()
+           self.log_debug("AccountInfo available - Get HosterList with User Pass")
+           (user, data) = self.account.select_account()
            hostis = self.getURL("https://www.free-way.me/ajax/jd.php", get={"id": 3, "user": user, "pass": data['password']}).replace("\"", "").strip()
 
-        self.logDebug("hosters: %s" % hostis)
+        self.log_debug("hosters: %s" % hostis)
         return [x.strip() for x in hostis.split(",") if x.strip()]

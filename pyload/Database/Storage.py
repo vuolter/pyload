@@ -5,10 +5,10 @@ from pyload.Database import style
 from pyload.Database import DatabaseBackend
 
 
-class StorageMethods(object):
+class Storage_methods(object):
 
     @style.queue
-    def setStorage(db, identifier, key, value):
+    def set_storage(db, identifier, key, value):
         db.c.execute("SELECT id FROM storage WHERE identifier=? AND key=?", (identifier, key))
         if db.c.fetchone() is not None:
             db.c.execute("UPDATE storage SET value=? WHERE identifier=? AND key=?", (value, identifier, key))
@@ -17,7 +17,7 @@ class StorageMethods(object):
 
 
     @style.queue
-    def getStorage(db, identifier, key=None):
+    def get_storage(db, identifier, key=None):
         if key is not None:
             db.c.execute("SELECT value FROM storage WHERE identifier=? AND key=?", (identifier, key))
             row = db.c.fetchone()
@@ -29,7 +29,7 @@ class StorageMethods(object):
 
 
     @style.queue
-    def delStorage(db, identifier, key):
+    def del_storage(db, identifier, key):
         db.c.execute("DELETE FROM storage WHERE identifier=? AND key=?", (identifier, key))
 
 

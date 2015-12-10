@@ -11,13 +11,13 @@ from pyload.network.RequestFactory import getURL, getRequest
 from pyload.plugin.Hook import Hook, threaded
 
 
-class ImageTyperzException(Exception):
+class Image_typerz_exception(Exception):
 
     def __init__(self, err):
         self.err = err
 
 
-    def getCode(self):
+    def get_code(self):
         return self.err
 
 
@@ -29,7 +29,7 @@ class ImageTyperzException(Exception):
         return "<ImageTyperzException %s>" % self.err
 
 
-class ImageTyperz(Hook):
+class Image_typerz(Hook):
     __name    = "ImageTyperz"
     __type    = "hook"
     __version = "0.06"
@@ -49,11 +49,11 @@ class ImageTyperz(Hook):
     GETCREDITS_URL = "http://captchatypers.com/Forms/RequestBalance.ashx"
 
 
-    def getCredits(self):
+    def get_credits(self):
         res = getURL(self.GETCREDITS_URL,
                      post={'action': "REQUESTBALANCE",
-                           'username': self.getConfig('username'),
-                           'password': self.getConfig('passkey')})
+                           'username': self.get_config('username'),
+                           'password': self.get_config('passkey')})
 
         if res.startswith('ERROR'):
             raise ImageTyperzException(res)
@@ -63,18 +63,18 @@ class ImageTyperz(Hook):
         except Exception:
             raise ImageTyperzException("Invalid response")
 
-        self.logInfo(_("Account balance: $%s left") % res)
+        self.log_info(_("Account balance: $%s left") % res)
         return balance
 
 
-    def submit(self, captcha, captchaType="file", match=None):
+    def submit(self, captcha, captcha_type="file", match=None):
         req = getRequest()
         # raise timeout threshold
         req.c.setopt(pycurl.LOW_SPEED_TIME, 80)
 
         try:
             #@NOTE: Workaround multipart-post bug in HTTPRequest.py
-            if re.match("^\w*$", self.getConfig('passkey')):
+            if re.match("^\w*$", self.get_config('passkey')):
                 multipart = True
                 data = (pycurl.FORM_FILE, captcha)
             else:
@@ -85,8 +85,8 @@ class ImageTyperz(Hook):
 
             res = req.load(self.SUBMIT_URL,
                            post={'action': "UPLOADCAPTCHA",
-                                 'username': self.getConfig('username'),
-                                 'password': self.getConfig('passkey'), "file": data},
+                                 'username': self.get_config('username'),
+                                 'password': self.get_config('passkey'), "file": data},
                            multipart=multipart)
         finally:
             req.close()
@@ -103,45 +103,45 @@ class ImageTyperz(Hook):
         return ticket, result
 
 
-    def captchaTask(self, task):
+    def captcha_task(self, task):
         if "service" in task.data:
             return False
 
         if not task.isTextual():
             return False
 
-        if not self.getConfig('username') or not self.getConfig('passkey'):
+        if not self.get_config('username') or not self.get_config('passkey'):
             return False
 
-        if self.pyload.isClientConnected() and not self.getConfig('force'):
+        if self.pyload.is_client_connected() and not self.get_config('force'):
             return False
 
-        if self.getCredits() > 0:
+        if self.get_credits() > 0:
             task.handler.append(self)
-            task.data['service'] = self.getClassName()
+            task.data['service'] = self.get_class_name()
             task.setWaiting(100)
-            self._processCaptcha(task)
+            self._process_captcha(task)
 
         else:
-            self.logInfo(_("Your %s account has not enough credits") % self.getClassName())
+            self.log_info(_("Your %s account has not enough credits") % self.get_class_name())
 
 
-    def captchaInvalid(self, task):
-        if task.data['service'] == self.getClassName() and "ticket" in task.data:
+    def captcha_invalid(self, task):
+        if task.data['service'] == self.get_class_name() and "ticket" in task.data:
             res = getURL(self.RESPOND_URL,
                          post={'action': "SETBADIMAGE",
-                               'username': self.getConfig('username'),
-                               'password': self.getConfig('passkey'),
+                               'username': self.get_config('username'),
+                               'password': self.get_config('passkey'),
                                'imageid': task.data['ticket']})
 
             if res == "SUCCESS":
-                self.logInfo(_("Bad captcha solution received, requested refund"))
+                self.log_info(_("Bad captcha solution received, requested refund"))
             else:
-                self.logError(_("Bad captcha solution received, refund request failed"), res)
+                self.log_error(_("Bad captcha solution received, refund request failed"), res)
 
 
     @threaded
-    def _processCaptcha(self, task):
+    def _process_captcha(self, task):
         c = task.captchaFile
         try:
             ticket, result = self.submit(c)

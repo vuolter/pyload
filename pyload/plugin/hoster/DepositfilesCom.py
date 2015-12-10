@@ -7,7 +7,7 @@ from pyload.plugin.captcha.ReCaptcha import ReCaptcha
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class DepositfilesCom(SimpleHoster):
+class Depositfiles_com(Simple_hoster):
     __name    = "DepositfilesCom"
     __type    = "hoster"
     __version = "0.55"
@@ -43,15 +43,15 @@ class DepositfilesCom(SimpleHoster):
     def handle_free(self, pyfile):
         self.html = self.load(pyfile.url, post={'gateway_result': "1"})
 
-        self.checkErrors()
+        self.check_errors()
 
         m = re.search(r"var fid = '(\w+)';", self.html)
         if m is None:
             self.retry(wait_time=5)
         params = {'fid': m.group(1)}
-        self.logDebug("FID: %s" % params['fid'])
+        self.log_debug("FID: %s" % params['fid'])
 
-        self.checkErrors()
+        self.check_errors()
 
         recaptcha = ReCaptcha(self)
         captcha_key = recaptcha.detect_key()
@@ -71,7 +71,7 @@ class DepositfilesCom(SimpleHoster):
 
     def handle_premium(self, pyfile):
         if '<span class="html_download_api-gold_traffic_limit">' in self.html:
-            self.logWarning(_("Download limit reached"))
+            self.log_warning(_("Download limit reached"))
             self.retry(25, 60 * 60, "Download limit reached")
 
         elif 'onClick="show_gold_offer' in self.html:

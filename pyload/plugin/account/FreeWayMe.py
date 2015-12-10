@@ -4,7 +4,7 @@ from pyload.plugin.Account import Account
 from pyload.utils import json_loads
 
 
-class FreeWayMe(Account):
+class Free_way_me(Account):
     __name    = "FreeWayMe"
     __type    = "account"
     __version = "0.13"
@@ -14,14 +14,14 @@ class FreeWayMe(Account):
     __authors     = [("Nicolas Giese", "james@free-way.me")]
 
 
-    def loadAccountInfo(self, user, req):
-        status = self.getAccountStatus(user, req)
+    def load_account_info(self, user, req):
+        status = self.get_account_status(user, req)
 
-        self.logDebug(status)
+        self.log_debug(status)
 
         account_info = {"validuntil": -1, "premium": False}
         if status['premium'] == "Free":
-            account_info['trafficleft'] = self.parseTraffic(status['guthaben'] + "MB")
+            account_info['trafficleft'] = self.parse_traffic(status['guthaben'] + "MB")
         elif status['premium'] == "Spender":
             account_info['trafficleft'] = -1
         elif status['premium'] == "Flatrate":
@@ -33,20 +33,20 @@ class FreeWayMe(Account):
 
 
     def login(self, user, data, req):
-        status = self.getAccountStatus(user, req)
+        status = self.get_account_status(user, req)
 
         # Check if user and password are valid
         if not status:
-            self.wrongPassword()
+            self.wrong_password()
 
 
-    def getAccountStatus(self, user, req):
+    def get_account_status(self, user, req):
         answer = req.load("https://www.free-way.me/ajax/jd.php",
-                          get={"id": 4, "user": user, "pass": self.getAccountData(user)['password']})
+                          get={"id": 4, "user": user, "pass": self.get_account_data(user)['password']})
 
-        self.logDebug("Login: %s" % answer)
+        self.log_debug("Login: %s" % answer)
 
         if answer == "Invalid login":
-            self.wrongPassword()
+            self.wrong_password()
 
         return json_loads(answer)

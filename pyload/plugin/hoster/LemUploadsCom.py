@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class LemUploadsCom(DeadHoster):
+class Lem_uploads_com(Dead_hoster):
     __name    = "LemUploadsCom"
     __type    = "hoster"
     __version = "0.02"

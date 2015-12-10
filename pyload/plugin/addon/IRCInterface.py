@@ -40,7 +40,7 @@ class IRCInterface(Thread, Addon):
     def __init__(self, core, manager):
         threading.Thread.__init__(self)
         Addon.__init__(self, core, manager)
-        self.setDaemon(True)
+        self.set_daemon(True)
 
 
     def activate(self):
@@ -51,25 +51,25 @@ class IRCInterface(Thread, Addon):
         self.start()
 
 
-    def packageFinished(self, pypack):
+    def package_finished(self, pypack):
         try:
-            if self.getConfig('info_pack'):
+            if self.get_config('info_pack'):
                 self.response(_("Package finished: %s") % pypack.name)
         except Exception:
             pass
 
 
-    def downloadFinished(self, pyfile):
+    def download_finished(self, pyfile):
         try:
-            if self.getConfig('info_file'):
+            if self.get_config('info_file'):
                 self.response(
                     _("Download finished: %(name)s @ %(plugin)s ") % {"name": pyfile.name, "plugin": pyfile.pluginname})
         except Exception:
             pass
 
 
-    def captchaTask(self, task):
-        if self.getConfig('captcha') and task.isTextual():
+    def captcha_task(self, task):
+        if self.get_config('captcha') and task.is_textual():
             task.handler.append(self)
             task.setWaiting(60)
 
@@ -84,20 +84,20 @@ class IRCInterface(Thread, Addon):
     def run(self):
         # connect to IRC etc.
         self.sock = socket.socket()
-        host = self.getConfig('host')
-        self.sock.connect((host, self.getConfig('port')))
+        host = self.get_config('host')
+        self.sock.connect((host, self.get_config('port')))
 
-        if self.getConfig('ssl'):
+        if self.get_config('ssl'):
             self.sock = ssl.wrap_socket(self.sock, cert_reqs=ssl.CERT_NONE)  #@TODO: support certificate
 
-        nick = self.getConfig('nick')
+        nick = self.get_config('nick')
         self.sock.send("NICK %s\r\n" % nick)
         self.sock.send("USER %s %s bla :%s\r\n" % (nick, host, nick))
-        for t in self.getConfig('owner').split():
+        for t in self.get_config('owner').split():
             if t.strip().startswith("#"):
                 self.sock.send("JOIN %s\r\n" % t.strip())
-        self.logInfo(_("Connected to"), host)
-        self.logInfo(_("Switching to listening mode!"))
+        self.log_info(_("Connected to"), host)
+        self.log_info(_("Switching to listening mode!"))
         try:
             self.main_loop()
 
@@ -147,10 +147,10 @@ class IRCInterface(Thread, Addon):
 
 
     def handle_events(self, msg):
-        if not msg['origin'].split("!", 1)[0] in self.getConfig('owner').split():
+        if not msg['origin'].split("!", 1)[0] in self.get_config('owner').split():
             return
 
-        if msg['target'].split("!", 1)[0] != self.getConfig('nick'):
+        if msg['target'].split("!", 1)[0] != self.get_config('nick'):
             return
 
         if msg['action'] != "PRIVMSG":
@@ -158,15 +158,15 @@ class IRCInterface(Thread, Addon):
 
         # HANDLE CTCP ANTI FLOOD/BOT PROTECTION
         if msg['text'] == "\x01VERSION\x01":
-            self.logDebug("Sending CTCP VERSION")
+            self.log_debug("Sending CTCP VERSION")
             self.sock.send("NOTICE %s :%s\r\n" % (msg['origin'], "pyLoad! IRC Interface"))
             return
         elif msg['text'] == "\x01TIME\x01":
-            self.logDebug("Sending CTCP TIME")
+            self.log_debug("Sending CTCP TIME")
             self.sock.send("NOTICE %s :%d\r\n" % (msg['origin'], time.time()))
             return
         elif msg['text'] == "\x01LAG\x01":
-            self.logDebug("Received CTCP LAG")  #: don't know how to answer
+            self.log_debug("Received CTCP LAG")  #: don't know how to answer
             return
 
         trigger = "pass"
@@ -186,12 +186,12 @@ class IRCInterface(Thread, Addon):
             for line in res:
                 self.response(line, msg['origin'])
         except Exception, e:
-            self.logError(e)
+            self.log_error(e)
 
 
     def response(self, msg, origin=""):
         if origin == "":
-            for t in self.getConfig('owner').split():
+            for t in self.get_config('owner').split():
                 self.sock.send("PRIVMSG %s :%s\r\n" % (t.strip(), msg))
         else:
             self.sock.send("PRIVMSG %s :%s\r\n" % (origin.split("!", 1)[0], msg))
@@ -205,7 +205,7 @@ class IRCInterface(Thread, Addon):
 
 
     def event_status(self, args):
-        downloads = self.pyload.api.statusDownloads()
+        downloads = self.pyload.api.status_downloads()
         if not downloads:
             return ["INFO: There are no active downloads currently."]
 
@@ -231,7 +231,7 @@ class IRCInterface(Thread, Addon):
 
 
     def event_queue(self, args):
-        ps = self.pyload.api.getQueueData()
+        ps = self.pyload.api.get_queue_data()
 
         if not ps:
             return ["INFO: There are no packages in queue."]
@@ -244,7 +244,7 @@ class IRCInterface(Thread, Addon):
 
 
     def event_collector(self, args):
-        ps = self.pyload.api.getCollectorData()
+        ps = self.pyload.api.get_collector_data()
         if not ps:
             return ["INFO: No packages in collector!"]
 
@@ -261,7 +261,7 @@ class IRCInterface(Thread, Addon):
 
         info = None
         try:
-            info = self.pyload.api.getFileData(int(args[0]))
+            info = self.pyload.api.get_file_data(int(args[0]))
 
         except FileDoesNotExists:
             return ["ERROR: Link doesn't exists."]
@@ -276,7 +276,7 @@ class IRCInterface(Thread, Addon):
         lines = []
         pack = None
         try:
-            pack = self.pyload.api.getPackageData(int(args[0]))
+            pack = self.pyload.api.get_package_data(int(args[0]))
 
         except PackageDoesNotExists:
             return ["ERROR: Package doesn't exists."]
@@ -313,12 +313,12 @@ class IRCInterface(Thread, Addon):
 
 
     def event_start(self, args):
-        self.pyload.api.unpauseServer()
+        self.pyload.api.unpause_server()
         return ["INFO: Starting downloads."]
 
 
     def event_stop(self, args):
-        self.pyload.api.pauseServer()
+        self.pyload.api.pause_server()
         return ["INFO: No new downloads will be started."]
 
 
@@ -334,7 +334,7 @@ class IRCInterface(Thread, Addon):
         count_failed = 0
         try:
             id = int(pack)
-            pack = self.pyload.api.getPackageData(id)
+            pack = self.pyload.api.get_package_data(id)
             if not pack:
                 return ["ERROR: Package doesn't exists."]
 
@@ -344,7 +344,7 @@ class IRCInterface(Thread, Addon):
 
         except Exception:
             # create new package
-            id = self.pyload.api.addPackage(pack, links, 1)
+            id = self.pyload.api.add_package(pack, links, 1)
             return ["INFO: Created new Package %s [#%d] with %d links." % (pack, id, len(links))]
 
 
@@ -353,11 +353,11 @@ class IRCInterface(Thread, Addon):
             return ["ERROR: Use del command like this: del -p|-l <id> [...] (-p indicates that the ids are from packages, -l indicates that the ids are from links)"]
 
         if args[0] == "-p":
-            ret = self.pyload.api.deletePackages(map(int, args[1:]))
+            ret = self.pyload.api.delete_packages(map(int, args[1:]))
             return ["INFO: Deleted %d packages!" % len(args[1:])]
 
         elif args[0] == "-l":
-            ret = self.pyload.api.delLinks(map(int, args[1:]))
+            ret = self.pyload.api.del_links(map(int, args[1:]))
             return ["INFO: Deleted %d links!" % len(args[1:])]
 
         else:
@@ -370,11 +370,11 @@ class IRCInterface(Thread, Addon):
 
         id = int(args[0])
         try:
-            info = self.pyload.api.getPackageInfo(id)
+            info = self.pyload.api.get_package_info(id)
         except PackageDoesNotExists:
             return ["ERROR: Package #%d does not exist." % id]
 
-        self.pyload.api.pushToQueue(id)
+        self.pyload.api.push_to_queue(id)
         return ["INFO: Pushed package #%d to queue." % id]
 
 
@@ -383,10 +383,10 @@ class IRCInterface(Thread, Addon):
             return ["ERROR: Pull package from queue like this: pull <package id>."]
 
         id = int(args[0])
-        if not self.pyload.api.getPackageData(id):
+        if not self.pyload.api.get_package_data(id):
             return ["ERROR: Package #%d does not exist." % id]
 
-        self.pyload.api.pullFromQueue(id)
+        self.pyload.api.pull_from_queue(id)
         return ["INFO: Pulled package #%d from queue to collector." % id]
 
 

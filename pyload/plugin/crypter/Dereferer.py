@@ -3,7 +3,7 @@
 from pyload.plugin.Crypter import Crypter
 
 
-class Dereferer(SimpleDereferer):
+class Dereferer(Simple_dereferer):
     __name    = "Dereferer"
     __type    = "crypter"
     __version = "0.11"

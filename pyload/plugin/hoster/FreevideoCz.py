@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class FreevideoCz(DeadHoster):
+class Freevideo_cz(Dead_hoster):
     __name    = "FreevideoCz"
     __type    = "hoster"
     __version = "0.30"

@@ -3,7 +3,7 @@
 from pyload.plugin.internal.SimpleCrypter import SimpleCrypter
 
 
-class FiletramCom(SimpleCrypter):
+class Filetram_com(Simple_crypter):
     __name    = "FiletramCom"
     __type    = "crypter"
     __version = "0.03"

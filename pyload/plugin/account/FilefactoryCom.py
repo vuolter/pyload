@@ -7,7 +7,7 @@ import time
 from pyload.plugin.Account import Account
 
 
-class FilefactoryCom(Account):
+class Filefactory_com(Account):
     __name    = "FilefactoryCom"
     __type    = "account"
     __version = "0.15"
@@ -21,7 +21,7 @@ class FilefactoryCom(Account):
     VALID_UNTIL_PATTERN = r'Premium valid until: <strong>(?P<D>\d{1,2})\w{1,2} (?P<M>\w{3}), (?P<Y>\d{4})</strong>'
 
 
-    def loadAccountInfo(self, user, req):
+    def load_account_info(self, user, req):
         html = req.load("http://www.filefactory.com/account/")
 
         m = re.search(self.VALID_UNTIL_PATTERN, html)
@@ -45,4 +45,4 @@ class FilefactoryCom(Account):
                               "Submit"       : "Sign In"})
 
         if req.lastEffectiveURL != "http://www.filefactory.com/account/":
-            self.wrongPassword()
+            self.wrong_password()

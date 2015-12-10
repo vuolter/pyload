@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSHoster import XFSHoster
 
 
-class FilerioCom(XFSHoster):
+class Filerio_com(XFSHoster):
     __name    = "FilerioCom"
     __type    = "hoster"
     __version = "0.07"

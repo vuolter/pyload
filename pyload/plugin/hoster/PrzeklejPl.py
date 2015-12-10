@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class PrzeklejPl(DeadHoster):
+class Przeklej_pl(Dead_hoster):
     __name    = "PrzeklejPl"
     __type    = "hoster"
     __version = "0.11"

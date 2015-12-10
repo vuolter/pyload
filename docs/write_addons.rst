@@ -19,7 +19,7 @@ All addons should start with something like this: ::
         from pyload.plugin.Addon import Addon
 
 
-        class YourAddon(Addon):
+        class Your_addon(Addon):
                 __name    = "YourAddon"
                 __tupe    = "addon"
                 __version = "0.1"
@@ -38,7 +38,7 @@ Using the Config
 
 We are taking a closer look at the ``__config`` parameter.
 You can add more config values as desired by adding tuples of the following format to the config list: ``("name", "type", "description", "default value")``.
-When everything went right you can access the config values with ``self.getConfig(name)`` and ``self.setConfig(name, value``.
+When everything went right you can access the config values with ``self.get_config(name)`` and ``self.set_config(name, value``.
 
 
 Interacting on Events
@@ -58,7 +58,7 @@ A basic excerpt would look like: ::
     from pyload.plugin.Addon import Addon
 
 
-    class YourAddon(Addon):
+    class Your_addon(Addon):
         """
         Your Addon code here.
         """
@@ -67,7 +67,7 @@ A basic excerpt would look like: ::
             print "Yay, the core is ready let's do some work."
 
 
-        def downloadFinished(self, pyfile):
+        def download_finished(self, pyfile):
             print "A Download just finished."
 
 Another and more flexible and powerful way is to use event listener.
@@ -80,7 +80,7 @@ It requires a `dict` that maps event names to function names or a `list` of func
     from pyload.plugin.Addon import Addon
 
 
-    class YourAddon(Addon):
+    class Your_addon(Addon):
         """
         Your Addon code here.
         """
@@ -94,15 +94,15 @@ It requires a `dict` that maps event names to function names or a `list` of func
             print "Initialized."
 
 
-        def doSomeWork(self, pyfile):
+        def do_some_work(self, pyfile):
             print "This is equivalent to the above example."
 
 
-        def someMethod(self):
+        def some_method(self):
             print "The underlying event (allDownloadsFinished) for this method is not available through the base class"
 
 An advantage of the event listener is that you are able to register and remove the listeners at runtime.
-Use `self.manager.addEvent("name", function)`, `self.manager.removeEvent("name", function)` and see doc for
+Use `self.manager.add_event("name", function)`, `self.manager.remove_event("name", function)` and see doc for
 :class:`AddonManager <pyload.manager.Addon.AddonManager>`. Contrary to ``event_map``, ``function`` has to be a reference
 and **not** a `string`.
 
@@ -121,7 +121,7 @@ Sounds complicated but is very easy to do. Just use the ``Expose`` decorator: ::
     from pyload.plugin.Addon import Addon, Expose
 
 
-    class YourAddon(Addon):
+    class Your_addon(Addon):
         """
         Your Addon code here.
         """
@@ -147,7 +147,7 @@ Just store everything in ``self.info``. ::
     from pyload.plugin.Addon import Addon
 
 
-    class YourAddon(Addon):
+    class Your_addon(Addon):
         """
         Your Addon code here.
         """

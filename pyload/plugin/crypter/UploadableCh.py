@@ -3,7 +3,7 @@
 from pyload.plugin.internal.SimpleCrypter import SimpleCrypter
 
 
-class UploadableCh(SimpleCrypter):
+class Uploadable_ch(Simple_crypter):
     __name    = "UploadableCh"
     __type    = "crypter"
     __version = "0.03"

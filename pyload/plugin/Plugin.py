@@ -43,7 +43,7 @@ class Retry(Exception):
     """ raised when start again from beginning """
 
 
-class SkipDownload(Exception):
+class Skip_download(Exception):
     """ raised when download should be skipped """
 
 
@@ -61,101 +61,101 @@ class Base(object):
     def _log(self, type, args):
         msg = " | ".join([encode(str(a)).strip() for a in args if a])
         logger = getattr(self.core.log, type)
-        logger("%s: %s" % (self.getClassName(), msg or _("%s MARK" % type.upper())))
+        logger("%s: %s" % (self.get_class_name(), msg or _("%s MARK" % type.upper())))
 
 
-    def logDebug(self, *args):
+    def log_debug(self, *args):
         if self.core.debug:
             return self._log("debug", args)
 
 
-    def logInfo(self, *args):
+    def log_info(self, *args):
         return self._log("info", args)
 
 
-    def logWarning(self, *args):
+    def log_warning(self, *args):
         return self._log("warning", args)
 
 
-    def logError(self, *args):
+    def log_error(self, *args):
         return self._log("error", args)
 
 
-    def logCritical(self, *args):
+    def log_critical(self, *args):
         return self._log("critical", args)
 
 
-    def getPluginType(self):
-        return getattr(self, "_%s__type" % self.getClassName())
+    def get_plugin_type(self):
+        return getattr(self, "_%s__type" % self.get_class_name())
 
 
     @classmethod
-    def getClassName(cls):
+    def get_class_name(cls):
         return cls.__name__
 
 
-    def getPluginConfSection(self):
-        return "%s_%s" % (self.getClassName(), getattr(self, "_%s__type" % self.getClassName()))
+    def get_plugin_conf_section(self):
+        return "%s_%s" % (self.get_class_name(), getattr(self, "_%s__type" % self.get_class_name()))
 
     #: Deprecated method
 
 
-    def setConf(self, option, value):
+    def set_conf(self, option, value):
         """ see `setConfig` """
-        self.setConfig(option, value)
+        self.set_config(option, value)
 
 
-    def setConfig(self, option, value):
+    def set_config(self, option, value):
         """ Set config value for current plugin
 
         :param option:
         :param value:
         :return:
         """
-        self.core.config.setPlugin(self.getPluginConfSection(), option, value)
+        self.core.config.set_plugin(self.get_plugin_conf_section(), option, value)
 
     #: Deprecated method
 
 
-    def getConf(self, option):
+    def get_conf(self, option):
         """ see `getConfig` """
-        return self.core.config.getPlugin(self.getPluginConfSection(), option)
+        return self.core.config.get_plugin(self.get_plugin_conf_section(), option)
 
 
-    def getConfig(self, option):
+    def get_config(self, option):
         """ Returns config value for current plugin
 
         :param option:
         :return:
         """
-        return self.core.config.getPlugin(self.getPluginConfSection(), option)
+        return self.core.config.get_plugin(self.get_plugin_conf_section(), option)
 
 
-    def setStorage(self, key, value):
+    def set_storage(self, key, value):
         """ Saves a value persistently to the database """
-        self.core.db.setStorage(self.getPluginConfSection(), key, value)
+        self.core.db.set_storage(self.get_plugin_conf_section(), key, value)
 
 
     def store(self, key, value):
         """ same as `setStorage` """
-        self.core.db.setStorage(self.getPluginConfSection(), key, value)
+        self.core.db.set_storage(self.get_plugin_conf_section(), key, value)
 
 
-    def getStorage(self, key=None, default=None):
+    def get_storage(self, key=None, default=None):
         """ Retrieves saved value or dict of all saved entries if key is None """
         if key:
-            return self.core.db.getStorage(self.getPluginConfSection(), key) or default
-        return self.core.db.getStorage(self.getPluginConfSection(), key)
+            return self.core.db.get_storage(self.get_plugin_conf_section(), key) or default
+        return self.core.db.get_storage(self.get_plugin_conf_section(), key)
 
 
     def retrieve(self, *args, **kwargs):
         """ same as `getStorage` """
-        return self.getStorage(*args, **kwargs)
+        return self.get_storage(*args, **kwargs)
 
 
-    def delStorage(self, key):
+    def del_storage(self, key):
         """ Delete entry in db """
-        self.core.db.delStorage(self.getClassName(), key)
+        self.core.db.del_storage(self.get_class_name(), key)
 
 
 class Plugin(Base):
@@ -201,28 +201,28 @@ class Plugin(Base):
         self.ocr = None
 
         #: account handler instance, see :py:class:`Account`
-        self.account = pyfile.m.core.accountManager.getAccountPlugin(self.getClassName())
+        self.account = pyfile.m.core.accountManager.get_account_plugin(self.get_class_name())
 
         #: premium status
         self.premium = False
         #: username/login
         self.user = None
 
-        if self.account and not self.account.canUse():
+        if self.account and not self.account.can_use():
             self.account = None
 
         if self.account:
-            self.user, data = self.account.selectAccount()
+            self.user, data = self.account.select_account()
             #: Browser instance, see `network.Browser`
-            self.req = self.account.getAccountRequest(self.user)
+            self.req = self.account.get_account_request(self.user)
             self.chunkLimit = -1  #: chunk limit, -1 for unlimited
             #: enables resume (will be ignored if server dont accept chunks)
             self.resumeDownload = True
             self.multiDL = True  #: every hoster with account should provide multiple downloads
             #: premium status
-            self.premium = self.account.isPremium(self.user)
+            self.premium = self.account.is_premium(self.user)
         else:
-            self.req = pyfile.m.core.requestFactory.getRequest(self.getClassName())
+            self.req = pyfile.m.core.requestFactory.get_request(self.get_class_name())
 
         #: associated pyfile instance, see `PyFile`
         self.pyfile = pyfile
@@ -246,14 +246,14 @@ class Plugin(Base):
         self.init()
 
 
-    def getChunkCount(self):
+    def get_chunk_count(self):
         if self.chunkLimit <= 0:
             return self.core.config.get("download", "chunks")
         return min(self.core.config.get("download", "chunks"), self.chunkLimit)
 
 
     def __call__(self):
-        return self.getClassName()
+        return self.get_class_name()
 
 
     def init(self):
@@ -271,13 +271,13 @@ class Plugin(Base):
         self.thread = thread
 
         if self.account:
-            self.account.checkLogin(self.user)
+            self.account.check_login(self.user)
         else:
-            self.req.clearCookies()
+            self.req.clear_cookies()
 
         self.setup()
 
-        self.pyfile.setStatus("starting")
+        self.pyfile.set_status("starting")
 
         return self.process(self.pyfile)
 
@@ -287,10 +287,10 @@ class Plugin(Base):
         raise NotImplementedError
 
 
-    def resetAccount(self):
+    def reset_account(self):
         """ dont use account and retry download """
         self.account = None
-        self.req = self.core.requestFactory.getRequest(self.getClassName())
+        self.req = self.core.requestFactory.get_request(self.get_class_name())
         self.retry()
 
 
@@ -308,13 +308,13 @@ class Plugin(Base):
         return True, 10
 
 
-    def setReconnect(self, reconnect):
+    def set_reconnect(self, reconnect):
         reconnect = bool(reconnect)
-        self.logDebug("Set wantReconnect to: %s (previous: %s)" % (reconnect, self.wantReconnect))
+        self.log_debug("Set wantReconnect to: %s (previous: %s)" % (reconnect, self.wantReconnect))
         self.wantReconnect = reconnect
 
 
-    def setWait(self, seconds, reconnect=None):
+    def set_wait(self, seconds, reconnect=None):
         """Set a specific wait time later used with `wait`
 
         :param seconds: wait time in seconds
@@ -323,13 +323,13 @@ class Plugin(Base):
         wait_time  = int(seconds) + 1
         wait_until = time.time() + wait_time
 
-        self.logDebug("Set waitUntil to: %f (previous: %f)" % (wait_until, self.pyfile.waitUntil),
+        self.log_debug("Set waitUntil to: %f (previous: %f)" % (wait_until, self.pyfile.waitUntil),
                       "Wait: %d seconds" % wait_time)
 
         self.pyfile.waitUntil = wait_until
 
         if reconnect is not None:
-            self.setReconnect(reconnect)
+            self.set_reconnect(reconnect)
 
 
     def wait(self, seconds=None, reconnect=None):
@@ -338,21 +338,21 @@ class Plugin(Base):
         pyfile = self.pyfile
 
         if seconds is not None:
-            self.setWait(seconds)
+            self.set_wait(seconds)
 
         if reconnect is not None:
-            self.setReconnect(reconnect)
+            self.set_reconnect(reconnect)
 
         self.waiting = True
 
         status = pyfile.status
         pyfile.setStatus("waiting")
 
-        self.logInfo(_("Wait: %d seconds") % (pyfile.waitUntil - time.time()),
+        self.log_info(_("Wait: %d seconds") % (pyfile.waitUntil - time.time()),
                      _("Reconnect: %s")    % self.wantReconnect)
 
         if self.account:
-            self.logDebug("Ignore reconnection due account logged")
+            self.log_debug("Ignore reconnection due account logged")
 
             while pyfile.waitUntil > time.time():
                 if pyfile.abort:
@@ -366,7 +366,7 @@ class Plugin(Base):
                 if pyfile.abort:
                     self.abort()
 
-                if self.thread.m.reconnecting.isSet():
+                if self.thread.m.reconnecting.is_set():
                     self.waiting = False
                     self.wantReconnect = False
                     raise Reconnect
@@ -408,7 +408,7 @@ class Plugin(Base):
         raise Fail("offline")
 
 
-    def tempOffline(self, reason=""):
+    def temp_offline(self, reason=""):
         """ fail and indicates file ist temporary offline, the core may take consequences """
         if reason:
             self.pyfile.error = str(reason)
@@ -431,19 +431,19 @@ class Plugin(Base):
         raise Retry(reason)
 
 
-    def invalidCaptcha(self):
-        self.logError(_("Invalid captcha"))
+    def invalid_captcha(self):
+        self.log_error(_("Invalid captcha"))
         if self.cTask:
             self.cTask.invalid()
 
 
-    def correctCaptcha(self):
-        self.logInfo(_("Correct captcha"))
+    def correct_captcha(self):
+        self.log_info(_("Correct captcha"))
         if self.cTask:
             self.cTask.correct()
 
 
-    def decryptCaptcha(self, url, get={}, post={}, cookies=False, forceUser=False, imgtype='jpg',
+    def decrypt_captcha(self, url, get={}, post={}, cookies=False, force_user=False, imgtype='jpg',
                        result_type='textual', timeout=290):
         """ Loads a captcha and decrypts it with ocr, plugin, user input
 
@@ -464,13 +464,13 @@ class Plugin(Base):
 
         id = ("%.2f" % time.time())[-6:].replace(".", "")
 
-        with open(os.path.join("tmp", "tmpCaptcha_%s_%s.%s" % (self.getClassName(), id, imgtype)), "wb") as tmpCaptcha:
+        with open(os.path.join("tmp", "tmpCaptcha_%s_%s.%s" % (self.get_class_name(), id, imgtype)), "wb") as tmpCaptcha:
             tmpCaptcha.write(img)
 
-        has_plugin = self.getClassName() in self.core.pluginManager.ocrPlugins
+        has_plugin = self.get_class_name() in self.core.pluginManager.ocrPlugins
 
         if self.core.captcha:
-            Ocr = self.core.pluginManager.loadClass("ocr", self.getClassName())
+            Ocr = self.core.pluginManager.load_class("ocr", self.get_class_name())
         else:
             Ocr = None
 
@@ -503,7 +503,7 @@ class Plugin(Base):
                 self.fail(_("No captcha result obtained in appropiate time by any of the plugins"))
 
             result = task.result
-            self.logDebug("Received captcha result: %s" % result)
+            self.log_debug("Received captcha result: %s" % result)
 
         if not self.core.debug:
             try:
@@ -537,7 +537,7 @@ class Plugin(Base):
         url = urllib.unquote(encode(url).strip())  #@NOTE: utf8 vs decode -> please use decode attribute in all future plugins
 
         if self.core.debug:
-            self.logDebug("Load url: " + url, *["%s=%s" % (key, val) for key, val in locals().iteritems() if key not in ("self", "url")])
+            self.log_debug("Load url: " + url, *["%s=%s" % (key, val) for key, val in locals().iteritems() if key not in ("self", "url")])
 
         res = self.req.load(url, get, post, ref, cookies, just_header, decode=decode, follow_location=follow_location, save_cookies=save_cookies)
 
@@ -548,16 +548,16 @@ class Plugin(Base):
             import inspect
 
             frame = inspect.currentframe()
-            framefile = fs_join("tmp", self.getClassName(), "%s_line%s.dump.html" % (frame.f_back.f_code.co_name, frame.f_back.f_lineno))
+            framefile = fs_join("tmp", self.get_class_name(), "%s_line%s.dump.html" % (frame.f_back.f_code.co_name, frame.f_back.f_lineno))
             try:
-                if not os.path.exists(os.path.join("tmp", self.getClassName())):
-                    os.makedirs(os.path.join("tmp", self.getClassName()))
+                if not os.path.exists(os.path.join("tmp", self.get_class_name())):
+                    os.makedirs(os.path.join("tmp", self.get_class_name()))
 
                 with open(framefile, "wb") as f:
                     del frame  #: delete the frame or it wont be cleaned
                     f.write(res)
             except IOError, e:
-                self.logError(e)
+                self.log_error(e)
 
         if just_header:
             # parse header
@@ -604,11 +604,11 @@ class Plugin(Base):
         url = urllib.unquote(encode(url).strip())
 
         if self.core.debug:
-            self.logDebug("Download url: " + url, *["%s=%s" % (key, val) for key, val in locals().iteritems() if key not in ("self", "url")])
+            self.log_debug("Download url: " + url, *["%s=%s" % (key, val) for key, val in locals().iteritems() if key not in ("self", "url")])
 
-        self.checkForSameFiles()
+        self.check_for_same_files()
 
-        self.pyfile.setStatus("downloading")
+        self.pyfile.set_status("downloading")
 
         if disposition:
             self.pyfile.name = urlparse.urlparse(url).path.split('/')[-1] or self.pyfile.name
@@ -635,11 +635,11 @@ class Plugin(Base):
 
         filename = os.path.join(location, name)
 
-        self.core.addonManager.dispatchEvent("download-start", self.pyfile, url, filename)
+        self.core.addonManager.dispatch_event("download-start", self.pyfile, url, filename)
 
         try:
-            newname = self.req.httpDownload(url, filename, get=get, post=post, ref=ref, cookies=cookies,
-                                            chunks=self.getChunkCount(), resume=self.resumeDownload,
+            newname = self.req.http_download(url, filename, get=get, post=post, ref=ref, cookies=cookies,
+                                            chunks=self.get_chunk_count(), resume=self.resumeDownload,
                                             progressNotify=self.pyfile.setProgress, disposition=disposition)
         finally:
             self.pyfile.size = self.req.size
@@ -648,7 +648,7 @@ class Plugin(Base):
             newname = urlparse.urlparse(newname).path.split('/')[-1]
 
             if disposition and newname != name:
-                self.logInfo(_("%(name)s saved as %(newname)s") % {"name": name, "newname": newname})
+                self.log_info(_("%(name)s saved as %(newname)s") % {"name": name, "newname": newname})
                 self.pyfile.name = newname
                 filename = os.path.join(location, newname)
 
@@ -658,7 +658,7 @@ class Plugin(Base):
             try:
                 os.chmod(fs_filename, int(self.core.config.get("permission", "file"), 8))
             except Exception, e:
-                self.logWarning(_("Setting file mode failed"), e)
+                self.log_warning(_("Setting file mode failed"), e)
 
         if self.core.config.get("permission", "change_dl") and os.name != "nt":
             try:
@@ -667,13 +667,13 @@ class Plugin(Base):
                 os.chown(fs_filename, uid, gid)
 
             except Exception, e:
-                self.logWarning(_("Setting User and Group failed"), e)
+                self.log_warning(_("Setting User and Group failed"), e)
 
         self.lastDownload = filename
         return self.lastDownload
 
 
-    def checkDownload(self, rules, api_size=0, max_size=50000, delete=True, read_size=0):
+    def check_download(self, rules, api_size=0, max_size=50000, delete=True, read_size=0):
         """ checks the content of the last downloaded file, re match is saved to `lastCheck`
 
         :param rules: dict with names and rules to match (compiled regexp or strings)
@@ -694,13 +694,13 @@ class Plugin(Base):
             return None
         elif size > max_size and not read_size:
             return None
-        self.logDebug("Download Check triggered")
+        self.log_debug("Download Check triggered")
 
         with open(lastDownload, "rb") as f:
             content = f.read(read_size if read_size else -1)
 
         # produces encoding errors, better log to other file in the future?
-        # self.logDebug("Content: %s" % content)
+        # self.log_debug("Content: %s" % content)
         for name, rule in rules.iteritems():
             if isinstance(rule, basestring):
                 if rule in content:
@@ -716,7 +716,7 @@ class Plugin(Base):
                     return name
 
 
-    def getPassword(self):
+    def get_password(self):
         """ get the password the user provided in the package"""
         password = self.pyfile.package().password
         if not password:
@@ -724,7 +724,7 @@ class Plugin(Base):
         return password
 
 
-    def checkForSameFiles(self, starting=False):
+    def check_for_same_files(self, starting=False):
         """ checks if same file was/is downloaded within same package
 
         :param starting: indicates that the current download is going to start
@@ -748,12 +748,12 @@ class Plugin(Base):
             if size >= self.pyfile.size:
                 raise SkipDownload("File exists")
 
-        pyfile = self.core.db.findDuplicates(self.pyfile.id, self.pyfile.package().folder, self.pyfile.name)
+        pyfile = self.core.db.find_duplicates(self.pyfile.id, self.pyfile.package().folder, self.pyfile.name)
         if pyfile:
             if os.path.exists(location):
                 raise SkipDownload(pyfile[0])
 
-            self.logDebug("File %s not skipped, because it does not exists." % self.pyfile.name)
+            self.log_debug("File %s not skipped, because it does not exists." % self.pyfile.name)
 
 
     def clean(self):

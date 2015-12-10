@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSAccount import XFSAccount
 
 
-class VidPlayNet(XFSAccount):
+class Vid_play_net(XFSAccount):
     __name    = "VidPlayNet"
     __type    = "account"
     __version = "0.02"

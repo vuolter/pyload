@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSHoster import XFSHoster
 
 
-class SafesharingEu(XFSHoster):
+class Safesharing_eu(XFSHoster):
     __name    = "SafesharingEu"
     __type    = "hoster"
     __version = "0.05"

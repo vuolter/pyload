@@ -6,7 +6,7 @@ import re
 from pyload.plugin.Captcha import Captcha
 
 
-class AdsCaptcha(Captcha):
+class Ads_captcha(Captcha):
     __name    = "AdsCaptcha"
     __type    = "captcha"
     __version = "0.08"
@@ -33,10 +33,10 @@ class AdsCaptcha(Captcha):
         n = re.search(self.CAPTCHAID_PATTERN, html)
         if m and n:
             self.key = (m.group(1).strip(), n.group(1).strip())  #: key is the tuple(PublicKey, CaptchaId)
-            self.logDebug("Key|id: %s | %s" % self.key)
+            self.log_debug("Key|id: %s | %s" % self.key)
             return self.key
         else:
-            self.logDebug("Key or id not found")
+            self.log_debug("Key or id not found")
             return None
 
 
@@ -63,17 +63,17 @@ class AdsCaptcha(Captcha):
             self.plugin.fail(errmsg)
             raise AttributeError(errmsg)
 
-        self.logDebug("Challenge: %s" % challenge)
+        self.log_debug("Challenge: %s" % challenge)
 
         return self.result(server, challenge), challenge
 
 
     def result(self, server, challenge):
-        result = self.plugin.decryptCaptcha("%sChallenge.aspx" % server,
+        result = self.plugin.decrypt_captcha("%sChallenge.aspx" % server,
                                             get={'cid': challenge, 'dummy': random.random()},
                                             cookies=True,
                                             imgtype="jpg")
 
-        self.logDebug("Result: %s" % result)
+        self.log_debug("Result: %s" % result)
 
         return result

@@ -5,7 +5,7 @@ from pyload.plugin.Account import Account
 from pyload.utils import json_loads
 
 
-class PremiumizeMe(Account):
+class Premiumize_me(Account):
     __name    = "PremiumizeMe"
     __type    = "account"
     __version = "0.13"
@@ -15,10 +15,10 @@ class PremiumizeMe(Account):
     __authors     = [("Florian Franzen", "FlorianFranzen@gmail.com")]
 
 
-    def loadAccountInfo(self, user, req):
+    def load_account_info(self, user, req):
         # Get user data from premiumize.me
-        status = self.getAccountStatus(user, req)
-        self.logDebug(status)
+        status = self.get_account_status(user, req)
+        self.log_debug(status)
 
         # Parse account info
         account_info = {"validuntil": float(status['result']['expires']),
@@ -32,18 +32,18 @@ class PremiumizeMe(Account):
 
     def login(self, user, data, req):
         # Get user data from premiumize.me
-        status = self.getAccountStatus(user, req)
+        status = self.get_account_status(user, req)
 
         # Check if user and password are valid
         if status['status'] != 200:
-            self.wrongPassword()
+            self.wrong_password()
 
 
-    def getAccountStatus(self, user, req):
+    def get_account_status(self, user, req):
         # Use premiumize.me API v1 (see https://secure.premiumize.me/?show=api)
         # to retrieve account info and return the parsed json answer
         answer = req.load("https://api.premiumize.me/pm-api/v1.php",
                            get={'method'       : "accountstatus",
                                 'params[login]': user,
-                                'params[pass]' : self.getAccountData(user)['password']})
+                                'params[pass]' : self.get_account_data(user)['password']})
         return json_loads(answer)

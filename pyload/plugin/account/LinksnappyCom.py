@@ -6,7 +6,7 @@ from pyload.plugin.Account import Account
 from pyload.utils import json_loads
 
 
-class LinksnappyCom(Account):
+class Linksnappy_com(Account):
     __name    = "LinksnappyCom"
     __type    = "account"
     __version = "0.05"
@@ -15,12 +15,12 @@ class LinksnappyCom(Account):
     __authors     = [("stickell", "l.stickell@yahoo.it")]
 
 
-    def loadAccountInfo(self, user, req):
-        data = self.getAccountData(user)
+    def load_account_info(self, user, req):
+        data = self.get_account_data(user)
         r = req.load('http://gen.linksnappy.com/lseAPI.php',
                      get={'act': 'USERDETAILS', 'username': user, 'password': hashlib.md5(data['password']).hexdigest()})
 
-        self.logDebug("JSON data: " + r)
+        self.log_debug("JSON data: " + r)
 
         j = json_loads(r)
 
@@ -41,7 +41,7 @@ class LinksnappyCom(Account):
         if 'trafficleft' not in j['return'] or isinstance(j['return']['trafficleft'], str):
             trafficleft = -1
         else:
-            trafficleft = self.parseTraffic("%d MB" % j['return']['trafficleft'])
+            trafficleft = self.parse_traffic("%d MB" % j['return']['trafficleft'])
 
         return {"premium": True, "validuntil": validuntil, "trafficleft": trafficleft}
 
@@ -54,4 +54,4 @@ class LinksnappyCom(Account):
                      decode=True)
 
         if 'Invalid Account Details' in r:
-            self.wrongPassword()
+            self.wrong_password()

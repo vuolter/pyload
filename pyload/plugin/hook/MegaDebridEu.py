@@ -4,7 +4,7 @@ from pyload.utils import json_loads
 from pyload.plugin.internal.MultiHook import MultiHook
 
 
-class MegaDebridEu(MultiHook):
+class Mega_debrid_eu(Multi_hook):
     __name    = "MegaDebridEu"
     __type    = "hook"
     __version = "0.05"
@@ -20,14 +20,14 @@ class MegaDebridEu(MultiHook):
     __authors     = [("D.Ducatel", "dducatel@je-geek.fr")]
 
 
-    def getHosters(self):
+    def get_hosters(self):
         reponse   = self.getURL("http://www.mega-debrid.eu/api.php", get={'action': "getHosters"})
         json_data = json_loads(reponse)
 
         if json_data['response_code'] == "ok":
             host_list = [element[0] for element in json_data['hosters']]
         else:
-            self.logError(_("Unable to retrieve hoster list"))
+            self.log_error(_("Unable to retrieve hoster list"))
             host_list = []
 
         return host_list

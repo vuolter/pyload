@@ -3,7 +3,7 @@
 from pyload.plugin.internal.MultiHook import MultiHook
 
 
-class SimplydebridCom(MultiHook):
+class Simplydebrid_com(Multi_hook):
     __name    = "SimplydebridCom"
     __type    = "hook"
     __version = "0.04"
@@ -19,6 +19,6 @@ class SimplydebridCom(MultiHook):
     __authors     = [("Kagenoshin", "kagenoshin@gmx.ch")]
 
 
-    def getHosters(self):
+    def get_hosters(self):
         html = self.getURL("http://simply-debrid.com/api.php", get={'list': 1})
         return [x.strip() for x in html.rstrip(';').replace("\"", "").split(";")]

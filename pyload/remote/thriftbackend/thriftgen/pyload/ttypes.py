@@ -11,7 +11,7 @@ from thrift.Thrift import TType, TMessageType, TException
 from thrift.protocol.TBase import TBase, TExceptionBase
 
 
-class DownloadStatus(TBase):
+class Download_status(TBase):
   Finished = 0
   Offline = 1
   Online = 2
@@ -80,7 +80,7 @@ class Destination(TBase):
   }
 
 
-class ElementType(TBase):
+class Element_type(TBase):
   Package = 0
   File = 1
 
@@ -152,7 +152,7 @@ class Output(TBase):
   }
 
 
-class DownloadInfo(TBase):
+class Download_info(TBase):
   """
   Attributes:
    - fid
@@ -213,7 +213,7 @@ class DownloadInfo(TBase):
   )
 
 
-  def __init__(self, fid=None, name=None, speed=None, eta=None, format_eta=None, bleft=None, size=None, format_size=None, percent=None, status=None, statusmsg=None, format_wait=None, wait_until=None, packageID=None, packageName=None, plugin=None,):
+  def __init__(self, fid=None, name=None, speed=None, eta=None, format_eta=None, bleft=None, size=None, format_size=None, percent=None, status=None, statusmsg=None, format_wait=None, wait_until=None, packageID=None, package_name=None, plugin=None,):
     self.fid = fid
     self.name = name
     self.speed = speed
@@ -232,7 +232,7 @@ class DownloadInfo(TBase):
     self.plugin = plugin
 
 
-class ServerStatus(TBase):
+class Server_status(TBase):
   """
   Attributes:
    - pause
@@ -276,7 +276,7 @@ class ServerStatus(TBase):
     self.reconnect = reconnect
 
 
-class ConfigItem(TBase):
+class Config_item(TBase):
   """
   Attributes:
    - name
@@ -308,7 +308,7 @@ class ConfigItem(TBase):
     self.type = type
 
 
-class ConfigSection(TBase):
+class Config_section(TBase):
   """
   Attributes:
    - name
@@ -340,7 +340,7 @@ class ConfigSection(TBase):
     self.outline = outline
 
 
-class FileData(TBase):
+class File_data(TBase):
   """
   Attributes:
    - fid
@@ -400,7 +400,7 @@ class FileData(TBase):
     self.order = order
 
 
-class PackageData(TBase):
+class Package_data(TBase):
   """
   Attributes:
    - pid
@@ -468,7 +468,7 @@ class PackageData(TBase):
     self.fids = fids
 
 
-class InteractionTask(TBase):
+class Interaction_task(TBase):
   """
   Attributes:
    - iid
@@ -520,7 +520,7 @@ class InteractionTask(TBase):
     self.plugin = plugin
 
 
-class CaptchaTask(TBase):
+class Captcha_task(TBase):
   """
   Attributes:
    - tid
@@ -545,14 +545,14 @@ class CaptchaTask(TBase):
   )
 
 
-  def __init__(self, tid=None, data=None, type=None, resultType=None,):
+  def __init__(self, tid=None, data=None, type=None, result_type=None,):
     self.tid = tid
     self.data = data
     self.type = type
     self.resultType = resultType
 
 
-class EventInfo(TBase):
+class Event_info(TBase):
   """
   Attributes:
    - eventname
@@ -584,7 +584,7 @@ class EventInfo(TBase):
     self.destination = destination
 
 
-class UserData(TBase):
+class User_data(TBase):
   """
   Attributes:
    - name
@@ -612,7 +612,7 @@ class UserData(TBase):
   )
 
 
-  def __init__(self, name=None, email=None, role=None, permission=None, templateName=None,):
+  def __init__(self, name=None, email=None, role=None, permission=None, template_name=None,):
     self.name = name
     self.email = email
     self.role = role
@@ -620,7 +620,7 @@ class UserData(TBase):
     self.templateName = templateName
 
 
-class AccountInfo(TBase):
+class Account_info(TBase):
   """
   Attributes:
    - validuntil
@@ -668,7 +668,7 @@ class AccountInfo(TBase):
     self.type = type
 
 
-class ServiceCall(TBase):
+class Service_call(TBase):
   """
   Attributes:
    - plugin
@@ -693,14 +693,14 @@ class ServiceCall(TBase):
   )
 
 
-  def __init__(self, plugin=None, func=None, arguments=None, parseArguments=None,):
+  def __init__(self, plugin=None, func=None, arguments=None, parse_arguments=None,):
     self.plugin = plugin
     self.func = func
     self.arguments = arguments
     self.parseArguments = parseArguments
 
 
-class OnlineStatus(TBase):
+class Online_status(TBase):
   """
   Attributes:
    - name
@@ -736,7 +736,7 @@ class OnlineStatus(TBase):
     self.size = size
 
 
-class OnlineCheck(TBase):
+class Online_check(TBase):
   """
   Attributes:
    - rid
@@ -760,7 +760,7 @@ class OnlineCheck(TBase):
     self.data = data
 
 
-class PackageDoesNotExists(TExceptionBase):
+class Package_does_not_exists(TException_base):
   """
   Attributes:
    - pid
@@ -784,7 +784,7 @@ class PackageDoesNotExists(TExceptionBase):
     return repr(self)
 
 
-class FileDoesNotExists(TExceptionBase):
+class File_does_not_exists(TException_base):
   """
   Attributes:
    - fid
@@ -808,7 +808,7 @@ class FileDoesNotExists(TExceptionBase):
     return repr(self)
 
 
-class ServiceDoesNotExists(TExceptionBase):
+class Service_does_not_exists(TException_base):
   """
   Attributes:
    - plugin
@@ -836,7 +836,7 @@ class ServiceDoesNotExists(TExceptionBase):
     return repr(self)
 
 
-class ServiceException(TExceptionBase):
+class Service_exception(TException_base):
   """
   Attributes:
    - msg

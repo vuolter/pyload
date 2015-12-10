@@ -61,26 +61,26 @@ class Addon(Base):
             for event, funcs in self.event_map.iteritems():
                 if type(funcs) in (list, tuple):
                     for f in funcs:
-                        self.manager.addEvent(event, getattr(self, f))
+                        self.manager.add_event(event, getattr(self, f))
                 else:
-                    self.manager.addEvent(event, getattr(self, funcs))
+                    self.manager.add_event(event, getattr(self, funcs))
 
             # delete for various reasons
             self.event_map = None
 
         if self.event_list:
-            self.logWarning(_("Plugin used deprecated `event_list`, use `event_map` instead"))
+            self.log_warning(_("Plugin used deprecated `event_list`, use `event_map` instead"))
 
             for f in self.event_list:
-                self.manager.addEvent(f, getattr(self, f))
+                self.manager.add_event(f, getattr(self, f))
 
             self.event_list = None
 
         self.setup()
 
 
-    def initPeriodical(self, delay=0, threaded=False):
-        self.cb = self.pyload.scheduler.addJob(max(0, delay), self._periodical, [threaded], threaded=threaded)
+    def init_periodical(self, delay=0, threaded=False):
+        self.cb = self.pyload.scheduler.add_job(max(0, delay), self._periodical, [threaded], threaded=threaded)
 
 
     def _periodical(self, threaded):
@@ -92,15 +92,15 @@ class Addon(Base):
             self.periodical()
 
         except Exception, e:
-            self.logError(_("Error executing addon: %s") % e)
+            self.log_error(_("Error executing addon: %s") % e)
             if self.pyload.debug:
                 traceback.print_exc()
 
-        self.cb = self.pyload.scheduler.addJob(self.interval, self._periodical, [threaded], threaded=threaded)
+        self.cb = self.pyload.scheduler.add_job(self.interval, self._periodical, [threaded], threaded=threaded)
 
 
     def __repr__(self):
-        return "<Addon %s>" % self.getClassName()
+        return "<Addon %s>" % self.get_class_name()
 
 
     def setup(self):
@@ -111,7 +111,7 @@ class Addon(Base):
     def deactivate(self):
         """Called when addon was deactivated"""
         if has_method(self.__class__, "unload"):
-            self.logWarning(_("Deprecated method `unload`, use `deactivate` instead"))
+            self.log_warning(_("Deprecated method `unload`, use `deactivate` instead"))
             self.unload()
 
 
@@ -119,9 +119,9 @@ class Addon(Base):
         pass
 
 
-    def isActivated(self):
+    def is_activated(self):
         """Checks if addon is activated"""
-        return self.getConfig("activated")
+        return self.get_config("activated")
 
 
     # Event methods - overwrite these if needed
@@ -130,45 +130,45 @@ class Addon(Base):
     def activate(self):
         """Called when addon was activated"""
         if has_method(self.__class__, "coreReady"):
-            self.logWarning(_("Deprecated method `coreReady`, use `activate` instead"))
-            self.coreReady()
+            self.log_warning(_("Deprecated method `coreReady`, use `activate` instead"))
+            self.core_ready()
 
 
-    def coreReady(self):  #: Deprecated, use method `activate` instead
+    def core_ready(self):  #: Deprecated, use method `activate` instead
         pass
 
 
     def exit(self):
         """Called by pyload.shutdown just before pyLoad exit"""
         if has_method(self.__class__, "coreExiting"):
-            self.coreExiting()
+            self.core_exiting()
 
 
-    def coreExiting(self):  #: Deprecated, use method `exit` instead
+    def core_exiting(self):  #: Deprecated, use method `exit` instead
         pass
 
 
-    def downloadPreparing(self, pyfile):
+    def download_preparing(self, pyfile):
         pass
 
 
-    def downloadFinished(self, pyfile):
+    def download_finished(self, pyfile):
         pass
 
 
-    def downloadFailed(self, pyfile):
+    def download_failed(self, pyfile):
         pass
 
 
-    def packageFinished(self, pypack):
+    def package_finished(self, pypack):
         pass
 
 
-    def beforeReconnecting(self, ip):
+    def before_reconnecting(self, ip):
         pass
 
 
-    def afterReconnecting(self, ip, oldip):
+    def after_reconnecting(self, ip, oldip):
         pass
 
 
@@ -176,14 +176,14 @@ class Addon(Base):
         pass
 
 
-    def captchaTask(self, task):
+    def captcha_task(self, task):
         """New captcha task for the plugin, it MUST set the handler and timeout or will be ignored"""
         pass
 
 
-    def captchaCorrect(self, task):
+    def captcha_correct(self, task):
         pass
 
 
-    def captchaInvalid(self, task):
+    def captcha_invalid(self, task):
         pass

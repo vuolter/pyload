@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class StorageTo(DeadHoster):
+class Storage_to(Dead_hoster):
     __name    = "StorageTo"
     __type    = "hoster"
     __version = "0.01"

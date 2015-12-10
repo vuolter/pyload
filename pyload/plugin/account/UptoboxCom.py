@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSAccount import XFSAccount
 
 
-class UptoboxCom(XFSAccount):
+class Uptobox_com(XFSAccount):
     __name    = "UptoboxCom"
     __type    = "account"
     __version = "0.08"

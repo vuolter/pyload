@@ -8,7 +8,7 @@ import traceback
 from pyload.utils import encode
 
 
-class CaptchaManager(object):
+class Captcha_manager(object):
 
     def __init__(self, core):
         self.lock = threading.Lock()
@@ -17,20 +17,20 @@ class CaptchaManager(object):
         self.ids = 0  #: only for internal purpose
 
 
-    def newTask(self, img, format, file, result_type):
+    def new_task(self, img, format, file, result_type):
         task = CaptchaTask(self.ids, img, format, file, result_type)
         self.ids += 1
         return task
 
 
-    def removeTask(self, task):
+    def remove_task(self, task):
         self.lock.acquire()
         if task in self.tasks:
             self.tasks.remove(task)
         self.lock.release()
 
 
-    def getTask(self):
+    def get_task(self):
         self.lock.acquire()
         for task in self.tasks:
             if task.status in ("waiting", "shared-user"):
@@ -40,7 +40,7 @@ class CaptchaManager(object):
         return None
 
 
-    def getTaskByID(self, tid):
+    def get_task_byID(self, tid):
         self.lock.acquire()
         for task in self.tasks:
             if task.id == str(tid):  #: task ids are strings
@@ -50,13 +50,13 @@ class CaptchaManager(object):
         return None
 
 
-    def handleCaptcha(self, task, timeout=50):
-        cli = self.pyload.isClientConnected()
+    def handle_captcha(self, task, timeout=50):
+        cli = self.pyload.is_client_connected()
 
         if cli:  #: client connected -> should solve the captcha
             task.setWaiting(timeout)  #: wait 50 sec for response
 
-        for plugin in self.pyload.addonManager.activePlugins():
+        for plugin in self.pyload.addonManager.active_plugins():
             try:
                 plugin.captchaTask(task)
             except Exception:
@@ -70,7 +70,7 @@ class CaptchaManager(object):
         return False
 
 
-class CaptchaTask(object):
+class Captcha_task(object):
 
     def __init__(self, id, img, format, file, result_type='textual'):
         self.id = str(id)
@@ -86,14 +86,14 @@ class CaptchaTask(object):
         self.data = {}  #: handler can store data here
 
 
-    def getCaptcha(self):
+    def get_captcha(self):
         return self.captchaImg, self.captchaFormat, self.captchaResultType
 
 
-    def setResult(self, text):
-        if self.isTextual():
+    def set_result(self, text):
+        if self.is_textual():
             self.result = text
-        if self.isPositional():
+        if self.is_positional():
             try:
                 parts = text.split(',')
                 self.result = (int(parts[0]), int(parts[1]))
@@ -101,45 +101,45 @@ class CaptchaTask(object):
                 self.result = None
 
 
-    def getResult(self):
+    def get_result(self):
         return encode(self.result)
 
 
-    def getStatus(self):
+    def get_status(self):
         return self.status
 
 
-    def setWaiting(self, sec):
+    def set_waiting(self, sec):
         """Let the captcha wait secs for the solution"""
         self.waitUntil = max(time.time() + sec, self.waitUntil)
         self.status = "waiting"
 
 
-    def isWaiting(self):
-        if self.result or self.error or self.timedOut():
+    def is_waiting(self):
+        if self.result or self.error or self.timed_out():
             return False
         else:
             return True
 
 
-    def isTextual(self):
+    def is_textual(self):
         """Returns if text is written on the captcha"""
         return self.captchaResultType == 'textual'
 
 
-    def isPositional(self):
+    def is_positional(self):
         """Returns if user have to click a specific region on the captcha"""
         return self.captchaResultType == 'positional'
 
 
-    def setWatingForUser(self, exclusive):
+    def set_wating_for_user(self, exclusive):
         if exclusive:
             self.status = "user"
         else:
             self.status = "shared-user"
 
 
-    def timedOut(self):
+    def timed_out(self):
         return time.time() > self.waitUntil
 
 

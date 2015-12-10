@@ -4,7 +4,7 @@ import re
 from pyload.plugin.Crypter import Crypter
 
 
-class MultiloadCz(Crypter):
+class Multiload_cz(Crypter):
     __name    = "MultiloadCz"
     __type    = "crypter"
     __version = "0.40"
@@ -34,9 +34,9 @@ class MultiloadCz(Crypter):
         else:
             m = re.findall(self.LINK_PATTERN, self.html)
             if m:
-                prefered_set = set(self.getConfig('usedHoster').split('|'))
+                prefered_set = set(self.get_config('usedHoster').split('|'))
                 self.urls.extend(x[1] for x in m if x[0] in prefered_set)
 
                 if not self.urls:
-                    ignored_set = set(self.getConfig('ignoredHoster').split('|'))
+                    ignored_set = set(self.get_config('ignoredHoster').split('|'))
                     self.urls.extend(x[1] for x in m if x[0] not in ignored_set)

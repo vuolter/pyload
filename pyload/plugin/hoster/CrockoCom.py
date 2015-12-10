@@ -6,7 +6,7 @@ from pyload.plugin.captcha.ReCaptcha import ReCaptcha
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class CrockoCom(SimpleHoster):
+class Crocko_com(Simple_hoster):
     __name    = "CrockoCom"
     __type    = "hoster"
     __version = "0.19"
@@ -56,8 +56,8 @@ class CrockoCom(SimpleHoster):
             inputs['recaptcha_response_field'], inputs['recaptcha_challenge_field'] = recaptcha.challenge()
             self.download(action, post=inputs)
 
-            if self.checkDownload({"captcha": recaptcha.KEY_AJAX_PATTERN}):
-                self.invalidCaptcha()
+            if self.check_download({"captcha": recaptcha.KEY_AJAX_PATTERN}):
+                self.invalid_captcha()
             else:
                 break
         else:

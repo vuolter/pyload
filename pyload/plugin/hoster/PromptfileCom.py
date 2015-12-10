@@ -5,7 +5,7 @@ import re
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class PromptfileCom(SimpleHoster):
+class Promptfile_com(Simple_hoster):
     __name    = "PromptfileCom"
     __type    = "hoster"
     __version = "0.13"
@@ -31,7 +31,7 @@ class PromptfileCom(SimpleHoster):
         if m is None:
             self.error(_("CHASH_PATTERN not found"))
         chash = m.group(1)
-        self.logDebug("Read chash %s" % chash)
+        self.log_debug("Read chash %s" % chash)
         # continue to stage2
         self.html = self.load(pyfile.url, decode=True, post={'chash': chash})
 

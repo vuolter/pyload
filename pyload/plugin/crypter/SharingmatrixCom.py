@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadCrypter import DeadCrypter
 
 
-class SharingmatrixCom(DeadCrypter):
+class Sharingmatrix_com(Dead_crypter):
     __name    = "SharingmatrixCom"
     __type    = "crypter"
     __version = "0.01"

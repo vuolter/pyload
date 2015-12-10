@@ -4,7 +4,7 @@ from pyload.utils import json_loads
 from pyload.plugin.Account import Account
 
 
-class SimplyPremiumCom(Account):
+class Simply_premium_com(Account):
     __name    = "SimplyPremiumCom"
     __type    = "account"
     __version = "0.05"
@@ -14,14 +14,14 @@ class SimplyPremiumCom(Account):
     __authors     = [("EvolutionClip", "evolutionclip@live.de")]
 
 
-    def loadAccountInfo(self, user, req):
+    def load_account_info(self, user, req):
         premium     = False
         validuntil  = -1
         trafficleft = None
 
         json_data = req.load('http://www.simply-premium.com/api/user.php?format=json')
 
-        self.logDebug("JSON data: %s" % json_data)
+        self.log_debug("JSON data: %s" % json_data)
 
         json_data = json_loads(json_data)
 
@@ -45,4 +45,4 @@ class SimplyPremiumCom(Account):
                         decode=True)
 
         if 'logout' not in html:
-            self.wrongPassword()
+            self.wrong_password()

@@ -6,7 +6,7 @@
 from pyload.plugin.internal.XFSHoster import XFSHoster
 
 
-class FileomCom(XFSHoster):
+class Fileom_com(XFSHoster):
     __name    = "FileomCom"
     __type    = "hoster"
     __version = "0.05"

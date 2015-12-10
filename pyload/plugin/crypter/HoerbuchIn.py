@@ -7,7 +7,7 @@ import BeautifulSoup, BeautifulStoneSoup
 from pyload.plugin.Crypter import Crypter
 
 
-class HoerbuchIn(Crypter):
+class Hoerbuch_in(Crypter):
     __name    = "HoerbuchIn"
     __type    = "crypter"
     __version = "0.60"
@@ -36,14 +36,14 @@ class HoerbuchIn(Crypter):
             abookname = soup.find("a", attrs={"rel": "bookmark"}).text
             for a in soup.findAll("a", attrs={"href": self.protection}):
                 package = "%s (%s)" % (abookname, a.previousSibling.previousSibling.text[:-1])
-                links = self.decryptFolder(a['href'])
+                links = self.decrypt_folder(a['href'])
 
                 self.packages.append((package, links, package))
         else:
-            self.urls = self.decryptFolder(pyfile.url)
+            self.urls = self.decrypt_folder(pyfile.url)
 
 
-    def decryptFolder(self, url):
+    def decrypt_folder(self, url):
         m = self.protection.search(url)
         if m is None:
             self.fail(_("Bad URL"))

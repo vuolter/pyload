@@ -6,7 +6,7 @@
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class DevhostSt(SimpleHoster):
+class Devhost_st(Simple_hoster):
     __name    = "DevhostSt"
     __type    = "hoster"
     __version = "0.05"

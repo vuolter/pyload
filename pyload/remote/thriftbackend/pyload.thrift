@@ -5,8 +5,8 @@ typedef i32 PackageID
 typedef i32 TaskID
 typedef i32 ResultID
 typedef i32 InteractionID
-typedef list<string> LinkList
-typedef string PluginName
+typedef list<string> Link_list
+typedef string Plugin_name
 typedef byte Progress
 typedef byte Priority
 

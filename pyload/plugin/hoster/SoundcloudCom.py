@@ -6,7 +6,7 @@ from pyload.plugin.internal.SimpleHoster import SimpleHoster
 from pyload.utils import json_loads
 
 
-class SoundcloudCom(SimpleHoster):
+class Soundcloud_com(Simple_hoster):
     __name    = "SoundcloudCom"
     __type    = "hoster"
     __version = "0.11"
@@ -46,8 +46,8 @@ class SoundcloudCom(SimpleHoster):
                               key=lambda t: regex.sub(t[0], ''),
                               reverse=True)
 
-        self.logDebug("Streams found: %s" % (http_streams or "None"))
+        self.log_debug("Streams found: %s" % (http_streams or "None"))
 
         if http_streams:
-            stream_name, self.link = http_streams[0 if self.getConfig('quality') == "Higher" else -1]
+            stream_name, self.link = http_streams[0 if self.get_config('quality') == "Higher" else -1]
             pyfile.name += '.' + stream_name.split('_')[1].lower()

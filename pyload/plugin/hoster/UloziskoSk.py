@@ -5,7 +5,7 @@ import re
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class UloziskoSk(SimpleHoster):
+class Ulozisko_sk(Simple_hoster):
     __name    = "UloziskoSk"
     __type    = "hoster"
     __version = "0.25"
@@ -30,7 +30,7 @@ class UloziskoSk(SimpleHoster):
 
     def process(self, pyfile):
         self.html = self.load(pyfile.url, decode=True)
-        self.getFileInfo()
+        self.get_file_info()
 
         m = re.search(self.IMG_PATTERN, self.html)
         if m:
@@ -50,16 +50,16 @@ class UloziskoSk(SimpleHoster):
             self.error(_("ID_PATTERN not found"))
         id = m.group(1)
 
-        self.logDebug("URL:" + parsed_url + ' ID:' + id)
+        self.log_debug("URL:" + parsed_url + ' ID:' + id)
 
         m = re.search(self.CAPTCHA_PATTERN, self.html)
         if m is None:
             self.error(_("CAPTCHA_PATTERN not found"))
         captcha_url = 'http://www.ulozisko.sk' + m.group(1)
 
-        captcha = self.decryptCaptcha(captcha_url, cookies=True)
+        captcha = self.decrypt_captcha(captcha_url, cookies=True)
 
-        self.logDebug("CAPTCHA_URL:" + captcha_url + ' CAPTCHA:' + captcha)
+        self.log_debug("CAPTCHA_URL:" + captcha_url + ' CAPTCHA:' + captcha)
 
         self.download(parsed_url,
                       post={"antispam": captcha,

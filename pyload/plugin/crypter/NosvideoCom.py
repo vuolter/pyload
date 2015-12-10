@@ -3,7 +3,7 @@
 from pyload.plugin.internal.SimpleCrypter import SimpleCrypter
 
 
-class NosvideoCom(SimpleCrypter):
+class Nosvideo_com(Simple_crypter):
     __name    = "NosvideoCom"
     __type    = "crypter"
     __version = "0.03"

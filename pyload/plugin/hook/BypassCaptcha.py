@@ -7,13 +7,13 @@ from pyload.network.RequestFactory import getURL, getRequest
 from pyload.plugin.Hook import Hook, threaded
 
 
-class BypassCaptchaException(Exception):
+class Bypass_captcha_exception(Exception):
 
     def __init__(self, err):
         self.err = err
 
 
-    def getCode(self):
+    def get_code(self):
         return self.err
 
 
@@ -25,7 +25,7 @@ class BypassCaptchaException(Exception):
         return "<BypassCaptchaException %s>" % self.err
 
 
-class BypassCaptcha(Hook):
+class Bypass_captcha(Hook):
     __name    = "BypassCaptcha"
     __type    = "hook"
     __version = "0.06"
@@ -47,14 +47,14 @@ class BypassCaptcha(Hook):
     GETCREDITS_URL = "http://bypasscaptcha.com/ex_left.php"
 
 
-    def getCredits(self):
-        res = getURL(self.GETCREDITS_URL, post={"key": self.getConfig('passkey')})
+    def get_credits(self):
+        res = getURL(self.GETCREDITS_URL, post={"key": self.get_config('passkey')})
 
         data = dict(x.split(' ', 1) for x in res.splitlines())
         return int(data['Left'])
 
 
-    def submit(self, captcha, captchaType="file", match=None):
+    def submit(self, captcha, captcha_type="file", match=None):
         req = getRequest()
 
         # raise timeout threshold
@@ -63,7 +63,7 @@ class BypassCaptcha(Hook):
         try:
             res = req.load(self.SUBMIT_URL,
                            post={'vendor_key': self.PYLOAD_KEY,
-                                 'key': self.getConfig('passkey'),
+                                 'key': self.get_config('passkey'),
                                  'gen_task_id': "1",
                                  'file': (pycurl.FORM_FILE, captcha)},
                            multipart=True)
@@ -76,54 +76,54 @@ class BypassCaptcha(Hook):
 
         result = data['Value']
         ticket = data['TaskId']
-        self.logDebug("Result %s : %s" % (ticket, result))
+        self.log_debug("Result %s : %s" % (ticket, result))
 
         return ticket, result
 
 
     def respond(self, ticket, success):
         try:
-            res = getURL(self.RESPOND_URL, post={"task_id": ticket, "key": self.getConfig('passkey'),
+            res = getURL(self.RESPOND_URL, post={"task_id": ticket, "key": self.get_config('passkey'),
                                                  "cv": 1 if success else 0})
         except BadHeader, e:
-            self.logError(_("Could not send response"), e)
+            self.log_error(_("Could not send response"), e)
 
 
-    def captchaTask(self, task):
+    def captcha_task(self, task):
         if "service" in task.data:
             return False
 
         if not task.isTextual():
             return False
 
-        if not self.getConfig('passkey'):
+        if not self.get_config('passkey'):
             return False
 
-        if self.pyload.isClientConnected() and not self.getConfig('force'):
+        if self.pyload.is_client_connected() and not self.get_config('force'):
             return False
 
-        if self.getCredits() > 0:
+        if self.get_credits() > 0:
             task.handler.append(self)
-            task.data['service'] = self.getClassName()
+            task.data['service'] = self.get_class_name()
             task.setWaiting(100)
-            self._processCaptcha(task)
+            self._process_captcha(task)
 
         else:
-            self.logInfo(_("Your %s account has not enough credits") % self.getClassName())
+            self.log_info(_("Your %s account has not enough credits") % self.get_class_name())
 
 
-    def captchaCorrect(self, task):
-        if task.data['service'] == self.getClassName() and "ticket" in task.data:
+    def captcha_correct(self, task):
+        if task.data['service'] == self.get_class_name() and "ticket" in task.data:
             self.respond(task.data['ticket'], True)
 
 
-    def captchaInvalid(self, task):
-        if task.data['service'] == self.getClassName() and "ticket" in task.data:
+    def captcha_invalid(self, task):
+        if task.data['service'] == self.get_class_name() and "ticket" in task.data:
             self.respond(task.data['ticket'], False)
 
 
     @threaded
-    def _processCaptcha(self, task):
+    def _process_captcha(self, task):
         c = task.captchaFile
         try:
             ticket, result = self.submit(c)

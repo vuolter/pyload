@@ -7,7 +7,7 @@ import time
 from pyload.plugin.internal.SimpleCrypter import SimpleCrypter
 
 
-class DlProtectCom(SimpleCrypter):
+class Dl_protect_com(Simple_crypter):
     __name    = "DlProtectCom"
     __type    = "crypter"
     __version = "0.03"
@@ -27,7 +27,7 @@ class DlProtectCom(SimpleCrypter):
     OFFLINE_PATTERN = r'Unfortunately, the link you are looking for is not found'
 
 
-    def getLinks(self):
+    def get_links(self):
         # Direct link with redirect
         if not re.match(r"https?://(?:www\.)?dl-protect\.com/.+", self.req.http.lastEffectiveURL):
             return [self.req.http.lastEffectiveURL]
@@ -47,12 +47,12 @@ class DlProtectCom(SimpleCrypter):
                              'submitform': "Decrypt+link"})
 
             if "Password :" in self.html:
-                post_req['pwd'] = self.getPassword()
+                post_req['pwd'] = self.get_password()
 
             if "Security Code" in self.html:
                 captcha_id   = re.search(r'/captcha\.php\?uid=(.+?)"', self.html).group(1)
                 captcha_url  = "http://www.dl-protect.com/captcha.php?uid=" + captcha_id
-                captcha_code = self.decryptCaptcha(captcha_url, imgtype="gif")
+                captcha_code = self.decrypt_captcha(captcha_url, imgtype="gif")
 
                 post_req['secure'] = captcha_code
 

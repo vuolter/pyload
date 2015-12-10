@@ -4,7 +4,7 @@ import re
 from pyload.plugin.Crypter import Crypter
 
 
-class UlozTo(Crypter):
+class Uloz_to(Crypter):
     __name    = "UlozTo"
     __type    = "crypter"
     __version = "0.20"
@@ -28,7 +28,7 @@ class UlozTo(Crypter):
 
         new_links = []
         for i in xrange(1, 100):
-            self.logInfo(_("Fetching links from page %i") % i)
+            self.log_info(_("Fetching links from page %i") % i)
             m = re.search(self.FOLDER_PATTERN, html, re.S)
             if m is None:
                 self.error(_("FOLDER_PATTERN not found"))
@@ -40,7 +40,7 @@ class UlozTo(Crypter):
             else:
                 break
         else:
-            self.logInfo(_("Limit of 99 pages reached, aborting"))
+            self.log_info(_("Limit of 99 pages reached, aborting"))
 
         if new_links:
             self.urls = [map(lambda s: "http://ulozto.net/%s" % s, new_links)]

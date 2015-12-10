@@ -3,7 +3,7 @@
 from pyload.plugin.internal.SimpleCrypter import SimpleCrypter
 
 
-class FilecloudIo(SimpleCrypter):
+class Filecloud_io(Simple_crypter):
     __name    = "FilecloudIo"
     __type    = "crypter"
     __version = "0.03"

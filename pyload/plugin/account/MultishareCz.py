@@ -5,7 +5,7 @@ import re
 from pyload.plugin.Account import Account
 
 
-class MultishareCz(Account):
+class Multishare_cz(Account):
     __name    = "MultishareCz"
     __type    = "account"
     __version = "0.05"
@@ -19,12 +19,12 @@ class MultishareCz(Account):
     ACCOUNT_INFO_PATTERN = r'<input type="hidden" id="(u_ID|u_hash)" name=".+?" value="(.+?)">'
 
 
-    def loadAccountInfo(self, user, req):
+    def load_account_info(self, user, req):
         # self.relogin(user)
         html = req.load("http://www.multishare.cz/profil/", decode=True)
 
         m = re.search(self.TRAFFIC_LEFT_PATTERN, html)
-        trafficleft = self.parseTraffic(m.group('S') + m.group('U')) if m else 0
+        trafficleft = self.parse_traffic(m.group('S') + m.group('U')) if m else 0
         self.premium = bool(trafficleft)
 
         html = req.load("http://www.multishare.cz/", decode=True)
@@ -41,4 +41,4 @@ class MultishareCz(Account):
                         decode=True)
 
         if '<div class="akce-chyba akce">' in html:
-            self.wrongPassword()
+            self.wrong_password()

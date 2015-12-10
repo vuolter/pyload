@@ -4,7 +4,7 @@ from pyload.utils import json_loads
 from pyload.plugin.internal.MultiHook import MultiHook
 
 
-class SimplyPremiumCom(MultiHook):
+class Simply_premium_com(Multi_hook):
     __name    = "SimplyPremiumCom"
     __type    = "hook"
     __version = "0.05"
@@ -20,7 +20,7 @@ class SimplyPremiumCom(MultiHook):
     __authors     = [("EvolutionClip", "evolutionclip@live.de")]
 
 
-    def getHosters(self):
+    def get_hosters(self):
         json_data = self.getURL("http://www.simply-premium.com/api/hosts.php", get={'format': "json", 'online': 1})
         json_data = json_loads(json_data)
 

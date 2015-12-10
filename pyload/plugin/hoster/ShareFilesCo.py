@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class ShareFilesCo(DeadHoster):
+class Share_files_co(Dead_hoster):
     __name    = "ShareFilesCo"
     __type    = "hoster"
     __version = "0.02"

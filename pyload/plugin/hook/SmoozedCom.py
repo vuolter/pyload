@@ -3,7 +3,7 @@
 from pyload.plugin.internal.MultiHook import MultiHook
 
 
-class SmoozedCom(MultiHook):
+class Smoozed_com(Multi_hook):
     __name    = "SmoozedCom"
     __type    = "hook"
     __version = "0.03"
@@ -19,6 +19,6 @@ class SmoozedCom(MultiHook):
     __authors     = [("", "")]
 
 
-    def getHosters(self):
-        user, data = self.account.selectAccount()
-        return self.account.getAccountInfo(user)["hosters"]
+    def get_hosters(self):
+        user, data = self.account.select_account()
+        return self.account.get_account_info(user)["hosters"]

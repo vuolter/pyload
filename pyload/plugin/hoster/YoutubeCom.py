@@ -29,7 +29,7 @@ def which(program):
                 return exe_file
 
 
-class YoutubeCom(Hoster):
+class Youtube_com(Hoster):
     __name    = "YoutubeCom"
     __type    = "hoster"
     __version = "0.41"
@@ -91,10 +91,10 @@ class YoutubeCom(Hoster):
             self.offline()
 
         if "We have been receiving a large volume of requests from your network." in html:
-            self.tempOffline()
+            self.temp_offline()
 
         # get config
-        use3d = self.getConfig('3d')
+        use3d = self.get_config('3d')
 
         if use3d:
             quality = {"sd": 82, "hd": 84, "fullhd": 85, "240p": 83, "360p": 82,
@@ -103,13 +103,13 @@ class YoutubeCom(Hoster):
             quality = {"sd": 18, "hd": 22, "fullhd": 37, "240p": 5, "360p": 18,
                        "480p": 35, "720p": 22, "1080p": 37, "3072p": 38}
 
-        desired_fmt = self.getConfig('fmt')
+        desired_fmt = self.get_config('fmt')
 
         if not desired_fmt:
-            desired_fmt = quality.get(self.getConfig('quality'), 18)
+            desired_fmt = quality.get(self.get_config('quality'), 18)
 
         elif desired_fmt not in self.formats:
-            self.logWarning(_("FMT %d unknown, using default") % desired_fmt)
+            self.log_warning(_("FMT %d unknown, using default") % desired_fmt)
             desired_fmt = 0
 
         # parse available streams
@@ -118,12 +118,12 @@ class YoutubeCom(Hoster):
         streams = [dict((y.split('=', 1)) for y in x) for x in streams]
         streams = [(int(x['itag']), urllib.unquote(x['url'])) for x in streams]
 
-        # self.logDebug("Found links: %s" % streams)
+        # self.log_debug("Found links: %s" % streams)
 
-        self.logDebug("AVAILABLE STREAMS: %s" % [x[0] for x in streams])
+        self.log_debug("AVAILABLE STREAMS: %s" % [x[0] for x in streams])
 
         # build dictionary of supported itags (3D/2D)
-        allowed = lambda x: self.getConfig(self.formats[x][0])
+        allowed = lambda x: self.get_config(self.formats[x][0])
         streams = [x for x in streams if x[0] in self.formats and allowed(x[0])]
 
         if not streams:
@@ -131,7 +131,7 @@ class YoutubeCom(Hoster):
 
         fmt_dict = dict([x for x in streams if self.formats[x[0]][4] == use3d] or streams)
 
-        self.logDebug("DESIRED STREAM: ITAG:%d (%s) %sfound, %sallowed" %
+        self.log_debug("DESIRED STREAM: ITAG:%d (%s) %sfound, %sallowed" %
                       (desired_fmt, "%s %dx%d Q:%d 3D:%s" % self.formats[desired_fmt],
                        "" if desired_fmt in fmt_dict else "NOT ", "" if allowed(desired_fmt) else "NOT "))
 
@@ -142,16 +142,16 @@ class YoutubeCom(Hoster):
             sel  = lambda x: self.formats[x][3]  #: select quality index
             comp = lambda x, y: abs(sel(x) - sel(y))
 
-            self.logDebug("Choosing nearest fmt: %s" % [(x, allowed(x), comp(x, desired_fmt)) for x in fmt_dict.keys()])
+            self.log_debug("Choosing nearest fmt: %s" % [(x, allowed(x), comp(x, desired_fmt)) for x in fmt_dict.keys()])
 
             fmt = reduce(lambda x, y: x if comp(x, desired_fmt) <= comp(y, desired_fmt) and
                          sel(x) > sel(y) else y, fmt_dict.keys())
 
-        self.logDebug("Chosen fmt: %s" % fmt)
+        self.log_debug("Chosen fmt: %s" % fmt)
 
         url = fmt_dict[fmt]
 
-        self.logDebug("URL: %s" % url)
+        self.log_debug("URL: %s" % url)
 
         # set file name
         file_suffix = self.formats[fmt][0] if fmt in self.formats else ".flv"

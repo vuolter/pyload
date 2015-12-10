@@ -5,7 +5,7 @@ import re
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class SendspaceCom(SimpleHoster):
+class Sendspace_com(Simple_hoster):
     __name    = "SendspaceCom"
     __type    = "hoster"
     __version = "0.17"
@@ -34,24 +34,24 @@ class SendspaceCom(SimpleHoster):
             m = re.search(self.LINK_FREE_PATTERN, self.html)
             if m:
                 if 'captcha_hash' in params:
-                    self.correctCaptcha()
+                    self.correct_captcha()
                 self.link = m.group(1)
                 break
 
             m = re.search(self.CAPTCHA_PATTERN, self.html)
             if m:
                 if 'captcha_hash' in params:
-                    self.invalidCaptcha()
+                    self.invalid_captcha()
                 captcha_url1 = "http://www.sendspace.com/" + m.group(1)
                 m = re.search(self.USER_CAPTCHA_PATTERN, self.html)
                 captcha_url2 = "http://www.sendspace.com/" + m.group(1)
                 params = {'captcha_hash': m.group(2),
                           'captcha_submit': 'Verify',
-                          'captcha_answer': self.decryptCaptcha(captcha_url1) + " " + self.decryptCaptcha(captcha_url2)}
+                          'captcha_answer': self.decrypt_captcha(captcha_url1) + " " + self.decrypt_captcha(captcha_url2)}
             else:
                 params = {'download': "Regular Download"}
 
-            self.logDebug(params)
+            self.log_debug(params)
             self.html = self.load(pyfile.url, post=params)
         else:
             self.fail(_("Download link not found"))

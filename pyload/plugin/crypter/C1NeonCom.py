@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadCrypter import DeadCrypter
 
 
-class C1NeonCom(DeadCrypter):
+class C1_neon_com(Dead_crypter):
     __name    = "C1NeonCom"
     __type    = "crypter"
     __version = "0.05"

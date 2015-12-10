@@ -5,7 +5,7 @@ import time
 from pyload.plugin.Account import Account
 
 
-class SimplydebridCom(Account):
+class Simplydebrid_com(Account):
     __name    = "SimplydebridCom"
     __type    = "account"
     __version = "0.11"
@@ -15,7 +15,7 @@ class SimplydebridCom(Account):
     __authors     = [("Kagenoshin", "kagenoshin@gmx.ch")]
 
 
-    def loadAccountInfo(self, user, req):
+    def load_account_info(self, user, req):
         get_data = {'login': 2, 'u': self.loginname, 'p': self.password}
         res = req.load("http://simply-debrid.com/api.php", get=get_data, decode=True)
         data = [x.strip() for x in res.split(";")]
@@ -32,4 +32,4 @@ class SimplydebridCom(Account):
 
         res = req.load("http://simply-debrid.com/api.php", get=get_data, decode=True)
         if res != "02: loggin success":
-            self.wrongPassword()
+            self.wrong_password()

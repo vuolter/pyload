@@ -3,7 +3,7 @@
 from pyload.plugin.Crypter import Crypter as _Crypter
 
 
-class DeadCrypter(_Crypter):
+class Dead_crypter(__crypter):
     __name    = "DeadCrypter"
     __type    = "crypter"
     __version = "0.04"
@@ -16,7 +16,7 @@ class DeadCrypter(_Crypter):
 
 
     @classmethod
-    def apiInfo(cls, url="", get={}, post={}):
+    def api_info(cls, url="", get={}, post={}):
         api = super(DeadCrypter, self).apiInfo(url, get, post)
         api['status'] = 1
         return api

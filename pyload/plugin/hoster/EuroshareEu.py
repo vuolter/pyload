@@ -5,7 +5,7 @@ import re
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class EuroshareEu(SimpleHoster):
+class Euroshare_eu(Simple_hoster):
     __name    = "EuroshareEu"
     __type    = "hoster"
     __version = "0.28"
@@ -36,7 +36,7 @@ class EuroshareEu(SimpleHoster):
 
         self.link = pyfile.url.rstrip('/') + "/download/"
 
-        check = self.checkDownload({"login": re.compile(self.ERR_NOT_LOGGED_IN_PATTERN),
+        check = self.check_download({"login": re.compile(self.ERR_NOT_LOGGED_IN_PATTERN),
                                     "json" : re.compile(r'\{"status":"error".*?"message":"(.*?)"')})
 
         if check == "login" or (check == "json" and self.lastCheck.group(1) == "Access token expired"):
@@ -49,7 +49,7 @@ class EuroshareEu(SimpleHoster):
 
     def handle_free(self, pyfile):
         if re.search(self.ERR_PARDL_PATTERN, self.html):
-            self.longWait(5 * 60, 12)
+            self.long_wait(5 * 60, 12)
 
         m = re.search(self.LINK_FREE_PATTERN, self.html)
         if m is None:
@@ -58,8 +58,8 @@ class EuroshareEu(SimpleHoster):
         self.link = "http://euroshare.eu%s" % m.group(1)
 
 
-    def checkFile(self, rules={}):
-        if self.checkDownload({"multi-dl": re.compile(self.ERR_PARDL_PATTERN)})
-            self.longWait(5 * 60, 12)
+    def check_file(self, rules={}):
+        if self.check_download({"multi-dl": re.compile(self.ERR_PARDL_PATTERN)})
+            self.long_wait(5 * 60, 12)
 
         return super(EuroshareEu, self).checkFile(rules)

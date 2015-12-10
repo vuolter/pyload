@@ -5,7 +5,7 @@ import re
 from pyload.plugin.internal.XFSHoster import XFSHoster
 
 
-class ExashareCom(XFSHoster):
+class Exashare_com(XFSHoster):
     __name    = "ExashareCom"
     __type    = "hoster"
     __version = "0.01"

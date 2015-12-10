@@ -3,7 +3,7 @@
 from pyload.plugin.internal.SimpleCrypter import SimpleCrypter
 
 
-class CrockoCom(SimpleCrypter):
+class Crocko_com(Simple_crypter):
     __name    = "CrockoCom"
     __type    = "crypter"
     __version = "0.01"

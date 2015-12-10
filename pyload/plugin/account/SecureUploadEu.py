@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSAccount import XFSAccount
 
 
-class SecureUploadEu(XFSAccount):
+class Secure_upload_eu(XFSAccount):
     __name    = "SecureUploadEu"
     __type    = "account"
     __version = "0.02"

@@ -3,7 +3,7 @@
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class OneFichierCom(SimpleHoster):
+class One_fichier_com(Simple_hoster):
     __name    = "OneFichierCom"
     __type    = "hoster"
     __version = "0.84"
@@ -40,13 +40,13 @@ class OneFichierCom(SimpleHoster):
 
     def handle_free(self, pyfile):
         id = self.info['pattern']['ID1'] or self.info['pattern']['ID2']
-        url, inputs = self.parseHtmlForm('action="https://1fichier.com/\?%s' % id)
+        url, inputs = self.parse_html_form('action="https://1fichier.com/\?%s' % id)
 
         if not url:
             self.fail(_("Download link not found"))
 
         if "pass" in inputs:
-            inputs['pass'] = self.getPassword()
+            inputs['pass'] = self.get_password()
 
         inputs['submit'] = "Download"
 

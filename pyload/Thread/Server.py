@@ -11,7 +11,7 @@ setup = None
 log   = logging.getLogger("log")
 
 
-class WebServer(threading.Thread):
+class Web_server(threading.Thread):
 
     def __init__(self, pycore):
         global core
@@ -27,7 +27,7 @@ class WebServer(threading.Thread):
         self.host    = self.pyload.config.get("webui", "ip")
         self.port    = self.pyload.config.get("webui", "port")
 
-        self.setDaemon(True)
+        self.set_daemon(True)
 
 
     def run(self):

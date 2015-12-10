@@ -6,7 +6,7 @@ from pyload.plugin.captcha.ReCaptcha import ReCaptcha
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class CatShareNet(SimpleHoster):
+class Cat_share_net(Simple_hoster):
     __name    = "CatShareNet"
     __type    = "hoster"
     __version = "0.13"
@@ -38,7 +38,7 @@ class CatShareNet(SimpleHoster):
         self.resumeDownload = True
 
 
-    def checkErrors(self):
+    def check_errors(self):
         m = re.search(self.IP_BLOCKED_PATTERN, self.html)
         if m:
             self.fail(_("Only connections from Polish IP address are allowed"))

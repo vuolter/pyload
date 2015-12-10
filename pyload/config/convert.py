@@ -11,7 +11,7 @@ __all__ = ["from_string", "to_configdata", "to_input"]
 
 #@TODO: Temp stuff... move to api/apitypes.py #################################
 
-class BaseObject(object):
+class Base_object(object):
     __version__ = (0, 4, 10)
     __slots__ = []
 
@@ -19,7 +19,7 @@ class BaseObject(object):
         return "<%s %s>" % (self.__class__.__name__, ", ".join("%s=%s" % (k,getattr(self,k)) for k in self.__slots__))
 
 
-class Input(BaseObject):
+class Input(Base_object):
     __slots__ = ['type', 'default_value', 'data']
 
     def __init__(self, type=None, default_value=None, data=None):
@@ -28,7 +28,7 @@ class Input(BaseObject):
         self.data = data
 
 
-class InputType:
+class Input_type:
     NA = 0
     Text = 1
     Int = 2

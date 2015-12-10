@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class FileshareInUa(DeadHoster):
+class Fileshare_in_ua(Dead_hoster):
     __name    = "FileshareInUa"
     __type    = "hoster"
     __version = "0.02"

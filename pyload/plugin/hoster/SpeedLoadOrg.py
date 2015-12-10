@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class SpeedLoadOrg(DeadHoster):
+class Speed_load_org(Dead_hoster):
     __name    = "SpeedLoadOrg"
     __type    = "hoster"
     __version = "1.02"

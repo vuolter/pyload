@@ -6,14 +6,14 @@ import time
 from pyload.utils import uniqify
 
 
-class PullManager(object):
+class Pull_manager(object):
 
     def __init__(self, core):
         self.pyload = core
         self.clients = []
 
 
-    def newClient(self, uuid):
+    def new_client(self, uuid):
         self.clients.append(Client(uuid))
 
 
@@ -23,7 +23,7 @@ class PullManager(object):
                 del self.clients[n]
 
 
-    def getEvents(self, uuid):
+    def get_events(self, uuid):
         events = []
         validUuid = False
         for client in self.clients:
@@ -34,12 +34,12 @@ class PullManager(object):
                     events.append(client.popEvent().toList())
                 break
         if not validUuid:
-            self.newClient(uuid)
+            self.new_client(uuid)
             events = [ReloadAllEvent("queue").toList(), ReloadAllEvent("collector").toList()]
         return uniqify(events)
 
 
-    def addEvent(self, event):
+    def add_event(self, event):
         for client in self.clients:
             client.addEvent(event)
 
@@ -52,21 +52,21 @@ class Client(object):
         self.events = []
 
 
-    def newEvents(self):
+    def new_events(self):
         return len(self.events) > 0
 
 
-    def popEvent(self):
+    def pop_event(self):
         if not len(self.events):
             return None
         return self.events.pop(0)
 
 
-    def addEvent(self, event):
+    def add_event(self, event):
         self.events.append(event)
 
 
-class UpdateEvent(object):
+class Update_event(object):
 
     def __init__(self, itype, iid, destination):
         assert itype == "pack" or itype == "file"
@@ -76,11 +76,11 @@ class UpdateEvent(object):
         self.destination = destination
 
 
-    def toList(self):
+    def to_list(self):
         return ["update", self.destination, self.type, self.id]
 
 
-class RemoveEvent(object):
+class Remove_event(object):
 
     def __init__(self, itype, iid, destination):
         assert itype == "pack" or itype == "file"
@@ -90,11 +90,11 @@ class RemoveEvent(object):
         self.destination = destination
 
 
-    def toList(self):
+    def to_list(self):
         return ["remove", self.destination, self.type, self.id]
 
 
-class InsertEvent(object):
+class Insert_event(object):
 
     def __init__(self, itype, iid, after, destination):
         assert itype == "pack" or itype == "file"
@@ -105,28 +105,28 @@ class InsertEvent(object):
         self.destination = destination
 
 
-    def toList(self):
+    def to_list(self):
         return ["insert", self.destination, self.type, self.id, self.after]
 
 
-class ReloadAllEvent(object):
+class Reload_all_event(object):
 
     def __init__(self, destination):
         assert destination == "queue" or destination == "collector"
         self.destination = destination
 
 
-    def toList(self):
+    def to_list(self):
         return ["reload", self.destination]
 
 
-class AccountUpdateEvent(object):
+class Account_update_event(object):
 
-    def toList(self):
+    def to_list(self):
         return ["account"]
 
 
-class ConfigUpdateEvent(object):
+class Config_update_event(object):
 
-    def toList(self):
+    def to_list(self):
         return ["config"]

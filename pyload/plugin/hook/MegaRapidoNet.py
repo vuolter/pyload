@@ -5,7 +5,7 @@ import re
 from pyload.plugin.internal.MultiHook import MultiHook
 
 
-class MegaRapidoNet(MultiHook):
+class Mega_rapido_net(Multi_hook):
     __name    = "MegaRapidoNet"
     __type    = "hook"
     __version = "0.02"
@@ -20,7 +20,7 @@ class MegaRapidoNet(MultiHook):
     __authors     = [("Kagenoshin", "kagenoshin@gmx.ch")]
 
 
-    def getHosters(self):
+    def get_hosters(self):
         hosters = {'1fichier'    : [],#leave it there are so many possible addresses?
                    '1st-files'   : ['1st-files.com'],
                    '2shared'     : ['2shared.com'],

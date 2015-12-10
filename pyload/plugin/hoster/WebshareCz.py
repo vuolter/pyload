@@ -6,7 +6,7 @@ from pyload.network.RequestFactory import getURL
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class WebshareCz(SimpleHoster):
+class Webshare_cz(Simple_hoster):
     __name    = "WebshareCz"
     __type    = "hoster"
     __version = "0.16"
@@ -21,7 +21,7 @@ class WebshareCz(SimpleHoster):
 
 
     @classmethod
-    def getInfo(cls, url="", html=""):
+    def get_info(cls, url="", html=""):
         info = super(WebshareCz, cls).getInfo(url, html)
 
         if url:
@@ -48,7 +48,7 @@ class WebshareCz(SimpleHoster):
                           post={'ident': self.info['pattern']['ID'], 'wst': wst},
                           decode=True)
 
-        self.logDebug("API data: " + api_data)
+        self.log_debug("API data: " + api_data)
 
         m = re.search('<link>(.+)</link>', api_data)
         if m is None:

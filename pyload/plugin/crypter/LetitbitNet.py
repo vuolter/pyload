@@ -4,7 +4,7 @@ import re
 from pyload.plugin.Crypter import Crypter
 
 
-class LetitbitNet(Crypter):
+class Letitbit_net(Crypter):
     __name    = "LetitbitNet"
     __type    = "crypter"
     __version = "0.10"

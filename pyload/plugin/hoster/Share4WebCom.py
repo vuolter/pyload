@@ -3,7 +3,7 @@
 from pyload.plugin.hoster.UnibytesCom import UnibytesCom
 
 
-class Share4WebCom(UnibytesCom):
+class Share4_web_com(Unibytes_com):
     __name    = "Share4WebCom"
     __type    = "hoster"
     __version = "0.11"

@@ -7,7 +7,7 @@ from pyload.Datatype import PyFile
 from pyload.plugin.Plugin import Base
 
 
-class ArchiveError(Exception):
+class Archive_error(Exception):
     pass
 
 
@@ -15,7 +15,7 @@ class CRCError(Exception):
     pass
 
 
-class PasswordError(Exception):
+class Password_error(Exception):
     pass
 
 
@@ -37,18 +37,18 @@ class Extractor:
 
 
     @classmethod
-    def isArchive(cls, filename):
+    def is_archive(cls, filename):
         name = os.path.basename(filename).lower()
         return any(name.endswith(ext) for ext in cls.EXTENSIONS)
 
 
     @classmethod
-    def isMultipart(cls, filename):
+    def is_multipart(cls, filename):
         return False
 
 
     @classmethod
-    def isUsable(cls):
+    def is_usable(cls):
         """
         Check if system statisfy dependencies
         :return: boolean
@@ -57,7 +57,7 @@ class Extractor:
 
 
     @classmethod
-    def getTargets(cls, files_ids):
+    def get_targets(cls, files_ids):
         """
         Filter suited targets from list of filename id tuple list
         :param files_ids: List of filepathes
@@ -67,8 +67,8 @@ class Extractor:
         processed = []
 
         for fname, id, fout in files_ids:
-            if cls.isArchive(fname):
-                pname = re.sub(cls.re_multipart, '', fname) if cls.isMultipart(fname) else os.path.splitext(fname)[0]
+            if cls.is_archive(fname):
+                pname = re.sub(cls.re_multipart, '', fname) if cls.is_multipart(fname) else os.path.splitext(fname)[0]
                 if pname not in processed:
                     processed.append(pname)
                     targets.append((fname, id, fout))
@@ -97,8 +97,8 @@ class Extractor:
         self.keepbroken   = keepbroken
         self.files        = []  #: Store extracted files here
 
-        pyfile = self.pyload.files.getFile(fid) if fid else None
-        self.notifyProgress = lambda x: pyfile.setProgress(x) if pyfile else lambda x: None
+        pyfile = self.pyload.files.get_file(fid) if fid else None
+        self.notifyProgress = lambda x: pyfile.set_progress(x) if pyfile else lambda x: None
 
 
     def init(self):
@@ -148,7 +148,7 @@ class Extractor:
         raise NotImplementedError
 
 
-    def getDeleteFiles(self):
+    def get_delete_files(self):
         """
         Return list of files to delete, do *not* delete them here.
 

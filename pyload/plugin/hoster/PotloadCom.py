@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class PotloadCom(DeadHoster):
+class Potload_com(Dead_hoster):
     __name    = "PotloadCom"
     __type    = "hoster"
     __version = "0.02"

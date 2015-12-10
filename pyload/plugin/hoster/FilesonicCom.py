@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class FilesonicCom(DeadHoster):
+class Filesonic_com(Dead_hoster):
     __name    = "FilesonicCom"
     __type    = "hoster"
     __version = "0.35"

@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSHoster import XFSHoster
 
 
-class StreamcloudEu(XFSHoster):
+class Streamcloud_eu(XFSHoster):
     __name    = "StreamcloudEu"
     __type    = "hoster"
     __version = "0.10"

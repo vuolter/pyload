@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSAccount import XFSAccount
 
 
-class EasybytezCom(XFSAccount):
+class Easybytez_com(XFSAccount):
     __name    = "EasybytezCom"
     __type    = "account"
     __version = "0.12"

@@ -7,7 +7,7 @@ from pyload.plugin.internal.SimpleHoster import SimpleHoster
 from pyload.utils import json_loads
 
 
-class YadiSk(SimpleHoster):
+class Yadi_sk(Simple_hoster):
     __name    = "YadiSk"
     __type    = "hoster"
     __version = "0.05"
@@ -23,7 +23,7 @@ class YadiSk(SimpleHoster):
 
 
     @classmethod
-    def getInfo(cls, url="", html=""):
+    def get_info(cls, url="", html=""):
         info = super(YadiSk, cls).getInfo(url, html)
 
         if html:

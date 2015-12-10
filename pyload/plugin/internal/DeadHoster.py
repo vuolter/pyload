@@ -3,7 +3,7 @@
 from pyload.plugin.Hoster import Hoster as _Hoster
 
 
-class DeadHoster(_Hoster):
+class Dead_hoster(__hoster):
     __name    = "DeadHoster"
     __type    = "hoster"
     __version = "0.14"
@@ -16,7 +16,7 @@ class DeadHoster(_Hoster):
 
 
     @classmethod
-    def apiInfo(cls, url="", get={}, post={}):
+    def api_info(cls, url="", get={}, post={}):
         api = super(DeadHoster, self).apiInfo(url, get, post)
         api['status'] = 1
         return api

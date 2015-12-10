@@ -6,7 +6,7 @@ from pyload.plugin.Captcha import Captcha
 from pyload.utils import json_loads
 
 
-class AdYouLike(Captcha):
+class Ad_you_like(Captcha):
     __name    = "AdYouLike"
     __type    = "captcha"
     __version = "0.05"
@@ -32,10 +32,10 @@ class AdYouLike(Captcha):
         n = re.search(self.CALLBACK_PATTERN, html)
         if m and n:
             self.key = (m.group(1).strip(), n.group(1).strip())
-            self.logDebug("Ayl|callback: %s | %s" % self.key)
+            self.log_debug("Ayl|callback: %s | %s" % self.key)
             return self.key   #: key is the tuple(ayl, callback)
         else:
-            self.logDebug("Ayl or callback not found")
+            self.log_debug("Ayl or callback not found")
             return None
 
 
@@ -66,7 +66,7 @@ class AdYouLike(Captcha):
             self.plugin.fail(errmsg)
             raise AttributeError(errmsg)
 
-        self.logDebug("Challenge: %s" % challenge)
+        self.log_debug("Challenge: %s" % challenge)
 
         return self.result(ayl, challenge), challenge
 
@@ -103,6 +103,6 @@ class AdYouLike(Captcha):
                   '_ayl_token_challenge': challenge['token'],
                   '_ayl_response': response}
 
-        self.logDebug("Result: %s" % result)
+        self.log_debug("Result: %s" % result)
 
         return result

@@ -5,7 +5,7 @@ import re
 from pyload.plugin.internal.MultiHook import MultiHook
 
 
-class LinkdecrypterCom(MultiHook):
+class Linkdecrypter_com(Multi_hook):
     __name    = "LinkdecrypterCom"
     __type    = "hook"
     __version = "1.06"
@@ -21,7 +21,7 @@ class LinkdecrypterCom(MultiHook):
     __authors     = [("Walter Purcaro", "vuolter@gmail.com")]
 
 
-    def getHosters(self):
+    def get_hosters(self):
         list = re.search(r'>Supported\(\d+\)</b>: <i>(.[\w.\-, ]+)',
                          self.getURL("http://linkdecrypter.com/", decode=True).replace("(g)", "")).group(1).split(', ')
         try:

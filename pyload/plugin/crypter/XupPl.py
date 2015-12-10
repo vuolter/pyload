@@ -3,7 +3,7 @@
 from pyload.plugin.Crypter import Crypter
 
 
-class XupPl(Crypter):
+class Xup_pl(Crypter):
     __name    = "XupPl"
     __type    = "crypter"
     __version = "0.10"

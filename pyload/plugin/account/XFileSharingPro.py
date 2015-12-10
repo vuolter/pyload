@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSAccount import XFSAccount
 
 
-class XFileSharingPro(XFSAccount):
+class XFile_sharing_pro(XFSAccount):
     __name    = "XFileSharingPro"
     __type    = "account"
     __version = "0.06"
@@ -21,8 +21,8 @@ class XFileSharingPro(XFSAccount):
             return super(XFileSharingPro, self).init()
 
 
-    def loadAccountInfo(self, user, req):
-        return super(XFileSharingPro if self.HOSTER_DOMAIN else XFSAccount, self).loadAccountInfo(user, req)
+    def load_account_info(self, user, req):
+        return super(XFileSharingPro if self.HOSTER_DOMAIN else XFSAccount, self).load_account_info(user, req)
 
 
     def login(self, user, data, req):

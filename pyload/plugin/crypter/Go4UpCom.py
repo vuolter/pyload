@@ -6,7 +6,7 @@ import urlparse
 from pyload.plugin.internal.SimpleCrypter import SimpleCrypter
 
 
-class Go4UpCom(SimpleCrypter):
+class Go4_up_com(Simple_crypter):
     __name    = "Go4UpCom"
     __type    = "crypter"
     __version = "0.12"
@@ -29,7 +29,7 @@ class Go4UpCom(SimpleCrypter):
     OFFLINE_PATTERN = r'>\s*(404 Page Not Found|File not Found|Mirror does not exist)'
 
 
-    def getLinks(self):
+    def get_links(self):
         links = []
 
         m = re.search(r'(/download/gethosts/.+?)"', self.html)

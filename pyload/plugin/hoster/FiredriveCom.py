@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class FiredriveCom(DeadHoster):
+class Firedrive_com(Dead_hoster):
     __name    = "FiredriveCom"
     __type    = "hoster"
     __version = "0.05"

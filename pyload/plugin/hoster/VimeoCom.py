@@ -5,7 +5,7 @@ import re
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class VimeoCom(SimpleHoster):
+class Vimeo_com(Simple_hoster):
     __name    = "VimeoCom"
     __type    = "hoster"
     __version = "0.04"
@@ -36,7 +36,7 @@ class VimeoCom(SimpleHoster):
 
 
     def handle_free(self, pyfile):
-        password = self.getPassword()
+        password = self.get_password()
 
         if self.js and 'class="btn iconify_down_b"' in self.html:
             html    = self.js.eval(self.load(pyfile.url, get={'action': "download", 'password': password}, decode=True))
@@ -47,14 +47,14 @@ class VimeoCom(SimpleHoster):
 
         link = dict((l.group('QL').lower(), l.group('URL')) for l in re.finditer(pattern, html))
 
-        if self.getConfig('original'):
+        if self.get_config('original'):
             if "original" in link:
                 self.link = link[q]
                 return
             else:
-                self.logInfo(_("Original file not downloadable"))
+                self.log_info(_("Original file not downloadable"))
 
-        quality = self.getConfig('quality')
+        quality = self.get_config('quality')
         if quality == "Highest":
             qlevel = ("hd", "sd", "mobile")
         elif quality == "Lowest":
@@ -67,6 +67,6 @@ class VimeoCom(SimpleHoster):
                 self.link = link[q]
                 return
             else:
-                self.logInfo(_("No %s quality video found") % q.upper())
+                self.log_info(_("No %s quality video found") % q.upper())
         else:
             self.fail(_("No video found!"))

@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class SharebeesCom(DeadHoster):
+class Sharebees_com(Dead_hoster):
     __name    = "SharebeesCom"
     __type    = "hoster"
     __version = "0.02"

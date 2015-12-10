@@ -6,7 +6,7 @@ from pyload.plugin.captcha.SolveMedia import SolveMedia
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class KingfilesNet(SimpleHoster):
+class Kingfiles_net(Simple_hoster):
     __name    = "KingfilesNet"
     __type    = "hoster"
     __version = "0.07"
@@ -55,7 +55,7 @@ class KingfilesNet(SimpleHoster):
             self.error(_("Random key not found"))
 
         rand = m.group(1)
-        self.logDebug("rand = ", rand)
+        self.log_debug("rand = ", rand)
 
         post_data = {'op'              : "download2",
                      'id'              : self.info['pattern']['ID'],

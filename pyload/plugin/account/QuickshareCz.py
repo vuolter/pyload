@@ -5,7 +5,7 @@ import re
 from pyload.plugin.Account import Account
 
 
-class QuickshareCz(Account):
+class Quickshare_cz(Account):
     __name    = "QuickshareCz"
     __type    = "account"
     __version = "0.03"
@@ -18,12 +18,12 @@ class QuickshareCz(Account):
     TRAFFIC_LEFT_PATTERN = r'Stav kreditu: <strong>(.+?)</strong>'
 
 
-    def loadAccountInfo(self, user, req):
+    def load_account_info(self, user, req):
         html = req.load("http://www.quickshare.cz/premium", decode=True)
 
         m = re.search(self.TRAFFIC_LEFT_PATTERN, html)
         if m:
-            trafficleft = self.parseTraffic(m.group(1))
+            trafficleft = self.parse_traffic(m.group(1))
             premium = bool(trafficleft)
         else:
             trafficleft = None
@@ -40,4 +40,4 @@ class QuickshareCz(Account):
                         decode=True)
 
         if u'>Takový uživatel neexistuje.<' in html or u'>Špatné heslo.<' in html:
-            self.wrongPassword()
+            self.wrong_password()

@@ -6,7 +6,7 @@ from pyload.plugin.captcha.ReCaptcha import ReCaptcha
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class DateiTo(SimpleHoster):
+class Datei_to(Simple_hoster):
     __name    = "DateiTo"
     __type    = "hoster"
     __version = "0.07"
@@ -35,13 +35,13 @@ class DateiTo(SimpleHoster):
         recaptcha = ReCaptcha(self)
 
         for _i in xrange(10):
-            self.logDebug("URL", url, "POST", data)
+            self.log_debug("URL", url, "POST", data)
             self.html = self.load(url, post=data)
-            self.checkErrors()
+            self.check_errors()
 
             if url.endswith('download.php') and 'P' in data:
                 if data['P'] == 'I':
-                    self.doWait()
+                    self.do_wait()
 
                 elif data['P'] == 'IV':
                     break
@@ -60,7 +60,7 @@ class DateiTo(SimpleHoster):
         self.link = self.html
 
 
-    def checkErrors(self):
+    def check_errors(self):
         m = re.search(self.MULTIDL_PATTERN, self.html)
         if m:
             m = re.search(self.WAIT_PATTERN, self.html)
@@ -72,7 +72,7 @@ class DateiTo(SimpleHoster):
         self.info.pop('error', None)
 
 
-    def doWait(self):
+    def do_wait(self):
         m = re.search(self.WAIT_PATTERN, self.html)
         wait_time = int(m.group(1)) if m else 30
 

@@ -5,7 +5,7 @@ import re
 from pyload.plugin.internal.SimpleCrypter import SimpleCrypter
 
 
-class CloudzillaTo(SimpleHoster):
+class Cloudzilla_to(Simple_hoster):
     __name    = "CloudzillaTo"
     __type    = "crypter"
     __version = "0.02"
@@ -25,10 +25,10 @@ class CloudzillaTo(SimpleHoster):
     PASSWORD_PATTERN = r'<div id="pwd_protected">'
 
 
-    def checkErrors(self):
+    def check_errors(self):
         m = re.search(self.PASSWORD_PATTERN, self.html)
         if m:
-            self.html = self.load(self.pyfile.url, get={'key': self.getPassword()})
+            self.html = self.load(self.pyfile.url, get={'key': self.get_password()})
 
         if re.search(self.PASSWORD_PATTERN, self.html):
             self.retry(reason="Wrong password")

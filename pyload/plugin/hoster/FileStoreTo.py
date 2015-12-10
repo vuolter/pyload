@@ -5,7 +5,7 @@ import re
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class FileStoreTo(SimpleHoster):
+class File_store_to(Simple_hoster):
     __name    = "FileStoreTo"
     __type    = "hoster"
     __version = "0.05"

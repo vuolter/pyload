@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSAccount import XFSAccount
 
 
-class CramitIn(XFSAccount):
+class Cramit_in(XFSAccount):
     __name    = "CramitIn"
     __type    = "account"
     __version = "0.03"

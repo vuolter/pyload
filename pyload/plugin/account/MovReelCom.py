@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSAccount import XFSAccount
 
 
-class MovReelCom(XFSAccount):
+class Mov_reel_com(XFSAccount):
     __name    = "MovReelCom"
     __type    = "account"
     __version = "0.03"

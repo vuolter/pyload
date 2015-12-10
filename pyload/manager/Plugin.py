@@ -13,7 +13,7 @@ import SafeEval
 from pyload.utils import exists, fs_join
 
 
-class PluginManager(object):
+class Plugin_manager(object):
     ROOT     = "pyload.plugin."
     USERROOT = "userplugins."
     TYPES    = ["account", "addon", "container", "crypter", "extractor", "hook", "hoster", "internal", "ocr"]
@@ -28,13 +28,13 @@ class PluginManager(object):
         self.pyload = core
 
         self.plugins = {}
-        self.createIndex()
+        self.create_index()
 
         # register for import addon
         sys.meta_path.append(self)
 
 
-    def loadTypes(self):
+    def load_types(self):
         rootdir = os.path.join(pypath, "pyload", "plugin")
         userdir = "userplugins"
 
@@ -47,12 +47,12 @@ class PluginManager(object):
         self.TYPES = list(set(self.TYPES) | types)
 
 
-    def createIndex(self):
+    def create_index(self):
         """Create information for all plugins available"""
 
         sys.path.append(os.path.abspath(""))
 
-        self.loadTypes()
+        self.load_types()
 
         configs = []
 
@@ -61,7 +61,7 @@ class PluginManager(object):
             setattr(self, "%sPlugins" % type, self.plugins[type])
             configs.extend("%s_%s" % (p, type) for p in self.plugins[type])
 
-        self.pyload.config.removeDeletedPlugins(configs)
+        self.pyload.config.remove_deleted_plugins(configs)
 
         self.pyload.log.debug("Created index of plugins")
 
@@ -147,7 +147,7 @@ class PluginManager(object):
 
                 # internals have no config
                 if folder == "internal":
-                    self.pyload.config.deleteConfig("internal")
+                    self.pyload.config.delete_config("internal")
                     continue
 
                 config = self.CONFIG.findall(content)
@@ -165,7 +165,7 @@ class PluginManager(object):
                         if folder not in ("account", "internal") and not [True for item in config if item[0] == "activated"]:
                             config.insert(0, ["activated", "bool", "Activated", not folder in ("addon", "hook")])
 
-                        self.pyload.config.addPluginConfig("%s_%s" % (name, folder), config, desc)
+                        self.pyload.config.add_plugin_config("%s_%s" % (name, folder), config, desc)
                     except Exception:
                         self.pyload.log.error("Invalid config in %s: %s" % (name, config))
 
@@ -175,7 +175,7 @@ class PluginManager(object):
                     config = (["activated", "bool", "Activated", False],)
 
                     try:
-                        self.pyload.config.addPluginConfig("%s_%s" % (name, folder), config, desc)
+                        self.pyload.config.add_plugin_config("%s_%s" % (name, folder), config, desc)
                     except Exception:
                         self.pyload.log.error("Invalid config in %s: %s" % (name, config))
 
@@ -185,7 +185,7 @@ class PluginManager(object):
         return plugins
 
 
-    def parseUrls(self, urls):
+    def parse_urls(self, urls):
         """Parse plugins for given list of urls"""
 
         last = None
@@ -224,27 +224,27 @@ class PluginManager(object):
         return res
 
 
-    def pluginClass(self, type, name):
+    def plugin_class(self, type, name):
         """Return plugin class"""
         if name in self.plugins[type]:
-            return self.loadClass(type, name)
+            return self.load_class(type, name)
         else:
             self.pyload.log.warning(_("Plugin [%(type)s] %(name)s not found | Using plugin: [internal] BasePlugin")
                                   % {'name': name, 'type': type})
-            return self.loadClass("internal", "BasePlugin")
+            return self.load_class("internal", "BasePlugin")
 
 
-    def pluginModule(self, type, name):
+    def plugin_module(self, type, name):
         """Return plugin module"""
         if name in self.plugins[type]:
-            return self.loadModule(type, name)
+            return self.load_module(type, name)
         else:
             self.pyload.log.warning(_("Plugin [%(type)s] %(name)s not found | Using plugin: [internal] BasePlugin")
                                   % {'name': name, 'type': type})
-            return self.loadModule("internal", "BasePlugin")
+            return self.load_module("internal", "BasePlugin")
 
 
-    def loadModule(self, type, name):
+    def load_module(self, type, name):
         """
         Returns loaded module for plugin
 
@@ -275,9 +275,9 @@ class PluginManager(object):
                 return module
 
 
-    def loadClass(self, type, name):
+    def load_class(self, type, name):
         """Returns the class of a plugin with the same name"""
-        module = self.loadModule(type, name)
+        module = self.load_module(type, name)
         try:
             return getattr(module, name)
 
@@ -286,7 +286,7 @@ class PluginManager(object):
                                 % {'name': name, 'type': type, 'version': plugins[name]['version'], "errmsg": str(e)})
 
 
-    def getAccountPlugins(self):
+    def get_account_plugins(self):
         """Return list of account plugin names"""
         return self.accountPlugins.keys()
 
@@ -333,7 +333,7 @@ class PluginManager(object):
         return sys.modules[name]
 
 
-    def reloadPlugins(self, type_plugins):
+    def reload_plugins(self, type_plugins):
         """Reload and reindex plugins"""
         if not type_plugins:
             return None
@@ -373,18 +373,18 @@ class PluginManager(object):
             setattr(self, "%sPlugins" % type, self.plugins[type])
 
         if "account" in as_dict:  #: accounts needs to be reloaded
-            self.pyload.accountManager.initPlugins()
-            self.pyload.scheduler.addJob(0, self.pyload.accountManager.getAccountInfos)
+            self.pyload.accountManager.init_plugins()
+            self.pyload.scheduler.add_job(0, self.pyload.accountManager.getAccountInfos)
 
         return reloaded  #: return a list of the plugins successfully reloaded
 
 
-    def reloadPlugin(self, type_plugin):
+    def reload_plugin(self, type_plugin):
         """Reload and reindex ONE plugin"""
-        return bool(self.reloadPlugins(type_plugin))
-        
-        
-    def removePlugins(self, type_plugins):
+        return bool(self.reload_plugins(type_plugin))
+
+
+    def remove_plugins(self, type_plugins):
         """Delete plugins from disk"""
 
         if not type_plugins:
@@ -392,7 +392,7 @@ class PluginManager(object):
 
         removed = set()
 
-        self.logDebug("Requested deletion of plugins: %s" % type_plugins)
+        self.log_debug("Requested deletion of plugins: %s" % type_plugins)
 
         for type, name in type_plugins:
             rootplugins = os.path.join(pypath, "module", "plugins")
@@ -403,10 +403,10 @@ class PluginManager(object):
 
                 if type == "addon":
                     try:
-                        self.manager.deactivateAddon(name)
+                        self.manager.deactivate_addon(name)
 
                     except Exception, e:
-                        self.logDebug(e)
+                        self.log_debug(e)
 
                 for filename in (py_filename, pyc_filename):
                     if not exists(filename):
@@ -416,7 +416,7 @@ class PluginManager(object):
                         os.remove(filename)
 
                     except OSError, e:
-                        self.logError(_("Error removing: %s") % filename, e)
+                        self.log_error(_("Error removing: %s") % filename, e)
 
                     else:
                         id = (type, name)

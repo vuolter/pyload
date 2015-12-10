@@ -11,7 +11,7 @@ from pyload.plugin.captcha.ReCaptcha import ReCaptcha
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class FilerNet(SimpleHoster):
+class Filer_net(Simple_hoster):
     __name    = "FilerNet"
     __type    = "hoster"
     __version = "0.19"
@@ -33,13 +33,13 @@ class FilerNet(SimpleHoster):
 
 
     def handle_free(self, pyfile):
-        inputs = self.parseHtmlForm(input_names={'token': re.compile(r'.+')})[1]
+        inputs = self.parse_html_form(input_names={'token': re.compile(r'.+')})[1]
         if 'token' not in inputs:
             self.error(_("Unable to detect token"))
 
         self.html = self.load(pyfile.url, post={'token': inputs['token']}, decode=True)
 
-        inputs = self.parseHtmlForm(input_names={'hash': re.compile(r'.+')})[1]
+        inputs = self.parse_html_form(input_names={'hash': re.compile(r'.+')})[1]
         if 'hash' not in inputs:
             self.error(_("Unable to detect hash"))
 
@@ -52,6 +52,6 @@ class FilerNet(SimpleHoster):
 
         if 'location' in self.req.http.header.lower():
             self.link = re.search(r'location: (\S+)', self.req.http.header, re.I).group(1)
-            self.correctCaptcha()
+            self.correct_captcha()
         else:
-            self.invalidCaptcha()
+            self.invalid_captcha()

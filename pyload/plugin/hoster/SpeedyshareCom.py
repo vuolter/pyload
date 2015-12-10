@@ -8,7 +8,7 @@ import re
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class SpeedyshareCom(SimpleHoster):
+class Speedyshare_com(Simple_hoster):
     __name    = "SpeedyshareCom"
     __type    = "hoster"
     __version = "0.05"

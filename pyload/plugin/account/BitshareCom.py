@@ -3,7 +3,7 @@
 from pyload.plugin.Account import Account
 
 
-class BitshareCom(Account):
+class Bitshare_com(Account):
     __name    = "BitshareCom"
     __type    = "account"
     __version = "0.13"
@@ -13,14 +13,14 @@ class BitshareCom(Account):
     __authors     = [("Paul King", "")]
 
 
-    def loadAccountInfo(self, user, req):
+    def load_account_info(self, user, req):
         html = req.load("http://bitshare.com/mysettings.html")
 
         if "\"http://bitshare.com/myupgrade.html\">Free" in html:
             return {"validuntil": -1, "trafficleft": -1, "premium": False}
 
         if not '<input type="checkbox" name="directdownload" checked="checked" />' in html:
-            self.logWarning(_("Activate direct Download in your Bitshare Account"))
+            self.log_warning(_("Activate direct Download in your Bitshare Account"))
 
         return {"validuntil": -1, "trafficleft": -1, "premium": True}
 
@@ -31,4 +31,4 @@ class BitshareCom(Account):
                         decode=True)
 
         if "login" in req.lastEffectiveURL:
-            self.wrongPassword()
+            self.wrong_password()

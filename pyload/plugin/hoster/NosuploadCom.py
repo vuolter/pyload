@@ -5,7 +5,7 @@ import re
 from pyload.plugin.internal.XFSHoster import XFSHoster
 
 
-class NosuploadCom(XFSHoster):
+class Nosupload_com(XFSHoster):
     __name    = "NosuploadCom"
     __type    = "hoster"
     __version = "0.31"
@@ -23,15 +23,15 @@ class NosuploadCom(XFSHoster):
     WAIT_PATTERN = r'Please wait.*?>(\d+)</span>'
 
 
-    def getDownloadLink(self):
+    def get_download_link(self):
         # stage1: press the "Free Download" button
-        data = self.getPostParameters()
+        data = self.get_post_parameters()
         self.html = self.load(self.pyfile.url, post=data, decode=True)
 
         # stage2: wait some time and press the "Download File" button
-        data = self.getPostParameters()
+        data = self.get_post_parameters()
         wait_time = re.search(self.WAIT_PATTERN, self.html, re.M | re.S).group(1)
-        self.logDebug("Hoster told us to wait %s seconds" % wait_time)
+        self.log_debug("Hoster told us to wait %s seconds" % wait_time)
         self.wait(wait_time)
         self.html = self.load(self.pyfile.url, post=data, decode=True)
 

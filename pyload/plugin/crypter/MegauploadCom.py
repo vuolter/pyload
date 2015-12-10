@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadCrypter import DeadCrypter
 
 
-class MegauploadCom(DeadCrypter):
+class Megaupload_com(Dead_crypter):
     __name    = "MegauploadCom"
     __type    = "crypter"
     __version = "0.02"

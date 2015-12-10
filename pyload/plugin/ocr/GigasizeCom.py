@@ -3,7 +3,7 @@
 from pyload.plugin.OCR import OCR
 
 
-class GigasizeCom(OCR):
+class Gigasize_com(OCR):
     __name    = "GigasizeCom"
     __type    = "ocr"
     __version = "0.11"

@@ -6,7 +6,7 @@ import time
 from pyload.plugin.Account import Account
 
 
-class TurbobitNet(Account):
+class Turbobit_net(Account):
     __name    = "TurbobitNet"
     __type    = "account"
     __version = "0.02"
@@ -16,7 +16,7 @@ class TurbobitNet(Account):
     __authors     = [("zoidberg", "zoidberg@mujmail.cz")]
 
 
-    def loadAccountInfo(self, user, req):
+    def load_account_info(self, user, req):
         html = req.load("http://turbobit.net")
 
         m = re.search(r'<u>Turbo Access</u> to ([\d.]+)', html)
@@ -40,4 +40,4 @@ class TurbobitNet(Account):
                         decode=True)
 
         if not '<div class="menu-item user-name">' in html:
-            self.wrongPassword()
+            self.wrong_password()

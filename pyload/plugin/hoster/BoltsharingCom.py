@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class BoltsharingCom(DeadHoster):
+class Boltsharing_com(Dead_hoster):
     __name    = "BoltsharingCom"
     __type    = "hoster"
     __version = "0.02"

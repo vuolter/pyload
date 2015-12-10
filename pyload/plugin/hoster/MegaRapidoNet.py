@@ -5,7 +5,7 @@ import random
 from pyload.plugin.internal.MultiHoster import MultiHoster
 
 
-def random_with_N_digits(n):
+def random_with__n_digits(n):
     rand = "0."
     not_zero = 0
     for _i in xrange(1, n + 1):
@@ -20,7 +20,7 @@ def random_with_N_digits(n):
         return random_with_N_digits(n)
 
 
-class MegaRapidoNet(MultiHoster):
+class Mega_rapido_net(Multi_hoster):
     __name    = "MegaRapidoNet"
     __type    = "hoster"
     __version = "0.02"
@@ -45,7 +45,7 @@ class MegaRapidoNet(MultiHoster):
                                'links'    : pyfile.url,
                                'exibir'   : "normal",
                                'usar'     : "premium",
-                               'user'     : self.account.getAccountInfo(self.user).get('sid', None),
+                               'user'     : self.account.get_account_info(self.user).get('sid', None),
                                'autoreset': ""})
 
         if "desloga e loga novamente para gerar seus links" in self.html.lower():

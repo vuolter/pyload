@@ -3,7 +3,7 @@
 from pyload.plugin.Plugin import Plugin
 
 
-def getInfo(self):
+def get_info(self):
         # result = [ .. (name, size, status, url) .. ]
         return
 

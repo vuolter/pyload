@@ -5,7 +5,7 @@ import re
 from pyload.plugin.internal.MultiHook import MultiHook
 
 
-class DebridItaliaCom(MultiHook):
+class Debrid_italia_com(Multi_hook):
     __name    = "DebridItaliaCom"
     __type    = "hook"
     __version = "0.12"
@@ -22,5 +22,5 @@ class DebridItaliaCom(MultiHook):
                        ("Walter Purcaro", "vuolter@gmail.com"  )]
 
 
-    def getHosters(self):
+    def get_hosters(self):
         return self.getURL("http://debriditalia.com/api.php", get={'hosts': ""}).replace('"', '').split(',')

@@ -4,7 +4,7 @@ from pyload.utils import json_loads
 from pyload.plugin.internal.MultiHook import MultiHook
 
 
-class RapideoPl(MultiHook):
+class Rapideo_pl(Multi_hook):
     __name    = "RapideoPl"
     __type    = "hook"
     __version = "0.03"
@@ -20,10 +20,10 @@ class RapideoPl(MultiHook):
     __authors     = [("goddie", "dev@rapideo.pl")]
 
 
-    def getHosters(self):
+    def get_hosters(self):
         hostings         = json_loads(self.getURL("https://www.rapideo.pl/clipboard.php?json=3").strip())
         hostings_domains = [domain for row in hostings for domain in row['domains'] if row['sdownload'] == "0"]
 
-        self.logDebug(hostings_domains)
+        self.log_debug(hostings_domains)
 
         return hostings_domains

@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class SpeedfileCz(DeadHoster):
+class Speedfile_cz(Dead_hoster):
     __name    = "SpeedFileCz"
     __type    = "hoster"
     __version = "0.32"

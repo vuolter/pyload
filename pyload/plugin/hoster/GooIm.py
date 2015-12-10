@@ -6,7 +6,7 @@
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class GooIm(SimpleHoster):
+class Goo_im(Simple_hoster):
     __name    = "GooIm"
     __type    = "hoster"
     __version = "0.04"

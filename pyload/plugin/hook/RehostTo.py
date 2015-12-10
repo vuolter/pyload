@@ -3,7 +3,7 @@
 from pyload.plugin.internal.MultiHook import MultiHook
 
 
-class RehostTo(MultiHook):
+class Rehost_to(Multi_hook):
     __name    = "RehostTo"
     __type    = "hook"
     __version = "0.50"
@@ -19,9 +19,9 @@ class RehostTo(MultiHook):
     __authors     = [("RaNaN", "RaNaN@pyload.org")]
 
 
-    def getHosters(self):
-        user, data = self.account.selectAccount()
+    def get_hosters(self):
+        user, data = self.account.select_account()
         html = self.getURL("http://rehost.to/api.php",
                            get={'cmd'     : "get_supported_och_dl",
-                                'long_ses': self.account.getAccountInfo(user)['session']})
+                                'long_ses': self.account.get_account_info(user)['session']})
         return [x.strip() for x in html.replace("\"", "").split(",")]

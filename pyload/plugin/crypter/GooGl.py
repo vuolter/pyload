@@ -4,7 +4,7 @@ from pyload.plugin.Crypter import Crypter
 from pyload.utils import json_loads
 
 
-class GooGl(Crypter):
+class Goo_gl(Crypter):
     __name    = "GooGl"
     __type    = "crypter"
     __version = "0.01"
@@ -23,7 +23,7 @@ class GooGl(Crypter):
 
     def decrypt(self, pyfile):
         rep = self.load(self.API_URL, get={'shortUrl': pyfile.url})
-        self.logDebug("JSON data: " + rep)
+        self.log_debug("JSON data: " + rep)
         rep = json_loads(rep)
 
         if 'longUrl' in rep:

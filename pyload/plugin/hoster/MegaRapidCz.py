@@ -8,7 +8,7 @@ from pyload.network.RequestFactory import getRequest
 from pyload.plugin.internal.SimpleHoster import SimpleHoster, parseFileInfo
 
 
-def getInfo(urls):
+def get_info(urls):
     h = getRequest()
     h.c.setopt(pycurl.HTTPHEADER,
                ["Accept: text/html",
@@ -19,7 +19,7 @@ def getInfo(urls):
         yield parseFileInfo(MegaRapidCz, url, html)
 
 
-class MegaRapidCz(SimpleHoster):
+class Mega_rapid_cz(Simple_hoster):
     __name    = "MegaRapidCz"
     __type    = "hoster"
     __version = "0.56"

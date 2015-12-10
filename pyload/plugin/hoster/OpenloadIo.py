@@ -3,7 +3,7 @@
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class OpenloadIo(SimpleHoster):
+class Openload_io(Simple_hoster):
     __name    = "OpenloadIo"
     __type    = "hoster"
     __version = "0.01"

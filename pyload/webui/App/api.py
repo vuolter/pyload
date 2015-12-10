@@ -14,7 +14,7 @@ from pyload.webui.App.utils import set_session
 
 
 # json encoder that accepts TBase objects
-class TBaseEncoder(json.JSONEncoder):
+class TBase_encoder(json.JSONEncoder):
 
     def default(self, o):
         if isinstance(o, BaseObject):
@@ -54,7 +54,7 @@ def call_api(func, args=""):
         return bottle.HTTPError(500, json_dumps({"error": e.message, "traceback": traceback.format_exc()}))
 
 
-def callApi(func, *args, **kwargs):
+def call_api(func, *args, **kwargs):
     if not hasattr(API.EXTERNAL, func) or func.startswith("_"):
         print "Invalid API call", func
         return bottle.HTTPError(404, json_dumps("Not Found"))

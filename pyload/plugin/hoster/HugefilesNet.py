@@ -5,7 +5,7 @@ import re
 from pyload.plugin.internal.XFSHoster import XFSHoster
 
 
-class HugefilesNet(XFSHoster):
+class Hugefiles_net(XFSHoster):
     __name    = "HugefilesNet"
     __type    = "hoster"
     __version = "0.05"

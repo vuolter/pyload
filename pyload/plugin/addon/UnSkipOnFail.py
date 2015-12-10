@@ -4,7 +4,7 @@ from pyload.Datatype import PyFile
 from pyload.plugin.Addon import Addon
 
 
-class UnSkipOnFail(Addon):
+class Un_skip_on_fail(Addon):
     __name    = "UnSkipOnFail"
     __type    = "addon"
     __version = "0.07"
@@ -16,18 +16,18 @@ class UnSkipOnFail(Addon):
     __authors     = [("Walter Purcaro", "vuolter@gmail.com")]
 
 
-    def downloadFailed(self, pyfile):
+    def download_failed(self, pyfile):
         #: Check if pyfile is still "failed",
         #  maybe might has been restarted in meantime
         if pyfile.status != 8:
             return
 
         msg = _("Looking for skipped duplicates of: %s (pid:%s)")
-        self.logInfo(msg % (pyfile.name, pyfile.package().id))
+        self.log_info(msg % (pyfile.name, pyfile.package().id))
 
-        link = self.findDuplicate(pyfile)
+        link = self.find_duplicate(pyfile)
         if link:
-            self.logInfo(_("Queue found duplicate: %s (pid:%s)") % (link.name, link.packageID))
+            self.log_info(_("Queue found duplicate: %s (pid:%s)") % (link.name, link.packageID))
 
             #: Change status of "link" to "new_status".
             #  "link" has to be a valid FileData object,
@@ -44,10 +44,10 @@ class UnSkipOnFail(Addon):
             pylink.release()
 
         else:
-            self.logInfo(_("No duplicates found"))
+            self.log_info(_("No duplicates found"))
 
 
-    def findDuplicate(self, pyfile):
+    def find_duplicate(self, pyfile):
         """
         Search all packages for duplicate links to "pyfile".
         Duplicates are links that would overwrite "pyfile".
@@ -58,7 +58,7 @@ class UnSkipOnFail(Addon):
         the data for "pyfile" iotselöf.
         It does MOT check the link's status.
         """
-        queue = self.pyload.api.getQueue()  #: get packages (w/o files, as most file data is useless here)
+        queue = self.pyload.api.get_queue()  #: get packages (w/o files, as most file data is useless here)
 
         for package in queue:
             #: check if package-folder equals pyfile's package folder
@@ -66,7 +66,7 @@ class UnSkipOnFail(Addon):
                 continue
 
             #: now get packaged data w/ files/links
-            pdata = self.pyload.api.getPackageData(package.pid)
+            pdata = self.pyload.api.get_package_data(package.pid)
             for link in pdata.links:
                 #: check if link is "skipped"
                 if link.status != 4:

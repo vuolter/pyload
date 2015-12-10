@@ -5,7 +5,7 @@ import xml.dom.minidom as dom
 from pyload.plugin.Account import Account
 
 
-class RealdebridCom(Account):
+class Realdebrid_com(Account):
     __name    = "RealdebridCom"
     __type    = "account"
     __version = "0.45"
@@ -15,7 +15,7 @@ class RealdebridCom(Account):
     __authors     = [("Devirex Hazzard", "naibaf_11@yahoo.de")]
 
 
-    def loadAccountInfo(self, user, req):
+    def load_account_info(self, user, req):
         if self.pin_code:
             return {"premium": False}
         html = req.load("https://real-debrid.com/api/account.php")
@@ -33,8 +33,8 @@ class RealdebridCom(Account):
                         decode=True)
 
         if "Your login informations are incorrect" in html:
-            self.wrongPassword()
+            self.wrong_password()
 
         elif "PIN Code required" in html:
-            self.logWarning(_("PIN code required. Please login to https://real-debrid.com using the PIN or disable the double authentication in your control panel on https://real-debrid.com"))
+            self.log_warning(_("PIN code required. Please login to https://real-debrid.com using the PIN or disable the double authentication in your control panel on https://real-debrid.com"))
             self.pin_code = True

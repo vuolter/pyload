@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class LomafileCom(DeadHoster):
+class Lomafile_com(Dead_hoster):
     __name    = "LomafileCom"
     __type    = "hoster"
     __version = "0.52"

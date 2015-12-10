@@ -5,7 +5,7 @@ import re
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class JumbofilesCom(SimpleHoster):
+class Jumbofiles_com(Simple_hoster):
     __name    = "JumbofilesCom"
     __type    = "hoster"
     __version = "0.03"

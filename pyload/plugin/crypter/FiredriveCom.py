@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadCrypter import DeadCrypter
 
 
-class FiredriveCom(DeadCrypter):
+class Firedrive_com(Dead_crypter):
     __name    = "FiredriveCom"
     __type    = "crypter"
     __version = "0.03"

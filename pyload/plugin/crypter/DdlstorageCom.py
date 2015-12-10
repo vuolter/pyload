@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadCrypter import DeadCrypter
 
 
-class DdlstorageCom(DeadCrypter):
+class Ddlstorage_com(Dead_crypter):
     __name    = "DdlstorageCom"
     __type    = "crypter"
     __version = "0.03"

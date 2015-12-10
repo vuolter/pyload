@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadCrypter import DeadCrypter
 
 
-class DuploadOrg(DeadCrypter):
+class Dupload_org(Dead_crypter):
     __name    = "DuploadOrg"
     __type    = "crypter"
     __version = "0.02"

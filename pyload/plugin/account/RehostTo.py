@@ -3,7 +3,7 @@
 from pyload.plugin.Account import Account
 
 
-class RehostTo(Account):
+class Rehost_to(Account):
     __name    = "RehostTo"
     __type    = "account"
     __version = "0.16"
@@ -13,7 +13,7 @@ class RehostTo(Account):
     __authors     = [("RaNaN", "RaNaN@pyload.org")]
 
 
-    def loadAccountInfo(self, user, req):
+    def load_account_info(self, user, req):
         premium     = False
         trafficleft = None
         validuntil  = -1
@@ -21,7 +21,7 @@ class RehostTo(Account):
 
         html = req.load("http://rehost.to/api.php",
                         get={'cmd' : "login", 'user': user,
-                             'pass': self.getAccountData(user)['password']})
+                             'pass': self.get_account_data(user)['password']})
         try:
             session = html.split(",")[1].split("=")[1]
 
@@ -29,12 +29,12 @@ class RehostTo(Account):
                             get={'cmd': "get_premium_credits", 'long_ses': session})
 
             if html.strip() == "0,0" or "ERROR" in html:
-                self.logDebug(html)
+                self.log_debug(html)
             else:
                 traffic, valid = html.split(",")
 
                 premium     = True
-                trafficleft = self.parseTraffic(traffic + "MB")
+                trafficleft = self.parse_traffic(traffic + "MB")
                 validuntil  = float(valid)
 
         finally:
@@ -50,5 +50,5 @@ class RehostTo(Account):
                         decode=True)
 
         if "ERROR" in html:
-            self.logDebug(html)
-            self.wrongPassword()
+            self.log_debug(html)
+            self.wrong_password()

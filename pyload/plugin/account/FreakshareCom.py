@@ -6,7 +6,7 @@ import time
 from pyload.plugin.Account import Account
 
 
-class FreakshareCom(Account):
+class Freakshare_com(Account):
     __name    = "FreakshareCom"
     __type    = "account"
     __version = "0.13"
@@ -16,7 +16,7 @@ class FreakshareCom(Account):
     __authors     = [("RaNaN", "RaNaN@pyload.org")]
 
 
-    def loadAccountInfo(self, user, req):
+    def load_account_info(self, user, req):
         premium = False
         validuntil  = None
         trafficleft = None
@@ -32,7 +32,7 @@ class FreakshareCom(Account):
 
         try:
             m = re.search(r'Traffic verbleibend:</td>\s*<td>([^<]+)', html, re.M)
-            trafficleft = self.parseTraffic(m.group(1))
+            trafficleft = self.parse_traffic(m.group(1))
 
         except Exception:
             pass
@@ -48,4 +48,4 @@ class FreakshareCom(Account):
                         decode=True)
 
         if ">Wrong Username or Password" in html:
-            self.wrongPassword()
+            self.wrong_password()

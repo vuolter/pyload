@@ -3,7 +3,7 @@
 from pyload.plugin.internal.SimpleCrypter import SimpleCrypter
 
 
-class DataHu(SimpleCrypter):
+class Data_hu(Simple_crypter):
     __name    = "DataHu"
     __type    = "crypter"
     __version = "0.06"
@@ -27,11 +27,11 @@ class DataHu(SimpleCrypter):
         super(DataHu, self).prepare()
 
         if u'K\xe9rlek add meg a jelsz\xf3t' in self.html:  #: Password protected
-            password = self.getPassword()
+            password = self.get_password()
             if not password:
                 self.fail(_("Password required"))
 
-            self.logDebug("The folder is password protected', 'Using password: " + password)
+            self.log_debug("The folder is password protected', 'Using password: " + password)
 
             self.html = self.load(self.pyfile.url, post={'mappa_pass': password}, decode=True)
 

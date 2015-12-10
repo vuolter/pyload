@@ -3,7 +3,7 @@
 from pyload.plugin.internal.MultiHook import MultiHook
 
 
-class PremiumTo(MultiHook):
+class Premium_to(Multi_hook):
     __name    = "PremiumTo"
     __type    = "hook"
     __version = "0.08"
@@ -21,7 +21,7 @@ class PremiumTo(MultiHook):
                        ("stickell", "l.stickell@yahoo.it")]
 
 
-    def getHosters(self):
+    def get_hosters(self):
         html = self.getURL("http://premium.to/api/hosters.php",
                       get={'username': self.account.username, 'password': self.account.password})
         return [x.strip() for x in html.replace("\"", "").split(";")]

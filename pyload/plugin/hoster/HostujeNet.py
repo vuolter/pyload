@@ -5,7 +5,7 @@ import re
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class HostujeNet(SimpleHoster):
+class Hostuje_net(Simple_hoster):
     __name    = "HostujeNet"
     __type    = "hoster"
     __version = "0.01"
@@ -39,7 +39,7 @@ class HostujeNet(SimpleHoster):
         else:
             self.error(_("script not found"))
 
-        action, inputs = self.parseHtmlForm(pyfile.url.replace(".", "\.").replace( "?", "\?"))
+        action, inputs = self.parse_html_form(pyfile.url.replace(".", "\.").replace( "?", "\?"))
         if not action:
             self.error(_("form not found"))
 

@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class DdlstorageCom(DeadHoster):
+class Ddlstorage_com(Dead_hoster):
     __name    = "DdlstorageCom"
     __type    = "hoster"
     __version = "1.02"

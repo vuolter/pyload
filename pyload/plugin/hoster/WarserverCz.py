@@ -3,7 +3,7 @@
 from pyload.plugin.internal.DeadHoster import DeadHoster
 
 
-class WarserverCz(DeadHoster):
+class Warserver_cz(Dead_hoster):
     __name    = "WarserverCz"
     __type    = "hoster"
     __version = "0.13"

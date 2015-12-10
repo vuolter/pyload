@@ -13,7 +13,7 @@ from pyload.Thread.Plugin import PluginThread
 from pyload.plugin.Hoster import parseFileInfo
 
 
-class InfoThread(PluginThread):
+class Info_thread(Plugin_thread):
 
     def __init__(self, manager, data, pid=-1, rid=-1, add=False):
         """Constructor"""
@@ -50,29 +50,29 @@ class InfoThread(PluginThread):
         # directly write to database
         if self.pid > -1:
             for (plugintype, pluginname), urls in plugins.iteritems():
-                plugin = self.pyload.pluginManager.pluginClass(plugintype, pluginname)
+                plugin = self.pyload.pluginManager.plugin_class(plugintype, pluginname)
                 if hasattr(plugin, "getInfo"):
-                    self.fetchForPlugin(pluginname, plugin, urls, self.updateDB)
+                    self.fetch_for_plugin(pluginname, plugin, urls, self.updateDB)
                     self.pyload.files.save()
 
         elif self.add:
             for (plugintype, pluginname), urls in plugins.iteritems():
-                plugin = self.pyload.pluginManager.pluginClass(plugintype, pluginname)
+                plugin = self.pyload.pluginManager.plugin_class(plugintype, pluginname)
                 if hasattr(plugin, "getInfo"):
-                    self.fetchForPlugin(pluginname, plugin, urls, self.updateCache, True)
+                    self.fetch_for_plugin(pluginname, plugin, urls, self.updateCache, True)
 
                 else:
                     # generate default result
                     result = [(url, 0, 3, url) for url in urls]
 
-                    self.updateCache(pluginname, result)
+                    self.update_cache(pluginname, result)
 
             packs = parseNames([(name, url) for name, x, y, url in self.cache])
 
             self.pyload.log.debug("Fetched and generated %d packages" % len(packs))
 
             for k, v in packs:
-                self.pyload.api.addPackage(k, v)
+                self.pyload.api.add_package(k, v)
 
             # empty cache
             del self.cache[:]
@@ -82,7 +82,7 @@ class InfoThread(PluginThread):
             for name, url in container:
                 # attach container content
                 try:
-                    data = self.decryptContainer(name, url)
+                    data = self.decrypt_container(name, url)
                 except Exception:
                     self.pyload.log.error("Could not decrypt container.")
                     if self.pyload.debug:
@@ -98,19 +98,19 @@ class InfoThread(PluginThread):
             self.manager.infoResults[self.rid] = {}
 
             for plugintype, pluginname, urls in plugins.iteritems():
-                plugin = self.pyload.pluginManager.pluginClass(plugintype, pluginname)
+                plugin = self.pyload.pluginManager.plugin_class(plugintype, pluginname)
                 if hasattr(plugin, "getInfo"):
-                    self.fetchForPlugin(pluginname, plugin, urls, self.updateResult, True)
+                    self.fetch_for_plugin(pluginname, plugin, urls, self.updateResult, True)
 
                     # force to process cache
                     if self.cache:
-                        self.updateResult(pluginname, [], True)
+                        self.update_result(pluginname, [], True)
 
                 else:
                     # generate default result
                     result = [(url, 0, 3, url) for url in urls]
 
-                    self.updateResult(pluginname, result, True)
+                    self.update_result(pluginname, result, True)
 
             self.manager.infoResults[self.rid]['ALL_INFO_FETCHED'] = {}
 
@@ -118,10 +118,10 @@ class InfoThread(PluginThread):
 
 
     def updateDB(self, plugin, result):
-        self.pyload.files.updateFileInfo(result, self.pid)
+        self.pyload.files.update_file_info(result, self.pid)
 
 
-    def updateResult(self, plugin, result, force=False):
+    def update_result(self, plugin, result, force=False):
         # parse package name and generate result
         # accumulate results
 
@@ -138,16 +138,16 @@ class InfoThread(PluginThread):
                     status.packagename = k
                     result[url] = status
 
-            self.manager.setInfoResults(self.rid, result)
+            self.manager.set_info_results(self.rid, result)
 
             self.cache = []
 
 
-    def updateCache(self, plugin, result):
+    def update_cache(self, plugin, result):
         self.cache.extend(result)
 
 
-    def fetchForPlugin(self, pluginname, plugin, urls, cb, err=None):
+    def fetch_for_plugin(self, pluginname, plugin, urls, cb, err=None):
         try:
             result = []  #: result loaded from cache
             process = []  #: urls to process
@@ -189,7 +189,7 @@ class InfoThread(PluginThread):
                 cb(pluginname, result)
 
 
-    def decryptContainer(self, plugin, url):
+    def decrypt_container(self, plugin, url):
         data = []
         # only works on container plugins
 
@@ -210,7 +210,7 @@ class InfoThread(PluginThread):
             for pack in pyfile.plugin.packages:
                 pyfile.plugin.urls.extend(pack[1])
 
-            data = self.pyload.pluginManager.parseUrls(pyfile.plugin.urls)
+            data = self.pyload.pluginManager.parse_urls(pyfile.plugin.urls)
 
             self.pyload.log.debug("Got %d links." % len(data))
 

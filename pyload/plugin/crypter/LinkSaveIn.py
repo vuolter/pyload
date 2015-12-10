@@ -3,7 +3,7 @@
 from pyload.plugin.internal.SimpleDereferer import SimpleDereferer
 
 
-class LinkSaveIn(SimpleDereferer):
+class Link_save_in(Simple_dereferer):
     __name    = "LinkSaveIn"
     __type    = "crypter"
     __version = "2.03"

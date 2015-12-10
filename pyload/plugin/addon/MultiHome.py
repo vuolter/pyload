@@ -5,7 +5,7 @@ import time
 from pyload.plugin.Addon import Addon
 
 
-class MultiHome(Addon):
+class Multi_home(Addon):
     __name    = "MultiHome"
     __type    = "addon"
     __version = "0.12"
@@ -21,18 +21,18 @@ class MultiHome(Addon):
         self.register   = {}
         self.interfaces = []
 
-        self.parseInterfaces(self.getConfig('interfaces').split(";"))
+        self.parse_interfaces(self.get_config('interfaces').split(";"))
 
         if not self.interfaces:
-            self.parseInterfaces([self.config.get("download", "interface")])
-            self.setConfig("interfaces", self.toConfig())
+            self.parse_interfaces([self.config.get("download", "interface")])
+            self.set_config("interfaces", self.to_config())
 
 
-    def toConfig(self):
+    def to_config(self):
         return ";".join(i.adress for i in self.interfaces)
 
 
-    def parseInterfaces(self, interfaces):
+    def parse_interfaces(self, interfaces):
         for interface in interfaces:
             if not interface or str(interface).lower() == "none":
                 continue
@@ -44,18 +44,18 @@ class MultiHome(Addon):
         oldGetRequest = requestFactory.getRequest
 
 
-        def getRequest(pluginName, account=None):
-            iface = self.bestInterface(pluginName, account)
+        def get_request(plugin_name, account=None):
+            iface = self.best_interface(pluginName, account)
             if iface:
                 iface.useFor(pluginName, account)
                 requestFactory.iface = lambda: iface.adress
-                self.logDebug("Using address", iface.adress)
+                self.log_debug("Using address", iface.adress)
             return oldGetRequest(pluginName, account)
 
         requestFactory.getRequest = getRequest
 
 
-    def bestInterface(self, pluginName, account):
+    def best_interface(self, plugin_name, account):
         best = None
         for interface in self.interfaces:
             if not best or interface.lastPluginAccess(pluginName, account) < best.lastPluginAccess(pluginName, account):
@@ -70,13 +70,13 @@ class Interface(object):
         self.history = {}
 
 
-    def lastPluginAccess(self, pluginName, account):
+    def last_plugin_access(self, plugin_name, account):
         if (pluginName, account) in self.history:
             return self.history[(pluginName, account)]
         return 0
 
 
-    def useFor(self, pluginName, account):
+    def use_for(self, plugin_name, account):
         self.history[(pluginName, account)] = time.time()
 
 

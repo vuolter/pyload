@@ -9,7 +9,7 @@ import urlparse
 from pyload.plugin.Captcha import Captcha
 
 
-class ReCaptcha(Captcha):
+class Re_captcha(Captcha):
     __name    = "ReCaptcha"
     __type    = "captcha"
     __version = "0.15"
@@ -36,10 +36,10 @@ class ReCaptcha(Captcha):
         m = re.search(self.KEY_V2_PATTERN, html) or re.search(self.KEY_V1_PATTERN, html)
         if m:
             self.key = m.group(1).strip()
-            self.logDebug("Key: %s" % self.key)
+            self.log_debug("Key: %s" % self.key)
             return self.key
         else:
-            self.logDebug("Key not found")
+            self.log_debug("Key not found")
             return None
 
 
@@ -77,55 +77,55 @@ class ReCaptcha(Captcha):
             self.plugin.fail(errmsg)
             raise AttributeError(errmsg)
 
-        self.logDebug("Challenge: %s" % challenge)
+        self.log_debug("Challenge: %s" % challenge)
 
         return self.result(server, challenge), challenge
 
 
     def result(self, server, challenge):
-        result = self.plugin.decryptCaptcha("%simage" % server,
+        result = self.plugin.decrypt_captcha("%simage" % server,
                                             get={'c': challenge},
                                             cookies=True,
                                             forceUser=True,
                                             imgtype="jpg")
 
-        self.logDebug("Result: %s" % result)
+        self.log_debug("Result: %s" % result)
 
         return result
 
 
-    def _collectApiInfo(self):
+    def _collect_api_info(self):
         html = self.plugin.req.load("http://www.google.com/recaptcha/api.js")
         a    = re.search(r'po.src = \'(.*?)\';', html).group(1)
         vers = a.split("/")[5]
 
-        self.logDebug("API version: %s" % vers)
+        self.log_debug("API version: %s" % vers)
 
         language = a.split("__")[1].split(".")[0]
 
-        self.logDebug("API language: %s" % language)
+        self.log_debug("API language: %s" % language)
 
         html = self.plugin.req.load("https://apis.google.com/js/api.js")
         b    = re.search(r'"h":"(.*?)","', html).group(1)
         jsh  = b.decode('unicode-escape')
 
-        self.logDebug("API jsh-string: %s" % jsh)
+        self.log_debug("API jsh-string: %s" % jsh)
 
         return vers, language, jsh
 
 
-    def _prepareTimeAndRpc(self):
+    def _prepare_time_and_rpc(self):
         self.plugin.req.load("http://www.google.com/recaptcha/api2/demo")
 
         millis = int(round(time.time() * 1000))
 
-        self.logDebug("Time: %s" % millis)
+        self.log_debug("Time: %s" % millis)
 
         rand = random.randint(1, 99999999)
         a    = "0.%s" % str(rand * 2147483647)
         rpc  = int(100000000 * float(a))
 
-        self.logDebug("Rpc-token: %s" % rpc)
+        self.log_debug("Rpc-token: %s" % rpc)
 
         return millis, rpc
 
@@ -139,8 +139,8 @@ class ReCaptcha(Captcha):
                 parent = ""
 
         botguardstring      = "!A"
-        vers, language, jsh = self._collectApiInfo()
-        millis, rpc         = self._prepareTimeAndRpc()
+        vers, language, jsh = self._collect_api_info()
+        millis, rpc         = self._prepare_time_and_rpc()
 
         html = self.plugin.req.load("https://www.google.com/recaptcha/api2/anchor",
                                     get={'k'       : key,
@@ -153,7 +153,7 @@ class ReCaptcha(Captcha):
                                          'rpctoken': rpc})
 
         token1 = re.search(r'id="recaptcha-token" value="(.*?)">', html)
-        self.logDebug("Token #1: %s" % token1.group(1))
+        self.log_debug("Token #1: %s" % token1.group(1))
 
         html = self.plugin.req.load("https://www.google.com/recaptcha/api2/frame",
                                     get={'c'      : token1.group(1),
@@ -165,19 +165,19 @@ class ReCaptcha(Captcha):
                                          'jsh'    : jsh}).decode('unicode-escape')
 
         token2 = re.search(r'"finput","(.*?)",', html)
-        self.logDebug("Token #2: %s" % token2.group(1))
+        self.log_debug("Token #2: %s" % token2.group(1))
 
         token3 = re.search(r'"rresp","(.*?)",', html)
-        self.logDebug("Token #3: %s" % token3.group(1))
+        self.log_debug("Token #3: %s" % token3.group(1))
 
         millis_captcha_loading = int(round(time.time() * 1000))
-        captcha_response       = self.plugin.decryptCaptcha("https://www.google.com/recaptcha/api2/payload",
+        captcha_response       = self.plugin.decrypt_captcha("https://www.google.com/recaptcha/api2/payload",
                                                             get={'c':token3.group(1), 'k':key},
                                                             cookies=True,
                                                             forceUser=True)
         response               = base64.b64encode('{"response":"%s"}' % captcha_response)
 
-        self.logDebug("Result: %s" % response)
+        self.log_debug("Result: %s" % response)
 
         timeToSolve     = int(round(time.time() * 1000)) - millis_captcha_loading
         timeToSolveMore = timeToSolve + int(float("0." + str(random.randint(1, 99999999))) * 500)
@@ -191,7 +191,7 @@ class ReCaptcha(Captcha):
                                           'bg'      : botguardstring})
 
         token4 = re.search(r'"uvresp","(.*?)",', html)
-        self.logDebug("Token #4: %s" % token4.group(1))
+        self.log_debug("Token #4: %s" % token4.group(1))
 
         result = token4.group(1)
 

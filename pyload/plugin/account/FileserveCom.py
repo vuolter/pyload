@@ -6,7 +6,7 @@ from pyload.plugin.Account import Account
 from pyload.utils import json_loads
 
 
-class FileserveCom(Account):
+class Fileserve_com(Account):
     __name    = "FileserveCom"
     __type    = "account"
     __version = "0.20"
@@ -16,8 +16,8 @@ class FileserveCom(Account):
     __authors     = [("mkaay", "mkaay@mkaay.de")]
 
 
-    def loadAccountInfo(self, user, req):
-        data = self.getAccountData(user)
+    def load_account_info(self, user, req):
+        data = self.get_account_data(user)
 
         html = req.load("http://app.fileserve.com/api/login/", post={"username": user, "password": data['password'],
                                                                      "submit": "Submit+Query"})
@@ -36,7 +36,7 @@ class FileserveCom(Account):
         res = json_loads(html)
 
         if not res['type']:
-            self.wrongPassword()
+            self.wrong_password()
 
         # login at fileserv html
         req.load("http://www.fileserve.com/login.php",

@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSAccount import XFSAccount
 
 
-class RyushareCom(XFSAccount):
+class Ryushare_com(XFSAccount):
     __name    = "RyushareCom"
     __type    = "account"
     __version = "0.06"

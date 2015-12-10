@@ -5,7 +5,7 @@ import re
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class NowVideoSx(SimpleHoster):
+class Now_video_sx(Simple_hoster):
     __name    = "NowVideoSx"
     __type    = "hoster"
     __version = "0.12"

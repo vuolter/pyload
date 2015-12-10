@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSAccount import XFSAccount
 
 
-class SafesharingEu(XFSAccount):
+class Safesharing_eu(XFSAccount):
     __name    = "SafesharingEu"
     __type    = "account"
     __version = "0.02"

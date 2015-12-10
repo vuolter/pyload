@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSAccount import XFSAccount
 
 
-class HugefilesNet(XFSAccount):
+class Hugefiles_net(XFSAccount):
     __name    = "HugefilesNet"
     __type    = "account"
     __version = "0.02"

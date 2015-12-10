@@ -6,7 +6,7 @@ from pyload.network.RequestFactory import getURL
 from pyload.plugin.Hoster import Hoster
 
 
-def getInfo(urls):
+def get_info(urls):
     result = []
 
     for url in urls:
@@ -20,7 +20,7 @@ def getInfo(urls):
     yield result
 
 
-class StreamCz(Hoster):
+class Stream_cz(Hoster):
     __name    = "StreamCz"
     __type    = "hoster"
     __version = "0.20"
@@ -53,7 +53,7 @@ class StreamCz(Hoster):
         if m is None:
             self.error(_("CDN_PATTERN not found"))
         cdn = m.groupdict()
-        self.logDebug(cdn)
+        self.log_debug(cdn)
         for cdnkey in ("cdnHD", "cdnHQ", "cdnLQ"):
             if cdnkey in cdn and cdn[cdnkey] > '':
                 cdnid = cdn[cdnkey]
@@ -67,5 +67,5 @@ class StreamCz(Hoster):
         pyfile.name = "%s-%s.%s.mp4" % (m.group(2), m.group(1), cdnkey[-2:])
 
         download_url = "http://cdn-dispatcher.stream.cz/?id=" + cdnid
-        self.logInfo(_("STREAM: %s") % cdnkey[-2:], download_url)
+        self.log_info(_("STREAM: %s") % cdnkey[-2:], download_url)
         self.download(download_url)

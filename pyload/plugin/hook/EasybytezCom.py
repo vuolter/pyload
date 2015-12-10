@@ -5,7 +5,7 @@ import re
 from pyload.plugin.internal.MultiHook import MultiHook
 
 
-class EasybytezCom(MultiHook):
+class Easybytez_com(Multi_hook):
     __name    = "EasybytezCom"
     __type    = "hook"
     __version = "0.07"
@@ -21,10 +21,10 @@ class EasybytezCom(MultiHook):
     __authors     = [("zoidberg", "zoidberg@mujmail.cz")]
 
 
-    def getHosters(self):
-        user, data = self.account.selectAccount()
+    def get_hosters(self):
+        user, data = self.account.select_account()
 
-        req  = self.account.getAccountRequest(user)
+        req  = self.account.get_account_request(user)
         html = req.load("http://www.easybytez.com")
 
         return re.search(r'</textarea>\s*Supported sites:(.*)', html).group(1).split(',')

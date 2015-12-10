@@ -24,7 +24,7 @@ class XDCCRequest(object):
         self.abort = False
 
 
-    def createSocket(self):
+    def create_socket(self):
         # proxytype = None
         # proxy = None
         # if self.proxies.has_key("socks5"):
@@ -50,7 +50,7 @@ class XDCCRequest(object):
         lastUpdate = time.time()
         cumRecvLen = 0
 
-        dccsock = self.createSocket()
+        dccsock = self.create_socket()
 
         dccsock.settimeout(self.timeout)
         dccsock.connect((ip, port))
@@ -76,7 +76,7 @@ class XDCCRequest(object):
                 os.remove(filename)
                 raise Abort
 
-            self._keepAlive(irc, ircbuffer)
+            self._keep_alive(irc, ircbuffer)
 
             data = dccsock.recv(4096)
             dataLen = len(data)
@@ -108,7 +108,7 @@ class XDCCRequest(object):
         return filename
 
 
-    def _keepAlive(self, sock, *readbuffer):
+    def _keep_alive(self, sock, *readbuffer):
         fdset = select.select([sock], [], [], 0)
         if sock not in fdset[0]:
             return
@@ -124,7 +124,7 @@ class XDCCRequest(object):
                 sock.send("PONG %s\r\n" % first[1])
 
 
-    def abortDownloads(self):
+    def abort_downloads(self):
         self.abort = True
 
 

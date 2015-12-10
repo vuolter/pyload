@@ -15,13 +15,13 @@ def _getdate(future=0, weekdayname=Cookie._weekdayname, monthname=Cookie._monthn
 Cookie._getdate = _getdate
 
 
-class CookieJar(Cookie.SimpleCookie):
+class Cookie_jar(Cookie.Simple_cookie):
 
-    def getCookie(self, name):
+    def get_cookie(self, name):
         return self[name].value
 
 
-    def setCookie(self, domain, name, value, path="/", exp=None, secure="FALSE"):
+    def set_cookie(self, domain, name, value, path="/", exp=None, secure="FALSE"):
         self[name] = value
         self[name]['domain'] = domain
         self[name]['path']   = path

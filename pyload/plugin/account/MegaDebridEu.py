@@ -4,7 +4,7 @@ from pyload.plugin.Account import Account
 from pyload.utils import json_loads
 
 
-class MegaDebridEu(Account):
+class Mega_debrid_eu(Account):
     __name    = "MegaDebridEu"
     __type    = "account"
     __version = "0.20"
@@ -18,8 +18,8 @@ class MegaDebridEu(Account):
     API_URL = "https://www.mega-debrid.eu/api.php"
 
 
-    def loadAccountInfo(self, user, req):
-        data = self.getAccountData(user)
+    def load_account_info(self, user, req):
+        data = self.get_account_data(user)
         jsonResponse = req.load(self.API_URL,
                                 get={'action': 'connectUser', 'login': user, 'password': data['password']})
         res = json_loads(jsonResponse)
@@ -27,7 +27,7 @@ class MegaDebridEu(Account):
         if res['response_code'] == "ok":
             return {"premium": True, "validuntil": float(res['vip_end']), "status": True}
         else:
-            self.logError(res)
+            self.log_error(res)
             return {"status": False, "premium": False}
 
 
@@ -36,4 +36,4 @@ class MegaDebridEu(Account):
                                 get={'action': 'connectUser', 'login': user, 'password': data['password']})
         res = json_loads(jsonResponse)
         if res['response_code'] != "ok":
-            self.wrongPassword()
+            self.wrong_password()

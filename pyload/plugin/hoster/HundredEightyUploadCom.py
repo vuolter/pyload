@@ -3,7 +3,7 @@
 from pyload.plugin.internal.XFSHoster import XFSHoster
 
 
-class HundredEightyUploadCom(XFSHoster):
+class Hundred_eighty_upload_com(XFSHoster):
     __name    = "HundredEightyUploadCom"
     __type    = "hoster"
     __version = "0.05"

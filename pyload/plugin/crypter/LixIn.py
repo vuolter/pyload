@@ -5,7 +5,7 @@ import re
 from pyload.plugin.Crypter import Crypter
 
 
-class LixIn(Crypter):
+class Lix_in(Crypter):
     __name    = "LixIn"
     __type    = "crypter"
     __version = "0.22"
@@ -32,7 +32,7 @@ class LixIn(Crypter):
             self.error(_("Unable to identify file ID"))
 
         id = m.group('ID')
-        self.logDebug("File id is %s" % id)
+        self.log_debug("File id is %s" % id)
 
         self.html = self.load(url, decode=True)
 
@@ -45,12 +45,12 @@ class LixIn(Crypter):
             for _i in xrange(5):
                 m = re.search(self.CAPTCHA_PATTERN, self.html)
                 if m:
-                    self.logDebug("Trying captcha")
-                    captcharesult = self.decryptCaptcha("http://lix.in/" + m.group(1))
+                    self.log_debug("Trying captcha")
+                    captcharesult = self.decrypt_captcha("http://lix.in/" + m.group(1))
                 self.html = self.load(url, decode=True,
                                           post={"capt": captcharesult, "submit": "submit", "tiny": id})
             else:
-                self.logDebug("No captcha/captcha solved")
+                self.log_debug("No captcha/captcha solved")
         else:
             self.html = self.load(url, decode=True, post={"submit": "submit", "tiny": id})
 
@@ -59,4 +59,4 @@ class LixIn(Crypter):
             self.error(_("Unable to find destination url"))
         else:
             self.urls = [m.group(1)]
-            self.logDebug("Found link %s, adding to package" % self.urls[0])
+            self.log_debug("Found link %s, adding to package" % self.urls[0])

@@ -4,7 +4,7 @@ from pyload.plugin.Account import Account
 from pyload.utils import json_loads
 
 
-class RPNetBiz(Account):
+class RPNet_biz(Account):
     __name    = "RPNetBiz"
     __type    = "account"
     __version = "0.12"
@@ -14,9 +14,9 @@ class RPNetBiz(Account):
     __authors     = [("Dman", "dmanugm@gmail.com")]
 
 
-    def loadAccountInfo(self, user, req):
+    def load_account_info(self, user, req):
         # Get account information from rpnet.biz
-        res = self.getAccountStatus(user, req)
+        res = self.get_account_status(user, req)
         try:
             if res['accountInfo']['isPremium']:
                 # Parse account info. Change the trafficleft later to support per host info.
@@ -34,18 +34,18 @@ class RPNetBiz(Account):
 
     def login(self, user, data, req):
         # Get account information from rpnet.biz
-        res = self.getAccountStatus(user, req)
+        res = self.get_account_status(user, req)
 
         # If we have an error in the res, we have wrong login information
         if 'error' in res:
-            self.wrongPassword()
+            self.wrong_password()
 
 
-    def getAccountStatus(self, user, req):
+    def get_account_status(self, user, req):
         # Using the rpnet API, check if valid premium account
         res = req.load("https://premium.rpnet.biz/client_api.php",
-                            get={"username": user, "password": self.getAccountData(user)['password'],
+                            get={"username": user, "password": self.get_account_data(user)['password'],
                                  "action": "showAccountInformation"})
-        self.logDebug("JSON data: %s" % res)
+        self.log_debug("JSON data: %s" % res)
 
         return json_loads(res)

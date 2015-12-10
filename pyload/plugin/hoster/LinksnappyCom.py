@@ -7,7 +7,7 @@ from pyload.utils import json_loads, json_dumps
 from pyload.plugin.internal.MultiHoster import MultiHoster
 
 
-class LinksnappyCom(MultiHoster):
+class Linksnappy_com(Multi_hoster):
     __name    = "LinksnappyCom"
     __type    = "hoster"
     __version = "0.08"
@@ -28,12 +28,12 @@ class LinksnappyCom(MultiHoster):
         json_params = json_dumps({'link'    : pyfile.url,
                                   'type'    : host,
                                   'username': self.user,
-                                  'password': self.account.getAccountData(self.user)['password']})
+                                  'password': self.account.get_account_data(self.user)['password']})
 
         r = self.load("http://gen.linksnappy.com/genAPI.php",
                       post={'genLinks': json_params})
 
-        self.logDebug("JSON data: " + r)
+        self.log_debug("JSON data: " + r)
 
         j = json_loads(r)['links'][0]
 

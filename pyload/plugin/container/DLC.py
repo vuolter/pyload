@@ -53,20 +53,20 @@ class DLC(Container):
 
         self.data     = Crypto.Cipher.AES.new(key, Crypto.Cipher.AES.MODE_CBC, iv).decrypt(dlc_data).decode('base64')
         self.packages = [(name or pyfile.name, links, name or pyfile.name) \
-                         for name, links in self.getPackages()]
+                         for name, links in self.get_packages()]
 
 
-    def getPackages(self):
+    def get_packages(self):
         root    = xml.dom.minidom.parseString(self.data).documentElement
         content = root.getElementsByTagName("content")[0]
-        return self.parsePackages(content)
+        return self.parse_packages(content)
 
 
-    def parsePackages(self, startNode):
-        return [(decode(node.getAttribute("name")).decode('base64'), self.parseLinks(node)) \
+    def parse_packages(self, start_node):
+        return [(decode(node.getAttribute("name")).decode('base64'), self.parse_links(node)) \
                 for node in startNode.getElementsByTagName("package")]
 
 
-    def parseLinks(self, startNode):
+    def parse_links(self, start_node):
         return [node.getElementsByTagName("url")[0].firstChild.data.decode('base64') \
                 for node in startNode.getElementsByTagName("file")]

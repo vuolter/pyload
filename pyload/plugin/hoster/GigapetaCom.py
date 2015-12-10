@@ -6,7 +6,7 @@ import re
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class GigapetaCom(SimpleHoster):
+class Gigapeta_com(Simple_hoster):
     __name    = "GigapetaCom"
     __type    = "hoster"
     __version = "0.03"
@@ -31,9 +31,9 @@ class GigapetaCom(SimpleHoster):
         captcha_url = "http://gigapeta.com/img/captcha.gif?x=%s" % captcha_key
 
         for _i in xrange(5):
-            self.checkErrors()
+            self.check_errors()
 
-            captcha = self.decryptCaptcha(captcha_url)
+            captcha = self.decrypt_captcha(captcha_url)
             self.html = self.load(pyfile.url,
                                   post={'captcha_key': captcha_key,
                                         'captcha'    : captcha,
@@ -45,14 +45,14 @@ class GigapetaCom(SimpleHoster):
                 self.link = m.group(1)
                 break
             elif "Entered figures don&#96;t coincide with the picture" in self.html:
-                self.invalidCaptcha()
+                self.invalid_captcha()
         else:
             self.fail(_("No valid captcha code entered"))
 
 
-    def checkErrors(self):
+    def check_errors(self):
         if "All threads for IP" in self.html:
-            self.logDebug("Your IP is already downloading a file")
+            self.log_debug("Your IP is already downloading a file")
             self.wait(5 * 60, True)
             self.retry()
 

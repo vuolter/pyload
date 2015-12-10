@@ -6,7 +6,7 @@ from pyload.plugin.captcha.ReCaptcha import ReCaptcha
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class UpstoreNet(SimpleHoster):
+class Upstore_net(Simple_hoster):
     __name    = "UpstoreNet"
     __type    = "hoster"
     __version = "0.05"
@@ -33,7 +33,7 @@ class UpstoreNet(SimpleHoster):
         if m is None:
             self.error(_("CHASH_PATTERN not found"))
         chash = m.group(1)
-        self.logDebug("Read hash " + chash)
+        self.log_debug("Read hash " + chash)
         # continue to stage2
         post_data = {'hash': chash, 'free': 'Slow download'}
         self.html = self.load(pyfile.url, post=post_data, decode=True)

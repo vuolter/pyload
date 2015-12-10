@@ -7,7 +7,7 @@ from pyload.plugin.internal.MultiHoster import MultiHoster
 from pyload.utils import parse_size
 
 
-class RealdebridCom(MultiHoster):
+class Realdebrid_com(Multi_hoster):
     __name    = "RealdebridCom"
     __type    = "hoster"
     __version = "0.67"
@@ -28,24 +28,24 @@ class RealdebridCom(MultiHoster):
         data = json_loads(self.load("https://real-debrid.com/ajax/unrestrict.php",
                                     get={'lang'    : "en",
                                          'link'    : pyfile.url,
-                                         'password': self.getPassword(),
+                                         'password': self.get_password(),
                                          'time'    : int(time.time() * 1000)}))
 
-        self.logDebug("Returned Data: %s" % data)
+        self.log_debug("Returned Data: %s" % data)
 
         if data['error'] != 0:
             if data['message'] == "Your file is unavailable on the hoster.":
                 self.offline()
             else:
-                self.logWarning(data['message'])
-                self.tempOffline()
+                self.log_warning(data['message'])
+                self.temp_offline()
         else:
             if pyfile.name and pyfile.name.endswith('.tmp') and data['file_name']:
                 pyfile.name = data['file_name']
             pyfile.size = parse_size(data['file_size'])
             self.link = data['generated_links'][0][-1]
 
-        if self.getConfig('ssl'):
+        if self.get_config('ssl'):
             self.link = self.link.replace("http://", "https://")
         else:
             self.link = self.link.replace("https://", "http://")

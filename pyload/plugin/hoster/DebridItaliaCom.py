@@ -5,7 +5,7 @@ import re
 from pyload.plugin.internal.MultiHoster import MultiHoster
 
 
-class DebridItaliaCom(MultiHoster):
+class Debrid_italia_com(Multi_hoster):
     __name    = "DebridItaliaCom"
     __type    = "hoster"
     __version = "0.17"
@@ -24,7 +24,7 @@ class DebridItaliaCom(MultiHoster):
 
     def handle_premium(self, pyfile):
         self.html = self.load("http://www.debriditalia.com/api.php",
-                              get={'generate': "on", 'link': pyfile.url, 'p': self.getPassword()})
+                              get={'generate': "on", 'link': pyfile.url, 'p': self.get_password()})
 
         if "ERROR:" not in self.html:
             self.link = self.html.strip()
@@ -34,7 +34,7 @@ class DebridItaliaCom(MultiHoster):
             self.html = self.load("http://debriditalia.com/linkgen2.php",
                                   post={'xjxfun'   : "convertiLink",
                                         'xjxargs[]': "S<![CDATA[%s]]>" % pyfile.url,
-                                        'xjxargs[]': "S%s" % self.getPassword()})
+                                        'xjxargs[]': "S%s" % self.get_password()})
             try:
                 self.link = re.search(r'<a href="(.+?)"', self.html).group(1)
             except AttributeError:

@@ -9,7 +9,7 @@ from pyload.plugin.Crypter import Crypter
 from pyload.plugin.captcha.SolveMedia import SolveMedia
 
 
-class SafelinkingNet(Crypter):
+class Safelinking_net(Crypter):
     __name    = "SafelinkingNet"
     __type    = "crypter"
     __version = "0.14"
@@ -43,7 +43,7 @@ class SafelinkingNet(Crypter):
             self.html = self.load(url)
 
             if "link-password" in self.html:
-                postData['link-password'] = self.getPassword()
+                postData['link-password'] = self.get_password()
 
             if "altcaptcha" in self.html:
                 for _i in xrange(5):

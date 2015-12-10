@@ -3,7 +3,7 @@
 from pyload.plugin.internal.SimpleCrypter import SimpleCrypter
 
 
-class FilerNet(SimpleCrypter):
+class Filer_net(Simple_crypter):
     __name    = "FilerNet"
     __type    = "crypter"
     __version = "0.42"

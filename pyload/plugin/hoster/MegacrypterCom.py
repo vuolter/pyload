@@ -7,7 +7,7 @@ from pyload.utils import json_loads, json_dumps
 from pyload.plugin.hoster.MegaCoNz import MegaCoNz
 
 
-class MegacrypterCom(MegaCoNz):
+class Megacrypter_com(Mega_co_nz):
     __name    = "MegacrypterCom"
     __type    = "hoster"
     __version = "0.22"
@@ -25,9 +25,9 @@ class MegacrypterCom(MegaCoNz):
 
     def api_response(self, **kwargs):
         """Dispatch a call to the api, see megacrypter.com/api_doc"""
-        self.logDebug("JSON request: " + json_dumps(kwargs))
+        self.log_debug("JSON request: " + json_dumps(kwargs))
         res = self.load(self.API_URL, post=json_dumps(kwargs))
-        self.logDebug("API Response: " + res)
+        self.log_debug("API Response: " + res)
         return json_loads(res)
 
 
@@ -51,7 +51,7 @@ class MegacrypterCom(MegaCoNz):
 
         self.download(dl['url'])
 
-        self.decryptFile(key)
+        self.decrypt_file(key)
 
         # Everything is finished and final name can be set
         pyfile.name = info['name']

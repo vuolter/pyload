@@ -5,7 +5,7 @@ from pyload.plugin.internal.SimpleCrypter import SimpleCrypter
 import re
 
 
-class TnyCz(SimpleCrypter):
+class Tny_cz(Simple_crypter):
     __name    = "TnyCz"
     __type    = "crypter"
     __version = "0.03"
@@ -23,6 +23,6 @@ class TnyCz(SimpleCrypter):
     NAME_PATTERN = r'<title>(?P<N>.+) - .+</title>'
 
 
-    def getLinks(self):
+    def get_links(self):
         m = re.search(r'<a id=\'save_paste\' href="(.+save\.php\?hash=.+)">', self.html)
         return re.findall(".+", self.load(m.group(1), decode=True)) if m else None

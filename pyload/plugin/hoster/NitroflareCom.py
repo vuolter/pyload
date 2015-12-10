@@ -6,7 +6,7 @@ from pyload.plugin.captcha.ReCaptcha import ReCaptcha
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class NitroflareCom(SimpleHoster):
+class Nitroflare_com(Simple_hoster):
     __name    = "NitroflareCom"
     __type    = "hoster"
     __version = "0.09"
@@ -34,7 +34,7 @@ class NitroflareCom(SimpleHoster):
     ERROR_PATTERN        = r'downloading is not possible'
 
 
-    def checkErrors(self):
+    def check_errors(self):
         if not self.html:
             return
 
@@ -66,7 +66,7 @@ class NitroflareCom(SimpleHoster):
         self.html = self.load("http://nitroflare.com/ajax/freeDownload.php",
                               post={'method': "startTimer", 'fileId': self.info['pattern']['ID']})
 
-        self.checkErrors()
+        self.check_errors()
 
         try:
             js_file   = self.load("http://nitroflare.com/js/downloadFree.js?v=1.0.1")
@@ -87,15 +87,15 @@ class NitroflareCom(SimpleHoster):
                                     'recaptcha_response_field' : response})
 
         if "The captcha wasn't entered correctly" in self.html:
-            self.logWarning("The captcha wasn't entered correctly")
+            self.log_warning("The captcha wasn't entered correctly")
             return
 
         if "You have to fill the captcha" in self.html:
-            self.logWarning("Captcha unfilled")
+            self.log_warning("Captcha unfilled")
             return
 
         m = re.search(self.LINK_FREE_PATTERN, self.html)
         if m:
             self.link = m.group(1)
         else:
-            self.logError("Unable to detect direct link")
+            self.log_error("Unable to detect direct link")

@@ -9,7 +9,7 @@ import urlparse
 from pyload.plugin.internal.SimpleCrypter import SimpleCrypter
 
 
-class DevhostSt(SimpleCrypter):
+class Devhost_st(Simple_crypter):
     __name    = "DevhostSt"
     __type    = "crypter"
     __version = "0.05"
@@ -29,11 +29,11 @@ class DevhostSt(SimpleCrypter):
     OFFLINE_PATTERN = r'"/cHP">test\.png<'
 
 
-    def checkNameSize(self, getinfo=True):
+    def check_name_size(self, getinfo=True):
         if not self.info or getinfo:
-            self.logDebug("File info (BEFORE): %s" % self.info)
-            self.info.update(self.getInfo(self.pyfile.url, self.html))
-            self.logDebug("File info (AFTER): %s"  % self.info)
+            self.log_debug("File info (BEFORE): %s" % self.info)
+            self.info.update(self.get_info(self.pyfile.url, self.html))
+            self.log_debug("File info (AFTER): %s"  % self.info)
 
         try:
             if self.info['pattern']['ID'] == "0":
@@ -49,7 +49,7 @@ class DevhostSt(SimpleCrypter):
             self.pyfile.name = m.group(1)
 
         except Exception, e:
-            self.logDebug(e)
+            self.log_debug(e)
             self.pyfile.name = self.info['pattern']['USER']
 
         try:
@@ -57,5 +57,5 @@ class DevhostSt(SimpleCrypter):
 
         except Exception:
             pass
-        self.logDebug("File name: %s"   % self.pyfile.name,
+        self.log_debug("File name: %s"   % self.pyfile.name,
                       "File folder: %s" % self.pyfile.name)

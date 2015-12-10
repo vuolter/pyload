@@ -4,7 +4,7 @@ from pyload.utils import json_loads
 from pyload.plugin.internal.MultiHoster import MultiHoster
 
 
-class RapideoPl(MultiHoster):
+class Rapideo_pl(Multi_hoster):
     __name    = "RapideoPl"
     __type    = "hoster"
     __version = "0.02"
@@ -37,13 +37,13 @@ class RapideoPl(MultiHoster):
     def prepare(self):
         super(RapideoPl, self).prepare()
 
-        data = self.account.getAccountData(self.user)
+        data = self.account.get_account_data(self.user)
 
         self.usr = data['usr']
         self.pwd = data['pwd']
 
 
-    def runFileQuery(self, url, mode=None):
+    def run_file_query(self, url, mode=None):
         query = self.API_QUERY.copy()
 
         query['username'] = self.usr
@@ -54,32 +54,32 @@ class RapideoPl(MultiHoster):
             query['check'] = 2
             query['loc']   = 1
 
-        self.logDebug(query)
+        self.log_debug(query)
 
         return self.load(self.API_URL, post=query)
 
 
     def handle_free(self, pyfile):
         try:
-            data = self.runFileQuery(pyfile.url, 'fileinfo')
+            data = self.run_file_query(pyfile.url, 'fileinfo')
 
         except Exception:
-            self.logDebug("RunFileQuery error")
-            self.tempOffline()
+            self.log_debug("RunFileQuery error")
+            self.temp_offline()
 
         try:
             parsed = json_loads(data)
 
         except Exception:
-            self.logDebug("Loads error")
-            self.tempOffline()
+            self.log_debug("Loads error")
+            self.temp_offline()
 
-        self.logDebug(parsed)
+        self.log_debug(parsed)
 
         if "errno" in parsed.keys():
             if parsed['errno'] in self.ERROR_CODES:
                 # error code in known
-                self.fail(self.ERROR_CODES[parsed['errno']] % self.getClassName())
+                self.fail(self.ERROR_CODES[parsed['errno']] % self.get_class_name())
             else:
                 # error code isn't yet added to plugin
                 self.fail(
@@ -97,8 +97,8 @@ class RapideoPl(MultiHoster):
         pyfile.size = parsed['filesize']
 
         try:
-            self.link = self.runFileQuery(pyfile.url, 'filedownload')
+            self.link = self.run_file_query(pyfile.url, 'filedownload')
 
         except Exception:
-            self.logDebug("runFileQuery error #2")
-            self.tempOffline()
+            self.log_debug("runFileQuery error #2")
+            self.temp_offline()

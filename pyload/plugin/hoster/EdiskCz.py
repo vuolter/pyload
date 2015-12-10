@@ -5,7 +5,7 @@ import re
 from pyload.plugin.internal.SimpleHoster import SimpleHoster
 
 
-class EdiskCz(SimpleHoster):
+class Edisk_cz(Simple_hoster):
     __name    = "EdiskCz"
     __type    = "hoster"
     __version = "0.23"
@@ -32,7 +32,7 @@ class EdiskCz(SimpleHoster):
     def process(self, pyfile):
         url = re.sub("/(stahni|sk/stahni)/", "/en/download/", pyfile.url)
 
-        self.logDebug("URL:" + url)
+        self.log_debug("URL:" + url)
 
         m = re.search(self.ACTION_PATTERN, url)
         if m is None:
@@ -40,7 +40,7 @@ class EdiskCz(SimpleHoster):
         action = m.group(1)
 
         self.html = self.load(url, decode=True)
-        self.getFileInfo()
+        self.get_file_info()
 
         self.html = self.load(re.sub("/en/download/", "/en/download-slow/", url))
 
