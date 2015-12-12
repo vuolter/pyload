@@ -41,9 +41,9 @@ def add(request):
     urls = filter(lambda x: x != "", bottle.request.POST['urls'].split("\n"))
 
     if package:
-        API.addPackage(package, urls, 0)
+        API.add_package(package, urls, 0)
     else:
-        API.generateAndAddPackages(urls, 0)
+        API.generate_and_add_packages(urls, 0)
 
     return ""
 
@@ -54,13 +54,13 @@ def addcrypted():
     package = bottle.request.forms.get('referer', 'ClickNLoad Package')
     dlc = bottle.request.forms['crypted'].replace(" ", "+")
 
-    dlc_path = os.path.join(API.getConfigValue('general', 'download_folder'),
+    dlc_path = os.path.join(API.get_config_value('general', 'download_folder'),
                             package.replace("/", "").replace("\\", "").replace(":", "") + ".dlc")
     with open(dlc_path, "wb") as dlc_file:
         dlc_file.write(dlc)
 
     try:
-        API.addPackage(package, [dlc_path], 0)
+        API.add_package(package, [dlc_path], 0)
     except Exception:
         return bottle.HTTPError()
     else:
@@ -107,9 +107,9 @@ def addcrypted2():
 
     try:
         if package:
-            API.addPackage(package, result, 0)
+            API.add_package(package, result, 0)
         else:
-            API.generateAndAddPackages(result, 0)
+            API.generate_and_add_packages(result, 0)
     except Exception:
         return "failed can't add"
     else:
@@ -131,9 +131,9 @@ def flashgot():
     folder = bottle.request.forms.get('dir', None)
 
     if package:
-        API.addPackage(package, urls, autostart)
+        API.add_package(package, urls, autostart)
     else:
-        API.generateAndAddPackages(urls, autostart)
+        API.generate_and_add_packages(urls, autostart)
 
     return ""
 

@@ -6,7 +6,7 @@ import threading
 import time
 
 
-class Already_called(Exception):
+class AlreadyCalled(Exception):
     pass
 
 
@@ -106,7 +106,7 @@ class Job(object):
             self.run()
 
 
-class Priority_queue(object):
+class PriorityQueue(object):
     """A non blocking priority queue"""
 
     def __init__(self):

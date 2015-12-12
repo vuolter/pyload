@@ -13,7 +13,7 @@ from pyload.remote.thriftbackend.Transport import TransportFactory
 # from pyload.remote.thriftbackend.Transport import TransportFactoryCompressed
 
 
-class Thrift_backend(Backend_base):
+class ThriftBackend(BackendBase):
 
     def setup(self, host, port):
         processor = Processor(self.pyload.api)

@@ -12,12 +12,12 @@ import bottle
 
 from pyload.webui import API, PYLOAD_DIR, THEME_DIR, env
 
-from pyload.webui.App.utils import get_theme, render_to_response, parse_permissions, parse_userdata, \
+from pyload.webui.App.misc import get_theme, render_to_response, parse_permissions, parse_userdata, \
     login_required, get_permission, set_permission, permlist, set_session
 
-from pyload.utils.filters import convert, relpath, unquotepath
+from pyload.misc.filters import convert, relpath, unquotepath
 
-from pyload.utils import decode, encode, format_size, fs_join, fs_encode, fs_decode
+from pyload.misc import decode, encode, format_size, fs_join, fs_encode, fs_decode
 
 
 # Helper
@@ -30,9 +30,9 @@ def pre_processor():
     update = False
     plugins = False
     if user['is_authenticated']:
-        status = API.statusServer()
-        info = API.getInfoByPlugin("UpdateManager")
-        captcha = API.isCaptchaWaiting()
+        status = API.status_server()
+        info = API.get_info_by_plugin("UpdateManager")
+        captcha = API.is_captcha_waiting()
 
         # check if update check is available
         if info:
@@ -123,7 +123,7 @@ def nopermission():
 
 @bottle.route('/login', method="GET")
 def login():
-    if API.getConfigValue("webui", "nolocalauth") \
+    if API.get_config_value("webui", "nolocalauth") \
        and bottle.request.environ.get("REMOTE_ADDR", "0") in ("127.0.0.1", "localhost"):
         set_session(request, "local")
         return bottle.redirect("/")
@@ -138,7 +138,7 @@ def login_post():
 
     remote_addr = bottle.request.environ.get("REMOTE_ADDR", "0")
 
-    info = API.checkAuth(user, password)
+    info = API.check_auth(user, password)
 
     if info:
         API.pyload.log.debug(_("WebUI login from IP address: %s") % remote_addr)
@@ -162,7 +162,7 @@ def logout():
 @login_required("LIST")
 def home():
     try:
-        res = [convert.toDict(x) for x in API.statusDownloads()]
+        res = [convert.to_dict(x) for x in API.status_downloads()]
     except Exception:
         s = bottle.request.environ.get('beaker.session')
         s.delete()
@@ -178,7 +178,7 @@ def home():
 @bottle.route('/queue')
 @login_required("LIST")
 def queue():
-    queue = API.getQueue()
+    queue = API.get_queue()
 
     queue.sort(key=operator.attrgetter("order"))
 
@@ -188,7 +188,7 @@ def queue():
 @bottle.route('/collector')
 @login_required('LIST')
 def collector():
-    queue = API.getCollector()
+    queue = API.get_collector()
 
     queue.sort(key=operator.attrgetter("order"))
 
@@ -198,7 +198,7 @@ def collector():
 @bottle.route('/downloads')
 @login_required('DOWNLOAD')
 def downloads():
-    root = API.getConfigValue("general", "download_folder")
+    root = API.get_config_value("general", "download_folder")
 
     if not os.path.isdir(root):
         return base([_('Download directory not found.')])
@@ -237,7 +237,7 @@ def get_download(path):
     path = urllib.unquote(decode(path))
     #@TODO some files can not be downloaded
 
-    root = API.getConfigValue("general", "download_folder")
+    root = API.get_config_value("general", "download_folder")
 
     path = path.replace("..", "")
     return bottle.static_file(fs_encode(path), fs_encode(root))
@@ -246,8 +246,8 @@ def get_download(path):
 @bottle.route('/settings')
 @login_required('SETTINGS')
 def config():
-    conf = API.getConfig()
-    plugin = API.getPluginConfig()
+    conf = API.get_config()
+    plugin = API.get_plugin_config()
     conf_menu = []
     plugin_menu = []
 
@@ -267,7 +267,7 @@ def config():
             last_name = name
         plugin_menu.append((entry, desc))
 
-    accs = API.getAccounts(False)
+    accs = API.get_accounts(False)
 
     for data in accs:
         if data.trafficleft == -1:
@@ -297,7 +297,7 @@ def config():
 
     return render_to_response('settings.html',
                               {'conf': {'plugin': plugin_menu, 'general': conf_menu, 'accs': accs},
-                               'types': API.getAccountTypes()},
+                               'types': API.get_account_types()},
                               [pre_processor])
 
 
@@ -392,7 +392,7 @@ def logs(item=-1):
     reversed = s.get('reversed', False)
 
     warning = ""
-    conf = API.getConfigValue("log", "file_log")
+    conf = API.get_config_value("log", "file_log")
     if not conf:
         warning = "Warning: File log is disabled, see settings page."
 
@@ -420,7 +420,7 @@ def logs(item=-1):
     except Exception:
         pass
 
-    log = API.getLog()
+    log = API.get_log()
     if not perpage:
         item = 1
 
@@ -467,7 +467,7 @@ def logs(item=-1):
                                             'reversed': reversed, 'perpage': perpage, 'perpage_p': sorted(perpage_p),
                                             'iprev': 1 if item - perpage < 1 else item - perpage,
                                             'inext': (item + perpage) if item + perpage < len(log) else item,
-                                            'color_console': API.getConfigValue("log", "color_console")},
+                                            'color_console': API.get_config_value("log", "color_console")},
                               [pre_processor])
 
 
@@ -476,7 +476,7 @@ def logs(item=-1):
 @login_required("ADMIN")
 def admin():
     # convert to dict
-    user = dict((name, convert.toDict(y)) for name, y in API.getAllUserData().iteritems())
+    user = dict((name, convert.to_dict(y)) for name, y in API.get_all_user_data().iteritems())
     perms = permlist()
 
     for data in user.itervalues():
@@ -503,19 +503,19 @@ def admin():
 
             user[name]['permission'] = set_permission(user[name]['perms'])
 
-            API.setUserPermission(name, user[name]['permission'], user[name]['role'])
+            API.set_user_permission(name, user[name]['permission'], user[name]['role'])
 
     return render_to_response("admin.html", {"users": user, "permlist": perms}, [pre_processor])
 
 
 @bottle.route('/info')
 def info():
-    conf = API.getConfigDict()
+    conf = API.get_config_dict()
     extra = os.uname() if hasattr(os, "uname") else tuple()
 
     data = {"python"   : sys.version,
             "os"       : " ".join((os.name, sys.platform) + extra),
-            "version"  : API.getServerVersion(),
+            "version"  : API.get_server_version(),
             "folder"   : os.path.abspath(PYLOAD_DIR), "config": os.path.abspath(""),
             "download" : os.path.abspath(conf['general']['download_folder']['value']),
             "freespace": format_size(API.free_space()),

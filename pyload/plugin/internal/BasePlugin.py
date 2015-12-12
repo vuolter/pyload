@@ -9,7 +9,7 @@ from pyload.plugin.internal.SimpleHoster import getFileURL
 from pyload.plugin.Hoster import Hoster
 
 
-class Base_plugin(Hoster):
+class BasePlugin(Hoster):
     __name    = "BasePlugin"
     __type    = "hoster"
     __version = "0.43"

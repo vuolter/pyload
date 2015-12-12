@@ -14,10 +14,10 @@ import pycurl
 from pyload.Datatype import PyFile
 from pyload.Thread import DecrypterThread, DownloadThread, InfoThread
 from pyload.network.RequestFactory import getURL
-from pyload.utils import free_space, lock
+from pyload.misc import free_space, lock
 
 
-class Thread_manager(object):
+class ThreadManager(object):
     """Manages the download threads, assign jobs, reconnect etc"""
 
     def __init__(self, core):
@@ -25,7 +25,7 @@ class Thread_manager(object):
         self.pyload = core
 
         self.threads = []  #: thread list
-        self.localThreads = []  #: addon+decrypter threads
+        self.local_threads = []  #: addon+decrypter threads
 
         self.pause = True
 
@@ -104,7 +104,7 @@ class Thread_manager(object):
     def get_active_files(self):
         active = [x.active for x in self.threads if x.active and isinstance(x.active, PyFile)]
 
-        for t in self.localThreads:
+        for t in self.local_threads:
             active.extend(t.getActiveFiles())
 
         return active

@@ -10,14 +10,14 @@ import urllib
 import pycurl
 
 from pyload.network.HTTPRequest import HTTPRequest
-from pyload.utils import fs_encode
+from pyload.misc import fs_encode
 
 
-class Wrong_format(Exception):
+class WrongFormat(Exception):
     pass
 
 
-class Chunk_info(object):
+class ChunkInfo(object):
 
     def __init__(self, name):
         self.name = unicode(name)

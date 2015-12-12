@@ -11,7 +11,7 @@ setup = None
 log   = logging.getLogger("log")
 
 
-class Web_server(threading.Thread):
+class WebServer(threading.Thread):
 
     def __init__(self, pycore):
         global core

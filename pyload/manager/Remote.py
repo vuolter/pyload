@@ -5,7 +5,7 @@ import threading
 import traceback
 
 
-class Backend_base(threading.Thread):
+class BackendBase(threading.Thread):
 
     def __init__(self, manager):
         threading.Thread.__init__(self)
@@ -48,7 +48,7 @@ class Backend_base(threading.Thread):
         self.shutdown()
 
 
-class Remote_manager(object):
+class RemoteManager(object):
     available = []
 
 

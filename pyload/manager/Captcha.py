@@ -5,10 +5,10 @@ import threading
 import time
 import traceback
 
-from pyload.utils import encode
+from pyload.misc import encode
 
 
-class Captcha_manager(object):
+class CaptchaManager(object):
 
     def __init__(self, core):
         self.lock = threading.Lock()
@@ -70,7 +70,7 @@ class Captcha_manager(object):
         return False
 
 
-class Captcha_task(object):
+class CaptchaTask(object):
 
     def __init__(self, id, img, format, file, result_type='textual'):
         self.id = str(id)

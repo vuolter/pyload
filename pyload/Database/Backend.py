@@ -59,7 +59,7 @@ class style(object):
         return x
 
 
-class Database_job(object):
+class DatabaseJob(object):
 
     def __init__(self, f, *args, **kwargs):
         self.done = threading.Event()
@@ -108,7 +108,7 @@ class Database_job(object):
         self.done.wait()
 
 
-class Database_backend(threading.Thread):
+class DatabaseBackend(threading.Thread):
     subs = []
 
 

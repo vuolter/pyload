@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from pyload.plugin import JSE
-from pyload.utils import decode
+from pyload.misc import decode
 
 
 class Rhino(JSE):

@@ -2,16 +2,16 @@
 # @author: RaNaN, mkaay
 
 from pyload.manager.Event import UpdateEvent
-from pyload.utils import safe_filename
+from pyload.misc import safe_filename
 
 
-class Py_package(object):
+class PyPackage(object):
     """Represents a package object at runtime"""
 
     def __init__(self, manager, id, name, folder, site, password, queue, order):
         self.pyload  = manager.pyload
         self.manager = manager
-        self.manager.packageCache[int(id)] = self
+        self.manager.package_cache[int(id)] = self
 
         self.id = int(id)
         self.name = name

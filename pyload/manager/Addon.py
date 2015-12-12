@@ -11,11 +11,11 @@ import types
 import SafeEval
 
 from pyload.Thread import AddonThread
-from pyload.utils import lock
-from pyload.utils.decorators import try_catch
+from pyload.misc import lock
+from pyload.misc.decorators import try_catch
 
 
-class Addon_manager(object):
+class AddonManager(object):
     """
     Manages addons, delegates and handles Events.
 

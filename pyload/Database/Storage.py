@@ -5,7 +5,7 @@ from pyload.Database import style
 from pyload.Database import DatabaseBackend
 
 
-class Storage_methods(object):
+class StorageMethods(object):
 
     @style.queue
     def set_storage(db, identifier, key, value):

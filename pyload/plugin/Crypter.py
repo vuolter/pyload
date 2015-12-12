@@ -3,7 +3,7 @@
 import urlparse
 
 from pyload.plugin.Plugin import Plugin
-from pyload.utils import decode, safe_filename
+from pyload.misc import decode, safe_filename
 
 
 class Crypter(Plugin):

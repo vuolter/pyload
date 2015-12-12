@@ -11,7 +11,7 @@ from pyload.Thread.Plugin import PluginThread
 from pyload.plugin.Plugin import Abort, Fail, Retry
 
 
-class Decrypter_thread(Plugin_thread):
+class DecrypterThread(PluginThread):
 
     """Thread for decrypting"""
 
@@ -20,9 +20,9 @@ class Decrypter_thread(Plugin_thread):
         PluginThread.__init__(self, manager)
 
         self.active = pyfile
-        manager.localThreads.append(self)
+        manager.local_threads.append(self)
 
-        pyfile.setStatus("decrypting")
+        pyfile.set_status("decrypting")
 
         self.start()
 
@@ -50,11 +50,11 @@ class Decrypter_thread(Plugin_thread):
             msg = e.args[0]
 
             if msg == "offline":
-                pyfile.setStatus("offline")
+                pyfile.set_status("offline")
                 self.pyload.log.warning(
                     _("Download is offline: %s") % pyfile.name)
             else:
-                pyfile.setStatus("failed")
+                pyfile.set_status("failed")
                 self.pyload.log.error(
                     _("Decrypting failed: %(name)s | %(msg)s") % {"name": pyfile.name, "msg": msg})
                 pyfile.error = msg
@@ -65,7 +65,7 @@ class Decrypter_thread(Plugin_thread):
 
         except Abort:
             self.pyload.log.info(_("Download aborted: %s") % pyfile.name)
-            pyfile.setStatus("aborted")
+            pyfile.set_status("aborted")
 
             if self.pyload.debug:
                 traceback.print_exc()
@@ -77,7 +77,7 @@ class Decrypter_thread(Plugin_thread):
             return self.run()
 
         except Exception, e:
-            pyfile.setStatus("failed")
+            pyfile.set_status("failed")
             self.pyload.log.error(_("Decrypting failed: %(name)s | %(msg)s") % {
                                   "name": pyfile.name, "msg": str(e)})
             pyfile.error = str(e)
@@ -93,7 +93,7 @@ class Decrypter_thread(Plugin_thread):
                 pyfile.release()
                 self.active = False
                 self.pyload.files.save()
-                self.manager.localThreads.remove(self)
+                self.manager.local_threads.remove(self)
                 sys.exc_clear()
 
         if not retry:

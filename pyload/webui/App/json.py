@@ -8,9 +8,9 @@ import traceback
 
 import bottle
 
-from pyload.utils import convert, decode, format_size
+from pyload.misc import convert, decode, format_size
 from pyload.webui import API
-from pyload.webui.App.utils import decode, login_required, render_to_response
+from pyload.webui.App.misc import decode, login_required, render_to_response
 
 
 def format_time(seconds):
@@ -30,8 +30,8 @@ def get_sort_key(item):
 @login_required('LIST')
 def status():
     try:
-        status = convert.toDict(API.statusServer())
-        status['captcha'] = API.isCaptchaWaiting()
+        status = convert.to_dict(API.status_server())
+        status['captcha'] = API.is_captcha_waiting()
         return status
     except Exception:
         return bottle.HTTPError()
@@ -42,7 +42,7 @@ def status():
 @login_required('LIST')
 def links():
     try:
-        links = [convert.toDict(x) for x in API.statusDownloads()]
+        links = [convert.to_dict(x) for x in API.status_downloads()]
         ids = []
         for link in links:
             ids.append(link['fid'])
@@ -69,7 +69,7 @@ def links():
 def packages():
     print "/json/packages"
     try:
-        data = API.getQueue()
+        data = API.get_queue()
 
         for package in data:
             package['links'] = []
@@ -86,8 +86,8 @@ def packages():
 @login_required('LIST')
 def package(id):
     try:
-        data = convert.toDict(API.getPackageData(id))
-        data['links'] = [convert.toDict(x) for x in data['links']]
+        data = convert.to_dict(API.get_package_data(id))
+        data['links'] = [convert.to_dict(x) for x in data['links']]
 
         for pyfile in data['links']:
             if pyfile['status'] == 0:
@@ -122,7 +122,7 @@ def package(id):
 def package_order(ids):
     try:
         pid, pos = ids.split("|")
-        API.orderPackage(int(pid), int(pos))
+        API.order_package(int(pid), int(pos))
         return {"response": "success"}
     except Exception:
         return bottle.HTTPError()
@@ -132,7 +132,7 @@ def package_order(ids):
 @login_required('DELETE')
 def abort_link(id):
     try:
-        API.stopDownloads([id])
+        API.stop_downloads([id])
         return {"response": "success"}
     except Exception:
         return bottle.HTTPError()
@@ -143,7 +143,7 @@ def abort_link(id):
 def link_order(ids):
     try:
         pid, pos = ids.split("|")
-        API.orderFile(int(pid), int(pos))
+        API.order_file(int(pid), int(pos))
         return {"response": "success"}
     except Exception:
         return bottle.HTTPError()
@@ -165,7 +165,7 @@ def add_package():
         if not name or name == "New Package":
             name = f.name
 
-        fpath = os.path.join(API.getConfigValue("general", "download_folder"), "tmp_" + f.filename)
+        fpath = os.path.join(API.get_config_value("general", "download_folder"), "tmp_" + f.filename)
         with open(fpath, 'wb') as destination:
             shutil.copyfileobj(f.file, destination)
         links.insert(0, fpath)
@@ -177,17 +177,17 @@ def add_package():
     links = map(lambda x: x.strip(), links)
     links = filter(lambda x: x != "", links)
 
-    pack = API.addPackage(name, links, queue)
+    pack = API.add_package(name, links, queue)
     if pw:
         data = {"password": decode(pw)}
-        API.setPackageData(pack, data)
+        API.set_package_data(pack, data)
 
 
 @bottle.route('/json/move_package/<dest:int>/<id:int>')
 @login_required('MODIFY')
 def move_package(dest, id):
     try:
-        API.movePackage(dest, id)
+        API.move_package(dest, id)
         return {"response": "success"}
     except Exception:
         return bottle.HTTPError()
@@ -202,7 +202,7 @@ def edit_package():
                 "folder"  : decode(bottle.request.forms.get("pack_folder")),
                 "password": decode(bottle.request.forms.get("pack_pws"))}
 
-        API.setPackageData(id, data)
+        API.set_package_data(id, data)
         return {"response": "success"}
 
     except Exception:
@@ -215,11 +215,11 @@ def edit_package():
 def set_captcha():
     if bottle.request.environ.get('REQUEST_METHOD', "GET") == "POST":
         try:
-            API.setCaptchaResult(bottle.request.forms['cap_id'], bottle.request.forms['cap_result'])
+            API.set_captcha_result(bottle.request.forms['cap_id'], bottle.request.forms['cap_result'])
         except Exception:
             pass
 
-    task = API.getCaptchaTask()
+    task = API.get_captcha_task()
 
     if task.tid >= 0:
         src = "data:image/%s;base64,%s" % (task.type, task.data)
@@ -234,9 +234,9 @@ def set_captcha():
 def load_config(category, section):
     conf = None
     if category == "general":
-        conf = API.getConfigDict()
+        conf = API.get_config_dict()
     elif category == "plugin":
-        conf = API.getPluginConfigDict()
+        conf = API.get_plugin_config_dict()
 
     for key, option in conf[section].iteritems():
         if key in ("desc", "outline"):
@@ -262,7 +262,7 @@ def save_config(category):
 
         if category == "general": category = "core"
 
-        API.setConfigValue(section, option, decode(value), category)
+        API.set_config_value(section, option, decode(value), category)
 
 
 @bottle.route('/json/add_account', method='POST')
@@ -272,7 +272,7 @@ def add_account():
     password = bottle.request.POST['account_password']
     type = bottle.request.POST['account_type']
 
-    API.updateAccount(type, login, password)
+    API.update_account(type, login, password)
 
 
 @bottle.route('/json/update_accounts', method='POST')
@@ -292,14 +292,14 @@ def update_accounts():
             continue
 
         if action == "password":
-            API.updateAccount(plugin, user, value)
+            API.update_account(plugin, user, value)
         elif action == "time" and "-" in value:
-            API.updateAccount(plugin, user, options={"time": [value]})
+            API.update_account(plugin, user, options={"time": [value]})
         elif action == "limitdl" and value.isdigit():
-            API.updateAccount(plugin, user, options={"limitDL": [value]})
+            API.update_account(plugin, user, options={"limitDL": [value]})
         elif action == "delete":
             deleted.append((plugin, user))
-            API.removeAccount(plugin, user)
+            API.remove_account(plugin, user)
 
 
 @bottle.route('/json/change_password', method='POST')
@@ -308,6 +308,6 @@ def change_password():
     oldpw = bottle.request.POST['login_current_password']
     newpw = bottle.request.POST['login_new_password']
 
-    if not API.changePassword(user, oldpw, newpw):
+    if not API.change_password(user, oldpw, newpw):
         print "Wrong password"
         return bottle.HTTPError()

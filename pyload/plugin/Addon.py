@@ -3,7 +3,7 @@
 import traceback
 
 from pyload.plugin.Plugin import Base
-from pyload.utils import has_method
+from pyload.misc import has_method
 
 
 class Expose(object):

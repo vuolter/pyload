@@ -8,24 +8,24 @@ import SafeEval
 import bottle
 
 from pyload.Api import BaseObject
-from pyload.utils import convert, json, json_dumps
+from pyload.misc import convert, json, json_dumps
 from pyload.webui import API
-from pyload.webui.App.utils import set_session
+from pyload.webui.App.misc import set_session
 
 
 # json encoder that accepts TBase objects
-class TBase_encoder(json.JSONEncoder):
+class TBaseEncoder(json.JSONEncoder):
 
     def default(self, o):
         if isinstance(o, BaseObject):
-            return convert.toDict(o)
+            return convert.to_dict(o)
         return json.JSONEncoder.default(self, o)
 
 
 # accepting positional arguments, as well as kwargs via post and get
 @bottle.route('/api/<func><args:re:[a-zA-Z0-9\-_/\"\'\[\]%{},]*>')
 @bottle.route('/api/<func><args:re:[a-zA-Z0-9\-_/\"\'\[\]%{},]*>', method='POST')
-def call_api(func, args=""):
+def call_API(func, args=""):
     bottle.response.headers.replace("Content-type", "application/json")
     bottle.response.headers.append("Cache-Control", "no-cache, must-revalidate")
 
@@ -36,7 +36,7 @@ def call_api(func, args=""):
     if not s or not s.get("authenticated", False):
         return bottle.HTTPError(403, json_dumps("Forbidden"))
 
-    if not API.isAuthorized(func, {"role": s['role'], "permission": s['perms']}):
+    if not API.is_authorized(func, {"role": s['role'], "permission": s['perms']}):
         return bottle.HTTPError(401, json_dumps("Unauthorized"))
 
     args = args.split("/")[1:]
@@ -48,13 +48,13 @@ def call_api(func, args=""):
         kwargs[x] = urllib.unquote(y)
 
     try:
-        return callApi(func, *args, **kwargs)
+        return call_API(func, *args, **kwargs)
     except Exception, e:
         traceback.print_exc()
         return bottle.HTTPError(500, json_dumps({"error": e.message, "traceback": traceback.format_exc()}))
 
 
-def call_api(func, *args, **kwargs):
+def call_API(func, *args, **kwargs):
     if not hasattr(API.EXTERNAL, func) or func.startswith("_"):
         print "Invalid API call", func
         return bottle.HTTPError(404, json_dumps("Not Found"))
@@ -77,7 +77,7 @@ def login():
 
     remote_addr = bottle.request.environ.get("REMOTE_ADDR", "0")
 
-    info = API.checkAuth(user, password)
+    info = API.check_auth(user, password)
 
     if info:
         API.pyload.log.debug(_("API login from IP address: %s") % remote_addr)

@@ -7,14 +7,14 @@ from gettext import gettext
 from collections import OrderedDict, namedtuple
 
 from pyload.config import convert, default
-from pyload.utils import chmod, encode
+from pyload.misc import chmod, encode
 
 __all__ = ["ConfigParser", "Section"]
 
 SectionTuple = namedtuple("SectionTuple", "label description explanation config")
 
 
-class Config_parser:
+class ConfigParser:
     """Holds and manages the configuration + meta data for config read from file"""
 
     CONFIG = "pyload.conf"

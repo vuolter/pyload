@@ -3,15 +3,15 @@
 from collections import namedtuple
 from gettext import gettext
 
-from pyload.utils import decode
-from pyload.utils.convert import to_bool
+from pyload.misc import decode
+from pyload.misc.convert import to_bool
 
 __all__ = ["from_string", "to_configdata", "to_input"]
 
 
 #@TODO: Temp stuff... move to api/apitypes.py #################################
 
-class Base_object(object):
+class BaseObject(object):
     __version__ = (0, 4, 10)
     __slots__ = []
 
@@ -19,7 +19,7 @@ class Base_object(object):
         return "<%s %s>" % (self.__class__.__name__, ", ".join("%s=%s" % (k,getattr(self,k)) for k in self.__slots__))
 
 
-class Input(Base_object):
+class Input(BaseObject):
     __slots__ = ['type', 'default_value', 'data']
 
     def __init__(self, type=None, default_value=None, data=None):
@@ -28,7 +28,7 @@ class Input(Base_object):
         self.data = data
 
 
-class Input_type:
+class InputType:
     NA = 0
     Text = 1
     Int = 2

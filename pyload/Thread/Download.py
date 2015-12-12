@@ -10,10 +10,10 @@ import traceback
 import pycurl
 
 from pyload.Thread.Plugin import PluginThread
-from pyload.plugin.Plugin import Abort, Fail, Reconnect, Retry, SkipDownload
+from pyload.plugin.Plugin import Abort, Fail, Reconnect, Retry, Skip
 
 
-class Download_thread(Plugin_thread):
+class DownloadThread(PluginThread):
     """Thread for downloading files from 'real' hoster plugins"""
 
     def __init__(self, manager):
@@ -44,11 +44,11 @@ class Download_thread(Plugin_thread):
                 return True
 
             try:
-                if not pyfile.hasPlugin():
+                if not pyfile.has_plugin():
                     continue
                 # this pyfile was deleted while queueing
 
-                pyfile.plugin.checkForSameFiles(starting=True)
+                pyfile.plugin.check_for_same_files(starting=True)
                 self.pyload.log.info(_("Download starts: %s" % pyfile.name))
 
                 # start download
@@ -62,7 +62,7 @@ class Download_thread(Plugin_thread):
 
             except NotImplementedError:
                 self.pyload.log.error(_("Plugin %s is missing a function.") % pyfile.pluginname)
-                pyfile.setStatus("failed")
+                pyfile.set_status("failed")
                 pyfile.error = "Plugin does not work"
                 self.clean(pyfile)
                 continue
@@ -73,7 +73,7 @@ class Download_thread(Plugin_thread):
                 except Exception:
                     pass
 
-                pyfile.setStatus("aborted")
+                pyfile.set_status("aborted")
 
                 if self.pyload.debug:
                     traceback.print_exc()
@@ -83,7 +83,7 @@ class Download_thread(Plugin_thread):
 
             except Reconnect:
                 self.queue.put(pyfile)
-                # pyfile.req.clearCookies()
+                # pyfile.req.clear_cookies()
 
                 while self.manager.reconnecting.is_set():
                     time.sleep(0.5)
@@ -100,13 +100,13 @@ class Download_thread(Plugin_thread):
                 msg = e.args[0]
 
                 if msg == "offline":
-                    pyfile.setStatus("offline")
+                    pyfile.set_status("offline")
                     self.pyload.log.warning(_("Download is offline: %s") % pyfile.name)
                 elif msg == "temp. offline":
-                    pyfile.setStatus("temp. offline")
+                    pyfile.set_status("temp. offline")
                     self.pyload.log.warning(_("Download is temporary offline: %s") % pyfile.name)
                 else:
-                    pyfile.setStatus("failed")
+                    pyfile.set_status("failed")
                     self.pyload.log.warning(_("Download failed: %(name)s | %(msg)s") % {"name": pyfile.name, "msg": msg})
                     pyfile.error = msg
 
@@ -131,7 +131,7 @@ class Download_thread(Plugin_thread):
                     wait = time.time() + 60
 
                     pyfile.waitUntil = wait
-                    pyfile.setStatus("waiting")
+                    pyfile.set_status("waiting")
                     while time.time() < wait:
                         time.sleep(1)
                         if pyfile.abort:
@@ -139,7 +139,7 @@ class Download_thread(Plugin_thread):
 
                     if pyfile.abort:
                         self.pyload.log.info(_("Download aborted: %s") % pyfile.name)
-                        pyfile.setStatus("aborted")
+                        pyfile.set_status("aborted")
 
                         self.clean(pyfile)
                     else:
@@ -148,7 +148,7 @@ class Download_thread(Plugin_thread):
                     continue
 
                 else:
-                    pyfile.setStatus("failed")
+                    pyfile.set_status("failed")
                     self.pyload.log.error("pycurl error %s: %s" % (code, msg))
                     if self.pyload.debug:
                         traceback.print_exc()
@@ -159,8 +159,8 @@ class Download_thread(Plugin_thread):
                 self.clean(pyfile)
                 continue
 
-            except SkipDownload, e:
-                pyfile.setStatus("skipped")
+            except Skip, e:
+                pyfile.set_status("skipped")
 
                 self.pyload.log.info(_("Download skipped: %(name)s due to %(plugin)s") % {"name": pyfile.name, "plugin": e.message})
 
@@ -174,7 +174,7 @@ class Download_thread(Plugin_thread):
                 continue
 
             except Exception, e:
-                pyfile.setStatus("failed")
+                pyfile.set_status("failed")
                 self.pyload.log.warning(_("Download failed: %(name)s | %(msg)s") % {"name": pyfile.name, "msg": str(e)})
                 pyfile.error = str(e)
 
@@ -188,13 +188,13 @@ class Download_thread(Plugin_thread):
 
             finally:
                 self.pyload.files.save()
-                pyfile.checkIfProcessed()
+                pyfile.check_if_processed()
                 sys.exc_clear()
 
             # pyfile.plugin.req.clean()
 
             self.active = False
-            pyfile.finishIfDone()
+            pyfile.finish_if_done()
             self.pyload.files.save()
 
 

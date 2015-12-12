@@ -7,13 +7,13 @@ import shutil
 import threading
 
 from pyload.manager.Event import AccountUpdateEvent
-from pyload.utils import lock
+from pyload.misc import lock
 
 
 ACC_VERSION = 1
 
 
-class Account_manager(object):
+class AccountManager(object):
     """Manages all accounts"""
 
     def __init__(self, core):

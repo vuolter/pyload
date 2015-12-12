@@ -43,7 +43,7 @@ setuptools.setup(
 
     include_package_data=True,
 
-    exclude_package_data={'pyload': ["docs*", "locale*", "tests*"]},  #: exluced from build but not from sdist
+    exclude_package_data={'pyload': ["doc*", "lib*", "locale*", "media*", "test*"]},  #: exluced from build but not from sdist
 
     install_requires=[
         "Beaker >= 1.6",

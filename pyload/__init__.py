@@ -53,7 +53,7 @@ sys.path.insert(1, os.path.join(pypath, "lib"))
 
 import codecs
 
-from pyload.utils import get_console_encoding
+from pyload.misc import get_console_encoding
 
 sys.stdout = codecs.getwriter(get_console_encoding(sys.stdout.encoding))(sys.stdout, errors="replace")
 
@@ -102,8 +102,8 @@ except IOError, e:
 
 else:
     __builtin__.configdir  = configdir
-    
-    
+
+
 #################################### Core #####################################
 # @author: RaNaN, mkaay, sebnapi, spoob, vuolter
 # @version: v0.4.10
@@ -121,7 +121,7 @@ import time
 import traceback
 
 import pyload
-from pyload.utils import pylgettext as gettext
+from pyload.misc import pylgettext as gettext
 
 from pyload import remote
 from pyload.Database import DatabaseBackend, FileHandler
@@ -135,7 +135,7 @@ from pyload.manager.Scheduler import Scheduler
 from pyload.Thread.Server import WebServer
 from pyload.network.JsEngine import JsEngine
 from pyload.network.RequestFactory import RequestFactory
-from pyload.utils import free_space, format_size
+from pyload.misc import free_space, format_size
 
 
 # TODO List
@@ -653,7 +653,7 @@ class Core(object):
             pyfiles = self.files.cache.values()
 
             for pyfile in pyfiles:
-                pyfile.abortDownload()
+                pyfile.abort_download()
 
             self.addonManager.core_exiting()
 
@@ -717,6 +717,5 @@ def main():
         except KeyboardInterrupt:
             pyload_core.shutdown()
             pyload_core.log.info(_("killed pyLoad from Terminal"))
-            pyload_core.removeLogger()
+            pyload_core.remove_logger()
             os._exit(1)
-            

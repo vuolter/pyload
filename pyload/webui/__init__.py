@@ -9,9 +9,9 @@ import bottle
 import jinja2
 
 from pyload.Thread import Server
-from pyload.utils.middlewares import StripPathMiddleware, GZipMiddleWare, PrefixMiddleware
+from pyload.misc.middlewares import StripPathMiddleware, GZipMiddleWare, PrefixMiddleware
 from pyload.network.JsEngine import JsEngine
-from pyload.utils import decode, format_size, load_translation
+from pyload.misc import decode, format_size, load_translation
 
 
 THEME_DIR  = os.path.abspath(os.path.join(os.path.dirname(__file__), "themes"))
@@ -22,14 +22,14 @@ sys.path.append(PYLOAD_DIR)
 API = Server.pyload.api
 JS = JsEngine(Server.core)
 
-PREFIX = API.getConfigValue('webui', 'prefix')
+PREFIX = API.get_config_value('webui', 'prefix')
 
 if PREFIX:
     PREFIX = PREFIX.rstrip("/")
     if not PREFIX.startswith("/"):
         PREFIX = "/" + PREFIX
 
-DEBUG = API.getConfigValue("general", "debug_mode") or "-d" in sys.argv or "--debug" in sys.argv
+DEBUG = API.get_config_value("general", "debug_mode") or "-d" in sys.argv or "--debug" in sys.argv
 bottle.debug(DEBUG)
 
 cache = os.path.join("tmp", "jinja_cache")
@@ -39,12 +39,12 @@ if not os.path.exists(cache):
 bcc = jinja2.FileSystemBytecodeCache(cache, '%s.cache')
 
 loader = jinja2.FileSystemLoader([THEME_DIR,
-                                 os.path.join(THEME_DIR, API.getConfigValue('webui', 'theme').capitalize())])
+                                 os.path.join(THEME_DIR, API.get_config_value('webui', 'theme').capitalize())])
 
 env = jinja2.Environment(loader=loader, extensions=['jinja2.ext.i18n', 'jinja2.ext.autoescape'], trim_blocks=True, auto_reload=False,
                   bytecode_cache=bcc)
 
-from pyload.utils.filters import quotepath, path_make_relative, path_make_absolute, truncate, date
+from pyload.misc.filters import quotepath, path_make_relative, path_make_absolute, truncate, date
 
 env.filters['quotepath'] = quotepath
 env.filters['truncate'] = truncate
@@ -60,7 +60,7 @@ if PREFIX:
 else:
     env.filters['url'] = lambda x: PREFIX + x if x.startswith("/") else x
 
-env.install_gettext_translations(load_translation("django", API.getConfigValue("general", "language")))
+env.install_gettext_translations(load_translation("django", API.get_config_value("general", "language")))
 
 session_opts = {
     'session.type': 'file',
@@ -96,7 +96,7 @@ def run_threaded(host="0.0.0.0", port="8000", theads=3, cert="", key=""):
 
     wsgiserver.CherryPyWSGIServer.numthreads = theads
 
-    from pyload.webui.App.utils import CherryPyWSGI
+    from pyload.webui.App.misc import CherryPyWSGI
 
     bottle.run(app=web, host=host, port=port, server=CherryPyWSGI, quiet=True)
 

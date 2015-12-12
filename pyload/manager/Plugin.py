@@ -10,10 +10,10 @@ import urllib
 
 import SafeEval
 
-from pyload.utils import exists, fs_join
+from pyload.misc import exists, fs_join
 
 
-class Plugin_manager(object):
+class PluginManager(object):
     ROOT     = "pyload.plugin."
     USERROOT = "userplugins."
     TYPES    = ["account", "addon", "container", "crypter", "extractor", "hook", "hoster", "internal", "ocr"]

@@ -69,13 +69,13 @@ try:
     # bench(client.getCollector)
 
     print
-    print client.getServerVersion()
-    print client.statusServer()
-    print client.statusDownloads()
-    q = client.getQueue()
+    print client.get_server_version()
+    print client.status_server()
+    print client.status_downloads()
+    q = client.get_queue()
 
     for p in q:
-      data = client.getPackageData(p.pid)
+      data = client.get_package_data(p.pid)
       print data
       print "Package Name: ", data.name
 

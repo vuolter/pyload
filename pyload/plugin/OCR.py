@@ -14,7 +14,7 @@ import subprocess
 # import tempfile
 
 from pyload.plugin.Plugin import Base
-from pyload.utils import fs_join
+from pyload.misc import fs_join
 
 
 class OCR(Base):

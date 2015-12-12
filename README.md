@@ -1,9 +1,6 @@
-<p align="center"><a href="http://pyload.org/"><img src="/docs/resources/banner.png" alt="pyLoad" /></a></p>
+<p align="center"><a href="http://pyload.github.io/"><img src="/media/banner.png" alt="pyLoad" /></a></p>
 
-[![Translation Status](http://translate.pyload.org/badges/pyload/localized.png "Translation Status")](http://translate.pyload.org/project/pyload/)
-
-**pyLoad** is a Free and Open Source download manager written in Python and designed to be extremely lightweight.
-
+**pyLoad** is a Free and Open Source download manager written in Python and designed to be extremely lightweight, easily extensible and fully manageable via web.
 
 Table of contents
 -----------------
@@ -44,7 +41,7 @@ Additionaly, pyLoad has a great variety of plugins to automate common tasks and 
 pyLoad has a fully featured and well documented Application Programming Interface, easily extendable and accessible by external tools, cross-platform apps or other softwares.
 Just take a look to the [Development section](#development) for more info about that.
 
-For news, wiki, forum and further info visit the pyLoad website: <http://pyload.org/>.
+For news, wiki, forum and further info visit: <http://pyload.github.io/> or <http://pyload.org/>.
 
 Or joining us at `#pyload` on `irc.freenode.net`.
 

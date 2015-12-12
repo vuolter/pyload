@@ -7,7 +7,7 @@ from pyload.Datatype import PyFile
 from pyload.plugin.Plugin import Base
 
 
-class Archive_error(Exception):
+class ArchiveError(Exception):
     pass
 
 
@@ -15,7 +15,7 @@ class CRCError(Exception):
     pass
 
 
-class Password_error(Exception):
+class PasswordError(Exception):
     pass
 
 

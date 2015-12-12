@@ -14,12 +14,12 @@ import types
 
 from pyload.Api import OnlineStatus
 from pyload.Datatype import PyFile
-from pyload.plugin.Plugin import Abort, Fail, Reconnect, Retry, SkipDownload
-from pyload.utils.packagetools import parseNames
-from pyload.utils import fs_join
+from pyload.plugin.Plugin import Abort, Fail, Reconnect, Retry, Skip
+from pyload.misc.packagetools import parse_names
+from pyload.misc import fs_join
 
 
-class Plugin_thread(threading.Thread):
+class PluginThread(threading.Thread):
     """Abstract base class for thread types"""
 
     def __init__(self, manager):

@@ -10,7 +10,7 @@ from pyload.webui import THEME_DIR, env
 
 
 def get_theme()
-    return os.path.join(THEME_DIR, API.getConfigValue("webui", "theme").capitalize())
+    return os.path.join(THEME_DIR, API.get_config_value("webui", "theme").capitalize())
 
 
 def render_to_response(file, args={}, proc=[]):
@@ -116,7 +116,7 @@ def login_required(perm=None):
     return _dec
 
 
-class Cherry_pyWSGI(bottle.Server_adapter):
+class CherryPyWSGI(bottle.ServerAdapter):
 
     def run(self, handler):
         from wsgiserver import CherryPyWSGIServer

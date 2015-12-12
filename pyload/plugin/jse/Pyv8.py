@@ -3,7 +3,7 @@
 from pyload.plugin import JSE
 
 
-class Py_v8(JSE):
+class PyV8(JSE):
     __name    = "PyV8"
     __type    = "jse"
     __version = "0.01"

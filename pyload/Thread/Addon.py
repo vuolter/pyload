@@ -11,7 +11,7 @@ import traceback
 from pyload.Thread.Plugin import PluginThread
 
 
-class Addon_thread(Plugin_thread):
+class AddonThread(PluginThread):
     """Thread for addons"""
 
     def __init__(self, m, function, args, kwargs):
@@ -24,7 +24,7 @@ class Addon_thread(Plugin_thread):
 
         self.active = []
 
-        m.localThreads.append(self)
+        m.local_threads.append(self)
 
         self.start()
 
@@ -43,7 +43,7 @@ class Addon_thread(Plugin_thread):
         if pyfile in self.active:
             self.active.remove(pyfile)
 
-        pyfile.finishIfDone()
+        pyfile.finish_if_done()
 
 
     def run(self):
@@ -63,4 +63,4 @@ class Addon_thread(Plugin_thread):
             for x in local:
                 self.finish_file(x)
 
-            self.manager.localThreads.remove(self)
+            self.manager.local_threads.remove(self)

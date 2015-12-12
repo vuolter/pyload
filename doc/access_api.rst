@@ -56,11 +56,11 @@ A basic script that prints out some information: ::
         print "Login was wrong"
         exit()
 
-    print "Server version:", client.getServerVersion()
-    print client.statusDownloads()
-    q = client.getQueue()
+    print "Server version:", client.get_server_version()
+    print client.status_downloads()
+    q = client.get_queue()
     for p in q:
-      data = client.getPackageData(p.pid)
+      data = client.get_package_data(p.pid)
       print "Package Name: ", data.name
 
 That's all for now, pretty easy isn't it?

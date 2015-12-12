@@ -39,7 +39,7 @@ def main():
 # DO NOT EDIT UNLESS YOU ARE SURE THAT YOU KNOW WHAT YOU ARE DOING
 
 
-class Base_object(object):
+class BaseObject(object):
 \t__slots__ = []
 
 """)

@@ -10,7 +10,7 @@ import urllib2
 url = "http://localhost:8001/api/%s"
 
 
-class Test_json(object):
+class TestJson(object):
 
     def call(self, name, post=None):
         if not post: post = {}

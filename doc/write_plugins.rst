@@ -22,7 +22,7 @@ How basic hoster plugin header could look like: ::
         from pyload.plugin.Hoster import Hoster
 
 
-        class My_file_hoster(Hoster):
+        class MyFileHoster(Hoster):
                 __name = "MyFileHoster"
                 __version = "0.1"
                 __pattern = r"http://myfilehoster.example.com/file_id/[0-9]+"
@@ -45,7 +45,7 @@ An example ``process`` function could look like this ::
         from pyload.plugin.Hoster import Hoster
 
 
-        class My_file_hoster(Hoster):
+        class MyFileHoster(Hoster):
             """Plugin code"""
 
             def process(self, pyfile):
@@ -84,7 +84,7 @@ Example: ::
     from pyload.plugin.Crypter import Crypter
 
 
-    class My_file_crypter(Crypter):
+    class MyFileCrypter(Crypter):
         """Plugin code"""
 
         def decrypt(self, pyfile):

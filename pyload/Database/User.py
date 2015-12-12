@@ -7,7 +7,7 @@ import random
 from pyload.Database import DatabaseBackend, style
 
 
-class User_methods(object):
+class UserMethods(object):
 
 
     @style.queue

@@ -3,34 +3,34 @@
 import thrift
 
 
-class Transport(thrift.transport.TTransport.TBuffered_transport):
+class Transport(thrift.transport.TTransport.TBufferedTransport):
     DEFAULT_BUFFER = 4096
 
 
-    def __init__(self, trans, rbuf_size = DEFAULT_BUFFER):
+    def __init__(self, trans, rbuf_size=DEFAULT_BUFFER):
         thrift.transport.TTransport.TBufferedTransport.__init__(self, trans, rbuf_size)
         self.handle = trans.handle
         self.remoteaddr = trans.handle.getpeername()
 
 
-class Transport_compressed(thrift.transport.TZlib_transport.TZlib_transport):
+class TransportCompressed(thrift.transport.TZlibTransport.TZlibTransport):
     DEFAULT_BUFFER = 4096
 
 
-    def __init__(self, trans, rbuf_size = DEFAULT_BUFFER):
+    def __init__(self, trans, rbuf_size=DEFAULT_BUFFER):
         thrift.transport.TZlibTransport.TZlibTransport.__init__(self, trans, rbuf_size)
         self.handle = trans.handle
         self.remoteaddr = trans.handle.getpeername()
 
 
-class Transport_factory(object):
+class TransportFactory(object):
 
     def get_transport(self, trans):
         buffered = Transport(trans)
         return buffered
 
 
-class Transport_factory_compressed(object):
+class TransportFactoryCompressed(object):
     _last_trans = None
     _last_z = None
 

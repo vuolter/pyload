@@ -1,10 +1,14 @@
 Credits
 -------
 
+#### Thanks to spoob, sebnapi and RaNaN who created pyLoad! ####
+
+
 ### pyLoad Team ###
 
 *(alphabetically sorted)*
 
+ - GammaC0de (Bilal Ghouri) <nitzo2001@yahoo.com>
  - RaNaN <Mast3rRaNaN@hotmail.de>
  - himbrr <himbrr@himbrr.ws>
  - mkaay (Marius) <mkaay@mkaay.de>
@@ -14,13 +18,20 @@ Credits
  - vuolter (Walter Purcaro) <vuolter@gmail.com>
  - zoidberg10 <zoidberg@mujmail.cz>
 
-A special thanks to spoob, sebnapi and RaNaN who created pyLoad!
-
 
 ### Mantainers ###
 
 *(alphabetically sorted)*
 
+ - stickell (Stefano) <l.stickell@yahoo.it>
+ - vuolter (Walter Purcaro) <vuolter@gmail.com>
+
+
+### Active Developers ###
+
+*(alphabetically sorted)*
+
+ - GammaC0de (Bilal Ghouri) <nitzo2001@yahoo.com>
  - vuolter (Walter Purcaro) <vuolter@gmail.com>
 
 
@@ -40,9 +51,7 @@ You can see their recent activities here: <http://translate.pyload.org/project/p
 
 Sadly, is really hard to list all the users who helped the pyLoad Team in these last years testing code, reporting issues,
 opening topic to share tips and advices, fix troubles or simply discuss about this project...
-
-
-#### The pyLoad Team can be only forever thankful to all of you for your amazing efforts! ####
+**The pyLoad Team can be only forever thankful to all of you for your free efforts!**
 
 
 -----------------------------------

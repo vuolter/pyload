@@ -17,11 +17,11 @@ from pyload.remote.thriftbackend.thriftgen.pyload.ttypes import *
 ConnectionClosed = thrift.transport.TTransport.TTransportException
 
 
-class Wrong_login(Exception):
+class WrongLogin(Exception):
     pass
 
 
-class No_connection(Exception):
+class NoConnection(Exception):
     pass
 
 
@@ -29,7 +29,7 @@ class NoSSL(Exception):
     pass
 
 
-class Thrift_client(object):
+class ThriftClient(object):
 
     def __init__(self, host="localhost", port=7227, user="", password=""):
 
@@ -76,8 +76,8 @@ class Thrift_client(object):
 
     def create_connection(self, host, port, ssl=False):
         self.socket = Socket(host, port, ssl)
-        self.transport = thrift.transport.TTransport.TBuffered_transport(self.socket)
-        # self.transport = thrift.transport.TZlibTransport.TZlib_transport(thrift.transport.TTransport.TBuffered_transport(self.socket))
+        self.transport = thrift.transport.TTransport.TBufferedTransport(self.socket)
+        # self.transport = thrift.transport.TZlibTransport.TZlibTransport(thrift.transport.TTransport.TBufferedTransport(self.socket))
 
         protocol = Protocol(self.transport)
         self.client = Pyload.Client(protocol)

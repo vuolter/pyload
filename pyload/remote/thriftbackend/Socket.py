@@ -11,7 +11,7 @@ import thrift
 WantReadError = Exception  #: overwritten when ssl is used
 
 
-class Secure_socket_connection(object):
+class SecureSocketConnection(object):
 
     def __init__(self, connection):
         self.__dict__['connection'] = connection
@@ -104,7 +104,7 @@ class Socket(thrift.transport.TSocket.TSocket):
         return buff
 
 
-class Server_socket(thrift.transport.TSocket.TServer_socket, Socket):
+class ServerSocket(thrift.transport.TSocket.TServerSocket, Socket):
 
     def __init__(self, port=7228, host="0.0.0.0", key="", cert=""):
         self.host = host

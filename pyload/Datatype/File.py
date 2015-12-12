@@ -5,7 +5,7 @@ import time
 import threading
 
 from pyload.manager.Event import UpdateEvent
-from pyload.utils import format_size, lock
+from pyload.misc import format_size, lock
 
 
 statusMap = {
@@ -31,7 +31,7 @@ def set_size(self, value):
     self._size = int(value)
 
 
-class Py_file(object):
+class PyFile(object):
     """
     Represents a file object at runtime
     """
@@ -88,7 +88,7 @@ class Py_file(object):
         """Inits plugin instance"""
         if not self.plugin:
             self.pluginmodule = self.pyload.pluginManager.plugin_module(self.plugintype, self.pluginname)
-            self.pluginclass  = self.pyload.plugin_manager.plugin_class(self.plugintype, self.pluginname)
+            self.pluginclass  = self.pyload.pluginManager.pluginClass(self.plugintype, self.pluginname)
             self.plugin       = self.pluginclass(self)
 
 

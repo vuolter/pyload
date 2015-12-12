@@ -13,7 +13,7 @@ from pyload.Thread.Plugin import PluginThread
 from pyload.plugin.Hoster import parseFileInfo
 
 
-class Info_thread(Plugin_thread):
+class InfoThread(PluginThread):
 
     def __init__(self, manager, data, pid=-1, rid=-1, add=False):
         """Constructor"""
@@ -67,7 +67,7 @@ class Info_thread(Plugin_thread):
 
                     self.update_cache(pluginname, result)
 
-            packs = parseNames([(name, url) for name, x, y, url in self.cache])
+            packs = parse_names([(name, url) for name, x, y, url in self.cache])
 
             self.pyload.log.debug("Fetched and generated %d packages" % len(packs))
 
@@ -131,7 +131,7 @@ class Info_thread(Plugin_thread):
             # used for package generating
             tmp = [(name, (url, OnlineStatus(name, plugin, "unknown", status, int(size)))) for name, size, status, url in self.cache]
 
-            data = parseNames(tmp)
+            data = parse_names(tmp)
             result = {}
             for k, v in data.iteritems():
                 for url, status in v:
@@ -198,14 +198,14 @@ class Info_thread(Plugin_thread):
         # dummy pyfile
         pyfile = PyFile(self.pyload.files, -1, url, url, 0, 0, "", plugin, -1, -1)
 
-        pyfile.initPlugin()
+        pyfile.init_plugin()
 
         # little plugin lifecycle
         try:
             pyfile.plugin.setup()
-            pyfile.plugin.loadToDisk()
+            pyfile.plugin.load_to_disk()
             pyfile.plugin.decrypt(pyfile)
-            pyfile.plugin.deleteTmp()
+            pyfile.plugin.delete_tmp()
 
             for pack in pyfile.plugin.packages:
                 pyfile.plugin.urls.extend(pack[1])

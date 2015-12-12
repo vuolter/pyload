@@ -2,10 +2,10 @@
 
 import thrift
 
-from pyload.utils import decode, encode
+from pyload.misc import decode, encode
 
 
-class Protocol(thrift.protocol.TBinary_protocol.thrift.protocol.TBinary_protocol):
+class Protocol(thrift.protocol.TBinaryProtocol.thrift.protocol.TBinaryProtocol):
 
     def write_string(self, str):
         str = encode(str)
@@ -19,7 +19,7 @@ class Protocol(thrift.protocol.TBinary_protocol.thrift.protocol.TBinary_protocol
         return decode(str)
 
 
-class Protocol_factory(thrift.protocol.TBinary_protocol.thrift.protocol.TBinary_protocol_factory):
+class ProtocolFactory(thrift.protocol.TBinaryProtocol.thrift.protocol.TBinaryProtocolFactory):
 
     def get_protocol(self, trans):
         prot = Protocol(trans, self.strictRead, self.strictWrite)

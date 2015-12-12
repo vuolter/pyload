@@ -16,7 +16,7 @@ if os.name != "nt":
     import grp
     import pwd
 
-from pyload.utils import fs_decode, fs_encode, safe_filename, fs_join, encode
+from pyload.misc import fs_decode, fs_encode, safe_filename, fs_join, encode
 
 
 def chunks(iterable, size):
@@ -43,7 +43,7 @@ class Retry(Exception):
     """ raised when start again from beginning """
 
 
-class Skip_download(Exception):
+class SkipDownload(Exception):
     """ raised when download should be skipped """
 
 
@@ -201,7 +201,7 @@ class Plugin(Base):
         self.ocr = None
 
         #: account handler instance, see :py:class:`Account`
-        self.account = pyfile.m.core.accountManager.get_account_plugin(self.get_class_name())
+        self.account = pyfile.m.core.account_manager.get_account_plugin(self.get_class_name())
 
         #: premium status
         self.premium = False
@@ -222,7 +222,7 @@ class Plugin(Base):
             #: premium status
             self.premium = self.account.is_premium(self.user)
         else:
-            self.req = pyfile.m.core.requestFactory.get_request(self.get_class_name())
+            self.req = pyfile.m.core.request_factory.get_request(self.get_class_name())
 
         #: associated pyfile instance, see `PyFile`
         self.pyfile = pyfile
@@ -346,7 +346,7 @@ class Plugin(Base):
         self.waiting = True
 
         status = pyfile.status
-        pyfile.setStatus("waiting")
+        pyfile.set_status("waiting")
 
         self.log_info(_("Wait: %d seconds") % (pyfile.waitUntil - time.time()),
                      _("Reconnect: %s")    % self.wantReconnect)
@@ -728,7 +728,7 @@ class Plugin(Base):
         """ checks if same file was/is downloaded within same package
 
         :param starting: indicates that the current download is going to start
-        :raises SkipDownload:
+        :raises Skip:
         """
 
         pack = self.pyfile.package()
@@ -736,9 +736,9 @@ class Plugin(Base):
         for pyfile in self.core.files.cache.values():
             if pyfile != self.pyfile and pyfile.name == self.pyfile.name and pyfile.package().folder == pack.folder:
                 if pyfile.status in (0, 12):  #: finished or downloading
-                    raise SkipDownload(pyfile.pluginname)
+                    raise Skip(pyfile.pluginname)
                 elif pyfile.status in (5, 7) and starting:  #: a download is waiting/starting and was appenrently started before
-                    raise SkipDownload(pyfile.pluginname)
+                    raise Skip(pyfile.pluginname)
 
         download_folder = self.core.config.get("general", "download_folder")
         location = fs_join(download_folder, pack.folder, self.pyfile.name)
@@ -746,12 +746,12 @@ class Plugin(Base):
         if starting and self.core.config.get("download", "skip_existing") and os.path.exists(location):
             size = os.stat(location).st_size
             if size >= self.pyfile.size:
-                raise SkipDownload("File exists")
+                raise Skip("File exists")
 
         pyfile = self.core.db.find_duplicates(self.pyfile.id, self.pyfile.package().folder, self.pyfile.name)
         if pyfile:
             if os.path.exists(location):
-                raise SkipDownload(pyfile[0])
+                raise Skip(pyfile[0])
 
             self.log_debug("File %s not skipped, because it does not exists." % self.pyfile.name)
 

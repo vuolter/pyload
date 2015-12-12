@@ -6,10 +6,10 @@ import time
 import traceback
 
 from pyload.plugin.Plugin import Base
-from pyload.utils import compare_time, parseFileSize, lock
+from pyload.misc import compare_time, parseFileSize, lock
 
 
-class Wrong_password(Exception):
+class WrongPassword(Exception):
     pass
 
 

@@ -6,7 +6,7 @@ import os
 import re
 
 from pyload.plugin.Crypter import Crypter
-from pyload.utils import fs_join
+from pyload.misc import fs_join
 
 
 class Container(Crypter):

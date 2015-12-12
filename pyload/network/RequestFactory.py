@@ -10,7 +10,7 @@ from pyload.network.HTTPRequest import HTTPRequest
 from pyload.network.XDCCRequest import XDCCRequest
 
 
-class Request_factory(object):
+class RequestFactory(object):
 
     def __init__(self, core):
         self.lock = threading.Lock()

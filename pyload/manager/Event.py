@@ -3,10 +3,10 @@
 
 import time
 
-from pyload.utils import uniqify
+from pyload.misc import uniqify
 
 
-class Pull_manager(object):
+class PullManager(object):
 
     def __init__(self, core):
         self.pyload = core
@@ -30,8 +30,8 @@ class Pull_manager(object):
             if client.uuid == uuid:
                 client.lastActive = time.time()
                 validUuid = True
-                while client.newEvents():
-                    events.append(client.popEvent().toList())
+                while client.new_events():
+                    events.append(client.pop_event().to_list())
                 break
         if not validUuid:
             self.new_client(uuid)
@@ -41,7 +41,7 @@ class Pull_manager(object):
 
     def add_event(self, event):
         for client in self.clients:
-            client.addEvent(event)
+            client.add_event(event)
 
 
 class Client(object):
@@ -66,7 +66,7 @@ class Client(object):
         self.events.append(event)
 
 
-class Update_event(object):
+class UpdateEvent(object):
 
     def __init__(self, itype, iid, destination):
         assert itype == "pack" or itype == "file"
@@ -80,7 +80,7 @@ class Update_event(object):
         return ["update", self.destination, self.type, self.id]
 
 
-class Remove_event(object):
+class RemoveEvent(object):
 
     def __init__(self, itype, iid, destination):
         assert itype == "pack" or itype == "file"
@@ -94,7 +94,7 @@ class Remove_event(object):
         return ["remove", self.destination, self.type, self.id]
 
 
-class Insert_event(object):
+class InsertEvent(object):
 
     def __init__(self, itype, iid, after, destination):
         assert itype == "pack" or itype == "file"
@@ -109,7 +109,7 @@ class Insert_event(object):
         return ["insert", self.destination, self.type, self.id, self.after]
 
 
-class Reload_all_event(object):
+class ReloadAllEvent(object):
 
     def __init__(self, destination):
         assert destination == "queue" or destination == "collector"
@@ -120,13 +120,13 @@ class Reload_all_event(object):
         return ["reload", self.destination]
 
 
-class Account_update_event(object):
+class AccountUpdateEvent(object):
 
     def to_list(self):
         return ["account"]
 
 
-class Config_update_event(object):
+class ConfigUpdateEvent(object):
 
     def to_list(self):
         return ["config"]

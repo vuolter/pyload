@@ -19,7 +19,7 @@ All addons should start with something like this: ::
         from pyload.plugin.Addon import Addon
 
 
-        class Your_addon(Addon):
+        class YourAddon(Addon):
                 __name    = "YourAddon"
                 __tupe    = "addon"
                 __version = "0.1"
@@ -58,7 +58,7 @@ A basic excerpt would look like: ::
     from pyload.plugin.Addon import Addon
 
 
-    class Your_addon(Addon):
+    class YourAddon(Addon):
         """
         Your Addon code here.
         """
@@ -80,7 +80,7 @@ It requires a `dict` that maps event names to function names or a `list` of func
     from pyload.plugin.Addon import Addon
 
 
-    class Your_addon(Addon):
+    class YourAddon(Addon):
         """
         Your Addon code here.
         """
@@ -121,7 +121,7 @@ Sounds complicated but is very easy to do. Just use the ``Expose`` decorator: ::
     from pyload.plugin.Addon import Addon, Expose
 
 
-    class Your_addon(Addon):
+    class YourAddon(Addon):
         """
         Your Addon code here.
         """
@@ -135,8 +135,8 @@ Here is a basic example: ::
 
     # Assuming client is a ThriftClient or Api object
 
-    print client.getServices()
-    print client.call(ServiceCall("YourAddon", "invoke", "an argument"))
+    print client.get_services()
+    print client.call(Service_call("YourAddon", "invoke", "an argument"))
 
 Providing status information
 ----------------------------
@@ -147,7 +147,7 @@ Just store everything in ``self.info``. ::
     from pyload.plugin.Addon import Addon
 
 
-    class Your_addon(Addon):
+    class YourAddon(Addon):
         """
         Your Addon code here.
         """
@@ -163,7 +163,7 @@ Usable with: ::
 
     # Assuming client is a ThriftClient or Api object
 
-    print client.getAllInfo()
+    print client.get_all_info()
 
 Example
 -------

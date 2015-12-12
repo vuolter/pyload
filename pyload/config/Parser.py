@@ -7,13 +7,13 @@ import shutil
 import time
 import traceback
 
-from pyload.utils import encode, decode
+from pyload.misc import encode, decode
 
 
 CONF_VERSION = 1
 
 
-class Config_parser(object):
+class ConfigParser(object):
     """
     holds and manage the configuration
 

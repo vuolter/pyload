@@ -15,8 +15,8 @@ import subprocess
 import time
 import traceback
 
-from pyload.utils import convert, pylgettext as gettext
-from pyload.utils.encoding import *
+from pyload.misc import convert, pylgettext as gettext
+from pyload.misc.encoding import *
 
 # abstraction layer for json operations
 try:

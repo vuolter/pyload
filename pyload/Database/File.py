@@ -6,7 +6,7 @@ import threading
 from pyload.Datatype import PyFile, PyPackage
 from pyload.Database import DatabaseBackend, style
 from pyload.manager.Event import InsertEvent, ReloadAllEvent, RemoveEvent, UpdateEvent
-from pyload.utils import format_size, lock
+from pyload.misc import format_size, lock
 
 try:
     from pysqlite2 import dbapi2 as sqlite3
@@ -14,7 +14,7 @@ except Exception:
     import sqlite3
 
 
-class File_handler(object):
+class FileHandler(object):
     """Handles all request made to obtain information,
     modify status or other request for links or packages"""
 
@@ -28,7 +28,7 @@ class File_handler(object):
                           _("downloading"), _("processing"), _("unknown")]
 
         self.cache = {}  #: holds instances for files
-        self.packageCache = {}  #: same for packages
+        self.package_cache = {}  #: same for packages
         #@TODO: purge the cache
 
         self.jobCache = {}
@@ -71,7 +71,7 @@ class File_handler(object):
         for pyfile in pyfiles:
             pyfile.sync()
 
-        pypacks = self.packageCache.values()
+        pypacks = self.package_cache.values()
         for pypack in pypacks:
             pypack.sync()
 
@@ -87,7 +87,7 @@ class File_handler(object):
 
         data.update([(x.id, x.toDbDict()[x.id]) for x in self.cache.values()])
 
-        for x in self.packageCache.itervalues():
+        for x in self.package_cache.itervalues():
             if x.queue != queue or x.id not in packs:
                 continue
             packs[x.id].update(x.toDict()[x.id])
@@ -104,7 +104,7 @@ class File_handler(object):
         """Gets a data representation without links"""
 
         packs = self.db.get_all_packages(queue)
-        for x in self.packageCache.itervalues():
+        for x in self.package_cache.itervalues():
             if x.queue != queue or x.id not in packs:
                 continue
             packs[x.id].update(x.toDict()[x.id])
@@ -150,8 +150,8 @@ class File_handler(object):
 
         p = self.get_package(id)
         if not p:
-            if id in self.packageCache:
-                del self.packageCache[id]
+            if id in self.package_cache:
+                del self.package_cache[id]
             return
 
         oldorder = p.order
@@ -163,17 +163,17 @@ class File_handler(object):
 
         for pyfile in pyfiles:
             if pyfile.packageid == id:
-                pyfile.abortDownload()
+                pyfile.abort_download()
                 pyfile.release()
 
         self.db.delete_package(p)
         self.pyload.pullManager.add_event(e)
         self.pyload.addonManager.dispatch_event("package-deleted", id)
 
-        if id in self.packageCache:
-            del self.packageCache[id]
+        if id in self.package_cache:
+            del self.package_cache[id]
 
-        packs = self.packageCache.values()
+        packs = self.package_cache.values()
         for pack in packs:
             if pack.queue == queue and pack.order > oldorder:
                 pack.order -= 1
@@ -214,7 +214,7 @@ class File_handler(object):
         for pyfile in pyfiles:
             if pyfile.packageid == pid and pyfile.order > oldorder:
                 pyfile.order -= 1
-                pyfile.notifyChange()
+                pyfile.notify_change()
 
 
     #--------------------------------------------------------------------------
@@ -229,8 +229,8 @@ class File_handler(object):
 
     def release_package(self, id):
         """Removes package from cache"""
-        if id in self.packageCache:
-            del self.packageCache[id]
+        if id in self.package_cache:
+            del self.package_cache[id]
 
 
     #--------------------------------------------------------------------------
@@ -258,8 +258,8 @@ class File_handler(object):
     def get_package(self, id):
         """Return package instance"""
 
-        if id in self.packageCache:
-            return self.packageCache[id]
+        if id in self.package_cache:
+            return self.package_cache[id]
         else:
             return self.db.get_package(id)
 
@@ -429,8 +429,8 @@ class File_handler(object):
 
         self.db.restart_package(id)
 
-        if id in self.packageCache:
-            self.packageCache[id].setFinished = False
+        if id in self.package_cache:
+            self.package_cache[id].setFinished = False
 
         e = UpdateEvent("pack", id, "collector" if not self.get_package(id).queue else "queue")
         self.pyload.pullManager.add_event(e)
@@ -472,7 +472,7 @@ class File_handler(object):
 
         self.db.reorder_package(p, -1, True)
 
-        packs = self.packageCache.values()
+        packs = self.package_cache.values()
         for pack in packs:
             if pack.queue != queue and pack.order > oldorder:
                 pack.order -= 1
@@ -495,7 +495,7 @@ class File_handler(object):
         self.pyload.pullManager.add_event(e)
         self.db.reorder_package(p, position)
 
-        packs = self.packageCache.values()
+        packs = self.package_cache.values()
         for pack in packs:
             if pack.queue != p.queue or pack.order < 0 or pack == p:
                 continue
@@ -533,11 +533,11 @@ class File_handler(object):
             if f['order'] > position:
                 if position <= pyfile.order < f['order']:
                     pyfile.order += 1
-                    pyfile.notifyChange()
+                    pyfile.notify_change()
             elif f['order'] < position:
                 if position >= pyfile.order > f['order']:
                     pyfile.order -= 1
-                    pyfile.notifyChange()
+                    pyfile.notify_change()
 
         if id in self.cache:
             self.cache[id].order = position
@@ -608,7 +608,7 @@ class File_handler(object):
         self.db.restart_failed()
 
 
-class File_methods(object):
+class FileMethods(object):
 
 
     @style.queue

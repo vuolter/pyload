@@ -19,7 +19,7 @@ core = None
 js = None
 
 
-class ClickNLoad_backend(Backend_base):
+class ClickNLoadBackend(BackendBase):
 
     def setup(self, host, port):
         self.httpd = BaseHTTPServer.HTTPServer((host, port), CNLHandler)
@@ -33,7 +33,7 @@ class ClickNLoad_backend(Backend_base):
             self.httpd.handle_request()
 
 
-class CNLHandler(BaseHTTPServer.BaseHTTPRequest_handler):
+class CNLHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
     def add_package(self, name, urls, queue=0):
         print "name", name

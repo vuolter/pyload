@@ -10,11 +10,11 @@ import time
 import urlparse
 
 from pyload.Datatype import PyFile
-from pyload.utils import decode
-from pyload.utils.packagetools import parseNames
+from pyload.misc import decode
+from pyload.misc.packagetools import parse_names
 from pyload.network.RequestFactory import getURL
 from pyload.remote import activated
-from pyload.utils import compare_time, free_space, safe_filename
+from pyload.misc import compare_time, free_space, safe_filename
 
 if activated:
     try:
@@ -243,7 +243,7 @@ class Api(Iface):
                                     not self.pyload.threadManager.pause and self.is_time_download(),
                                     self.pyload.config.get("reconnect", "activated") and self.is_time_reconnect())
         for pyfile in [x.active for x in self.pyload.threadManager.threads if x.active and isinstance(x.active, PyFile)]:
-            serverStatus.speed += pyfile.getSpeed()  #: bytes/s
+            serverStatus.speed += pyfile.get_speed()  #: bytes/s
         return serverStatus
 
 
@@ -328,9 +328,9 @@ class Api(Iface):
             if not isinstance(pyfile, PyFile):
                 continue
             data.append(DownloadInfo(
-                pyfile.id, pyfile.name, pyfile.getSpeed(), pyfile.getETA(), pyfile.formatETA(),
-                pyfile.getBytesLeft(), pyfile.getSize(), pyfile.format_size(), pyfile.getPercent(),
-                pyfile.status, pyfile.getStatusName(), pyfile.formatWait(),
+                pyfile.id, pyfile.name, pyfile.get_speed(), pyfile.getETA(), pyfile.formatETA(),
+                pyfile.get_bytes_left(), pyfile.get_size(), pyfile.format_size(), pyfile.get_percent(),
+                pyfile.status, pyfile.get_status_name(), pyfile.format_wait(),
                 pyfile.waitUntil, pyfile.packageid, pyfile.package().name, pyfile.pluginname))
         return data
 
@@ -414,7 +414,7 @@ class Api(Iface):
         rid = self.pyload.threadManager.create_result_thread(data, False)
 
         tmp = [(url, (url, OnlineStatus(url, (plugintype, pluginname), "unknown", 3, 0))) for url, plugintype, pluginname in data]
-        data = parseNames(tmp)
+        data = parse_names(tmp)
         result = {}
         for k, v in data.iteritems():
             for url, status in v:
@@ -463,7 +463,7 @@ class Api(Iface):
         :param links: list of urls
         :return: package names mapped to urls
         """
-        return parseNames((x, x) for x in links)
+        return parse_names((x, x) for x in links)
 
 
     @permission(PERMS.ADD)
@@ -693,7 +693,7 @@ class Api(Iface):
 
         pyfiles = self.pyload.files.cache.values()
         for pyfile in pyfiles:
-            pyfile.abortDownload()
+            pyfile.abort_download()
 
 
     @permission(PERMS.MODIFY)
@@ -707,7 +707,7 @@ class Api(Iface):
         pyfiles = self.pyload.files.cache.values()
         for pyfile in pyfiles:
             if pyfile.id in fids:
-                pyfile.abortDownload()
+                pyfile.abort_download()
 
 
     @permission(PERMS.MODIFY)

@@ -5,7 +5,7 @@ import SocketServer
 from pyload.manager.Remote import BackendBase
 
 
-class Request_handler(Socket_server.Base_request_handler):
+class RequestHandler(SocketServer.BaseRequestHandler):
 
     def setup(self):
         pass
@@ -15,7 +15,7 @@ class Request_handler(Socket_server.Base_request_handler):
         print self.request.recv(1024)
 
 
-class Socket_backend(Backend_base):
+class SocketBackend(BackendBase):
 
     def setup(self, host, port):
         # local only
