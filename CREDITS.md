@@ -8,7 +8,7 @@ Credits
 
 *(alphabetically sorted)*
 
- - GammaC0de (Bilal Ghouri) <nitzo2001@yahoo.com>
+ - GammaC0de (Nitzo) <nitzo2001@yahoo.com>
  - RaNaN <Mast3rRaNaN@hotmail.de>
  - himbrr <himbrr@himbrr.ws>
  - mkaay (Marius) <mkaay@mkaay.de>
@@ -31,7 +31,7 @@ Credits
 
 *(alphabetically sorted)*
 
- - GammaC0de (Bilal Ghouri) <nitzo2001@yahoo.com>
+ - GammaC0de (Nitzo) <nitzo2001@yahoo.com>
  - vuolter (Walter Purcaro) <vuolter@gmail.com>
 
 
