@@ -1,3 +1,9 @@
+// http://tympanus.net/codrops/2014/09/23/animated-background-headers/
+
+// Animated Background Headers (demo 2)
+// by Rachel Smith
+// modded by Walter Purcaro
+
 (function() {
 
     var width, height, largeHeader, canvas, ctx, circles, target, animateHeader = true;
@@ -14,14 +20,14 @@
         largeHeader = document.getElementById('page-header');
         largeHeader.style.height = height+'px';
 
-        canvas = document.getElementById('particle-canvas');
+        canvas = document.getElementById('page-canvas');
         canvas.width = width;
         canvas.height = height;
         ctx = canvas.getContext('2d');
 
         // create particles
         circles = [];
-        for(var x = 0; x < width*0.5; x++) {
+        for(var x = 0; x < width*0.2; x++) {
             var c = new Circle();
             circles.push(c);
         }
@@ -72,7 +78,7 @@
             _this.pos.x = Math.random()*width;
             _this.pos.y = height+Math.random()*100;
             _this.alpha = 0.1+Math.random()*0.3;
-            _this.scale = 0.1+Math.random()*0.3;
+            _this.scale = 0.1+Math.random()*1.1;
             _this.velocity = Math.random();
         }
 
@@ -83,7 +89,7 @@
             _this.pos.y -= _this.velocity;
             _this.alpha -= 0.0005;
             ctx.beginPath();
-            ctx.arc(_this.pos.x, _this.pos.y, _this.scale*10, 0, 2 * Math.PI, false);
+            ctx.arc(_this.pos.x, _this.pos.y, _this.scale * 10, 0, 2 * Math.PI, false);
             ctx.fillStyle = 'rgba(255,255,255,'+ _this.alpha+')';
             ctx.fill();
         };

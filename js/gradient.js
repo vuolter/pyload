@@ -2,6 +2,7 @@
 
 // Animated Background Gradient
 // by Mario Klingemann
+// modded by Walter Purcaro
 
 var colors = new Array(
   [62,35,255],
