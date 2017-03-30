@@ -16,7 +16,7 @@ import subprocess
 
 from itertools import chain
 
-from setuptools import Command, setup
+from setuptools import Command, find_packages, setup
 from setuptools.command.install import install
 from setuptools.command.sdist import sdist
 
@@ -182,7 +182,8 @@ LICENSE = "GNU Affero General Public License v3"
 AUTHOR = "Walter Purcaro"
 AUTHOR_EMAIL = "vuolter@gmail.com"
 PLATFORMS = ['any']
-PACKAGES = ['pyload', 'pyload/core', 'pyload/plugins']
+PACKAGES = find_packages('src')
+PACKAGE_DIR = {'': 'src'}
 INCLUDE_PACKAGE_DATA = True
 NAMESPACE_PACKAGES = ['pyload']
 INSTALL_REQUIRES = _get_requires('install.txt')
@@ -209,7 +210,7 @@ CMDCLASS = {
     'sdist': Sdist
 }
 MESSAGE_EXTRACTORS = {
-    'pyload': [('**.py', 'python', None)]
+    'src': [('**.py', 'python', None)]
 }
 ZIP_SAFE = False
 CLASSIFIERS = [
@@ -247,6 +248,7 @@ SETUP_MAP = dict(
     author_email=AUTHOR_EMAIL,
     platforms=PLATFORMS,
     packages=PACKAGES,
+    package_dir=PACKAGE_DIR,
     include_package_data=INCLUDE_PACKAGE_DATA,
     namespace_packages=NAMESPACE_PACKAGES,
     install_requires=INSTALL_REQUIRES,
